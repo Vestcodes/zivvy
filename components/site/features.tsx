@@ -1,4 +1,5 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Reveal } from "@/components/ui/reveal";
 import {
   Banknote,
   Boxes,
@@ -53,19 +54,20 @@ export function Features() {
         </p>
       </div>
       <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {FEATURES.map(({ icon: Icon, title, desc }) => (
-          <Card
-            key={title}
-            className="border-border/70 bg-card/60 backdrop-blur transition-all hover:-translate-y-0.5 hover:shadow-elevation-md"
-          >
-            <CardHeader>
-              <div className="bg-primary-gradient mb-3 grid size-10 place-items-center rounded-md text-primary-foreground shadow-elevation-sm">
-                <Icon className="size-5" />
-              </div>
-              <CardTitle className="font-display text-lg">{title}</CardTitle>
-              <CardDescription>{desc}</CardDescription>
-            </CardHeader>
-          </Card>
+        {FEATURES.map(({ icon: Icon, title, desc }, i) => (
+          <Reveal key={title} delay={i * 60}>
+            <Card
+              className="border-border/70 bg-card/60 backdrop-blur transition-all duration-[var(--duration-base)] hover:-translate-y-0.5 hover:shadow-elevation-md"
+            >
+              <CardHeader>
+                <div className="bg-primary-gradient mb-3 grid size-10 place-items-center rounded-md text-primary-foreground shadow-elevation-sm">
+                  <Icon className="size-5" />
+                </div>
+                <CardTitle className="font-display text-lg">{title}</CardTitle>
+                <CardDescription>{desc}</CardDescription>
+              </CardHeader>
+            </Card>
+          </Reveal>
         ))}
       </div>
     </section>

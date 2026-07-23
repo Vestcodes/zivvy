@@ -6,6 +6,7 @@ import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Reveal } from "@/components/ui/reveal";
 import { cn } from "@/lib/utils";
 
 type Billing = "monthly" | "annual";
@@ -145,16 +146,16 @@ export function PricingPreview({ showIntro = true, className }: Props = {}) {
       </div>
 
       <div className="mt-10 grid gap-4 lg:grid-cols-3">
-        {PLANS.map((plan) => {
+        {PLANS.map((plan, i) => {
           const price = billing === "annual" ? plan.annual : plan.monthly;
           const isFree = plan.slug === "free";
           const isRibbon = plan.highlighted;
           const href = `/login#signup?plan=${plan.slug}&billing=${billing}`;
           return (
+            <Reveal key={plan.slug} delay={i * 80}>
             <Card
-              key={plan.slug}
               className={cn(
-                "relative border-border/70 transition-all",
+                "relative h-full border-border/70 transition-all duration-[var(--duration-base)]",
                 isRibbon
                   ? "ring-2 ring-primary/40 shadow-elevation-md"
                   : "bg-card/60 hover:-translate-y-0.5 hover:shadow-elevation-md"
@@ -210,6 +211,7 @@ export function PricingPreview({ showIntro = true, className }: Props = {}) {
                 </Button>
               </CardFooter>
             </Card>
+            </Reveal>
           );
         })}
       </div>

@@ -11,12 +11,15 @@ interface Props {
   value: unknown;
   onChange: (next: unknown) => void;
   disabled?: boolean;
+  error?: string;
 }
 
-export function FieldInput({ field, value, onChange, disabled }: Props) {
+export function FieldInput({ field, value, onChange, disabled, error }: Props) {
   const label = field.label ?? field.fieldname;
   const readOnly = field.read_only === 1 || disabled;
   const commonId = `field-${field.fieldname}`;
+  const errorId = `${commonId}-error`;
+  const invalid = Boolean(error);
 
   const control = () => {
     switch (field.fieldtype) {
@@ -31,6 +34,8 @@ export function FieldInput({ field, value, onChange, disabled }: Props) {
             value={(value as string | number | undefined) ?? ""}
             onChange={(e) => onChange(e.target.value === "" ? null : Number(e.target.value))}
             disabled={readOnly}
+            aria-invalid={invalid || undefined}
+            aria-describedby={invalid ? errorId : undefined}
             className="font-mono tabular-nums"
           />
         );
@@ -43,6 +48,8 @@ export function FieldInput({ field, value, onChange, disabled }: Props) {
             value={(value as string | number | undefined) ?? ""}
             onChange={(e) => onChange(e.target.value === "" ? null : parseInt(e.target.value, 10))}
             disabled={readOnly}
+            aria-invalid={invalid || undefined}
+            aria-describedby={invalid ? errorId : undefined}
             className="font-mono tabular-nums"
           />
         );
@@ -129,12 +136,17 @@ export function FieldInput({ field, value, onChange, disabled }: Props) {
   };
 
   return (
-    <div className="grid gap-1.5">
+    <div className="grid gap-1.5" data-field={field.fieldname}>
       <Label htmlFor={commonId} className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
         {label}
         {field.reqd === 1 && <span className="text-destructive">*</span>}
       </Label>
       {control()}
+      {invalid && (
+        <p id={errorId} role="alert" className="text-xs text-destructive">
+          {error}
+        </p>
+      )}
     </div>
   );
 }

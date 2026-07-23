@@ -1,29 +1,38 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { Lock } from "lucide-react";
 import { APPS, CATEGORIES, type AppTile } from "@/components/app/app-launcher-data";
 import { useZivvyBoot } from "@/components/boot-provider";
-import { tierAtLeast } from "@/lib/boot-types";
+import { isItemGated } from "@/lib/gating";
+import { useUpgradeDialog } from "@/components/billing/upgrade-affordance";
 import { cn } from "@/lib/utils";
+import type { ZivvyTier } from "@/lib/boot-types";
 
-function Tile({ app, gated }: { app: AppTile; gated: boolean }) {
+function Tile({
+  app,
+  gated,
+  requiredTier,
+  onGatedActivate
+}: {
+  app: AppTile;
+  gated: boolean;
+  requiredTier?: ZivvyTier;
+  onGatedActivate: (feature: string, tier: ZivvyTier) => void;
+}) {
   const Icon = app.icon;
-  const href = gated ? "/billing" : app.href;
-  return (
-    <Link
-      href={href}
-      className="group flex flex-col items-center gap-2 rounded-lg p-3 transition-colors hover:bg-secondary/60"
-    >
+
+  const inner = (
+    <>
       <div
         className={cn(
-          "relative grid size-20 place-items-center overflow-hidden rounded-2xl bg-linear-to-br text-white shadow-md transition-all group-hover:-translate-y-0.5 group-hover:shadow-lg sm:size-24",
+          "relative grid size-20 place-items-center overflow-hidden rounded-2xl bg-linear-to-br text-white shadow-md transition-all duration-[var(--duration-base)] ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:-translate-y-1 group-hover:shadow-lg group-active:scale-[0.98] group-active:translate-y-0 sm:size-24",
           app.gradient,
           gated && "grayscale-[0.5] opacity-70"
         )}
       >
-        <Icon className="size-8 sm:size-9" strokeWidth={1.75} />
-        {/* Glossy highlight */}
+        <Icon className="size-8 sm:size-9 transition-transform group-hover:scale-110" strokeWidth={1.75} />
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0 opacity-70"
@@ -33,7 +42,7 @@ function Tile({ app, gated }: { app: AppTile; gated: boolean }) {
           }}
         />
         {gated && (
-          <div className="absolute right-1.5 top-1.5 grid size-5 place-items-center rounded-full bg-black/60 text-white">
+          <div className="absolute right-1.5 top-1.5 grid size-5 place-items-center rounded-full bg-black/60 text-white shadow-sm">
             <Lock className="size-3" />
           </div>
         )}
@@ -41,14 +50,35 @@ function Tile({ app, gated }: { app: AppTile; gated: boolean }) {
       <span className="text-center text-sm font-medium leading-tight">
         {app.label}
       </span>
+    </>
+  );
+
+  if (gated) {
+    return (
+      <button
+        type="button"
+        onClick={() => onGatedActivate(app.label, requiredTier ?? "pro")}
+        className="group flex flex-col items-center gap-2 rounded-lg p-3 text-left transition-colors hover:bg-secondary/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+      >
+        {inner}
+      </button>
+    );
+  }
+
+  return (
+    <Link
+      href={app.href}
+      className="group flex flex-col items-center gap-2 rounded-lg p-3 transition-colors hover:bg-secondary/60"
+    >
+      {inner}
     </Link>
   );
 }
 
 export function AppLauncher() {
   const boot = useZivvyBoot();
-  const blocked = new Set(boot?.blocked_modules ?? []);
-  const tier = boot?.tier ?? "free";
+  const pathname = usePathname();
+  const upgrade = useUpgradeDialog(pathname);
 
   return (
     <div className="mx-auto w-full max-w-6xl space-y-8">
@@ -69,15 +99,25 @@ export function AppLauncher() {
             </h2>
             <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-7">
               {items.map((app) => {
-                const gated =
-                  (app.module && blocked.has(app.module)) ||
-                  (app.minTier && !tierAtLeast(tier, app.minTier));
-                return <Tile key={app.href} app={app} gated={Boolean(gated)} />;
+                const gate = isItemGated(
+                  { module: app.module, minTier: app.minTier },
+                  boot
+                );
+                return (
+                  <Tile
+                    key={app.href}
+                    app={app}
+                    gated={gate.gated}
+                    requiredTier={gate.requiredTier}
+                    onGatedActivate={upgrade.open}
+                  />
+                );
               })}
             </div>
           </section>
         );
       })}
+      {upgrade.element}
     </div>
   );
 }

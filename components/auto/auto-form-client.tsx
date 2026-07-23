@@ -31,6 +31,9 @@ import { FieldInput } from "@/components/auto/field-input";
 import { frappeCall, FrappeError } from "@/lib/frappe-client";
 import type { DoctypeMeta, FormGroup } from "@/lib/frappe-meta";
 import { cn } from "@/lib/utils";
+import { parseFrappeError, EMPTY_ERRORS, type ParsedFormError } from "@/lib/form-errors";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
 
 interface Props {
   meta: DoctypeMeta;
@@ -80,6 +83,7 @@ export function AutoFormClient({ meta, groups, initialDoc, basePath, title }: Pr
   const [canceling, setCanceling] = useState(false);
   const [dialog, setDialog] = useState<DialogKind>(null);
   const [justSaved, setJustSaved] = useState(false);
+  const [errors, setErrors] = useState<ParsedFormError>(EMPTY_ERRORS);
 
   const docstatus = Number((doc.docstatus as number | undefined) ?? 0);
   const isNew = doc.__islocal === 1 || !doc.name;
@@ -87,10 +91,31 @@ export function AutoFormClient({ meta, groups, initialDoc, basePath, title }: Pr
 
   const updateField = useCallback((fieldname: string, value: unknown) => {
     setDoc((prev) => ({ ...prev, [fieldname]: value }));
+    // Clear this field's error the moment the user edits it
+    setErrors((prev) => {
+      if (!prev.fieldErrors[fieldname]) return prev;
+      const next = { ...prev.fieldErrors };
+      delete next[fieldname];
+      return { ...prev, fieldErrors: next, hasFieldErrors: Object.keys(next).length > 0 };
+    });
+  }, []);
+
+  const scrollToFirstError = useCallback((parsed: ParsedFormError) => {
+    const first = Object.keys(parsed.fieldErrors)[0];
+    if (!first) return;
+    // Defer to next tick so the error renders first
+    requestAnimationFrame(() => {
+      const el = document.querySelector<HTMLElement>(`[data-field="${first}"] input, [data-field="${first}"] textarea, [data-field="${first}"] [role="combobox"]`);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "center" });
+        el.focus({ preventScroll: true });
+      }
+    });
   }, []);
 
   const onSave = useCallback(async () => {
     setSaving(true);
+    setErrors(EMPTY_ERRORS);
     try {
       const method = isNew ? "frappe.client.insert" : "frappe.client.save";
       const result = await frappeCall<{ name?: string }>(method, {
@@ -105,15 +130,24 @@ export function AutoFormClient({ meta, groups, initialDoc, basePath, title }: Pr
         router.refresh();
       }
     } catch (err) {
-      toast.error(err instanceof FrappeError ? err.message : "Save failed.");
+      const parsed = parseFrappeError(err);
+      setErrors(parsed);
+      if (parsed.hasFieldErrors) {
+        scrollToFirstError(parsed);
+      } else if (parsed.formError) {
+        toast.error(parsed.formError);
+      } else {
+        toast.error("Save failed.");
+      }
     } finally {
       setSaving(false);
     }
-  }, [doc, isNew, meta.name, basePath, router]);
+  }, [doc, isNew, meta.name, basePath, router, scrollToFirstError]);
 
   const onSubmitDoc = useCallback(async () => {
     setSubmitting(true);
     setDialog(null);
+    setErrors(EMPTY_ERRORS);
     try {
       await frappeCall("frappe.client.submit", {
         doc: JSON.stringify({ ...doc, doctype: meta.name })
@@ -121,11 +155,17 @@ export function AutoFormClient({ meta, groups, initialDoc, basePath, title }: Pr
       toast.success("Submitted");
       router.refresh();
     } catch (err) {
-      toast.error(err instanceof FrappeError ? err.message : "Submit failed.");
+      const parsed = parseFrappeError(err);
+      setErrors(parsed);
+      if (parsed.hasFieldErrors) {
+        scrollToFirstError(parsed);
+      } else {
+        toast.error(parsed.formError ?? "Submit failed.");
+      }
     } finally {
       setSubmitting(false);
     }
-  }, [doc, meta.name, router]);
+  }, [doc, meta.name, router, scrollToFirstError]);
 
   const onCancelDoc = useCallback(async () => {
     if (!doc.name) return;

@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { LogIn, Mail } from "lucide-react";
 import { frappeLogin, frappeSendLoginLink, FrappeError } from "@/lib/frappe-client";
+import { parseFrappeError } from "@/lib/form-errors";
 
 interface Props {
   onForgotPassword?: () => void;
@@ -15,10 +16,12 @@ interface Props {
 export function SignInForm({ onForgotPassword }: Props = {}) {
   const [pending, setPending] = useState(false);
   const [linkPending, setLinkPending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setPending(true);
+    setError(null);
     const data = new FormData(event.currentTarget);
     const email = String(data.get("email") ?? "").trim();
     const password = String(data.get("password") ?? "");
@@ -27,8 +30,8 @@ export function SignInForm({ onForgotPassword }: Props = {}) {
       toast.success("Welcome back.");
       window.location.href = "/dashboard";
     } catch (err) {
-      const msg = err instanceof FrappeError ? err.message : "Sign in failed.";
-      toast.error(msg);
+      const parsed = parseFrappeError(err);
+      setError(parsed.formError ?? "Sign in failed.");
     } finally {
       setPending(false);
     }
@@ -56,6 +59,11 @@ export function SignInForm({ onForgotPassword }: Props = {}) {
 
   return (
     <form onSubmit={onSubmit} className="space-y-4">
+      {error && (
+        <p role="alert" className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+          {error}
+        </p>
+      )}
       <div className="grid gap-2">
         <Label htmlFor="signin-email">Email</Label>
         <Input
@@ -65,6 +73,7 @@ export function SignInForm({ onForgotPassword }: Props = {}) {
           required
           autoComplete="email"
           placeholder="you@work.com"
+          aria-invalid={error ? true : undefined}
         />
       </div>
       <div className="grid gap-2">
