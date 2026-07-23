@@ -5,9 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { toast } from "sonner";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, MailCheck } from "lucide-react";
 import { frappeSignup, FrappeError } from "@/lib/frappe-client";
+import { toast } from "sonner";
 
 const DATACENTERS = [
   { value: "india", label: "India (Mumbai)" },
@@ -15,33 +15,85 @@ const DATACENTERS = [
   { value: "us", label: "United States (Virginia)" }
 ] as const;
 
+type Status = "idle" | "submitting" | "sent" | "already-registered";
+
 export function SignUpForm() {
-  const [pending, setPending] = useState(false);
+  const [status, setStatus] = useState<Status>("idle");
   const [dc, setDc] = useState<"india" | "eu" | "us">("us");
+  const [sentTo, setSentTo] = useState<string>("");
+  const [message, setMessage] = useState<string>("");
+  const [error, setError] = useState<string | null>(null);
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setPending(true);
+    setError(null);
+    setStatus("submitting");
     const data = new FormData(event.currentTarget);
+    const email = String(data.get("email") ?? "").trim();
     try {
-      const [status, message] = await frappeSignup({
+      const [statusCode, msg] = await frappeSignup({
         full_name: String(data.get("full_name") ?? "").trim(),
-        email: String(data.get("email") ?? "").trim(),
+        email,
         company_name: String(data.get("company_name") ?? "").trim() || undefined,
         zivvy_datacenter: dc,
         redirect_to: "/dashboard"
       });
-      if (status === 1) {
-        toast.success(message || "Account created. Check your email.");
-      } else {
-        toast.info(message || "Already registered — check your email or sign in.");
-      }
+      setSentTo(email);
+      setMessage(msg || "");
+      setStatus(statusCode === 1 ? "sent" : "already-registered");
     } catch (err) {
-      const msg = err instanceof FrappeError ? err.message : "Could not sign up.";
-      toast.error(msg);
-    } finally {
-      setPending(false);
+      const errMsg = err instanceof FrappeError ? err.message : "Could not sign up.";
+      setError(errMsg);
+      toast.error(errMsg);
+      setStatus("idle");
     }
+  }
+
+  if (status === "sent" || status === "already-registered") {
+    return (
+      <div className="space-y-4 text-center">
+        <div className="mx-auto grid size-12 place-items-center rounded-full bg-primary/10 text-primary">
+          <MailCheck className="size-5" />
+        </div>
+        <div>
+          <h3 className="font-display text-lg">
+            {status === "sent" ? "Check your inbox" : "You already have an account"}
+          </h3>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {status === "sent" ? (
+              <>
+                We sent a welcome + verification link to{" "}
+                <span className="font-medium text-foreground">{sentTo}</span>. Follow it
+                to finish setting up your workspace.
+              </>
+            ) : (
+              <>
+                <span className="font-medium text-foreground">{sentTo}</span> is already
+                registered. Sign in below, or use "Forgot?" to reset your password.
+              </>
+            )}
+          </p>
+          {message && status === "sent" && (
+            <p className="mt-2 text-xs text-muted-foreground">{message}</p>
+          )}
+        </div>
+        <div className="grid gap-2">
+          <a
+            href={`/login`}
+            className="inline-flex h-9 w-full items-center justify-center rounded-md border border-input bg-background text-sm font-medium shadow-xs hover:bg-accent"
+          >
+            Go to sign in
+          </a>
+          <button
+            type="button"
+            className="text-xs text-muted-foreground hover:text-foreground"
+            onClick={() => setStatus("idle")}
+          >
+            Use a different email
+          </button>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -65,6 +117,7 @@ export function SignUpForm() {
           required
           autoComplete="email"
           placeholder="you@work.com"
+          aria-invalid={Boolean(error)}
         />
       </div>
       <div className="grid gap-2">
@@ -94,8 +147,13 @@ export function SignUpForm() {
           Your business data stays in this region.
         </p>
       </div>
-      <Button type="submit" variant="polished" className="w-full" disabled={pending}>
-        {pending ? "Creating account…" : (
+      {error && (
+        <p role="alert" className="text-xs text-destructive">
+          {error}
+        </p>
+      )}
+      <Button type="submit" variant="polished" className="w-full" disabled={status === "submitting"}>
+        {status === "submitting" ? "Creating account…" : (
           <>
             Create free account
             <ArrowRight className="size-4" />

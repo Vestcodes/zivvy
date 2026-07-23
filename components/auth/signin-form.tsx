@@ -8,7 +8,11 @@ import { toast } from "sonner";
 import { LogIn, Mail } from "lucide-react";
 import { frappeLogin, frappeSendLoginLink, FrappeError } from "@/lib/frappe-client";
 
-export function SignInForm() {
+interface Props {
+  onForgotPassword?: () => void;
+}
+
+export function SignInForm({ onForgotPassword }: Props = {}) {
   const [pending, setPending] = useState(false);
   const [linkPending, setLinkPending] = useState(false);
 
@@ -66,12 +70,13 @@ export function SignInForm() {
       <div className="grid gap-2">
         <div className="flex items-baseline justify-between">
           <Label htmlFor="signin-password">Password</Label>
-          <a
-            href="#reset"
-            className="text-xs text-muted-foreground underline-offset-2 hover:text-primary hover:underline"
+          <button
+            type="button"
+            onClick={onForgotPassword}
+            className="text-xs text-muted-foreground underline-offset-2 hover:text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 rounded"
           >
             Forgot?
-          </a>
+          </button>
         </div>
         <Input
           id="signin-password"
