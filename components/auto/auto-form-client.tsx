@@ -30,6 +30,8 @@ import {
 } from "@/components/ui/alert-dialog";
 import { FieldView } from "@/components/auto/field-view";
 import { FieldInput } from "@/components/auto/field-input";
+import { ActivityTimeline } from "@/components/auto/activity-timeline";
+import { PrintButton } from "@/components/auto/print-preview";
 import { frappeCall, FrappeError } from "@/lib/frappe-client";
 import type { DoctypeMeta, FormGroup } from "@/lib/frappe-meta";
 import { cn } from "@/lib/utils";
@@ -266,6 +268,9 @@ export function AutoFormClient({ meta, groups, initialDoc, basePath, title }: Pr
 
           <div className="flex flex-wrap items-center gap-2">
             {!editing && !isNew && (
+              <PrintButton doctype={meta.name} docname={String(doc.name)} />
+            )}
+            {!editing && !isNew && (
               <Button variant="outline" onClick={() => setEditing(true)} disabled={docstatus === 2}>
                 <Pencil />
                 Edit
@@ -319,6 +324,17 @@ export function AutoFormClient({ meta, groups, initialDoc, basePath, title }: Pr
             </CardContent>
           </Card>
         ))}
+
+        {!isNew && !editing && (
+          <ActivityTimeline
+            doctype={meta.name}
+            docname={String(doc.name)}
+            owner={doc.owner as string | undefined}
+            creation={doc.creation as string | undefined}
+            modified={doc.modified as string | undefined}
+            modifiedBy={doc.modified_by as string | undefined}
+          />
+        )}
       </div>
 
       {editing && (

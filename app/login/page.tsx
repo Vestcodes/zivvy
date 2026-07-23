@@ -1,14 +1,20 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { Logo } from "@/components/site/logo";
 import { AuthPanel } from "@/components/auth/auth-panel";
+import { fetchBootinfo } from "@/lib/boot-server";
 
 export const metadata: Metadata = {
   title: "Sign in — Zivvy",
   description: "Sign in to your Zivvy workspace, or create a free account."
 };
 
-export default function LoginPage() {
+export default async function LoginPage() {
+  const boot = await fetchBootinfo();
+  if (boot.logged_in) {
+    redirect("/dashboard");
+  }
   return (
     <div className="grid min-h-dvh lg:grid-cols-2">
       {/* Brand panel */}

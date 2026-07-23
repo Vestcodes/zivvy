@@ -115,6 +115,13 @@ export async function frappeLoggedUser() {
   return frappeCall<string>("frappe.auth.get_logged_user");
 }
 
+export async function frappeUpdatePassword(key: string, newPassword: string) {
+  return frappeCall("frappe.core.doctype.user.user.update_password", {
+    new_password: newPassword,
+    key
+  });
+}
+
 export async function frappeLogout() {
   return frappeCall("logout");
 }

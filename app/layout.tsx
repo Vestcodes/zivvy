@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
 import { BootProvider } from "@/components/boot-provider";
+import { QueryProvider } from "@/components/query-provider";
 import { fetchBootinfo } from "@/lib/boot-server";
 import "./globals.css";
 
@@ -47,10 +48,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       suppressHydrationWarning
     >
       <body className="min-h-dvh">
-        <BootProvider bootinfo={bootinfo}>
-          {children}
-          <Toaster position="top-center" />
-        </BootProvider>
+        <QueryProvider>
+          <BootProvider bootinfo={bootinfo}>
+            {children}
+            <Toaster position="top-center" />
+          </BootProvider>
+        </QueryProvider>
       </body>
     </html>
   );

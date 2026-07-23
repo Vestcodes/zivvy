@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { LinkField } from "@/components/auto/link-field";
 import type { DocField } from "@/lib/frappe-meta";
 
 interface Props {
@@ -119,8 +120,19 @@ export function FieldInput({ field, value, onChange, disabled, error }: Props) {
             disabled={readOnly}
           />
         );
-      case "Data":
       case "Link":
+        return (
+          <LinkField
+            id={commonId}
+            doctype={field.options ?? ""}
+            value={(value as string | undefined) ?? ""}
+            onChange={onChange}
+            disabled={readOnly}
+            aria-invalid={invalid || undefined}
+            aria-describedby={invalid ? errorId : undefined}
+          />
+        );
+      case "Data":
       case "Dynamic Link":
       default:
         return (

@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Bell } from "lucide-react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -14,9 +13,10 @@ import {
   BreadcrumbSeparator
 } from "@/components/ui/breadcrumb";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { AwesomebarTrigger } from "@/components/app/awesomebar";
+import { NotificationBell } from "@/components/app/notifications";
 import { useZivvyBoot } from "@/components/boot-provider";
+import type { Notification } from "@/lib/notifications";
 
 const TIER_STYLE: Record<string, string> = {
   free: "bg-muted text-foreground border-transparent",
@@ -58,7 +58,12 @@ function humanize(segment: string): string {
     .join(" ");
 }
 
-export function AppTopbar() {
+interface TopbarProps {
+  notifications?: Notification[];
+  unreadCount?: number;
+}
+
+export function AppTopbar({ notifications = [], unreadCount = 0 }: TopbarProps) {
   const pathname = usePathname();
   const boot = useZivvyBoot();
   const segments = pathname.split("/").filter(Boolean);
@@ -111,9 +116,7 @@ export function AppTopbar() {
             )}
           </>
         )}
-        <Button variant="ghost" size="icon-sm" aria-label="Notifications">
-          <Bell />
-        </Button>
+        <NotificationBell notifications={notifications} unreadCount={unreadCount} />
       </div>
     </header>
   );
