@@ -30,10 +30,31 @@ const TIER_LABEL: Record<string, string> = {
   business: "Business"
 };
 
+const SEGMENT_LABELS: Record<string, string> = {
+  rfqs: "RFQs",
+  slas: "SLAs",
+  sla: "SLA",
+  pos: "POS",
+  crm: "CRM",
+  hr: "HR",
+  kpi: "KPI",
+  kpis: "KPIs",
+  bom: "BOM",
+  boms: "BOMs",
+  faq: "FAQ",
+  faqs: "FAQs",
+  api: "API",
+  ceo: "CEO",
+  cfo: "CFO",
+  cto: "CTO"
+};
+
 function humanize(segment: string): string {
+  const key = segment.toLowerCase();
+  if (SEGMENT_LABELS[key]) return SEGMENT_LABELS[key];
   return segment
     .split("-")
-    .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
+    .map((s) => (SEGMENT_LABELS[s.toLowerCase()] ?? (s.charAt(0).toUpperCase() + s.slice(1))))
     .join(" ");
 }
 

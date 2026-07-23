@@ -92,20 +92,23 @@ export async function AutoList({ doctype, basePath, title, filters, pageLength =
                       {f.label ?? f.fieldname}
                     </TableHead>
                   ))}
-                <TableHead className="w-8" />
               </TableRow>
             </TableHeader>
             <TableBody>
               {list.values.map((row) => {
                 const rowHref = `${basePath}/${encodeURIComponent(String(row.name))}`;
                 return (
-                  <TableRow key={String(row.name)} className="cursor-pointer">
+                  <TableRow
+                    key={String(row.name)}
+                    className="group relative cursor-pointer transition-colors hover:bg-muted/40"
+                  >
                     <TableCell>
                       <Link
                         href={rowHref}
-                        className="block font-medium text-foreground hover:text-primary hover:underline"
+                        className="inline-flex items-center gap-1.5 font-medium text-foreground hover:text-primary"
                       >
                         {String(row.name)}
+                        <ChevronRight className="size-3.5 text-muted-foreground opacity-0 transition-all group-hover:translate-x-0.5 group-hover:opacity-100" />
                       </Link>
                     </TableCell>
                     {listFields
@@ -115,9 +118,6 @@ export async function AutoList({ doctype, basePath, title, filters, pageLength =
                           <FieldCell field={f} value={row[f.fieldname]} />
                         </TableCell>
                       ))}
-                    <TableCell>
-                      <ChevronRight className="size-4 text-muted-foreground" />
-                    </TableCell>
                   </TableRow>
                 );
               })}

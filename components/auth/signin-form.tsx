@@ -89,13 +89,10 @@ export function SignInForm() {
           </>
         )}
       </Button>
-      <div className="relative py-2">
-        <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-border/60" />
-        </div>
-        <div className="relative flex justify-center text-xs">
-          <span className="bg-card px-2 text-muted-foreground">or</span>
-        </div>
+      <div className="flex items-center gap-3 py-2" aria-hidden>
+        <span className="h-px flex-1 bg-border/60" />
+        <span className="text-xs text-muted-foreground">or</span>
+        <span className="h-px flex-1 bg-border/60" />
       </div>
       <Button
         type="button"

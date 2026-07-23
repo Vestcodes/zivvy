@@ -8,18 +8,30 @@ import { useBoot, useZivvyBoot } from "@/components/boot-provider";
 export function DashboardHero() {
   const boot = useBoot();
   const zivvy = useZivvyBoot();
-  const firstName = boot.user?.full_name?.split(" ")[0] ?? "there";
+  const firstName = boot.user?.full_name?.split(" ")[0];
   const greeting = getGreeting();
   const company = zivvy?.tenant?.company;
+  const today = new Date().toLocaleDateString(undefined, {
+    weekday: "long",
+    month: "long",
+    day: "numeric"
+  });
 
   return (
     <section className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
       <div>
         <p className="text-sm text-muted-foreground">
-          {company ? <>{company} · <span className="font-mono text-xs">{greeting}</span></> : greeting}
+          {company ? (
+            <>
+              {company} <span className="text-muted-foreground/50">·</span>{" "}
+              <span className="font-mono text-xs">{today}</span>
+            </>
+          ) : (
+            today
+          )}
         </p>
         <h1 className="font-display text-3xl tracking-tight sm:text-4xl">
-          {greeting}, {firstName}.
+          {firstName ? `${greeting}, ${firstName}` : greeting}
         </h1>
         <p className="mt-2 max-w-xl text-muted-foreground">
           Here's what's happening across your business today.

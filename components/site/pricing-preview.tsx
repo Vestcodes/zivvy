@@ -22,7 +22,7 @@ const PLANS: Plan[] = [
     cadence: "per seat / month",
     desc: "Get started with sales, stock basics, and CRM.",
     features: ["2 seats", "Sales & CRM", "Basic stock", "Community support"],
-    cta: "Start free"
+    cta: "Get started"
   },
   {
     name: "Pro",
@@ -36,7 +36,7 @@ const PLANS: Plan[] = [
       "Barcode workflows",
       "Priority email"
     ],
-    cta: "Start Pro",
+    cta: "Try Pro",
     highlighted: true
   },
   {
@@ -51,7 +51,7 @@ const PLANS: Plan[] = [
       "Subcontracting",
       "Priority support"
     ],
-    cta: "Start Business"
+    cta: "Talk to sales"
   }
 ];
 

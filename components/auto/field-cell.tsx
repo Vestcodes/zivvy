@@ -3,23 +3,9 @@ import { Check, Minus } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import type { DocField } from "@/lib/frappe-meta";
-
-const CURRENCY_FORMAT = new Intl.NumberFormat(undefined, {
-  style: "decimal",
-  minimumFractionDigits: 2,
-  maximumFractionDigits: 2
-});
+import { formatDate, formatDateTime, formatMoney } from "@/lib/format";
 
 const INT_FORMAT = new Intl.NumberFormat();
-
-function formatDate(value: unknown, withTime = false) {
-  if (!value) return "";
-  const d = new Date(String(value));
-  if (isNaN(d.getTime())) return String(value);
-  return withTime
-    ? d.toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" })
-    : d.toLocaleDateString(undefined, { dateStyle: "medium" });
-}
 
 export function FieldCell({
   field,
@@ -38,7 +24,7 @@ export function FieldCell({
     case "Currency":
       return (
         <span className="font-mono tabular-nums">
-          {CURRENCY_FORMAT.format(Number(value))}
+          {formatMoney(Number(value), "USD", { fractionDigits: 2 })}
         </span>
       );
 
@@ -61,10 +47,10 @@ export function FieldCell({
       );
 
     case "Date":
-      return <span className="tabular-nums">{formatDate(value, false)}</span>;
+      return <span className="tabular-nums">{formatDate(String(value))}</span>;
 
     case "Datetime":
-      return <span className="tabular-nums">{formatDate(value, true)}</span>;
+      return <span className="tabular-nums">{formatDateTime(String(value))}</span>;
 
     case "Check":
       return Number(value) === 1 ? (
