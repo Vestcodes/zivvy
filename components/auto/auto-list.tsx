@@ -15,7 +15,9 @@ import { AutoListEmpty } from "@/components/auto/auto-list-empty";
 import { AutoListSkeleton } from "@/components/auto/auto-list-skeleton";
 import { AutoListSearch } from "@/components/auto/auto-list-search";
 import { AutoListPagination } from "@/components/auto/auto-list-pagination";
+import { AutoListKeyboard } from "@/components/auto/auto-list-keyboard";
 import { UpgradeRequired } from "@/components/upgrade-required";
+import { SavedViewsBar } from "@/components/auto/saved-views-bar";
 import {
   frappeGetCount,
   getDoctypeMeta,
@@ -31,7 +33,7 @@ interface Props {
   title: string;
   filters?: Array<[string, string, string, string | number | boolean]>;
   pageLength?: number;
-  searchParams?: { q?: string; page?: string; size?: string };
+  searchParams?: { q?: string; page?: string; size?: string; filters?: string; sort?: string; order?: string };
 }
 
 export async function AutoList({
@@ -74,9 +76,21 @@ export async function AutoList({
   const page = Math.max(1, Number(searchParams.page ?? 1) || 1);
   const size = Math.max(5, Math.min(200, Number(searchParams.size ?? pageLength) || pageLength));
 
-  // Build filters: base filters + optional search on `name` field
+  // Saved-view filters from URL
+  let viewFilters: Array<[string, string, string, string | number | boolean]> = [];
+  if (searchParams.filters) {
+    try { viewFilters = JSON.parse(searchParams.filters); } catch { /* ignore */ }
+  }
+
+  // Saved-view sort override
+  const sortOverride = searchParams.sort
+    ? `\`tab${doctype}\`.\`${searchParams.sort}\` ${searchParams.order ?? "DESC"}`
+    : null;
+
+  // Build filters: base filters + saved-view filters + optional search on `name` field
   const filters: Array<[string, string, string, string | number | boolean]> = [
-    ...(baseFilters ?? [])
+    ...(baseFilters ?? []),
+    ...viewFilters
   ];
   if (q) {
     filters.push([doctype, "name", "like", `%${q}%`]);
@@ -87,7 +101,7 @@ export async function AutoList({
       doctype,
       fields: fieldNames,
       filters: filters.length > 0 ? filters : undefined,
-      order_by: orderBy,
+      order_by: sortOverride ?? orderBy,
       start: (page - 1) * size,
       page_length: size
     }),
@@ -97,6 +111,9 @@ export async function AutoList({
   ]);
 
   const shownOnPage = list?.values.length ?? 0;
+  const rowHrefs = (list?.values ?? []).map(
+    (row) => `${basePath}/${encodeURIComponent(String(row.name))}`
+  );
 
   return (
     <div className="space-y-4">
@@ -125,6 +142,8 @@ export async function AutoList({
         </div>
       </header>
 
+      <SavedViewsBar doctype={doctype} />
+
       {!list || shownOnPage === 0 ? (
         <AutoListEmpty
           title={title}
@@ -132,50 +151,52 @@ export async function AutoList({
           reason={list ? "empty" : "unavailable"}
         />
       ) : (
-        <Card className="border-border/70 bg-card p-0 shadow-sm">
-          <Table>
-            <TableHeader>
-              <TableRow className="bg-secondary/40 hover:bg-secondary/40">
-                <TableHead className="w-[240px] font-medium">Name</TableHead>
-                {listFields
-                  .filter((f) => f.fieldname !== "name")
-                  .map((f) => (
-                    <TableHead key={f.fieldname} className="font-medium">
-                      {f.label ?? f.fieldname}
-                    </TableHead>
-                  ))}
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {list.values.map((row) => {
-                const rowHref = `${basePath}/${encodeURIComponent(String(row.name))}`;
-                return (
-                  <TableRow
-                    key={String(row.name)}
-                    className="group relative cursor-pointer transition-colors hover:bg-muted/40"
-                  >
-                    <TableCell>
-                      <Link
-                        href={rowHref}
-                        className="inline-flex items-center gap-1.5 font-medium text-foreground hover:text-primary"
-                      >
-                        {String(row.name)}
-                        <ChevronRight className="size-3.5 text-muted-foreground opacity-0 transition-all group-hover:translate-x-0.5 group-hover:opacity-100" />
-                      </Link>
-                    </TableCell>
-                    {listFields
-                      .filter((f) => f.fieldname !== "name")
-                      .map((f) => (
-                        <TableCell key={f.fieldname} className="text-sm">
-                          <FieldCell field={f} value={row[f.fieldname]} />
-                        </TableCell>
-                      ))}
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </Card>
+        <AutoListKeyboard rowHrefs={rowHrefs} newHref={`${basePath}/new`}>
+          <Card className="border-border/70 bg-card p-0 shadow-sm">
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-secondary/40 hover:bg-secondary/40">
+                  <TableHead className="w-[240px] font-medium">Name</TableHead>
+                  {listFields
+                    .filter((f) => f.fieldname !== "name")
+                    .map((f) => (
+                      <TableHead key={f.fieldname} className="font-medium">
+                        {f.label ?? f.fieldname}
+                      </TableHead>
+                    ))}
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {list.values.map((row) => {
+                  const rowHref = `${basePath}/${encodeURIComponent(String(row.name))}`;
+                  return (
+                    <TableRow
+                      key={String(row.name)}
+                      className="group relative cursor-pointer transition-colors hover:bg-muted/40"
+                    >
+                      <TableCell>
+                        <Link
+                          href={rowHref}
+                          className="inline-flex items-center gap-1.5 font-medium text-foreground hover:text-primary"
+                        >
+                          {String(row.name)}
+                          <ChevronRight className="size-3.5 text-muted-foreground opacity-0 transition-all group-hover:translate-x-0.5 group-hover:opacity-100" />
+                        </Link>
+                      </TableCell>
+                      {listFields
+                        .filter((f) => f.fieldname !== "name")
+                        .map((f) => (
+                          <TableCell key={f.fieldname} className="text-sm">
+                            <FieldCell field={f} value={row[f.fieldname]} />
+                          </TableCell>
+                        ))}
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </Card>
+        </AutoListKeyboard>
       )}
 
       <AutoListPagination page={page} pageSize={size} total={count} shownOnPage={shownOnPage} />

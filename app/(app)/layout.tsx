@@ -4,6 +4,7 @@ import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AppSidebar } from "@/components/app/app-sidebar";
 import { AppTopbar } from "@/components/app/app-topbar";
+import { KeyboardShortcuts } from "@/components/app/keyboard-shortcuts";
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const boot = await fetchBootinfo();
@@ -21,6 +22,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
             {children}
           </div>
         </SidebarInset>
+        <KeyboardShortcuts />
       </SidebarProvider>
     </TooltipProvider>
   );

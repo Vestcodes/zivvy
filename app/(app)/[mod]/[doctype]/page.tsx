@@ -5,7 +5,7 @@ import { slugToDoctype } from "@/lib/doctype-slugs";
 
 interface Props {
   params: Promise<{ mod: string; doctype: string }>;
-  searchParams: Promise<{ q?: string; page?: string; size?: string }>;
+  searchParams: Promise<{ q?: string; page?: string; size?: string; filters?: string; sort?: string; order?: string }>;
 }
 
 function humanize(seg: string): string {
