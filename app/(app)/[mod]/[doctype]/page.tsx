@@ -5,6 +5,7 @@ import { slugToDoctype } from "@/lib/doctype-slugs";
 
 interface Props {
   params: Promise<{ mod: string; doctype: string }>;
+  searchParams: Promise<{ q?: string; page?: string; size?: string }>;
 }
 
 function humanize(seg: string): string {
@@ -19,8 +20,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return { title: `${humanize(doctype)} — Zivvy` };
 }
 
-export default async function ModuleDoctypeListPage({ params }: Props) {
+export default async function ModuleDoctypeListPage({ params, searchParams }: Props) {
   const { mod, doctype: docSlug } = await params;
+  const sp = await searchParams;
   const dt = slugToDoctype(mod, docSlug);
   if (!dt) notFound();
 
@@ -29,6 +31,7 @@ export default async function ModuleDoctypeListPage({ params }: Props) {
       doctype={dt}
       basePath={`/${mod}/${docSlug}`}
       title={humanize(docSlug)}
+      searchParams={sp}
     />
   );
 }

@@ -1,7 +1,6 @@
 import Link from "next/link";
-import { ChevronRight, Plus, Search } from "lucide-react";
+import { ChevronRight, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -14,8 +13,11 @@ import { Card } from "@/components/ui/card";
 import { FieldCell } from "@/components/auto/field-cell";
 import { AutoListEmpty } from "@/components/auto/auto-list-empty";
 import { AutoListSkeleton } from "@/components/auto/auto-list-skeleton";
+import { AutoListSearch } from "@/components/auto/auto-list-search";
+import { AutoListPagination } from "@/components/auto/auto-list-pagination";
 import { UpgradeRequired } from "@/components/upgrade-required";
 import {
+  frappeGetCount,
   getDoctypeMeta,
   listViewFields,
   reportviewGet
@@ -29,11 +31,18 @@ interface Props {
   title: string;
   filters?: Array<[string, string, string, string | number | boolean]>;
   pageLength?: number;
+  searchParams?: { q?: string; page?: string; size?: string };
 }
 
-export async function AutoList({ doctype, basePath, title, filters, pageLength = 25 }: Props) {
-  // Gate BEFORE fetching. Bootinfo has doctype_min_tier straight from the
-  // backend gating config — the frontend just renders the correct UX.
+export async function AutoList({
+  doctype,
+  basePath,
+  title,
+  filters: baseFilters,
+  pageLength = 25,
+  searchParams = {}
+}: Props) {
+  // Tier gate FIRST — before any fetches.
   const boot = await fetchBootinfo();
   const zivvy = boot.zivvy;
   const requiredTier = zivvy?.doctype_min_tier?.[doctype];
@@ -61,13 +70,33 @@ export async function AutoList({ doctype, basePath, title, filters, pageLength =
     ? `\`tab${doctype}\`.\`${meta.sort_field}\` ${meta.sort_order ?? "DESC"}`
     : `\`tab${doctype}\`.\`modified\` DESC`;
 
-  const list = await reportviewGet({
-    doctype,
-    fields: fieldNames,
-    filters,
-    order_by: orderBy,
-    page_length: pageLength
-  });
+  const q = (searchParams.q ?? "").trim();
+  const page = Math.max(1, Number(searchParams.page ?? 1) || 1);
+  const size = Math.max(5, Math.min(200, Number(searchParams.size ?? pageLength) || pageLength));
+
+  // Build filters: base filters + optional search on `name` field
+  const filters: Array<[string, string, string, string | number | boolean]> = [
+    ...(baseFilters ?? [])
+  ];
+  if (q) {
+    filters.push([doctype, "name", "like", `%${q}%`]);
+  }
+
+  const [list, count] = await Promise.all([
+    reportviewGet({
+      doctype,
+      fields: fieldNames,
+      filters: filters.length > 0 ? filters : undefined,
+      order_by: orderBy,
+      start: (page - 1) * size,
+      page_length: size
+    }),
+    frappeGetCount(doctype, filters.length > 0 ? Object.fromEntries(
+      filters.map(([, field, op, val]) => [field, op === "=" ? val : [op, val]])
+    ) : undefined)
+  ]);
+
+  const shownOnPage = list?.values.length ?? 0;
 
   return (
     <div className="space-y-4">
@@ -77,13 +106,16 @@ export async function AutoList({ doctype, basePath, title, filters, pageLength =
           <p className="text-sm text-muted-foreground">
             {meta.is_submittable ? "Submittable · " : ""}
             {doctype}
+            {q && (
+              <>
+                {" "}
+                · <span className="font-mono">matching "{q}"</span>
+              </>
+            )}
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <div className="relative">
-            <Search className="pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground" />
-            <Input placeholder="Search…" className="h-9 w-56 pl-8" />
-          </div>
+          <AutoListSearch placeholder={`Search ${title.toLowerCase()}…`} />
           <Button asChild variant="polished" size="sm">
             <Link href={`${basePath}/new`}>
               <Plus />
@@ -93,7 +125,7 @@ export async function AutoList({ doctype, basePath, title, filters, pageLength =
         </div>
       </header>
 
-      {!list || list.values.length === 0 ? (
+      {!list || shownOnPage === 0 ? (
         <AutoListEmpty
           title={title}
           basePath={basePath}
@@ -146,13 +178,7 @@ export async function AutoList({ doctype, basePath, title, filters, pageLength =
         </Card>
       )}
 
-      <footer className="flex items-center justify-between text-xs text-muted-foreground">
-        <span>
-          {list?.values.length ?? 0} of ~
-          {list?.values.length === pageLength ? "many" : list?.values.length ?? 0}
-        </span>
-        <span className="font-mono">Page 1</span>
-      </footer>
+      <AutoListPagination page={page} pageSize={size} total={count} shownOnPage={shownOnPage} />
     </div>
   );
 }
