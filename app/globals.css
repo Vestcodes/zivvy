@@ -63,6 +63,27 @@
   --duration-slow: 260ms;
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Semantic status tones — pill fg/bg/ring per status intent.
+     Use via bg-status-<tone>/text-status-<tone>-fg utilities. */
+  --status-success-bg: #dcfce7;
+  --status-success-fg: #14532d;
+  --status-success-ring: #86efac;
+  --status-warning-bg: #fef3c7;
+  --status-warning-fg: #78350f;
+  --status-warning-ring: #fcd34d;
+  --status-danger-bg: #fee2e2;
+  --status-danger-fg: #7f1d1d;
+  --status-danger-ring: #fca5a5;
+  --status-info-bg: #dbeafe;
+  --status-info-fg: #1e3a8a;
+  --status-info-ring: #93c5fd;
+  --status-neutral-bg: #f3f4f6;
+  --status-neutral-fg: #374151;
+  --status-neutral-ring: #d1d5db;
+  --status-progress-bg: #ede9fe;
+  --status-progress-fg: #4c1d95;
+  --status-progress-ring: #c4b5fd;
 }
 
 /* Respect user preference — override transitions/animations */
@@ -123,6 +144,26 @@
   --primary-light: color-mix(in oklab, var(--primary) 82%, white);
   --primary-dark: var(--primary);
   --primary-ring: color-mix(in oklab, var(--primary) 58%, black);
+
+  /* Dark-mode status tones — deeper backgrounds, lighter fg */
+  --status-success-bg: #14532d33;
+  --status-success-fg: #86efac;
+  --status-success-ring: #14532d;
+  --status-warning-bg: #78350f33;
+  --status-warning-fg: #fcd34d;
+  --status-warning-ring: #78350f;
+  --status-danger-bg: #7f1d1d33;
+  --status-danger-fg: #fca5a5;
+  --status-danger-ring: #7f1d1d;
+  --status-info-bg: #1e3a8a33;
+  --status-info-fg: #93c5fd;
+  --status-info-ring: #1e3a8a;
+  --status-neutral-bg: #37415133;
+  --status-neutral-fg: #d1d5db;
+  --status-neutral-ring: #374151;
+  --status-progress-bg: #4c1d9533;
+  --status-progress-fg: #c4b5fd;
+  --status-progress-ring: #4c1d95;
 }
 
 @theme inline {
@@ -162,6 +203,25 @@
   --color-primary-light: var(--primary-light);
   --color-primary-dark: var(--primary-dark);
   --color-primary-ring: var(--primary-ring);
+
+  --color-status-success-bg: var(--status-success-bg);
+  --color-status-success-fg: var(--status-success-fg);
+  --color-status-success-ring: var(--status-success-ring);
+  --color-status-warning-bg: var(--status-warning-bg);
+  --color-status-warning-fg: var(--status-warning-fg);
+  --color-status-warning-ring: var(--status-warning-ring);
+  --color-status-danger-bg: var(--status-danger-bg);
+  --color-status-danger-fg: var(--status-danger-fg);
+  --color-status-danger-ring: var(--status-danger-ring);
+  --color-status-info-bg: var(--status-info-bg);
+  --color-status-info-fg: var(--status-info-fg);
+  --color-status-info-ring: var(--status-info-ring);
+  --color-status-neutral-bg: var(--status-neutral-bg);
+  --color-status-neutral-fg: var(--status-neutral-fg);
+  --color-status-neutral-ring: var(--status-neutral-ring);
+  --color-status-progress-bg: var(--status-progress-bg);
+  --color-status-progress-fg: var(--status-progress-fg);
+  --color-status-progress-ring: var(--status-progress-ring);
 
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);

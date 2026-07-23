@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { Check, Minus } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { StatusBadge } from "@/components/ui/status-badge";
+import { STATUS_FIELD_NAMES } from "@/lib/status";
 import { cn } from "@/lib/utils";
 import type { DocField } from "@/lib/frappe-meta";
 import { formatDate, formatDateTime, formatMoney } from "@/lib/format";
@@ -60,6 +62,9 @@ export function FieldCell({
       );
 
     case "Select":
+      if (STATUS_FIELD_NAMES.has(field.fieldname)) {
+        return <StatusBadge status={String(value)} />;
+      }
       return (
         <Badge variant="outline" className="border-border/70 bg-secondary/70 font-normal">
           {String(value)}

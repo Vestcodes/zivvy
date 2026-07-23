@@ -14,6 +14,8 @@ import {
   X
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { StatusBadge } from "@/components/ui/status-badge";
+import { docstatusLabel, toneForDocstatus } from "@/lib/status";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -43,17 +45,6 @@ interface Props {
   title: string;
 }
 
-const DOCSTATUS_LABEL: Record<number, string> = {
-  0: "Draft",
-  1: "Submitted",
-  2: "Cancelled"
-};
-
-const DOCSTATUS_BADGE: Record<number, string> = {
-  0: "bg-secondary text-secondary-foreground border-transparent",
-  1: "bg-primary text-primary-foreground border-transparent",
-  2: "bg-muted text-muted-foreground border-transparent"
-};
 
 function shallowEqual(a: Record<string, unknown>, b: Record<string, unknown>): boolean {
   const ak = Object.keys(a);
@@ -254,9 +245,10 @@ export function AutoFormClient({ meta, groups, initialDoc, basePath, title }: Pr
                 {isNew ? `New ${singular}` : String(doc.name)}
               </h1>
               {meta.is_submittable && !isNew && (
-                <Badge className={DOCSTATUS_BADGE[docstatus] ?? DOCSTATUS_BADGE[0]}>
-                  {DOCSTATUS_LABEL[docstatus] ?? String(docstatus)}
-                </Badge>
+                <StatusBadge
+                  status={docstatusLabel(docstatus)}
+                  tone={toneForDocstatus(docstatus)}
+                />
               )}
               {dirty && (
                 <Badge className="border-chart-2/30 bg-chart-2/10 text-chart-2">
