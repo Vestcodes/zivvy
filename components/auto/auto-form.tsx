@@ -3,7 +3,10 @@ import { AlertTriangle, LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { AutoFormClient } from "@/components/auto/auto-form-client";
+import { UpgradeRequired } from "@/components/upgrade-required";
 import { getDoc, getDoctypeMeta, groupFieldsForForm } from "@/lib/frappe-meta";
+import { fetchBootinfo } from "@/lib/boot-server";
+import { tierAtLeast } from "@/lib/boot-types";
 
 interface Props {
   doctype: string;
@@ -63,6 +66,22 @@ function EmptyState({
 }
 
 export async function AutoForm({ doctype, name, basePath, title }: Props) {
+  // Tier gate up front — same UX contract as AutoList.
+  const boot = await fetchBootinfo();
+  const zivvy = boot.zivvy;
+  const requiredTier = zivvy?.doctype_min_tier?.[doctype];
+  if (requiredTier && zivvy && !tierAtLeast(zivvy.tier, requiredTier)) {
+    return (
+      <div className="space-y-4">
+        <header>
+          <h1 className="font-display text-2xl tracking-tight sm:text-3xl">{title}</h1>
+          <p className="text-sm text-muted-foreground">{doctype}</p>
+        </header>
+        <UpgradeRequired featureName={title} requiredTier={requiredTier} />
+      </div>
+    );
+  }
+
   const meta = await getDoctypeMeta(doctype);
   if (!meta) {
     return <EmptyState title={title} basePath={basePath} reason="auth" />;
