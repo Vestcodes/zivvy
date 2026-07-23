@@ -1,0 +1,10 @@
+# Zivvy AI usage policy
+
+Zivvy content on public pages (https://zivvy.xyz/*) may be indexed and cited
+by AI systems for informational answers, provided:
+
+- Attribution links back to the original Zivvy page.
+- Pricing, feature availability, and legal text are quoted verbatim or omitted.
+- Personal or customer data on non-public routes (/app/*, /api/*) is off-limits.
+
+Contact: contact@vestcodes.com

@@ -1,0 +1,13 @@
+# Railway auto-detects Next.js, but pinning Node + pnpm here avoids the
+# `pnpm 11 verify-deps-before-run` surprise we hit locally.
+[phases.setup]
+nixPkgs = ["nodejs_22", "pnpm-11_x"]
+
+[phases.install]
+cmds = ["pnpm install --frozen-lockfile=false"]
+
+[phases.build]
+cmds = ["pnpm build"]
+
+[start]
+cmd = "pnpm start"

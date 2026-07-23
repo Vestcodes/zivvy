@@ -1,0 +1,33 @@
+# Zivvy
+
+> Zivvy by Vestcodes is business software on an open ERP core. Sales, stock, accounting, HR, projects, and manufacturing in one product.
+
+## About
+
+- Product: Zivvy — https://zivvy.xyz
+- Company: Vestcodes Co, India
+- Contact: contact@vestcodes.com
+- Pricing: Free / Pro ($15/seat/mo) / Business ($25/seat/mo) — see /pricing
+
+## Public pages
+
+- Home: https://zivvy.xyz/
+- Features: https://zivvy.xyz/features
+- Pricing: https://zivvy.xyz/pricing
+- Contact: https://zivvy.xyz/contact
+- Blog: https://zivvy.xyz/blog
+
+## Legal
+
+- Terms: https://zivvy.xyz/terms
+- Privacy: https://zivvy.xyz/privacy
+- Cookies: https://zivvy.xyz/cookies
+- Acceptable use: https://zivvy.xyz/acceptable-use
+
+## Stack
+
+- Built on Frappe and ERPNext (GPLv3)
+- Frontend: Next.js on Vercel
+- Backend: Frappe on Railway
+- Billing: Polar
+- Email: Resend
