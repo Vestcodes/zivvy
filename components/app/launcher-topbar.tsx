@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { Logo } from "@/components/site/logo";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -54,27 +55,32 @@ export function LauncherTopbar() {
   }
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 shrink-0 items-center gap-3 border-b bg-background/85 px-4 backdrop-blur md:px-8">
+    <header className="sticky top-0 z-30 flex h-12 shrink-0 items-center gap-2 border-b bg-background/90 px-3 backdrop-blur md:px-6">
       <Link href="/apps" className="shrink-0">
         <Logo />
       </Link>
       {zivvy?.tenant?.company && (
-        <span className="hidden text-sm text-muted-foreground md:inline">
+        <span className="hidden truncate max-w-[200px] text-xs text-muted-foreground md:inline">
           · {zivvy.tenant.company}
         </span>
       )}
-      <div className="ml-auto flex items-center gap-2">
+      <div className="ml-auto flex items-center gap-1.5">
         <AwesomebarTrigger />
         {zivvy && (
-          <Badge className={TIER_STYLE[zivvy.tier] ?? TIER_STYLE.free}>
+          <Badge
+            className={cn(
+              "h-6 px-2 text-[10px] font-medium uppercase tracking-wide",
+              TIER_STYLE[zivvy.tier] ?? TIER_STYLE.free
+            )}
+          >
             {TIER_LABEL[zivvy.tier] ?? zivvy.tier}
           </Badge>
         )}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <button className="grid size-9 place-items-center rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring">
-              <Avatar className="size-9">
-                <AvatarFallback className="bg-primary-gradient text-primary-foreground">
+            <button className="grid size-8 place-items-center rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring">
+              <Avatar className="size-8">
+                <AvatarFallback className="bg-primary-gradient text-primary-foreground text-xs">
                   {initials}
                 </AvatarFallback>
               </Avatar>
