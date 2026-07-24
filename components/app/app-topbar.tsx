@@ -15,7 +15,6 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { AwesomebarTrigger } from "@/components/app/awesomebar";
 import { NotificationBell } from "@/components/app/notifications";
-import { ChatBadge } from "@/components/app/chat-badge";
 import { useZivvyBoot } from "@/components/boot-provider";
 import { cn } from "@/lib/utils";
 import type { Notification } from "@/lib/notifications";
@@ -126,8 +125,11 @@ export function AppTopbar({ notifications = [], unreadCount = 0, unreadChat = 0 
             {boot.tenant.company}
           </span>
         )}
-        <ChatBadge unread={unreadChat} />
-        <NotificationBell notifications={notifications} unreadCount={unreadCount} />
+        <NotificationBell
+          notifications={notifications}
+          unreadCount={unreadCount}
+          unreadChat={unreadChat}
+        />
       </div>
     </header>
   );
