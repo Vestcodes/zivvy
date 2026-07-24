@@ -3,7 +3,15 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Check, ChevronsUpDown, Loader2, Search, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from "@/components/ui/select";
 import { frappeCall } from "@/lib/frappe-client";
+import { isEnumLikeDoctype } from "@/lib/enum-doctypes";
 import { cn } from "@/lib/utils";
 
 interface Props {
@@ -22,7 +30,79 @@ interface LinkOption {
   description?: string;
 }
 
-export function LinkField({
+export function LinkField(props: Props) {
+  // Small enum-like doctypes (Salutation, Gender, Country, …) render as a
+  // preloaded select rather than a search-required combobox. Trades one
+  // round-trip on mount for zero-friction picking.
+  if (isEnumLikeDoctype(props.doctype)) {
+    return <EnumSelect {...props} />;
+  }
+  return <SearchLink {...props} />;
+}
+
+function EnumSelect({
+  doctype,
+  value,
+  onChange,
+  disabled,
+  id
+}: Props) {
+  const [options, setOptions] = useState<string[] | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    frappeCall<Array<Record<string, unknown>>>("frappe.client.get_list", {
+      doctype,
+      fields: JSON.stringify(["name"]),
+      order_by: "name asc",
+      limit_page_length: 100
+    })
+      .then((rows) => {
+        if (cancelled) return;
+        setOptions(Array.isArray(rows) ? rows.map((r) => String(r.name ?? "")).filter(Boolean) : []);
+      })
+      .catch(() => {
+        if (!cancelled) setOptions([]);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [doctype]);
+
+  const loading = options === null;
+  const items = options ?? [];
+
+  return (
+    <Select
+      value={value || undefined}
+      onValueChange={(v) => onChange(v === "__clear__" ? "" : v)}
+      disabled={disabled || loading}
+    >
+      <SelectTrigger id={id} className="w-full">
+        <SelectValue placeholder={loading ? "Loading…" : `Select ${doctype.toLowerCase()}`} />
+      </SelectTrigger>
+      <SelectContent>
+        {value && (
+          <SelectItem value="__clear__" className="text-muted-foreground">
+            Clear selection
+          </SelectItem>
+        )}
+        {items.map((opt) => (
+          <SelectItem key={opt} value={opt}>
+            {opt}
+          </SelectItem>
+        ))}
+        {items.length === 0 && !loading && (
+          <div className="px-3 py-4 text-center text-sm text-muted-foreground">
+            No {doctype.toLowerCase()} configured
+          </div>
+        )}
+      </SelectContent>
+    </Select>
+  );
+}
+
+function SearchLink({
   doctype,
   value,
   onChange,
