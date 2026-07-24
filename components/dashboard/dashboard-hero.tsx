@@ -18,33 +18,31 @@ export function DashboardHero() {
   });
 
   return (
-    <section className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-      <div>
-        <p className="text-sm text-muted-foreground">
+    <section className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+      <div className="min-w-0">
+        <p className="text-xs text-muted-foreground">
           {company ? (
             <>
-              {company} <span className="text-muted-foreground/50">·</span>{" "}
-              <span className="font-mono text-xs">{today}</span>
+              <span className="font-medium text-foreground/80">{company}</span>
+              <span className="text-muted-foreground/50"> · </span>
+              <span className="font-mono">{today}</span>
             </>
           ) : (
             today
           )}
         </p>
-        <h1 className="font-display text-3xl tracking-tight sm:text-4xl">
+        <h1 className="font-display text-2xl tracking-tight sm:text-3xl">
           {firstName ? `${greeting}, ${firstName}` : greeting}
         </h1>
-        <p className="mt-2 max-w-xl text-muted-foreground">
-          Here's what's happening across your business today.
-        </p>
       </div>
       <div className="flex gap-2">
-        <Button asChild variant="outline">
+        <Button asChild variant="outline" size="sm">
           <Link href="/sales/customers/new">
             <Plus />
             New customer
           </Link>
         </Button>
-        <Button asChild variant="polished">
+        <Button asChild variant="polished" size="sm">
           <Link href="/sales/invoices/new">
             <Plus />
             New invoice

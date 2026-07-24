@@ -24,7 +24,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         <AppSidebar />
         <SidebarInset>
           <AppTopbar notifications={notifications} unreadCount={unreadCount} />
-          <div className="flex flex-1 flex-col gap-4 p-4 md:p-6 lg:p-8">
+          <div className="flex flex-1 flex-col gap-4 p-4 md:p-5 lg:px-6 lg:py-5">
             {children}
           </div>
         </SidebarInset>

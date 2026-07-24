@@ -12,10 +12,10 @@ export const metadata: Metadata = {
 export default async function DashboardPage() {
   const { kpis, attention, activity } = await fetchDashboardData();
   return (
-    <div className="mx-auto w-full max-w-6xl space-y-6">
+    <div className="mx-auto w-full max-w-6xl space-y-4">
       <DashboardHero />
       <DashboardKpis data={kpis} />
-      <div className="grid gap-4 lg:grid-cols-3">
+      <div className="grid gap-3 lg:grid-cols-3">
         <DashboardAttention items={attention} className="lg:col-span-2" />
         <DashboardActivity items={activity} />
       </div>

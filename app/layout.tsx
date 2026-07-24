@@ -1,10 +1,11 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
 import { BootProvider } from "@/components/boot-provider";
 import { QueryProvider } from "@/components/query-provider";
 import { ThemeProvider } from "@/components/theme-provider";
 import { fetchBootinfo } from "@/lib/boot-server";
+import { OrganizationJsonLd, SoftwareApplicationJsonLd } from "@/components/seo/json-ld";
 import "./globals.css";
 
 // Inter drives both --font-sans and --font-serif (Inter's Display cut covers
@@ -27,31 +28,95 @@ const fontMono = JetBrains_Mono({
   display: "swap"
 });
 
+const TITLE = "Zivvy — the clean way to run your whole business";
+const DESCRIPTION =
+  "Sales, stock, accounting, HR and manufacturing in one product built for founder-led teams. Seat-based pricing, region-picked data, no forced modules.";
+
 export const metadata: Metadata = {
-  title: "Zivvy — business software that works",
-  description:
-    "Sales, stock, accounting, HR and manufacturing in one clean product.",
+  title: {
+    default: TITLE,
+    template: "%s · Zivvy"
+  },
+  description: DESCRIPTION,
   metadataBase: new URL("https://zivvy.xyz"),
+  applicationName: "Zivvy",
+  keywords: [
+    "ERP software",
+    "business software",
+    "ERPNext alternative",
+    "Odoo alternative",
+    "small business ERP",
+    "accounting software",
+    "inventory management",
+    "HR software",
+    "manufacturing ERP",
+    "SaaS ERP",
+    "Zivvy"
+  ],
+  authors: [{ name: "Vestcodes", url: "https://zivvy.xyz" }],
+  creator: "Vestcodes",
+  publisher: "Vestcodes",
+  category: "Business Software",
   alternates: {
-    canonical: "/"
+    canonical: "/",
+    types: {
+      "application/rss+xml": [{ url: "/blog/rss.xml", title: "Zivvy Blog" }]
+    }
   },
   icons: {
     icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
     apple: [{ url: "/apple-icon", sizes: "180x180", type: "image/png" }]
   },
   openGraph: {
-    title: "Zivvy — business software that works",
-    description: "Sales, stock, accounting, HR and manufacturing in one clean product.",
+    title: TITLE,
+    description: DESCRIPTION,
     url: "https://zivvy.xyz",
     siteName: "Zivvy",
     type: "website",
-    locale: "en_US"
+    locale: "en_US",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "Zivvy — the clean way to run your whole business"
+      }
+    ]
   },
   twitter: {
     card: "summary_large_image",
-    title: "Zivvy — business software that works",
-    description: "Sales, stock, accounting, HR and manufacturing in one clean product."
+    title: TITLE,
+    description: DESCRIPTION,
+    images: ["/opengraph-image"]
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1
+    }
+  },
+  formatDetection: {
+    telephone: false,
+    email: false,
+    address: false
+  },
+  verification: {
+    // Populate when Google Search Console / Bing verify tokens are set.
   }
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#05080f" }
+  ],
+  width: "device-width",
+  initialScale: 1
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
@@ -63,6 +128,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       suppressHydrationWarning
     >
       <body className="min-h-dvh">
+        <OrganizationJsonLd />
+        <SoftwareApplicationJsonLd />
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
           <QueryProvider>
             <BootProvider bootinfo={bootinfo}>

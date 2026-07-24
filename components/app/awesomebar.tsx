@@ -56,11 +56,11 @@ export function AwesomebarTrigger() {
         variant="outline"
         size="sm"
         onClick={() => setOpen(true)}
-        className="h-9 w-full max-w-72 justify-between text-muted-foreground"
+        className="h-8 w-full max-w-56 justify-between text-muted-foreground"
       >
-        <span className="inline-flex items-center gap-2">
-          <Search className="size-4" />
-          <span className="text-sm">Search or jump…</span>
+        <span className="inline-flex min-w-0 items-center gap-2">
+          <Search className="size-4 shrink-0" />
+          <span className="truncate text-sm">Search…</span>
         </span>
         <kbd className="pointer-events-none inline-flex items-center gap-0.5 rounded border border-border bg-muted px-1.5 font-mono text-[10px] text-muted-foreground">
           <span>⌘</span>K

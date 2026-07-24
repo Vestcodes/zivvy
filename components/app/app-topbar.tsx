@@ -16,6 +16,7 @@ import { Badge } from "@/components/ui/badge";
 import { AwesomebarTrigger } from "@/components/app/awesomebar";
 import { NotificationBell } from "@/components/app/notifications";
 import { useZivvyBoot } from "@/components/boot-provider";
+import { cn } from "@/lib/utils";
 import type { Notification } from "@/lib/notifications";
 
 const TIER_STYLE: Record<string, string> = {
@@ -69,12 +70,12 @@ export function AppTopbar({ notifications = [], unreadCount = 0 }: TopbarProps) 
   const segments = pathname.split("/").filter(Boolean);
 
   return (
-    <header className="sticky top-0 z-30 flex h-14 shrink-0 items-center gap-2 border-b bg-background/85 px-4 backdrop-blur">
+    <header className="sticky top-0 z-30 flex h-12 shrink-0 items-center gap-1.5 border-b bg-background/90 px-3 backdrop-blur">
       <SidebarTrigger className="-ml-1" />
-      <Separator orientation="vertical" className="mr-2 h-4" />
+      <Separator orientation="vertical" className="mx-1 h-4" />
 
-      <Breadcrumb className="hidden sm:block">
-        <BreadcrumbList>
+      <Breadcrumb className="hidden min-w-0 flex-shrink sm:block">
+        <BreadcrumbList className="flex-nowrap">
           {segments.length === 0 ? (
             <BreadcrumbItem>
               <BreadcrumbPage>Dashboard</BreadcrumbPage>
@@ -88,10 +89,14 @@ export function AppTopbar({ notifications = [], unreadCount = 0 }: TopbarProps) 
                   {i > 0 && <BreadcrumbSeparator />}
                   <BreadcrumbItem>
                     {isLast ? (
-                      <BreadcrumbPage>{humanize(seg)}</BreadcrumbPage>
+                      <BreadcrumbPage className="truncate max-w-[220px]">
+                        {humanize(seg)}
+                      </BreadcrumbPage>
                     ) : (
                       <BreadcrumbLink asChild>
-                        <Link href={href}>{humanize(seg)}</Link>
+                        <Link href={href} className="truncate max-w-[120px]">
+                          {humanize(seg)}
+                        </Link>
                       </BreadcrumbLink>
                     )}
                   </BreadcrumbItem>
@@ -102,19 +107,22 @@ export function AppTopbar({ notifications = [], unreadCount = 0 }: TopbarProps) 
         </BreadcrumbList>
       </Breadcrumb>
 
-      <div className="ml-auto flex items-center gap-2">
+      <div className="ml-auto flex items-center gap-1.5">
         <AwesomebarTrigger />
         {boot && (
-          <>
-            <Badge className={TIER_STYLE[boot.tier] ?? TIER_STYLE.free}>
-              {TIER_LABEL[boot.tier] ?? boot.tier}
-            </Badge>
-            {boot.tenant?.company && (
-              <span className="hidden font-mono text-xs text-muted-foreground md:inline">
-                · {boot.tenant.company}
-              </span>
+          <Badge
+            className={cn(
+              "h-6 px-2 text-[10px] font-medium uppercase tracking-wide",
+              TIER_STYLE[boot.tier] ?? TIER_STYLE.free
             )}
-          </>
+          >
+            {TIER_LABEL[boot.tier] ?? boot.tier}
+          </Badge>
+        )}
+        {boot?.tenant?.company && (
+          <span className="hidden truncate max-w-[160px] font-mono text-xs text-muted-foreground lg:inline">
+            {boot.tenant.company}
+          </span>
         )}
         <NotificationBell notifications={notifications} unreadCount={unreadCount} />
       </div>

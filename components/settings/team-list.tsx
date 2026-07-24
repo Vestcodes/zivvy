@@ -41,11 +41,18 @@ import {
   AlertDialogHeader,
   AlertDialogTitle
 } from "@/components/ui/alert-dialog";
-import { frappeCall } from "@/lib/frappe-client";
+import { frappeCall, FrappeError } from "@/lib/frappe-client";
 import type { TeamMember } from "@/lib/team";
 import { ASSIGNABLE_ROLES } from "@/lib/team";
 import { cn } from "@/lib/utils";
 import { formatDate } from "@/lib/format";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from "@/components/ui/select";
 
 interface Props {
   members: TeamMember[];
@@ -67,53 +74,88 @@ export function TeamList({ members, seatsUsed, seatsAllowed, currentUser }: Prop
   const router = useRouter();
   const [inviteOpen, setInviteOpen] = useState(false);
   const [removeTarget, setRemoveTarget] = useState<TeamMember | null>(null);
+  const [rolesTarget, setRolesTarget] = useState<TeamMember | null>(null);
+  const [rolesDraft, setRolesDraft] = useState<Set<string>>(new Set());
+  const [savingRoles, setSavingRoles] = useState(false);
   const [inviteEmail, setInviteEmail] = useState("");
   const [inviteFullName, setInviteFullName] = useState("");
+  const [inviteRole, setInviteRole] = useState<string>("Sales User");
   const [inviting, setInviting] = useState(false);
   const [removing, setRemoving] = useState(false);
 
   const atCapacity = seatsUsed >= seatsAllowed && seatsAllowed > 0;
 
   const handleInvite = useCallback(async () => {
-    if (!inviteEmail.trim()) return;
+    const email = inviteEmail.trim();
+    if (!email) return;
     setInviting(true);
     try {
-      await frappeCall("frappe.core.doctype.user.user.invite_user", {
-        email: inviteEmail.trim(),
-        full_name: inviteFullName.trim() || undefined
+      await frappeCall("zivvy_brand.tenants.api.invite_user", {
+        email,
+        full_name: inviteFullName.trim() || undefined,
+        role: inviteRole
       });
-      toast.success(`Invitation sent to ${inviteEmail.trim()}`);
+      toast.success(`Invitation sent to ${email}`);
       setInviteOpen(false);
       setInviteEmail("");
       setInviteFullName("");
+      setInviteRole("Sales User");
       router.refresh();
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Failed to send invitation");
+      toast.error(err instanceof FrappeError ? err.message : "Failed to send invitation");
     } finally {
       setInviting(false);
     }
-  }, [inviteEmail, inviteFullName, router]);
+  }, [inviteEmail, inviteFullName, inviteRole, router]);
 
   const handleRemove = useCallback(async () => {
     if (!removeTarget) return;
     setRemoving(true);
     try {
-      await frappeCall("frappe.client.save", {
-        doc: JSON.stringify({
-          doctype: "User",
-          name: removeTarget.name,
-          enabled: 0
-        })
+      await frappeCall("zivvy_brand.tenants.api.disable_user", {
+        email: removeTarget.name
       });
       toast.success(`${removeTarget.full_name || removeTarget.email} has been disabled`);
       setRemoveTarget(null);
       router.refresh();
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Failed to disable user");
+      toast.error(err instanceof FrappeError ? err.message : "Failed to disable user");
     } finally {
       setRemoving(false);
     }
   }, [removeTarget, router]);
+
+  const openRoles = useCallback((member: TeamMember) => {
+    setRolesTarget(member);
+    setRolesDraft(new Set(member.roles.filter((r) => (ASSIGNABLE_ROLES as readonly string[]).includes(r))));
+  }, []);
+
+  const toggleRole = useCallback((role: string) => {
+    setRolesDraft((prev) => {
+      const next = new Set(prev);
+      if (next.has(role)) next.delete(role);
+      else next.add(role);
+      return next;
+    });
+  }, []);
+
+  const handleSaveRoles = useCallback(async () => {
+    if (!rolesTarget) return;
+    setSavingRoles(true);
+    try {
+      await frappeCall("zivvy_brand.tenants.api.set_user_roles", {
+        email: rolesTarget.name,
+        roles: JSON.stringify(Array.from(rolesDraft))
+      });
+      toast.success(`Roles updated for ${rolesTarget.full_name || rolesTarget.email}`);
+      setRolesTarget(null);
+      router.refresh();
+    } catch (err) {
+      toast.error(err instanceof FrappeError ? err.message : "Failed to update roles");
+    } finally {
+      setSavingRoles(false);
+    }
+  }, [rolesTarget, rolesDraft, router]);
 
   return (
     <>
@@ -217,7 +259,7 @@ export function TeamList({ members, seatsUsed, seatsAllowed, currentUser }: Prop
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="w-40">
-                          <DropdownMenuItem disabled>
+                          <DropdownMenuItem onClick={() => openRoles(member)}>
                             <Shield className="size-3.5" />
                             Edit roles
                           </DropdownMenuItem>
@@ -285,8 +327,21 @@ export function TeamList({ members, seatsUsed, seatsAllowed, currentUser }: Prop
                 onKeyDown={(e) => e.key === "Enter" && handleInvite()}
               />
             </div>
+            <div className="grid gap-1.5">
+              <Label htmlFor="invite-role">Role</Label>
+              <Select value={inviteRole} onValueChange={setInviteRole}>
+                <SelectTrigger id="invite-role">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {ASSIGNABLE_ROLES.map((r) => (
+                    <SelectItem key={r} value={r}>{r}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
             <p className="text-xs text-muted-foreground">
-              They'll receive an email with a link to set up their account.
+              They&apos;ll receive an email with a link to set their password. You can change their roles at any time.
             </p>
           </div>
           <DialogFooter>
@@ -299,6 +354,54 @@ export function TeamList({ members, seatsUsed, seatsAllowed, currentUser }: Prop
               disabled={inviting || !inviteEmail.trim()}
             >
               {inviting ? "Sending…" : "Send invite"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Role editor */}
+      <Dialog open={!!rolesTarget} onOpenChange={(o) => !o && setRolesTarget(null)}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>
+              Edit roles — {rolesTarget?.full_name || rolesTarget?.email}
+            </DialogTitle>
+          </DialogHeader>
+          <div className="grid max-h-[50vh] gap-2 overflow-y-auto py-2">
+            {ASSIGNABLE_ROLES.map((role) => {
+              const checked = rolesDraft.has(role);
+              return (
+                <label
+                  key={role}
+                  className={cn(
+                    "flex cursor-pointer items-center gap-2 rounded-md border px-3 py-2 text-sm transition-colors",
+                    checked
+                      ? "border-primary/40 bg-primary/5"
+                      : "border-border/70 hover:bg-muted/50"
+                  )}
+                >
+                  <input
+                    type="checkbox"
+                    checked={checked}
+                    onChange={() => toggleRole(role)}
+                    className="size-4 rounded border-border"
+                  />
+                  {role.includes("Manager") ? (
+                    <ShieldCheck className="size-3.5 text-primary" />
+                  ) : (
+                    <Shield className="size-3.5 text-muted-foreground" />
+                  )}
+                  <span>{role}</span>
+                </label>
+              );
+            })}
+          </div>
+          <DialogFooter>
+            <Button variant="ghost" onClick={() => setRolesTarget(null)} disabled={savingRoles}>
+              Cancel
+            </Button>
+            <Button variant="polished" onClick={handleSaveRoles} disabled={savingRoles}>
+              {savingRoles ? "Saving…" : "Save roles"}
             </Button>
           </DialogFooter>
         </DialogContent>
