@@ -38,7 +38,7 @@ async function serverCall<T = unknown>(
   try {
     const res = await fetch(`${FRAPPE_ORIGIN}/api/method/${method}`, {
       method: "POST",
-      cache: "no-store",
+      next: { revalidate: 30 },
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "X-Requested-With": "XMLHttpRequest",

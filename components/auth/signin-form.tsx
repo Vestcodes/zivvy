@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -14,6 +15,7 @@ interface Props {
 }
 
 export function SignInForm({ onForgotPassword }: Props = {}) {
+  const router = useRouter();
   const [pending, setPending] = useState(false);
   const [linkPending, setLinkPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -28,7 +30,8 @@ export function SignInForm({ onForgotPassword }: Props = {}) {
     try {
       await frappeLogin(email, password);
       toast.success("Welcome back.");
-      window.location.href = "/dashboard";
+      router.refresh();
+      router.push("/dashboard");
     } catch (err) {
       const parsed = parseFrappeError(err);
       setError(parsed.formError ?? "Sign in failed.");

@@ -78,7 +78,7 @@ export async function fetchDashboardData(): Promise<DashboardData> {
       `${FRAPPE_ORIGIN}/api/method/zivvy_brand.dashboard.api.get_dashboard_data`,
       {
         method: "POST",
-        cache: "no-store",
+        next: { revalidate: 60 },
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "X-Requested-With": "XMLHttpRequest",
