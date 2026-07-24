@@ -1,6 +1,12 @@
 import type { LucideIcon } from "lucide-react";
 import {
   LayoutDashboard,
+  BarChart3,
+  BookOpen,
+  Headphones,
+  LineChart,
+  ShoppingBag,
+  Tags,
   Contact,
   ScrollText,
   ShoppingCart,
@@ -80,6 +86,9 @@ export type AppCategoryKey =
   | "assets"
   | "projects"
   | "support"
+  | "collab"
+  | "insights"
+  | "storefront"
   | "setup";
 
 export interface AppCategory {
@@ -100,16 +109,25 @@ export const CATEGORIES: AppCategory[] = [
   { key: "assets",        label: "Assets" },
   { key: "projects",      label: "Projects" },
   { key: "support",       label: "Support" },
+  { key: "collab",        label: "Team collaboration" },
+  { key: "insights",      label: "Insights" },
+  { key: "storefront",    label: "Storefront" },
   { key: "setup",         label: "Setup" }
 ];
 
 export const APPS: AppTile[] = [
   // WORKSPACE
   { label: "Dashboard",         href: "/dashboard",              icon: LayoutDashboard,  gradient: "from-[#ff00c8] to-[#9000ff]", category: "workspace" },
+  { label: "Stats",             href: "/stats",                  icon: BarChart3,        gradient: "from-[#22c393] to-[#0f766e]", category: "workspace" },
   { label: "Messages",          href: "/messages",               icon: MessagesSquare,   gradient: "from-[#ec4899] to-[#8b5cf6]", category: "workspace" },
 
   // SALES & CRM
-  { label: "CRM",               href: "/crm/leads",              icon: Sparkles,         gradient: "from-[#a855f7] to-[#7c3aed]", category: "sales", module: "CRM" },
+  { label: "Leads",             href: "/crm/leads",              icon: Sparkles,         gradient: "from-[#a855f7] to-[#7c3aed]", category: "sales", module: "CRM" },
+  { label: "Pipeline",          href: "/crm/opportunities?view=kanban", icon: KanbanSquare, gradient: "from-[#7c3aed] to-[#5b21b6]", category: "sales", module: "CRM" },
+  { label: "Opportunities",     href: "/crm/opportunities",      icon: ScrollText,       gradient: "from-[#8b5cf6] to-[#6d28d9]", category: "sales", module: "CRM" },
+  { label: "Prospects",         href: "/crm/prospects",          icon: Users,            gradient: "from-[#c026d3] to-[#7e22ce]", category: "sales", module: "CRM" },
+  { label: "Campaigns",         href: "/crm/campaigns",          icon: Handshake,        gradient: "from-[#9333ea] to-[#6b21a8]", category: "sales", module: "CRM", minTier: "pro" },
+  { label: "Appointments",      href: "/crm/appointments",       icon: CalendarClock,    gradient: "from-[#d946ef] to-[#9333ea]", category: "sales", module: "CRM", minTier: "pro" },
   { label: "Customers",         href: "/sales/customers",        icon: Contact,          gradient: "from-[#ec4899] to-[#db2777]", category: "sales", module: "Selling" },
   { label: "Quotations",        href: "/sales/quotations",       icon: ScrollText,       gradient: "from-[#f472b6] to-[#c026d3]", category: "sales", module: "Selling" },
   { label: "Sales orders",      href: "/sales/orders",           icon: ShoppingCart,     gradient: "from-[#f43f5e] to-[#e11d48]", category: "sales", module: "Selling" },
@@ -187,5 +205,21 @@ export const APPS: AppTile[] = [
   { label: "Team",              href: "/settings/team",          icon: UserCog,          gradient: "from-[#64748b] to-[#334155]", category: "setup" },
   { label: "Billing",           href: "/billing",                icon: CreditCard,       gradient: "from-[#94a3b8] to-[#475569]", category: "setup" },
   { label: "Settings",          href: "/settings",               icon: Settings,         gradient: "from-[#71717a] to-[#3f3f46]", category: "setup" },
-  { label: "Help",              href: "/help",                   icon: LifeBuoy,         gradient: "from-[#a1a1aa] to-[#52525b]", category: "setup" }
+  { label: "Help",              href: "/help",                   icon: LifeBuoy,         gradient: "from-[#a1a1aa] to-[#52525b]", category: "setup" },
+
+  // TEAM COLLABORATION (bundled Frappe product apps)
+  { label: "Chat",              href: "/raven/channels",         icon: MessagesSquare,   gradient: "from-[#6366f1] to-[#4338ca]", category: "collab",     module: "Raven",   minTier: "pro" },
+  { label: "Wiki",              href: "/wiki/pages",             icon: BookOpen,         gradient: "from-[#0ea5e9] to-[#0369a1]", category: "collab",     module: "Wiki" },
+  { label: "Helpdesk",          href: "/helpdesk/tickets",       icon: Headphones,       gradient: "from-[#f97316] to-[#c2410c]", category: "collab",     module: "Helpdesk", minTier: "pro" },
+  { label: "KB",                href: "/helpdesk/kb",            icon: BookOpen,         gradient: "from-[#fb923c] to-[#9a3412]", category: "collab",     module: "Helpdesk", minTier: "pro" },
+
+  // INSIGHTS (Business — analytics + BI)
+  { label: "Dashboards",        href: "/insights/dashboards",    icon: BarChart3,        gradient: "from-[#059669] to-[#065f46]", category: "insights",   module: "Insights", minTier: "business" },
+  { label: "Charts",            href: "/insights/charts",        icon: LineChart,        gradient: "from-[#10b981] to-[#047857]", category: "insights",   module: "Insights", minTier: "business" },
+  { label: "Queries",           href: "/insights/queries",       icon: ScrollText,       gradient: "from-[#22c55e] to-[#15803d]", category: "insights",   module: "Insights", minTier: "business" },
+
+  // STOREFRONT (Business — webshop + ecommerce sync)
+  { label: "Products",          href: "/webshop/products",       icon: ShoppingBag,      gradient: "from-[#e11d48] to-[#9f1239]", category: "storefront", module: "Webshop",  minTier: "business" },
+  { label: "Categories",        href: "/webshop/categories",     icon: Tags,             gradient: "from-[#f43f5e] to-[#be123c]", category: "storefront", module: "Webshop",  minTier: "business" },
+  { label: "Online orders",     href: "/webshop/orders",         icon: ShoppingCart,     gradient: "from-[#fb7185] to-[#e11d48]", category: "storefront", module: "Webshop",  minTier: "business" }
 ];

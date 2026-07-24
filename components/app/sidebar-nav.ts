@@ -51,7 +51,17 @@ import {
   Ship,
   Package2,
   Route as RouteIcon,
-  MapPinned
+  MapPinned,
+  BookOpen,
+  Hash,
+  Headphones,
+  BarChart3,
+  LineChart,
+  ShoppingBag,
+  Tags,
+  FileText,
+  MessageSquare,
+  Users2
 } from "lucide-react";
 import type { ZivvyTier } from "@/lib/boot-types";
 
@@ -97,10 +107,14 @@ export const MODULE_NAVS: Record<string, ModuleNav> = {
   crm: {
     key: "crm",
     title: "CRM",
-    subtitle: "Leads, opportunities, pipeline",
+    subtitle: "Pipeline, deals, campaigns, appointments",
     items: [
       { label: "Leads", href: "/crm/leads", icon: Sparkles, module: "CRM" },
-      { label: "Opportunities", href: "/crm/opportunities", icon: KanbanSquare, module: "CRM" }
+      { label: "Pipeline", href: "/crm/opportunities?view=kanban", icon: KanbanSquare, module: "CRM" },
+      { label: "Opportunities", href: "/crm/opportunities", icon: ScrollText, module: "CRM" },
+      { label: "Prospects", href: "/crm/prospects", icon: Users, module: "CRM" },
+      { label: "Campaigns", href: "/crm/campaigns", icon: Handshake, module: "CRM", minTier: "pro" },
+      { label: "Appointments", href: "/crm/appointments", icon: CalendarClock, module: "CRM", minTier: "pro" }
     ]
   },
 
@@ -248,6 +262,61 @@ export const MODULE_NAVS: Record<string, ModuleNav> = {
       { label: "Issues", href: "/support/issues", icon: AlertOctagon, module: "Support" },
       { label: "Warranty", href: "/support/warranty", icon: ShieldAlert, module: "Support" },
       { label: "SLAs", href: "/support/slas", icon: HardHat, module: "Support" }
+    ]
+  },
+
+  helpdesk: {
+    key: "helpdesk",
+    title: "Helpdesk",
+    subtitle: "Customer tickets, knowledge base, teams",
+    items: [
+      { label: "Tickets", href: "/helpdesk/tickets", icon: Ticket, module: "Helpdesk", minTier: "pro" },
+      { label: "Knowledge base", href: "/helpdesk/kb", icon: BookOpen, module: "Helpdesk", minTier: "pro" },
+      { label: "Teams", href: "/helpdesk/teams", icon: Users2, module: "Helpdesk", minTier: "pro" },
+      { label: "Contracts", href: "/helpdesk/contracts", icon: FileText, module: "Helpdesk", minTier: "pro" }
+    ]
+  },
+
+  raven: {
+    key: "raven",
+    title: "Chat",
+    subtitle: "Channels, DMs, threads",
+    items: [
+      { label: "Channels", href: "/raven/channels", icon: Hash, module: "Raven", minTier: "pro" },
+      { label: "Direct messages", href: "/raven/dms", icon: MessageSquare, module: "Raven", minTier: "pro" },
+      { label: "Threads", href: "/raven/threads", icon: MessagesSquare, module: "Raven", minTier: "pro" }
+    ]
+  },
+
+  insights: {
+    key: "insights",
+    title: "Insights",
+    subtitle: "Dashboards, queries, charts",
+    items: [
+      { label: "Dashboards", href: "/insights/dashboards", icon: BarChart3, module: "Insights", minTier: "business" },
+      { label: "Charts", href: "/insights/charts", icon: LineChart, module: "Insights", minTier: "business" },
+      { label: "Queries", href: "/insights/queries", icon: ScrollText, module: "Insights", minTier: "business" }
+    ]
+  },
+
+  wiki: {
+    key: "wiki",
+    title: "Wiki",
+    subtitle: "Team knowledge, docs, playbooks",
+    items: [
+      { label: "Pages", href: "/wiki/pages", icon: BookOpen, module: "Wiki" },
+      { label: "Spaces", href: "/wiki/spaces", icon: FileText, module: "Wiki" }
+    ]
+  },
+
+  webshop: {
+    key: "webshop",
+    title: "Webshop",
+    subtitle: "Storefront, catalog, promotions",
+    items: [
+      { label: "Products", href: "/webshop/products", icon: ShoppingBag, module: "Webshop", minTier: "business" },
+      { label: "Categories", href: "/webshop/categories", icon: Tags, module: "Webshop", minTier: "business" },
+      { label: "Orders", href: "/webshop/orders", icon: ShoppingCart, module: "Webshop", minTier: "business" }
     ]
   },
 

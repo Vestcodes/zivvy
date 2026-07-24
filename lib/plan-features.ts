@@ -24,9 +24,21 @@ export const MODULE_MIN_TIER: Record<string, ZivvyTier> = {
   Subcontracting: "business",
   Assets: "business",
 
+  // Bundled product apps — same tier as their backend gate in
+  // zivvy_brand SPA_PATH_MIN_TIER. Keep in lock-step.
+  Insights: "business",           // /insights — analytics + BI (Business)
+  Webshop: "business",            // /webshop  — storefront (Business)
+  "E-commerce Integrations": "business",
+
+  Helpdesk: "pro",                // /helpdesk — Frappe Helpdesk (Pro)
+  Raven: "pro",                   // /raven    — team chat (Pro)
+
+  // Free — bundled product apps that ship on every tier.
+  // Wiki + CRM don't appear here (implicit "free") to keep the map lean.
+
   // Pro-required — heavier ops surfaces.
-  Accounts: "pro",           // full accounting (Journal, Payments, Reports)
-  Buying: "pro",             // purchase pipeline + RFQs
+  Accounts: "pro",                // full accounting (Journal, Payments, Reports)
+  Buying: "pro",                  // purchase pipeline + RFQs
   Projects: "pro",
   HRMS: "pro"
 };
@@ -76,7 +88,23 @@ export const DOCTYPE_MIN_TIER: Record<string, ZivvyTier> = {
   "Supplier Quotation": "pro",
   "Purchase Invoice": "pro",
   "Purchase Receipt": "pro",
-  "Request for Quotation": "pro"
+  "Request for Quotation": "pro",
+
+  // Bundled Frappe product-app doctypes.
+  // Helpdesk (Pro)
+  "HD Ticket": "pro",
+  "HD Article": "pro",
+  "HD Team": "pro",
+  // Raven (Pro)
+  "Raven Channel": "pro",
+  "Raven Message": "pro",
+  // Insights (Business)
+  "Insights Dashboard": "business",
+  "Insights Query": "business",
+  "Insights Chart": "business",
+  // Webshop (Business)
+  "Website Item": "business",
+  "Web Item Group": "business"
 };
 
 /**

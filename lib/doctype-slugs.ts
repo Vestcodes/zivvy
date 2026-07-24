@@ -78,17 +78,46 @@ export const SLUG_TO_DOCTYPE: Record<string, string> = {
   // CRM
   "crm/leads":             "Lead",
   "crm/opportunities":     "Opportunity",
+  "crm/prospects":         "Prospect",
+  "crm/campaigns":         "Campaign",
+  "crm/appointments":      "Appointment",
+  "crm/contracts":         "Contract",
 
   // Projects
   "projects":              "Project",
   "projects/tasks":        "Task",
   "projects/timesheets":   "Timesheet",
 
-  // Support
+  // Support (ERPNext core)
   "support/tickets":       "Issue",
   "support/issues":        "Issue",
   "support/warranty":      "Warranty Claim",
-  "support/slas":          "Service Level Agreement"
+  "support/slas":          "Service Level Agreement",
+
+  // Helpdesk (Frappe Helpdesk app, Pro tier)
+  "helpdesk/tickets":      "HD Ticket",
+  "helpdesk/kb":           "HD Article",
+  "helpdesk/teams":        "HD Team",
+  "helpdesk/contracts":    "HD Service Contract",
+
+  // Raven — team chat (Pro tier)
+  "raven/channels":        "Raven Channel",
+  "raven/dms":             "Raven Channel",
+  "raven/threads":         "Raven Message",
+
+  // Insights — analytics / BI (Business tier)
+  "insights/dashboards":   "Insights Dashboard",
+  "insights/charts":       "Insights Chart",
+  "insights/queries":      "Insights Query",
+
+  // Wiki (Free — bundled docs app)
+  "wiki/pages":            "Wiki Page",
+  "wiki/spaces":           "Wiki Space",
+
+  // Webshop (Business tier — storefront)
+  "webshop/products":      "Website Item",
+  "webshop/categories":    "Web Item Group",
+  "webshop/orders":        "Sales Order"
 };
 
 export function slugToDoctype(module: string, doctype: string): string | null {
