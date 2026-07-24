@@ -43,7 +43,6 @@ export default async function LoginPage() {
             </h2>
             <p className="mt-5 text-primary-foreground/75">
               Sales, stock, accounting, HR, and manufacturing in one product.
-              Powered by an open ERP core.
             </p>
             <ul className="mt-8 space-y-2 text-sm text-primary-foreground/70">
               <li>· 2 seats on Free, forever</li>
@@ -52,7 +51,7 @@ export default async function LoginPage() {
             </ul>
           </div>
           <p className="text-xs text-primary-foreground/50">
-            © {new Date().getFullYear()} Vestcodes Co · Zivvy — business software on an open ERP core
+            © {new Date().getFullYear()} Zivvy · Business software that works
           </p>
         </div>
       </div>

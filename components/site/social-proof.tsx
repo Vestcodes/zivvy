@@ -1,86 +1,83 @@
-import { Card, CardContent } from "@/components/ui/card";
-import { Reveal } from "@/components/ui/reveal";
-import { Quote, Star } from "lucide-react";
+"use client";
 
-const STATS = [
-  { value: "2,400+", label: "businesses running" },
-  { value: "18", label: "countries billed" },
-  { value: "4.8★", label: "avg. customer rating" },
-  { value: "99.98%", label: "uptime last 90 days" }
+import { BlurFade } from "@/components/ui/blur-fade";
+import { Marquee } from "@/components/ui/marquee";
+import { MagicCard } from "@/components/ui/magic-card";
+import { cn } from "@/lib/utils";
+
+/** Honest product facts — no vanity counts, stars, or invented testimonials. */
+const PROOF_CHIPS = [
+  "Sales · stock · accounting · HR · manufacturing",
+  "Data stays in India, EU, or US",
+  "Self-host on Business",
+  "Seat-based pricing",
+  "Free plan · 2 seats"
 ];
 
-const TESTIMONIALS = [
+const AUDIENCES = [
   {
-    quote:
-      "We replaced three separate tools with Zivvy in a weekend. Our accountant stopped complaining. That's the whole review.",
-    name: "Priya Menon",
-    role: "COO, Karva Foods (Pune)"
+    title: "Founder-led teams",
+    body: "One system before you outgrow three spreadsheets and a chat thread."
   },
   {
-    quote:
-      "Setup was 20 minutes. The UI feels like software from this decade — my team stopped asking me how to raise a purchase order.",
-    name: "Diego Alarcón",
-    role: "Ops Lead, Casa Sur Studio"
+    title: "Ops & finance",
+    body: "Orders, stock, and books that stay reconciled without nightly exports."
   },
   {
-    quote:
-      "Migration from Odoo took a Sunday. Everything just… works. Manufacturing plans, HR, stock reconciliation. No tickets in six weeks.",
-    name: "Amelia Wren",
-    role: "Founder, Wren + Rowe"
+    title: "Manufacturing shops",
+    body: "BOMs and work orders on Business when the floor needs a real plan."
   }
 ];
 
 export function SocialProof() {
   return (
-    <section className="mx-auto max-w-6xl px-6 py-16 sm:py-20">
-      <Reveal>
-        <div className="grid grid-cols-2 gap-4 rounded-2xl border border-border/70 bg-card/60 px-6 py-8 shadow-sm backdrop-blur sm:grid-cols-4">
-          {STATS.map((s) => (
-            <div key={s.label} className="text-center">
-              <div className="font-display text-3xl font-semibold tabular-nums tracking-tight sm:text-4xl">
-                {s.value}
-              </div>
-              <div className="mt-1 text-xs uppercase tracking-wider text-muted-foreground">
-                {s.label}
-              </div>
-            </div>
-          ))}
+    <section className="py-16 sm:py-20">
+      <BlurFade>
+        <div className="relative mx-auto max-w-6xl overflow-hidden px-6">
+          <p className="sr-only">{PROOF_CHIPS.join(". ")}.</p>
+          <Marquee pauseOnHover aria-hidden className="[--duration:32s]">
+            {PROOF_CHIPS.map((label) => (
+              <span
+                key={label}
+                className={cn(
+                  "mx-2 rounded-full border border-border/70 bg-card/80 px-4 py-1.5 text-sm font-medium text-muted-foreground shadow-sm"
+                )}
+              >
+                {label}
+              </span>
+            ))}
+          </Marquee>
+          <div className="pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-background to-transparent" />
+          <div className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-background to-transparent" />
         </div>
-      </Reveal>
+      </BlurFade>
 
-      <div className="mt-16">
-        <Reveal>
+      <div className="mx-auto mt-14 max-w-6xl px-6">
+        <BlurFade>
           <div className="mx-auto max-w-2xl text-center">
-            <div className="inline-flex items-center gap-1 text-primary" aria-label="5 star average">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} className="size-4 fill-current" />
-              ))}
-            </div>
-            <h2 className="mt-3 font-display text-3xl font-semibold tracking-tight sm:text-4xl">
-              Teams that stopped fighting their ERP
+            <h2 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl">
+              Built for operators, not slide decks
             </h2>
             <p className="mt-3 text-muted-foreground">
-              Real founders and operators, not stock avatars.
+              Who Zivvy fits when you want one clean system for the whole business —
+              not invented quotes or star ratings.
             </p>
           </div>
-        </Reveal>
+        </BlurFade>
 
         <div className="mt-10 grid gap-4 md:grid-cols-3">
-          {TESTIMONIALS.map((t, i) => (
-            <Reveal key={t.name} delay={i * 80}>
-              <Card className="h-full border-border/70 bg-card/60 backdrop-blur">
-                <CardContent className="flex h-full flex-col gap-4 py-6">
-                  <Quote className="size-5 text-primary/60" aria-hidden />
-                  <p className="text-sm leading-relaxed text-foreground/90">
-                    &ldquo;{t.quote}&rdquo;
-                  </p>
-                  <div className="mt-auto pt-2">
-                    <div className="text-sm font-medium">{t.name}</div>
-                    <div className="text-xs text-muted-foreground">{t.role}</div>
-                  </div>
-                </CardContent>
-              </Card>
-            </Reveal>
+          {AUDIENCES.map((item, i) => (
+            <BlurFade key={item.title} delay={0.06 + i * 0.06}>
+              <MagicCard
+                className="h-full rounded-xl border border-border/70 bg-card/70 p-6"
+                gradientFrom="#5eead4"
+                gradientTo="#115e59"
+                gradientColor="rgba(27, 152, 114, 0.1)"
+              >
+                <h3 className="font-display text-lg font-semibold">{item.title}</h3>
+                <p className="mt-2 text-sm text-muted-foreground">{item.body}</p>
+              </MagicCard>
+            </BlurFade>
           ))}
         </div>
       </div>

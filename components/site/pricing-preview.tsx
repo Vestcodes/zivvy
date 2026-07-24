@@ -6,6 +6,7 @@ import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { BorderBeam } from "@/components/ui/border-beam";
 import { Reveal } from "@/components/ui/reveal";
 import { cn } from "@/lib/utils";
 
@@ -35,15 +36,15 @@ const PLANS: Plan[] = [
   {
     slug: "pro",
     name: "Pro",
-    monthly: 15,
-    annual: 12,
+    monthly: 18,
+    annual: 14,
     desc: "Full accounting, stock, HR, and projects.",
     features: [
       "Accounting & tax",
       "Full stock & warehouses",
       "HR & payroll",
       "Barcode workflows",
-      "Priority email"
+      "Priority support"
     ],
     cta: "Try Pro",
     highlighted: true
@@ -51,15 +52,15 @@ const PLANS: Plan[] = [
   {
     slug: "business",
     name: "Business",
-    monthly: 25,
-    annual: 20,
+    monthly: 30,
+    annual: 24,
     desc: "Everything, plus manufacturing, assets, and multi-company.",
     features: [
       "Everything in Pro",
       "Manufacturing & BOMs",
       "Assets & quality",
       "Subcontracting",
-      "Priority support"
+      "Multi-company controls"
     ],
     cta: "Talk to sales"
   }
@@ -155,18 +156,21 @@ export function PricingPreview({ showIntro = true, className }: Props = {}) {
             <Reveal key={plan.slug} delay={i * 80}>
             <Card
               className={cn(
-                "relative h-full border-border/70 transition-all duration-[var(--duration-base)]",
+                "relative h-full overflow-hidden border-border/70 transition-all duration-[var(--duration-base)]",
                 isRibbon
                   ? "ring-2 ring-primary/40 shadow-elevation-md"
                   : "bg-card/60 hover:-translate-y-0.5 hover:shadow-elevation-md"
               )}
             >
               {isRibbon && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                  <Badge className="border-transparent bg-primary px-3 py-1 text-primary-foreground shadow-md">
-                    Most popular
-                  </Badge>
-                </div>
+                <>
+                  <BorderBeam size={120} duration={8} colorFrom="#34d399" colorTo="#0f766e" />
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                    <Badge className="border-transparent bg-primary px-3 py-1 text-primary-foreground shadow-md">
+                      Most popular
+                    </Badge>
+                  </div>
+                </>
               )}
               <CardHeader>
                 <CardTitle className="font-display text-xl">{plan.name}</CardTitle>

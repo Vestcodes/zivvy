@@ -1,0 +1,25 @@
+Welcome to Zivvy — business software that finally feels made for operators.
+
+This is a live walkthrough of the Business plan: the highest tier, with manufacturing, quality, and multi-company controls unlocked.
+
+We start on the dashboard. One workspace for sales, stock, finance, people, and production — without hopping between tools.
+
+Next, CRM. Leads and opportunities stay connected to the same customer record your sales team will invoice later. No duplicate data. No “which spreadsheet is true.”
+
+From CRM we move into sales. Customers, quotations, sales orders, and invoices share one flow. When a deal closes, fulfillment and billing already know the context.
+
+Inventory is next. Items and warehouses stay reconciled in real time, so purchasing and production are working from the same numbers.
+
+Finance sits beside operations — payments and reports without a separate accounting silo. Your books reflect what the business actually shipped and billed.
+
+HR and payroll are seat-aware and multi-tenant. Employees, attendance, and pay runs live next to the work they support.
+
+Projects keep delivery visible for services and internal initiatives — tasks and ownership without another project tool.
+
+On Business, manufacturing unlocks. Bills of materials and work orders connect shop-floor execution back to stock and costing.
+
+Quality inspections close the loop — catch issues before they become returns or rework.
+
+Finally, billing and team settings. Upgrade seats, manage plan, and keep access clean as you grow.
+
+That’s Zivvy Business: one calm product for the whole company. Start free, and unlock manufacturing when you’re ready.

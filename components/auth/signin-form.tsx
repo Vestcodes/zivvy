@@ -118,6 +118,17 @@ export function SignInForm({ onForgotPassword }: Props = {}) {
         <Mail className="size-4" />
         {linkPending ? "Sending link…" : "Email me a sign-in link"}
       </Button>
+      <p className="text-center text-xs text-muted-foreground">
+        By continuing you agree to our{" "}
+        <a href="/terms" className="underline hover:text-primary">
+          Terms
+        </a>{" "}
+        and{" "}
+        <a href="/privacy" className="underline hover:text-primary">
+          Privacy Policy
+        </a>
+        .
+      </p>
     </form>
   );
 }

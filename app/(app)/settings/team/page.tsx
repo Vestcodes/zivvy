@@ -8,12 +8,9 @@ export const metadata: Metadata = {
 };
 
 export default async function TeamPage() {
-  const [boot, members] = await Promise.all([
-    fetchBootinfo(),
-    fetchTeamMembers()
-  ]);
-
+  const boot = await fetchBootinfo();
   const zivvy = boot.zivvy;
+  const members = await fetchTeamMembers(zivvy?.tenant?.name ?? null);
 
   return (
     <TeamList

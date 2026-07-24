@@ -3,6 +3,7 @@ import { Inter, JetBrains_Mono } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
 import { BootProvider } from "@/components/boot-provider";
 import { QueryProvider } from "@/components/query-provider";
+import { ThemeProvider } from "@/components/theme-provider";
 import { fetchBootinfo } from "@/lib/boot-server";
 import "./globals.css";
 
@@ -27,15 +28,29 @@ const fontMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Zivvy — business software on an open ERP core",
+  title: "Zivvy — business software that works",
   description:
-    "Zivvy by Vestcodes: sales, stock, accounting, HR and manufacturing in one clean product on top of an open ERP core.",
+    "Sales, stock, accounting, HR and manufacturing in one clean product.",
   metadataBase: new URL("https://zivvy.xyz"),
+  alternates: {
+    canonical: "/"
+  },
+  icons: {
+    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
+    apple: [{ url: "/apple-icon", sizes: "180x180", type: "image/png" }]
+  },
   openGraph: {
-    title: "Zivvy",
-    description: "Business software on an open ERP core.",
+    title: "Zivvy — business software that works",
+    description: "Sales, stock, accounting, HR and manufacturing in one clean product.",
     url: "https://zivvy.xyz",
-    siteName: "Zivvy"
+    siteName: "Zivvy",
+    type: "website",
+    locale: "en_US"
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Zivvy — business software that works",
+    description: "Sales, stock, accounting, HR and manufacturing in one clean product."
   }
 };
 
@@ -48,12 +63,14 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       suppressHydrationWarning
     >
       <body className="min-h-dvh">
-        <QueryProvider>
-          <BootProvider bootinfo={bootinfo}>
-            {children}
-            <Toaster position="top-center" />
-          </BootProvider>
-        </QueryProvider>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
+          <QueryProvider>
+            <BootProvider bootinfo={bootinfo}>
+              {children}
+              <Toaster position="top-center" />
+            </BootProvider>
+          </QueryProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

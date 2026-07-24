@@ -88,7 +88,7 @@ export function BillingSuccess() {
             Almost there
           </CardTitle>
           <CardDescription>
-            Polar hasn't confirmed your plan yet. This can take a minute — refresh below or head to billing.
+            Your plan hasn't been confirmed yet. This can take a minute — refresh below or head to billing.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -113,7 +113,7 @@ export function BillingSuccess() {
           Confirming your subscription
         </CardTitle>
         <CardDescription>
-          One second — waiting on Polar to sync your new plan.
+          One second — confirming your new plan.
           <br />
           <span className="text-xs">Attempt {attempt + 1} of {MAX_ATTEMPTS}</span>
         </CardDescription>

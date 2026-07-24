@@ -1,7 +1,16 @@
 /**
- * localStorage-backed saved views per doctype.
- * Each view stores a name, filters, sort config, and page size.
+ * localStorage-backed saved views per (user, tenant, doctype).
+ *
+ * The key includes a hash of the user email and the tenant slug so that:
+ *   - Multi-user shared browsers don't leak views across accounts.
+ *   - Switching tenants (org-per-tenant) scopes to that tenant's views.
+ *
+ * A missing user/tenant means "not signed in" — hydrated data is empty
+ * and writes are no-ops (safer than falling back to a global key).
  */
+
+const STORAGE_PREFIX = "zivvy:views:v2:";
+const LEGACY_PREFIX = "zivvy:views:";
 
 export interface SavedView {
   id: string;
@@ -10,6 +19,8 @@ export interface SavedView {
   sortField?: string;
   sortOrder?: "ASC" | "DESC";
   pageSize?: number;
+  q?: string;
+  isDefault?: boolean;
 }
 
 export interface SavedViewStore {
@@ -17,72 +28,116 @@ export interface SavedViewStore {
   activeId: string | null;
 }
 
-const STORAGE_PREFIX = "zivvy:views:";
+const EMPTY_STORE: SavedViewStore = { views: [], activeId: null };
 
-function storageKey(doctype: string): string {
-  return `${STORAGE_PREFIX}${doctype}`;
+export interface Scope {
+  userEmail: string | null;
+  tenant: string | null;
+  doctype: string;
 }
 
-function read(doctype: string): SavedViewStore {
-  if (typeof window === "undefined") return { views: [], activeId: null };
+function hashKey(userEmail: string, tenant: string): string {
+  // Non-cryptographic — we only need low-collision namespacing on a device.
+  // DJB2 over the userEmail+tenant pair.
+  const input = `${userEmail}|${tenant}`;
+  let h = 5381;
+  for (let i = 0; i < input.length; i++) {
+    h = ((h << 5) + h + input.charCodeAt(i)) | 0;
+  }
+  return (h >>> 0).toString(36);
+}
+
+function storageKey(scope: Scope): string | null {
+  if (!scope.userEmail || !scope.tenant) return null;
+  return `${STORAGE_PREFIX}${hashKey(scope.userEmail, scope.tenant)}:${scope.doctype}`;
+}
+
+function read(scope: Scope): SavedViewStore {
+  if (typeof window === "undefined") return { ...EMPTY_STORE };
+  const key = storageKey(scope);
+  if (!key) return { ...EMPTY_STORE };
   try {
-    const raw = localStorage.getItem(storageKey(doctype));
-    if (!raw) return { views: [], activeId: null };
-    return JSON.parse(raw) as SavedViewStore;
+    const raw = window.localStorage.getItem(key);
+    if (!raw) return { ...EMPTY_STORE };
+    const parsed = JSON.parse(raw) as SavedViewStore;
+    if (!Array.isArray(parsed.views)) return { ...EMPTY_STORE };
+    return parsed;
   } catch {
-    return { views: [], activeId: null };
+    return { ...EMPTY_STORE };
   }
 }
 
-function write(doctype: string, store: SavedViewStore) {
+function write(scope: Scope, store: SavedViewStore): void {
   if (typeof window === "undefined") return;
-  localStorage.setItem(storageKey(doctype), JSON.stringify(store));
+  const key = storageKey(scope);
+  if (!key) return;
+  try {
+    window.localStorage.setItem(key, JSON.stringify(store));
+  } catch {
+    // quota exceeded or storage disabled — silently drop; the user will
+    // see the tab strip return to its last-saved state, which is safer
+    // than showing a phantom "saved" tab that isn't persisted.
+  }
 }
 
-export function getSavedViews(doctype: string): SavedViewStore {
-  return read(doctype);
+export function getSavedViews(scope: Scope): SavedViewStore {
+  return read(scope);
 }
 
-export function getActiveView(doctype: string): SavedView | null {
-  const store = read(doctype);
-  if (!store.activeId) return null;
-  return store.views.find((v) => v.id === store.activeId) ?? null;
+export function getDefaultView(scope: Scope): SavedView | null {
+  const store = read(scope);
+  return store.views.find((v) => v.isDefault) ?? null;
 }
 
-export function setActiveView(doctype: string, viewId: string | null) {
-  const store = read(doctype);
+export function setActiveView(scope: Scope, viewId: string | null): void {
+  const store = read(scope);
   store.activeId = viewId;
-  write(doctype, store);
+  write(scope, store);
 }
 
-export function saveView(doctype: string, view: Omit<SavedView, "id">): SavedView {
-  const store = read(doctype);
-  const id = `v_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
+export function saveView(scope: Scope, view: Omit<SavedView, "id">): SavedView {
+  const store = read(scope);
+  const id = `v_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 7)}`;
   const newView: SavedView = { ...view, id };
+  // If this view is being saved as default, un-default all others.
+  if (newView.isDefault) {
+    store.views = store.views.map((v) => ({ ...v, isDefault: false }));
+  }
   store.views.push(newView);
   store.activeId = id;
-  write(doctype, store);
+  write(scope, store);
   return newView;
 }
 
-export function updateView(doctype: string, id: string, updates: Partial<Omit<SavedView, "id">>) {
-  const store = read(doctype);
+export function updateView(
+  scope: Scope,
+  id: string,
+  updates: Partial<Omit<SavedView, "id">>
+): void {
+  const store = read(scope);
   const idx = store.views.findIndex((v) => v.id === id);
   if (idx === -1) return;
+  // If this view is being promoted to default, demote everything else.
+  if (updates.isDefault === true) {
+    store.views = store.views.map((v) => ({ ...v, isDefault: false }));
+  }
   store.views[idx] = { ...store.views[idx], ...updates };
-  write(doctype, store);
+  write(scope, store);
 }
 
-export function deleteView(doctype: string, id: string) {
-  const store = read(doctype);
+export function deleteView(scope: Scope, id: string): void {
+  const store = read(scope);
   store.views = store.views.filter((v) => v.id !== id);
   if (store.activeId === id) store.activeId = null;
-  write(doctype, store);
+  write(scope, store);
 }
 
-export function filtersToSearchParams(
-  view: SavedView | null
-): Record<string, string> {
+export function findView(scope: Scope, id: string): SavedView | null {
+  const store = read(scope);
+  return store.views.find((v) => v.id === id) ?? null;
+}
+
+export function filtersToSearchParams(view: SavedView | null): Record<string, string> {
   if (!view) return {};
   const params: Record<string, string> = {};
   if (view.filters.length > 0) {
@@ -95,5 +150,25 @@ export function filtersToSearchParams(
   if (view.pageSize) {
     params.size = String(view.pageSize);
   }
+  if (view.q) {
+    params.q = view.q;
+  }
   return params;
+}
+
+/**
+ * Clear every zivvy saved-views entry from localStorage. Call on logout.
+ * Also purges legacy (un-namespaced) keys from v1.
+ */
+export function purgeAllSavedViews(): void {
+  if (typeof window === "undefined") return;
+  const keys: string[] = [];
+  for (let i = 0; i < window.localStorage.length; i++) {
+    const k = window.localStorage.key(i);
+    if (!k) continue;
+    if (k.startsWith(STORAGE_PREFIX) || k.startsWith(LEGACY_PREFIX)) {
+      keys.push(k);
+    }
+  }
+  for (const k of keys) window.localStorage.removeItem(k);
 }

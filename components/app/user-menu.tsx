@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/sidebar";
 import { useBoot } from "@/components/boot-provider";
 import { frappeLogout } from "@/lib/frappe-client";
+import { purgeAllSavedViews } from "@/lib/saved-views";
 import Link from "next/link";
 
 export function UserMenu() {
@@ -39,6 +40,13 @@ export function UserMenu() {
       await frappeLogout();
     } catch {
       // ignore — still bounce to login
+    }
+    // Clear per-user saved views so a shared browser doesn't carry them
+    // into the next sign-in.
+    try {
+      purgeAllSavedViews();
+    } catch {
+      // localStorage might be disabled — sign-out proceeds either way
     }
     window.location.href = "/login";
   }

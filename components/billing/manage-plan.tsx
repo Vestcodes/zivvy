@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Check, ExternalLink } from "lucide-react";
@@ -21,7 +22,7 @@ const PLANS: {
   {
     tier: "pro",
     name: "Pro",
-    price: "$15",
+    price: "$18",
     desc: "Full accounting, stock, HR, and projects.",
     features: [
       "Accounting & tax",
@@ -34,7 +35,7 @@ const PLANS: {
   {
     tier: "business",
     name: "Business",
-    price: "$25",
+    price: "$30",
     desc: "Manufacturing, assets, subcontracting, multi-company.",
     features: [
       "Everything in Pro",
@@ -89,7 +90,7 @@ export function ManagePlan({ hasSubscription, currentTier }: { hasSubscription: 
           <CardHeader>
             <CardTitle className="font-display text-lg">Manage subscription</CardTitle>
             <CardDescription>
-              Update payment, seats, or cancel via Polar's customer portal.
+              Update payment method, seats, or cancel your subscription.
             </CardDescription>
           </CardHeader>
           <CardFooter>
@@ -110,7 +111,11 @@ export function ManagePlan({ hasSubscription, currentTier }: { hasSubscription: 
           {currentTier === "free" ? "Upgrade" : "Change plan"}
         </h2>
         <p className="mt-1 text-sm text-muted-foreground">
-          Pay per seat. Change or cancel anytime.
+          Pay per seat. Change or cancel anytime. See{" "}
+          <Link href="/refunds" className="underline underline-offset-2 hover:text-foreground">
+            billing &amp; refunds
+          </Link>
+          .
         </p>
         <div className="mt-4 grid gap-4 md:grid-cols-2">
           {PLANS.map((plan) => {

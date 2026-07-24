@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+  <rect width="32" height="32" rx="8" fill="url(#zivvy)"/>
+  <text
+    x="16"
+    y="22"
+    text-anchor="middle"
+    font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif"
+    font-size="18"
+    font-weight="700"
+    fill="#ffffff"
+  >Z</text>
+  <defs>
+    <linearGradient id="zivvy" x1="0" y1="0" x2="0" y2="32" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#3db892"/>
+      <stop offset="1" stop-color="#1b9872"/>
+    </linearGradient>
+  </defs>
+</svg>

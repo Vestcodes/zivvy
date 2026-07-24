@@ -42,7 +42,7 @@ export function ContactForm() {
           </div>
           <h3 className="mt-3 font-display text-lg">Message received</h3>
           <p className="mt-1 max-w-sm text-sm text-muted-foreground">
-            We'll be in touch within one business day. Faster on Business.
+            We'll be in touch within one business day. Faster on Pro.
           </p>
           <button
             type="button"

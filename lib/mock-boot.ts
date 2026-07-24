@@ -5,7 +5,7 @@ const MOCK_ZIVVY: ZivvyBoot = {
   tier_label: "Pro",
   demo_plan: null,
   site_tier: "pro",
-  priority_support: false,
+  priority_support: true,
   seats_used: 3,
   seats_allowed: 10,
   subscription_status: "active",

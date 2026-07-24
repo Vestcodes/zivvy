@@ -144,7 +144,7 @@ export const MODULE_NAVS: Record<string, ModuleNav> = {
   shipping: {
     key: "shipping",
     title: "Shipping",
-    subtitle: "Shipments, carriers, tracking (erpnext-shipping)",
+    subtitle: "Shipments, carriers, tracking",
     items: [
       { label: "Shipments", href: "/shipping/shipments", icon: Ship, module: "Stock" },
       { label: "Parcels", href: "/shipping/parcels", icon: Package2, module: "Stock" },

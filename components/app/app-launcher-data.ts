@@ -130,7 +130,7 @@ export const APPS: AppTile[] = [
   { label: "Reorder",           href: "/stock/reorder",          icon: ListChecks,       gradient: "from-[#84cc16] to-[#4d7c0f]", category: "stock", module: "Stock" },
   { label: "Barcode",           href: "/stock/scan",             icon: Barcode,          gradient: "from-[#14b8a6] to-[#0d9488]", category: "stock", minTier: "pro" },
 
-  // SHIPPING (erpnext-shipping app)
+  // SHIPPING
   { label: "Shipments",         href: "/shipping/shipments",     icon: Ship,             gradient: "from-[#0ea5e9] to-[#0369a1]", category: "shipping", module: "Stock" },
   { label: "Parcels",           href: "/shipping/parcels",       icon: Package2,         gradient: "from-[#38bdf8] to-[#075985]", category: "shipping", module: "Stock" },
   { label: "Shipping rules",    href: "/shipping/rules",         icon: RouteIcon,        gradient: "from-[#0284c7] to-[#0c4a6e]", category: "shipping", module: "Stock" },

@@ -1,11 +1,13 @@
+import Link from "next/link";
+
 const FAQ = [
   {
     q: "How does seat-based billing work?",
-    a: "You pay only for the users you actively use. Add or remove seats anytime — proration is automatic through Polar."
+    a: "You pay only for the users you actively use. Add or remove seats anytime — proration is automatic."
   },
   {
     q: "Can I switch plans?",
-    a: "Yes. Upgrade or downgrade whenever you like. Feature access updates immediately after Polar confirms the change."
+    a: "Yes. Upgrade or downgrade whenever you like. Feature access updates immediately."
   },
   {
     q: "What happens on Free?",
@@ -17,7 +19,32 @@ const FAQ = [
   },
   {
     q: "Is there a contract?",
-    a: "No annual lock-in. Monthly, cancel any time."
+    a: (
+      <>
+        Monthly or annual (20% off). Cancel any time — no long-term lock-in. See{" "}
+        <Link href="/terms" className="text-primary underline-offset-2 hover:underline">
+          Terms
+        </Link>{" "}
+        and{" "}
+        <Link href="/refunds" className="text-primary underline-offset-2 hover:underline">
+          Billing &amp; Refunds
+        </Link>
+        .
+      </>
+    )
+  },
+  {
+    q: "How do refunds work?",
+    a: (
+      <>
+        Monthly plans cancel any time — you keep access through the paid period. Annual plans are
+        refundable for 30 days. Full policy on{" "}
+        <Link href="/refunds" className="text-primary underline-offset-2 hover:underline">
+          Billing &amp; Refunds
+        </Link>
+        .
+      </>
+    )
   }
 ];
 

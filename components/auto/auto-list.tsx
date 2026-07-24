@@ -142,7 +142,11 @@ export async function AutoList({
         </div>
       </header>
 
-      <SavedViewsBar doctype={doctype} />
+      <SavedViewsBar
+        doctype={doctype}
+        userEmail={boot.user?.name ?? null}
+        tenantName={boot.zivvy?.tenant?.name ?? null}
+      />
 
       {!list || shownOnPage === 0 ? (
         <AutoListEmpty

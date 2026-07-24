@@ -174,7 +174,7 @@ export async function fetchBootinfo(): Promise<Bootinfo> {
     tier_label: plan?.tier_label ?? tier.charAt(0).toUpperCase() + tier.slice(1),
     demo_plan: plan?.demo_plan ?? null,
     site_tier: plan?.site_tier ?? tier,
-    priority_support: false,
+    priority_support: tier === "pro" || tier === "business",
     seats_used: plan?.seats_used ?? tenant?.seats_used ?? 0,
     seats_allowed: plan?.seats_allowed ?? tenant?.seat_limit ?? 0,
     subscription_status:

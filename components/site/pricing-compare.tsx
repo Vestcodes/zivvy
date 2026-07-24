@@ -14,7 +14,7 @@ const ROWS: Row[] = [
   { label: "Assets & quality", free: false, pro: false, business: true },
   { label: "Subcontracting", free: false, pro: false, business: true },
   { label: "Multiple companies", free: false, pro: false, business: true },
-  { label: "Priority support", free: false, pro: false, business: true }
+  { label: "Priority support", free: false, pro: true, business: true }
 ];
 
 function Cell({ on }: { on: boolean }) {

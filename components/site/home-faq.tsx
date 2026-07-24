@@ -9,28 +9,42 @@ import {
 
 const FAQ = [
   {
-    q: "Is this built on ERPNext?",
-    a: "Yes — under the hood is a Frappe/ERPNext core. Zivvy adds a modern frontend, a working billing layer, and sane defaults so you never touch the old desk UI unless you want to."
-  },
-  {
-    q: "How is Zivvy different from Odoo?",
-    a: "Zivvy is open-core, seat-based, and has no forced modules. Sales, stock, HR, accounting, and manufacturing all live in one product with pricing that doesn't punish growth."
+    q: "How is Zivvy different from Odoo or Zoho?",
+    a: "Zivvy is seat-based with no forced modules. Sales, stock, HR, accounting, and manufacturing live in one clean product. Pricing does not punish growth."
   },
   {
     q: "Can I bring my own hosting?",
-    a: "Business plan customers can self-host or run on their own cloud. We provide the container image, migration scripts, and support for the first 30 days."
+    a: "Business customers can self-host or run on their own cloud. Pro and Business include priority support. Business also includes migration help for the first 30 days."
   },
   {
     q: "Can we import from another ERP?",
-    a: "Yes — CSV import for masters, transactions, and stock levels. For larger migrations from Odoo, SAP B1, Zoho, or Tally, our team runs the mapping for you on Pro and Business."
+    a: "Yes — CSV import for masters, transactions, and stock. Larger migrations from Odoo, SAP B1, Zoho, or Tally get mapping help on Pro and Business."
   },
   {
     q: "What data goes where?",
-    a: "Pick India, EU, or US at signup. Your data stays in that region and never crosses borders. GDPR + SOC 2 controls are in place; we're happy to sign a DPA."
+    a: (
+      <>
+        Pick India, EU, or US at signup. Your data stays in that region.
+        We can sign a DPA — see the{" "}
+        <Link href="/dpa" className="text-primary underline-offset-2 hover:underline">
+          DPA summary
+        </Link>
+        .
+      </>
+    )
   },
   {
     q: "How do refunds work?",
-    a: "Monthly plans cancel any time — you pay only for what you used. Annual plans are refundable for 30 days, no questions asked. After that, we prorate on downgrades."
+    a: (
+      <>
+        Monthly plans cancel any time. Annual plans are refundable for 30 days.
+        After that, we prorate on downgrades. Details:{" "}
+        <Link href="/refunds" className="text-primary underline-offset-2 hover:underline">
+          Billing &amp; Refunds
+        </Link>
+        .
+      </>
+    )
   }
 ];
 

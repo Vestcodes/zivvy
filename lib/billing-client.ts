@@ -17,11 +17,18 @@ export function getMyPlan() {
   return frappeCall<MyPlan>("zivvy_brand.billing.api.get_my_plan");
 }
 
-export function createCheckout(plan: Exclude<ZivvyTier, "free">, seats?: number) {
-  return frappeCall<{ checkout_id: string; url: string; seats: number; plan: ZivvyTier }>(
-    "zivvy_brand.billing.api.create_checkout",
-    { plan, seats }
-  );
+export function createCheckout(
+  plan: Exclude<ZivvyTier, "free">,
+  seats?: number,
+  billing: "monthly" | "annual" = "monthly"
+) {
+  return frappeCall<{
+    checkout_id: string;
+    url: string;
+    seats: number;
+    plan: ZivvyTier;
+    billing: "monthly" | "annual";
+  }>("zivvy_brand.billing.api.create_checkout", { plan, seats, billing });
 }
 
 export function createPortalSession() {

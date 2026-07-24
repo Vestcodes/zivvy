@@ -13,19 +13,19 @@ const CONTACTS = [
   {
     icon: Mail,
     label: "Email",
-    value: "contact@vestcodes.com",
-    href: "mailto:contact@vestcodes.com"
+    value: "support@zivvy.xyz",
+    href: "mailto:support@zivvy.xyz"
   },
   {
     icon: MessagesSquare,
     label: "Support",
-    value: "Priority support included on Business",
+    value: "Priority support included on Pro ($18)",
     href: "/pricing"
   },
   {
     icon: MapPin,
     label: "Company",
-    value: "Vestcodes Co, India",
+    value: "Zivvy",
     href: null
   }
 ];
@@ -40,7 +40,7 @@ export default function ContactPage() {
             Talk to us
           </h1>
           <p className="mt-4 text-lg text-muted-foreground">
-            We answer within a business day. Faster on Business.
+            We answer within a business day. Faster on Pro.
           </p>
         </section>
 
