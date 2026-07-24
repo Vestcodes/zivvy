@@ -392,7 +392,7 @@ export function computeListAction(ctx: ListActionCtx): NextAction | null {
 
 function singular(s: string): string {
   if (s.endsWith("ies")) return s.slice(0, -3) + "y";
-  if (s.endsWith("es") && !s.endsWith("ses")) return s.slice(0, -2);
+  if (/(?:ch|sh|x|z|ss)es$/i.test(s)) return s.slice(0, -2);
   if (s.endsWith("s")) return s.slice(0, -1);
   return s;
 }
