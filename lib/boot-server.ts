@@ -8,11 +8,12 @@ import {
   type ZivvyTenantSummary
 } from "@/lib/boot-types";
 import {
-  DOCTYPE_MIN_TIER,
-  MODULE_MIN_TIER,
-  blockedModulesFor
+  DOCTYPE_MIN_TIER as FALLBACK_DOCTYPE_MIN_TIER,
+  MODULE_MIN_TIER as FALLBACK_MODULE_MIN_TIER
 } from "@/lib/plan-features";
+import { fetchTierMap } from "@/lib/tier-map-server";
 import { MOCK_BOOT } from "@/lib/mock-boot";
+import { tierAtLeast } from "@/lib/boot-types";
 
 const FRAPPE_ORIGIN =
   process.env.FRAPPE_ORIGIN ||
@@ -127,13 +128,14 @@ async function _fetchBootinfo(): Promise<Bootinfo> {
   const email = await frappeServerCall<string>("frappe.auth.get_logged_user");
   if (!email || email === "Guest") return GUEST_BOOT;
 
-  const [plan, userVals] = await Promise.all([
+  const [plan, userVals, tierMap] = await Promise.all([
     frappeServerCall<RawPlan>("zivvy_brand.billing.api.get_my_plan"),
     frappeServerCall<RawUserValues>("frappe.client.get_value", {
       doctype: "User",
       filters: JSON.stringify({ name: email }),
       fieldname: JSON.stringify(["full_name", "zivvy_tenant"])
-    })
+    }),
+    fetchTierMap()
   ]);
 
   let tenant: ZivvyTenantSummary | null = null;
@@ -193,10 +195,18 @@ async function _fetchBootinfo(): Promise<Bootinfo> {
     seats_allowed: plan?.seats_allowed ?? tenant?.seat_limit ?? 0,
     subscription_status:
       plan?.subscription_status ?? plan?.status ?? tenant?.subscription_status ?? "none",
-    blocked_modules: blockedModulesFor(tier),
-    blocked_doctypes: [],
-    module_min_tier: MODULE_MIN_TIER,
-    doctype_min_tier: DOCTYPE_MIN_TIER,
+    // Derive blocked_modules from the AUTHORITATIVE tier map fetched from
+    // the backend (falls back to lib/plan-features.ts when the endpoint is
+    // unreachable during deploys). This is what makes the launcher tiles
+    // + sidebar items correctly show as locked BEFORE the user clicks.
+    blocked_modules: Object.entries(tierMap.module_min_tier)
+      .filter(([, required]) => !tierAtLeast(tier, required))
+      .map(([module]) => module),
+    blocked_doctypes: Object.entries(tierMap.doctype_min_tier)
+      .filter(([, required]) => !tierAtLeast(tier, required))
+      .map(([doctype]) => doctype),
+    module_min_tier: tierMap.module_min_tier,
+    doctype_min_tier: tierMap.doctype_min_tier,
     pricing: plan?.pricing ?? {},
     billing_route: "/billing",
     pricing_route: "/pricing",
