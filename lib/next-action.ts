@@ -127,6 +127,136 @@ const DOCTYPE_OVERRIDES: Record<string, (ctx: Ctx) => NextAction | null> = {
       };
     }
     return null;
+  },
+
+  // Helpdesk — customer tickets need a clear next step at every stage.
+  "HD Ticket": (ctx) => {
+    const status = pickStatus(ctx.doc);
+    const assignee = ctx.doc._assign;
+    if (status === "Open" && (!assignee || assignee === "[]")) {
+      return {
+        label: "Assign to a teammate",
+        hint: "Nobody owns this ticket yet — pick an agent so nothing sits.",
+        tone: "warning",
+        kind: "fill",
+        targetField: "_assign"
+      };
+    }
+    if (status === "Open") {
+      return {
+        label: "Reply to the customer",
+        hint: "Send the first response — SLAs start ticking from ticket creation.",
+        tone: "primary",
+        kind: "review"
+      };
+    }
+    if (status === "Replied" || status === "On Hold") {
+      return {
+        label: "Waiting on the customer",
+        hint: "Ball's in their court. Set a reminder if they don't respond.",
+        tone: "info",
+        kind: "review"
+      };
+    }
+    if (status === "Resolved") {
+      return {
+        label: "Close the ticket",
+        hint: "Customer confirmed resolution. Mark closed to free the queue.",
+        tone: "primary",
+        kind: "review"
+      };
+    }
+    return null;
+  },
+
+  // Helpdesk knowledge base — drafts are the failure mode.
+  "HD Article": (ctx) => {
+    if (ctx.doc.status === "Draft") {
+      return {
+        label: "Publish this article",
+        hint: "Drafts don't help customers. Publish when the content is ready.",
+        tone: "primary",
+        kind: "review"
+      };
+    }
+    return null;
+  },
+
+  // Wiki — same draft-blocker as HD Article.
+  "Wiki Page": (ctx) => {
+    if (ctx.doc.published === 0 || ctx.doc.published === false) {
+      return {
+        label: "Publish this page",
+        hint: "Only your team can see unpublished pages. Publish when it's ready.",
+        tone: "primary",
+        kind: "fill",
+        targetField: "published"
+      };
+    }
+    return null;
+  },
+
+  // Insights — dashboards need charts, charts need queries.
+  "Insights Dashboard": (ctx) => {
+    const charts = ctx.doc.charts;
+    if (Array.isArray(charts) && charts.length === 0) {
+      return {
+        label: "Add your first chart",
+        hint: "An empty dashboard has nothing to show. Start with one chart.",
+        tone: "primary",
+        kind: "fill",
+        targetField: "charts"
+      };
+    }
+    return null;
+  },
+  "Insights Query": (ctx) => {
+    if (!ctx.doc.data_source) {
+      return {
+        label: "Pick a data source",
+        hint: "Queries need a database to run against. Choose one to continue.",
+        tone: "warning",
+        kind: "fill",
+        targetField: "data_source"
+      };
+    }
+    return null;
+  },
+
+  // Webshop — items aren't visible to shoppers until published.
+  "Website Item": (ctx) => {
+    if (ctx.doc.published === 0 || ctx.doc.published === false) {
+      return {
+        label: "Publish to storefront",
+        hint: "Customers can't buy this until it's published. Toggle when ready.",
+        tone: "primary",
+        kind: "fill",
+        targetField: "published"
+      };
+    }
+    if (!ctx.doc.website_image) {
+      return {
+        label: "Add a product image",
+        hint: "Items with a cover image convert 3× better. Upload one before publishing.",
+        tone: "warning",
+        kind: "fill",
+        targetField: "website_image"
+      };
+    }
+    return null;
+  },
+
+  // Raven Channel — the "empty channel" case.
+  "Raven Channel": (ctx) => {
+    if (!ctx.doc.channel_description && !ctx.doc.last_message_details) {
+      return {
+        label: "Send the first message",
+        hint: "Empty channels feel dead. Kick things off with a hello or purpose.",
+        tone: "primary",
+        kind: "review"
+      };
+    }
+    return null;
   }
 };
 

@@ -15,6 +15,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { AwesomebarTrigger } from "@/components/app/awesomebar";
 import { NotificationBell } from "@/components/app/notifications";
+import { ChatBadge } from "@/components/app/chat-badge";
 import { useZivvyBoot } from "@/components/boot-provider";
 import { cn } from "@/lib/utils";
 import type { Notification } from "@/lib/notifications";
@@ -62,9 +63,10 @@ function humanize(segment: string): string {
 interface TopbarProps {
   notifications?: Notification[];
   unreadCount?: number;
+  unreadChat?: number;
 }
 
-export function AppTopbar({ notifications = [], unreadCount = 0 }: TopbarProps) {
+export function AppTopbar({ notifications = [], unreadCount = 0, unreadChat = 0 }: TopbarProps) {
   const pathname = usePathname();
   const boot = useZivvyBoot();
   const segments = pathname.split("/").filter(Boolean);
@@ -124,6 +126,7 @@ export function AppTopbar({ notifications = [], unreadCount = 0 }: TopbarProps) 
             {boot.tenant.company}
           </span>
         )}
+        <ChatBadge unread={unreadChat} />
         <NotificationBell notifications={notifications} unreadCount={unreadCount} />
       </div>
     </header>
