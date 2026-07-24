@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { cookies } from "next/headers";
 
 const FRAPPE_ORIGIN =
@@ -58,7 +59,9 @@ async function serverCall<T = unknown>(
   }
 }
 
-export async function fetchNotifications(limit = 20): Promise<Notification[]> {
+export const fetchNotifications = cache(_fetchNotifications);
+
+async function _fetchNotifications(limit = 20): Promise<Notification[]> {
   const res = await serverCall<Array<Record<string, unknown>>>(
     "frappe.client.get_list",
     {
@@ -87,7 +90,9 @@ export async function fetchNotifications(limit = 20): Promise<Notification[]> {
   }));
 }
 
-export async function fetchUnreadCount(): Promise<number> {
+export const fetchUnreadCount = cache(_fetchUnreadCount);
+
+async function _fetchUnreadCount(): Promise<number> {
   const res = await serverCall<number>("frappe.client.get_count", {
     doctype: "Notification Log",
     filters: JSON.stringify({ read: 0 })

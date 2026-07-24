@@ -1,5 +1,6 @@
 import "server-only";
 
+import { cache } from "react";
 import { cookies } from "next/headers";
 import type { TeamMember } from "@/lib/team-roles";
 export type { TeamMember } from "@/lib/team-roles";
@@ -51,7 +52,9 @@ async function serverCall<T = unknown>(
   }
 }
 
-export async function fetchTeamMembers(tenantName?: string | null): Promise<TeamMember[]> {
+export const fetchTeamMembers = cache(_fetchTeamMembers);
+
+async function _fetchTeamMembers(tenantName?: string | null): Promise<TeamMember[]> {
   // Scope by tenant when we have one — critical for multi-tenant Frappe sites
   // where an unscoped list would leak users across workspaces. The absence of
   // a tenant means we still filter to System Users so guests/administrators

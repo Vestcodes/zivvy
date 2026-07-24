@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { cookies } from "next/headers";
 import {
   GUEST_BOOT,
@@ -6,6 +7,11 @@ import {
   type ZivvyTier,
   type ZivvyTenantSummary
 } from "@/lib/boot-types";
+import {
+  DOCTYPE_MIN_TIER,
+  MODULE_MIN_TIER,
+  blockedModulesFor
+} from "@/lib/plan-features";
 import { MOCK_BOOT } from "@/lib/mock-boot";
 
 const FRAPPE_ORIGIN =
@@ -103,7 +109,15 @@ interface RawTenantValues {
  * `frappe.boot.get_bootinfo` is NOT whitelisted for RPC (403), so we compose
  * our Bootinfo shape from these smaller reads instead.
  */
-export async function fetchBootinfo(): Promise<Bootinfo> {
+/**
+ * React `cache()` dedupes the boot fetch across every server component in a
+ * single request. Without this, the root layout + `/settings/team` +
+ * `/dashboard` etc. each fire their own Frappe RPC — 3-4× the latency for
+ * exactly the same data.
+ */
+export const fetchBootinfo = cache(_fetchBootinfo);
+
+async function _fetchBootinfo(): Promise<Bootinfo> {
   if (DEV_MOCK) return MOCK_BOOT;
 
   const cookieStore = await cookies();
@@ -179,10 +193,10 @@ export async function fetchBootinfo(): Promise<Bootinfo> {
     seats_allowed: plan?.seats_allowed ?? tenant?.seat_limit ?? 0,
     subscription_status:
       plan?.subscription_status ?? plan?.status ?? tenant?.subscription_status ?? "none",
-    blocked_modules: [],
+    blocked_modules: blockedModulesFor(tier),
     blocked_doctypes: [],
-    module_min_tier: {},
-    doctype_min_tier: {},
+    module_min_tier: MODULE_MIN_TIER,
+    doctype_min_tier: DOCTYPE_MIN_TIER,
     pricing: plan?.pricing ?? {},
     billing_route: "/billing",
     pricing_route: "/pricing",
