@@ -14,10 +14,7 @@ import { cookies } from "next/headers";
  * silently rather than crashing the topbar.
  */
 
-const FRAPPE_ORIGIN =
-  process.env.FRAPPE_ORIGIN ||
-  process.env.NEXT_PUBLIC_FRAPPE_ORIGIN ||
-  "https://zivvy.xyz";
+import { FRAPPE_ORIGIN } from "@/lib/frappe-origin";
 
 async function serverCall<T = unknown>(
   method: string,

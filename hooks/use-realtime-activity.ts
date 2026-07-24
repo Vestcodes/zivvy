@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { io, Socket } from "socket.io-client";
+import type { Socket } from "socket.io-client";
 
 /**
  * Realtime activity — opens a socket.io connection to the Frappe backend,
@@ -64,52 +64,41 @@ export function useRealtimeActivity({ enabled }: Options): Api {
     const origin = resolveRealtimeOrigin();
     if (!origin) return;
 
-    const socket = io(origin, {
-      // Frappe's socket.io listens on /socket.io/ — same path across versions.
-      path: "/socket.io",
-      // We cross-origin from zivvy.xyz to api.zivvy.xyz; withCredentials
-      // ensures the sid cookie rides for auth.
-      withCredentials: true,
-      // Prefer websocket but let socket.io fall back to polling on flaky
-      // networks. Frappe's socket.io server supports both.
-      transports: ["websocket", "polling"],
-      reconnection: true,
-      reconnectionDelay: 1000,
-      reconnectionDelayMax: 5000,
-      reconnectionAttempts: Infinity
+    let cancelled = false;
+
+    import("socket.io-client").then(({ io }) => {
+      if (cancelled) return;
+
+      const socket = io(origin, {
+        path: "/socket.io",
+        withCredentials: true,
+        transports: ["websocket", "polling"],
+        reconnection: true,
+        reconnectionDelay: 1000,
+        reconnectionDelayMax: 5000,
+        reconnectionAttempts: Infinity
+      });
+      socketRef.current = socket;
+
+      socket.on("connect", () => setConnected(true));
+      socket.on("disconnect", () => setConnected(false));
+
+      socket.on("notification", () => setNotifDelta((v) => v + 1));
+      socket.on("notification_alert", () => setNotifDelta((v) => v + 1));
+
+      socket.on("raven:new_message", () => setChatDelta((v) => v + 1));
+      socket.on("raven_new_message", () => setChatDelta((v) => v + 1));
+      socket.on("message_created", () => setChatDelta((v) => v + 1));
     });
-    socketRef.current = socket;
-
-    socket.on("connect", () => setConnected(true));
-    socket.on("disconnect", () => setConnected(false));
-
-    // Frappe generic notification event — fires on any notification insert.
-    // Covers most modules (assignments, mentions, comments, etc.).
-    const onNotification = () => {
-      setNotifDelta((v) => v + 1);
-    };
-    socket.on("notification", onNotification);
-    // Frappe's newer channel name — cover both to survive version drift.
-    socket.on("notification_alert", onNotification);
-
-    // Raven publishes on `raven:new_message` when a chat message lands.
-    // The event payload has `channel_id` and `sender` — we only care about
-    // counting for the badge.
-    const onRaven = () => {
-      setChatDelta((v) => v + 1);
-    };
-    socket.on("raven:new_message", onRaven);
-    socket.on("raven_new_message", onRaven);
-    socket.on("message_created", onRaven);
 
     return () => {
-      socket.off("notification", onNotification);
-      socket.off("notification_alert", onNotification);
-      socket.off("raven:new_message", onRaven);
-      socket.off("raven_new_message", onRaven);
-      socket.off("message_created", onRaven);
-      socket.disconnect();
-      socketRef.current = null;
+      cancelled = true;
+      const socket = socketRef.current;
+      if (socket) {
+        socket.removeAllListeners();
+        socket.disconnect();
+        socketRef.current = null;
+      }
     };
   }, [enabled]);
 

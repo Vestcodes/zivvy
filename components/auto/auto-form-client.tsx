@@ -8,6 +8,8 @@ import {
   ArrowLeft,
   Ban,
   CheckCircle2,
+  ChevronDown,
+  ChevronUp,
   Loader2,
   Pencil,
   Save,
@@ -17,7 +19,6 @@ import { Badge } from "@/components/ui/badge";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { docstatusLabel, toneForDocstatus } from "@/lib/status";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -40,7 +41,7 @@ import { parseFrappeError, EMPTY_ERRORS, type ParsedFormError } from "@/lib/form
 import { computeNextAction, type NextAction } from "@/lib/next-action";
 import { densifyForm } from "@/lib/form-density";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertCircle, ChevronDown, ChevronUp } from "lucide-react";
+import { AlertCircle } from "lucide-react";
 
 interface Props {
   meta: DoctypeMeta;
@@ -48,8 +49,6 @@ interface Props {
   initialDoc: Record<string, unknown>;
   basePath: string;
   title: string;
-  /** Server-computed next action for the initial doc state. Re-computed on
-   * the client whenever the doc changes so it stays live. */
   initialNextAction?: NextAction | null;
 }
 
@@ -60,7 +59,6 @@ function shallowEqual(a: Record<string, unknown>, b: Record<string, unknown>): b
   if (ak.length !== bk.length) return false;
   for (const k of ak) {
     if (a[k] !== b[k]) {
-      // Coerce nullish → same for empty-vs-null equality.
       const av = a[k] ?? null;
       const bv = b[k] ?? null;
       if (av !== bv) return false;
@@ -96,10 +94,8 @@ export function AutoFormClient({
   const isNew = doc.__islocal === 1 || !doc.name;
   const dirty = useMemo(() => editing && !shallowEqual(doc, initialRef.current), [doc, editing]);
 
-  // Progressive form density: split each section into essentials + details.
   const densified = useMemo(() => densifyForm(groups), [groups]);
 
-  // Live next-action — recomputes as the user edits so the strip stays honest.
   const nextAction = useMemo<NextAction | null>(() => {
     return computeNextAction({ meta, doc, isNew, basePath });
   }, [meta, doc, isNew, basePath]);
@@ -107,7 +103,6 @@ export function AutoFormClient({
   const displayedNextAction = nextAction ?? initialNextAction ?? null;
 
   const focusField = useCallback((fieldname: string) => {
-    // Ensure the field is visible — if it's a detail field, un-fold first.
     setShowAllDetail(true);
     requestAnimationFrame(() => {
       const el = document.querySelector<HTMLElement>(
@@ -122,7 +117,6 @@ export function AutoFormClient({
 
   const updateField = useCallback((fieldname: string, value: unknown) => {
     setDoc((prev) => ({ ...prev, [fieldname]: value }));
-    // Clear this field's error the moment the user edits it
     setErrors((prev) => {
       if (!prev.fieldErrors[fieldname]) return prev;
       const next = { ...prev.fieldErrors };
@@ -134,7 +128,6 @@ export function AutoFormClient({
   const scrollToFirstError = useCallback((parsed: ParsedFormError) => {
     const first = Object.keys(parsed.fieldErrors)[0];
     if (!first) return;
-    // Defer to next tick so the error renders first
     requestAnimationFrame(() => {
       const el = document.querySelector<HTMLElement>(`[data-field="${first}"] input, [data-field="${first}"] textarea, [data-field="${first}"] [role="combobox"]`);
       if (el) {
@@ -263,14 +256,12 @@ export function AutoFormClient({
     }
   }, [editing, isNew, dirty, focusField, onSave, router]);
 
-  // Fade the "Saved" chip out after 4 seconds
   useEffect(() => {
     if (!justSaved) return;
     const id = setTimeout(() => setJustSaved(false), 4000);
     return () => clearTimeout(id);
   }, [justSaved]);
 
-  // Cmd/Ctrl+S to save; Esc to discard
   useEffect(() => {
     if (!editing) return;
     const onKey = (e: KeyboardEvent) => {
@@ -287,7 +278,6 @@ export function AutoFormClient({
     return () => window.removeEventListener("keydown", onKey);
   }, [editing, dirty, saving, onSave, handleDiscardClick]);
 
-  // Warn on unload with unsaved changes
   useEffect(() => {
     if (!dirty) return;
     const beforeUnload = (e: BeforeUnloadEvent) => {
@@ -300,21 +290,29 @@ export function AutoFormClient({
 
   const singular = title.replace(/s$/, "").toLowerCase();
 
+  const visibleSections = densified.sections.filter((section) => {
+    const hasEssentials = section.columns.some((c) =>
+      c.fields.some((f) => f.tier === "essential")
+    );
+    return hasEssentials || showAllDetail;
+  });
+
   return (
     <>
-      <div className={cn("space-y-4", editing && "pb-20")}>
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-          <div className="min-w-0">
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <Button asChild variant="ghost" size="icon-sm">
-                <Link href={basePath}>
-                  <ArrowLeft />
-                </Link>
-              </Button>
-              <span className="truncate">{title}</span>
-            </div>
-            <div className="mt-1 flex flex-wrap items-center gap-2">
-              <h1 className="truncate font-display text-2xl tracking-tight sm:text-3xl">
+      <div className={cn("mx-auto w-full max-w-3xl", editing && "pb-24")}>
+        {/* Header */}
+        <div className="mb-6">
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <Button asChild variant="ghost" size="icon-sm" className="size-7">
+              <Link href={basePath}>
+                <ArrowLeft className="size-4" />
+              </Link>
+            </Button>
+            <span className="truncate">{title}</span>
+          </div>
+          <div className="mt-2 flex flex-wrap items-center justify-between gap-3">
+            <div className="flex flex-wrap items-center gap-3">
+              <h1 className="font-display text-2xl tracking-tight sm:text-3xl">
                 {isNew ? `New ${singular}` : String(doc.name)}
               </h1>
               {meta.is_submittable && !isNew && (
@@ -324,8 +322,8 @@ export function AutoFormClient({
                 />
               )}
               {dirty && (
-                <Badge className="border-chart-2/30 bg-chart-2/10 text-chart-2">
-                  Unsaved changes
+                <Badge className="border-amber-500/30 bg-amber-500/10 text-amber-600 dark:text-amber-400">
+                  Unsaved
                 </Badge>
               )}
               {justSaved && !dirty && (
@@ -335,35 +333,36 @@ export function AutoFormClient({
                 </Badge>
               )}
             </div>
-          </div>
 
-          <div className="flex flex-wrap items-center gap-2">
-            {!editing && !isNew && (
-              <PrintButton doctype={meta.name} docname={String(doc.name)} />
-            )}
-            {!editing && !isNew && (
-              <Button variant="outline" onClick={() => setEditing(true)} disabled={docstatus === 2}>
-                <Pencil />
-                Edit
-              </Button>
-            )}
-            {!editing && meta.is_submittable && docstatus === 0 && !isNew && (
-              <Button variant="polished" onClick={() => setDialog("submit")} disabled={submitting}>
-                <CheckCircle2 />
-                {submitting ? "Submitting…" : "Submit"}
-              </Button>
-            )}
-            {!editing && meta.is_submittable && docstatus === 1 && (
-              <Button variant="outline" onClick={() => setDialog("cancel")} disabled={canceling}>
-                <Ban />
-                {canceling ? "Cancelling…" : "Cancel"}
-              </Button>
-            )}
+            <div className="flex items-center gap-2">
+              {!editing && !isNew && (
+                <PrintButton doctype={meta.name} docname={String(doc.name)} />
+              )}
+              {!editing && !isNew && (
+                <Button variant="outline" size="sm" onClick={() => setEditing(true)} disabled={docstatus === 2}>
+                  <Pencil className="size-3.5" />
+                  Edit
+                </Button>
+              )}
+              {!editing && meta.is_submittable && docstatus === 0 && !isNew && (
+                <Button variant="polished" size="sm" onClick={() => setDialog("submit")} disabled={submitting}>
+                  <CheckCircle2 className="size-3.5" />
+                  {submitting ? "Submitting..." : "Submit"}
+                </Button>
+              )}
+              {!editing && meta.is_submittable && docstatus === 1 && (
+                <Button variant="outline" size="sm" onClick={() => setDialog("cancel")} disabled={canceling}>
+                  <Ban className="size-3.5" />
+                  {canceling ? "Cancelling..." : "Cancel"}
+                </Button>
+              )}
+            </div>
           </div>
         </div>
 
+        {/* Error banner */}
         {(errors.formError || errors.hasFieldErrors) && (
-          <Alert variant="destructive" role="alert">
+          <Alert variant="destructive" role="alert" className="mb-5">
             <AlertCircle className="size-4" />
             <AlertTitle>
               {errors.hasFieldErrors
@@ -376,31 +375,33 @@ export function AutoFormClient({
           </Alert>
         )}
 
-        <NextActionStrip action={displayedNextAction} onExecute={executeNextAction} />
+        {/* Next action strip */}
+        <NextActionStrip action={displayedNextAction} onExecute={executeNextAction} className="mb-5" />
 
-        {densified.sections.map((section, sectionIdx) => {
-          const hasEssentials = section.columns.some((c) =>
-            c.fields.some((f) => f.tier === "essential")
-          );
-          if (!hasEssentials && !showAllDetail) return null;
-          return (
-            <Card
+        {/* Form body — single unified container */}
+        <div className="rounded-xl border border-border/70 bg-card shadow-sm">
+          {visibleSections.map((section, sectionIdx) => (
+            <div
               key={`${section.label}-${sectionIdx}`}
-              className="border-border/70 bg-card shadow-sm"
+              className={cn(
+                sectionIdx > 0 && "border-t border-border/50"
+              )}
             >
-              <CardContent className="space-y-4 py-6">
+              <div className="px-6 py-5">
                 {section.label && (
-                  <h2 className="font-display text-lg tracking-tight">{section.label}</h2>
+                  <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-muted-foreground/70">
+                    {section.label}
+                  </h2>
                 )}
                 <div
                   className={
                     section.columns.length > 1
-                      ? "grid gap-6 md:grid-cols-2"
-                      : "grid gap-6"
+                      ? "grid gap-x-8 gap-y-5 md:grid-cols-2"
+                      : "grid gap-5"
                   }
                 >
                   {section.columns.map((col, i) => (
-                    <div key={i} className="grid gap-4">
+                    <div key={i} className="grid gap-5">
                       {col.fields
                         .filter(({ tier }) => showAllDetail || tier === "essential")
                         .map(({ field: f }) =>
@@ -419,68 +420,73 @@ export function AutoFormClient({
                     </div>
                   ))}
                 </div>
-              </CardContent>
-            </Card>
-          );
-        })}
+              </div>
+            </div>
+          ))}
 
-        {densified.totalDetail > 0 && (
-          <div className="flex justify-center pt-1">
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              onClick={() => setShowAllDetail((v) => !v)}
-              className="text-muted-foreground hover:text-foreground"
-            >
-              {showAllDetail ? (
-                <>
-                  <ChevronUp className="size-3.5" />
-                  Hide detail fields
-                </>
-              ) : (
-                <>
-                  <ChevronDown className="size-3.5" />
-                  Show all fields ({densified.totalDetail} more)
-                </>
-              )}
-            </Button>
-          </div>
-        )}
+          {/* Detail fields toggle — inside the container */}
+          {densified.totalDetail > 0 && (
+            <div className="border-t border-border/50 px-6 py-3">
+              <button
+                type="button"
+                onClick={() => setShowAllDetail((v) => !v)}
+                className="flex w-full items-center justify-center gap-1.5 rounded-lg py-1.5 text-sm text-muted-foreground transition-colors hover:bg-muted/50 hover:text-foreground"
+              >
+                {showAllDetail ? (
+                  <>
+                    <ChevronUp className="size-3.5" />
+                    Fewer fields
+                  </>
+                ) : (
+                  <>
+                    <ChevronDown className="size-3.5" />
+                    {densified.totalDetail} more {densified.totalDetail === 1 ? "field" : "fields"}
+                  </>
+                )}
+              </button>
+            </div>
+          )}
+        </div>
 
+        {/* Activity timeline */}
         {!isNew && !editing && (
-          <ActivityTimeline
-            doctype={meta.name}
-            docname={String(doc.name)}
-            owner={doc.owner as string | undefined}
-            creation={doc.creation as string | undefined}
-            modified={doc.modified as string | undefined}
-            modifiedBy={doc.modified_by as string | undefined}
-          />
+          <div className="mt-6">
+            <ActivityTimeline
+              doctype={meta.name}
+              docname={String(doc.name)}
+              owner={doc.owner as string | undefined}
+              creation={doc.creation as string | undefined}
+              modified={doc.modified as string | undefined}
+              modifiedBy={doc.modified_by as string | undefined}
+            />
+          </div>
         )}
       </div>
 
+      {/* Bottom action bar */}
       {editing && (
         <div className="pointer-events-none fixed inset-x-0 bottom-0 z-40 flex justify-center px-4 pb-4">
-          <div className="pointer-events-auto flex w-full max-w-3xl items-center justify-between gap-3 rounded-full border border-border/70 bg-background/95 px-3 py-2 shadow-elevation-lg backdrop-blur">
-            <div className="ml-2 flex min-w-0 items-center gap-2 text-xs text-muted-foreground">
+          <div className="pointer-events-auto flex w-full max-w-3xl items-center justify-between gap-3 rounded-2xl border border-border/70 bg-background/95 px-4 py-3 shadow-elevation-lg backdrop-blur supports-[backdrop-filter]:bg-background/80">
+            <div className="ml-1 flex min-w-0 items-center gap-2 text-sm text-muted-foreground">
               {saving ? (
                 <>
-                  <Loader2 className="size-3.5 animate-spin" />
-                  <span>Saving…</span>
+                  <Loader2 className="size-4 animate-spin text-primary" />
+                  <span className="font-medium text-foreground">Saving...</span>
                 </>
               ) : dirty ? (
                 <span>
-                  Unsaved changes ·{" "}
-                  <span className="hidden font-mono text-[10px] sm:inline">⌘S to save · Esc to discard</span>
+                  Unsaved changes
+                  <span className="ml-2 hidden text-xs opacity-60 sm:inline">
+                    {"⌘"}S to save
+                  </span>
                 </span>
               ) : (
-                <span>No changes</span>
+                <span className="opacity-60">No changes</span>
               )}
             </div>
             <div className="flex items-center gap-2">
-              <Button variant="ghost" size="sm" onClick={handleDiscardClick}>
-                <X />
+              <Button variant="ghost" size="sm" onClick={handleDiscardClick} className="text-muted-foreground">
+                <X className="size-3.5" />
                 Discard
               </Button>
               <Button
@@ -488,15 +494,21 @@ export function AutoFormClient({
                 size="sm"
                 onClick={onSave}
                 disabled={saving || !dirty && !isNew}
+                className="min-w-[5rem]"
               >
-                <Save />
-                {saving ? "Saving…" : isNew ? "Create" : "Save"}
+                {saving ? (
+                  <Loader2 className="size-3.5 animate-spin" />
+                ) : (
+                  <Save className="size-3.5" />
+                )}
+                {saving ? "Saving..." : isNew ? "Create" : "Save"}
               </Button>
             </div>
           </div>
         </div>
       )}
 
+      {/* Dialogs */}
       <AlertDialog open={dialog === "discard"} onOpenChange={(o) => !o && setDialog(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>

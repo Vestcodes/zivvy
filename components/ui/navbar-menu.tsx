@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useCallback } from "react";
 import Link from "next/link";
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
@@ -44,9 +44,9 @@ export const MenuItem = ({
               <motion.div
                 transition={transition}
                 layoutId="active"
-                className="overflow-hidden rounded-2xl border border-border/70 bg-popover/95 shadow-elevation-lg backdrop-blur-md"
+                className="max-h-[calc(100vh-5rem)] overflow-y-auto rounded-2xl border border-border/70 bg-popover/95 shadow-elevation-lg backdrop-blur-md"
               >
-                <motion.div layout className="h-full w-max p-4">
+                <motion.div layout className="w-max p-4">
                   {children}
                 </motion.div>
               </motion.div>
@@ -67,9 +67,23 @@ export const Menu = ({
   children: React.ReactNode;
   className?: string;
 }) => {
+  const dismiss = useCallback(() => setActive(null), [setActive]);
+
+  useEffect(() => {
+    window.addEventListener("scroll", dismiss, { passive: true });
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") dismiss();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("scroll", dismiss);
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [dismiss]);
+
   return (
     <nav
-      onMouseLeave={() => setActive(null)}
+      onMouseLeave={dismiss}
       className={cn(
         "relative flex items-center justify-center gap-6 bg-transparent px-1 py-2",
         className

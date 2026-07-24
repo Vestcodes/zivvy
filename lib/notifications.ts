@@ -1,10 +1,6 @@
 import { cache } from "react";
 import { cookies } from "next/headers";
-
-const FRAPPE_ORIGIN =
-  process.env.FRAPPE_ORIGIN ||
-  process.env.NEXT_PUBLIC_FRAPPE_ORIGIN ||
-  "https://zivvy.xyz";
+import { FRAPPE_ORIGIN } from "@/lib/frappe-origin";
 
 export interface Notification {
   name: string;

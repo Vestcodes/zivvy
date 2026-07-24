@@ -5,11 +5,7 @@ import { cookies } from "next/headers";
 import type { TeamMember } from "@/lib/team-roles";
 export type { TeamMember } from "@/lib/team-roles";
 export { ASSIGNABLE_ROLES } from "@/lib/team-roles";
-
-const FRAPPE_ORIGIN =
-  process.env.FRAPPE_ORIGIN ||
-  process.env.NEXT_PUBLIC_FRAPPE_ORIGIN ||
-  "https://zivvy.xyz";
+import { FRAPPE_ORIGIN } from "@/lib/frappe-origin";
 
 async function serverCall<T = unknown>(
   method: string,

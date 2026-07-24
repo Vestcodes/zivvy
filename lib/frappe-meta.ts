@@ -1,9 +1,6 @@
+import { cache } from "react";
 import { cookies } from "next/headers";
-
-const FRAPPE_ORIGIN =
-  process.env.FRAPPE_ORIGIN ||
-  process.env.NEXT_PUBLIC_FRAPPE_ORIGIN ||
-  "https://zivvy.xyz";
+import { FRAPPE_ORIGIN } from "@/lib/frappe-origin";
 
 const DEV_MOCK =
   process.env.NEXT_PUBLIC_ZIVVY_DEV_MOCK === "1" ||
@@ -85,13 +82,14 @@ async function frappeServerCall<T = unknown>(
   }
 }
 
-export async function getDoctypeMeta(doctype: string): Promise<DoctypeMeta | null> {
-  const res = await frappeServerCall<{ docs: DoctypeMeta[] }>(
-    "frappe.desk.form.load.getdoctype",
-    { doctype, with_parent: 1 }
+export const getDoctypeMeta = cache(_getDoctypeMeta);
+
+async function _getDoctypeMeta(doctype: string): Promise<DoctypeMeta | null> {
+  const res = await frappeServerCall<DoctypeMeta>(
+    "zivvy_brand.gating.doctype_meta.get_slim_meta",
+    { doctype }
   );
-  if (!res?.docs) return null;
-  return res.docs.find((d) => d.name === doctype) ?? res.docs[0] ?? null;
+  return res ?? null;
 }
 
 export interface ListRow {

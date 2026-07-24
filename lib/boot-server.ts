@@ -11,14 +11,9 @@ import {
   DOCTYPE_MIN_TIER as FALLBACK_DOCTYPE_MIN_TIER,
   MODULE_MIN_TIER as FALLBACK_MODULE_MIN_TIER
 } from "@/lib/plan-features";
-import { fetchTierMap } from "@/lib/tier-map-server";
 import { MOCK_BOOT } from "@/lib/mock-boot";
 import { tierAtLeast } from "@/lib/boot-types";
-
-const FRAPPE_ORIGIN =
-  process.env.FRAPPE_ORIGIN ||
-  process.env.NEXT_PUBLIC_FRAPPE_ORIGIN ||
-  "https://zivvy.xyz";
+import { FRAPPE_ORIGIN } from "@/lib/frappe-origin";
 
 const DEV_MOCK =
   process.env.NEXT_PUBLIC_ZIVVY_DEV_MOCK === "1" ||
@@ -62,59 +57,37 @@ async function frappeServerCall<T = unknown>(
   }
 }
 
-interface RawPlan {
-  tier?: ZivvyTier;
-  tier_label?: string;
-  demo_plan?: ZivvyTier | null;
-  site_tier?: ZivvyTier;
-  status?: string;                // Zivvy subscription status
-  subscription_status?: string;   // alt field name
-  seats_used?: number;
-  seats_allowed?: number;
-  current_period_end?: string | null;
-  cancel_at_period_end?: 0 | 1 | boolean;
-  polar_customer_id?: string | null;
-  polar_subscription_id?: string | null;
-  pricing?: Record<string, unknown>;
+interface BootData {
+  user: {
+    email: string;
+    full_name: string;
+    tenant: string | null;
+  };
+  plan: {
+    tier: ZivvyTier;
+    tier_label: string;
+    demo_plan: ZivvyTier | null;
+    site_tier: ZivvyTier;
+    status: string;
+    seats_used: number;
+    seats_allowed: number;
+    current_period_end: string | null;
+    cancel_at_period_end: boolean | 0 | 1 | null;
+    pricing: Record<string, unknown>;
+  };
+  tenant: ZivvyTenantSummary | null;
+  tier_map: {
+    module_min_tier: Record<string, ZivvyTier>;
+    doctype_min_tier: Record<string, ZivvyTier>;
+  };
+  blocked_modules: string[];
+  blocked_doctypes: string[];
 }
 
-interface RawUserValues {
-  full_name?: string | null;
-  zivvy_tenant?: string | null;
-}
-
-interface RawTenantValues {
-  tenant_name?: string | null;
-  slug?: string | null;
-  company?: string | null;
-  status?: string | null;
-  plan?: ZivvyTier | null;
-  seat_limit?: number | null;
-  seats_used?: number | null;
-  datacenter?: "india" | "eu" | "us" | null;
-  subscription_status?: string | null;
-  current_period_end?: string | null;
-  cancel_at_period_end?: 0 | 1 | boolean | null;
-  polar_customer_id?: string | null;
-  polar_subscription_id?: string | null;
-  owner_user?: string | null;
-}
-
-/**
- * Best-effort authenticated bootinfo. Uses only whitelisted Frappe endpoints:
- *  - frappe.auth.get_logged_user   (auth check)
- *  - zivvy_brand.billing.api.get_my_plan  (tier + seats)
- *  - frappe.client.get_value(User)        (full_name + zivvy_tenant)
- *  - frappe.client.get_value(Zivvy Tenant) (company + datacenter + …)
- *
- * `frappe.boot.get_bootinfo` is NOT whitelisted for RPC (403), so we compose
- * our Bootinfo shape from these smaller reads instead.
- */
 /**
  * React `cache()` dedupes the boot fetch across every server component in a
- * single request. Without this, the root layout + `/settings/team` +
- * `/dashboard` etc. each fire their own Frappe RPC — 3-4× the latency for
- * exactly the same data.
+ * single request. The consolidated endpoint returns user + plan + tenant +
+ * tier map in a single RPC — down from 4+ sequential roundtrips.
  */
 export const fetchBootinfo = cache(_fetchBootinfo);
 
@@ -125,89 +98,42 @@ async function _fetchBootinfo(): Promise<Bootinfo> {
   const sid = cookieStore.get("sid")?.value;
   if (!sid) return GUEST_BOOT;
 
-  const email = await frappeServerCall<string>("frappe.auth.get_logged_user");
-  if (!email || email === "Guest") return GUEST_BOOT;
+  const data = await frappeServerCall<BootData>(
+    "zivvy_brand.gating.api.get_boot_data"
+  );
+  if (!data?.user) return GUEST_BOOT;
 
-  const [plan, userVals, tierMap] = await Promise.all([
-    frappeServerCall<RawPlan>("zivvy_brand.billing.api.get_my_plan"),
-    frappeServerCall<RawUserValues>("frappe.client.get_value", {
-      doctype: "User",
-      filters: JSON.stringify({ name: email }),
-      fieldname: JSON.stringify(["full_name", "zivvy_tenant"])
-    }),
-    fetchTierMap()
-  ]);
+  const { user, plan, tenant: tenantInfo, tier_map: tierMap, blocked_modules, blocked_doctypes } = data;
 
-  let tenant: ZivvyTenantSummary | null = null;
-  if (userVals?.zivvy_tenant) {
-    const tenantVals = await frappeServerCall<RawTenantValues>(
-      "frappe.client.get_value",
-      {
-        doctype: "Zivvy Tenant",
-        filters: JSON.stringify({ name: userVals.zivvy_tenant }),
-        fieldname: JSON.stringify([
-          "tenant_name",
-          "slug",
-          "company",
-          "status",
-          "plan",
-          "seat_limit",
-          "seats_used",
-          "datacenter",
-          "subscription_status",
-          "current_period_end",
-          "cancel_at_period_end",
-          "polar_customer_id",
-          "polar_subscription_id",
-          "owner_user"
-        ])
+  const tier: ZivvyTier = plan.tier ?? "free";
+  const moduleTierMap = tierMap?.module_min_tier ?? FALLBACK_MODULE_MIN_TIER;
+  const doctypeTierMap = tierMap?.doctype_min_tier ?? FALLBACK_DOCTYPE_MIN_TIER;
+
+  const tenant: ZivvyTenantSummary | null = tenantInfo
+    ? {
+        ...tenantInfo,
+        name: tenantInfo.name ?? user.tenant ?? undefined
       }
-    );
-    if (tenantVals) {
-      tenant = {
-        name: userVals.zivvy_tenant,
-        tenant_name: tenantVals.tenant_name ?? undefined,
-        slug: tenantVals.slug ?? userVals.zivvy_tenant,
-        company: tenantVals.company ?? undefined,
-        status: tenantVals.status ?? undefined,
-        plan: (tenantVals.plan as ZivvyTier | undefined) ?? undefined,
-        seat_limit: tenantVals.seat_limit ?? undefined,
-        seats_used: tenantVals.seats_used ?? undefined,
-        datacenter: (tenantVals.datacenter as "india" | "eu" | "us" | undefined) ?? undefined,
-        subscription_status: tenantVals.subscription_status ?? undefined,
-        current_period_end: tenantVals.current_period_end ?? undefined,
-        cancel_at_period_end: Boolean(tenantVals.cancel_at_period_end),
-        polar_customer_id: tenantVals.polar_customer_id ?? undefined,
-        polar_subscription_id: tenantVals.polar_subscription_id ?? undefined,
-        owner_user: tenantVals.owner_user ?? undefined
-      };
-    }
-  }
+    : null;
 
-  const tier: ZivvyTier = plan?.tier ?? "free";
   const zivvy: ZivvyBoot = {
     tier,
-    tier_label: plan?.tier_label ?? tier.charAt(0).toUpperCase() + tier.slice(1),
-    demo_plan: plan?.demo_plan ?? null,
-    site_tier: plan?.site_tier ?? tier,
+    tier_label: plan.tier_label ?? tier.charAt(0).toUpperCase() + tier.slice(1),
+    demo_plan: plan.demo_plan ?? null,
+    site_tier: plan.site_tier ?? tier,
     priority_support: tier === "pro" || tier === "business",
-    seats_used: plan?.seats_used ?? tenant?.seats_used ?? 0,
-    seats_allowed: plan?.seats_allowed ?? tenant?.seat_limit ?? 0,
-    subscription_status:
-      plan?.subscription_status ?? plan?.status ?? tenant?.subscription_status ?? "none",
-    // Derive blocked_modules from the AUTHORITATIVE tier map fetched from
-    // the backend (falls back to lib/plan-features.ts when the endpoint is
-    // unreachable during deploys). This is what makes the launcher tiles
-    // + sidebar items correctly show as locked BEFORE the user clicks.
-    blocked_modules: Object.entries(tierMap.module_min_tier)
+    seats_used: plan.seats_used ?? tenant?.seats_used ?? 0,
+    seats_allowed: plan.seats_allowed ?? tenant?.seat_limit ?? 0,
+    subscription_status: plan.status ?? tenant?.subscription_status ?? "none",
+    blocked_modules: blocked_modules ?? Object.entries(moduleTierMap)
       .filter(([, required]) => !tierAtLeast(tier, required))
       .map(([module]) => module),
-    blocked_doctypes: Object.entries(tierMap.doctype_min_tier)
+    blocked_doctypes: blocked_doctypes ?? Object.entries(doctypeTierMap)
       .filter(([, required]) => !tierAtLeast(tier, required))
       .map(([doctype]) => doctype),
-    module_min_tier: tierMap.module_min_tier,
-    doctype_min_tier: tierMap.doctype_min_tier,
-    pricing: plan?.pricing ?? {},
+    module_min_tier: moduleTierMap,
+    doctype_min_tier: doctypeTierMap,
+    pricing: plan.pricing ?? {},
     billing_route: "/billing",
     pricing_route: "/pricing",
     tenant,
@@ -227,8 +153,8 @@ async function _fetchBootinfo(): Promise<Bootinfo> {
   return {
     logged_in: true,
     user: {
-      name: email,
-      full_name: userVals?.full_name ?? email,
+      name: user.email,
+      full_name: user.full_name ?? user.email,
       roles: []
     },
     sysdefaults: tenant?.company ? { company: tenant.company } : undefined,

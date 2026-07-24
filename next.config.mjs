@@ -1,5 +1,5 @@
 /** @type {import('next').NextConfig} */
-const FRAPPE_ORIGIN = process.env.NEXT_PUBLIC_FRAPPE_ORIGIN || "https://zivvy.xyz";
+const FRAPPE_ORIGIN = process.env.NEXT_PUBLIC_FRAPPE_ORIGIN || "https://api.zivvy.xyz";
 
 /**
  * Frappe static bundles live under /assets/{app}/… .
@@ -19,6 +19,26 @@ const FRAPPE_ASSET_APPS = [
 const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  compress: true,
+  experimental: {
+    optimizePackageImports: [
+      "lucide-react",
+      "radix-ui",
+      "@radix-ui/react-icons",
+      "motion",
+      "cmdk",
+    ],
+  },
+  headers() {
+    return [
+      {
+        source: "/_next/static/:path*",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
+        ],
+      },
+    ];
+  },
   async redirects() {
     return [
       { source: "/www", destination: "/", permanent: false },
