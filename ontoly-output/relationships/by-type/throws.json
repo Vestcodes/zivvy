@@ -1,0 +1,42 @@
+[
+  {
+    "id": "edge:throws:020gvr2",
+    "type": "THROWS",
+    "from": "fn:lib/frappe-client.ts:frappeCall",
+    "to": "class:lib/frappe-client.ts:FrappeError",
+    "evidence": [
+      {
+        "kind": "syntax",
+        "confidence": "exact",
+        "span": {
+          "file": "lib/frappe-client.ts",
+          "startLine": 78,
+          "startColumn": 5,
+          "endLine": 78,
+          "endColumn": 60
+        },
+        "description": "throws exception"
+      }
+    ]
+  },
+  {
+    "id": "edge:throws:1t0vskr",
+    "type": "THROWS",
+    "from": "fn:components/ui/sidebar.tsx:useSidebar",
+    "to": "exception:Error",
+    "evidence": [
+      {
+        "kind": "syntax",
+        "confidence": "exact",
+        "span": {
+          "file": "components/ui/sidebar.tsx",
+          "startLine": 50,
+          "startColumn": 5,
+          "endLine": 50,
+          "endColumn": 73
+        },
+        "description": "throws exception"
+      }
+    ]
+  }
+]

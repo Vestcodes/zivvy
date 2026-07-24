@@ -1,0 +1,161 @@
+{
+  "repository": "zivvy-web",
+  "graphHash": "13c6bdg",
+  "generatedAt": "1970-01-01T00:00:00.000Z",
+  "summary": {
+    "coverage": 100,
+    "confidence": 100,
+    "completeness": 100,
+    "consistency": 100,
+    "trustworthiness": 100
+  },
+  "metrics": [
+    {
+      "id": "packages",
+      "label": "Packages",
+      "total": 18,
+      "covered": 18,
+      "coverage": 100,
+      "confidence": 100,
+      "status": "pass",
+      "missingEntities": [],
+      "diagnostics": [],
+      "recommendations": [],
+      "metadata": {
+        "dependencyEdges": 23
+      }
+    },
+    {
+      "id": "services",
+      "label": "Services",
+      "total": 0,
+      "covered": 0,
+      "coverage": 0,
+      "confidence": 0,
+      "status": "unknown",
+      "missingEntities": [],
+      "diagnostics": [],
+      "recommendations": []
+    },
+    {
+      "id": "controllers",
+      "label": "Controllers",
+      "total": 0,
+      "covered": 0,
+      "coverage": 0,
+      "confidence": 0,
+      "status": "unknown",
+      "missingEntities": [],
+      "diagnostics": [],
+      "recommendations": [],
+      "metadata": {
+        "duplicateNames": []
+      }
+    },
+    {
+      "id": "routes",
+      "label": "Routes",
+      "total": 0,
+      "covered": 0,
+      "coverage": 0,
+      "confidence": 0,
+      "status": "unknown",
+      "missingEntities": [],
+      "diagnostics": [],
+      "recommendations": [],
+      "metadata": {
+        "duplicateRouteKeys": []
+      }
+    },
+    {
+      "id": "dependencyInjection",
+      "label": "Dependency Injection",
+      "total": 0,
+      "covered": 0,
+      "coverage": 0,
+      "confidence": 0,
+      "status": "unknown",
+      "missingEntities": [],
+      "diagnostics": [],
+      "recommendations": [],
+      "metadata": {
+        "invalidTargets": 0
+      }
+    },
+    {
+      "id": "configuration",
+      "label": "Configuration",
+      "total": 8,
+      "covered": 8,
+      "coverage": 100,
+      "confidence": 100,
+      "status": "pass",
+      "missingEntities": [],
+      "diagnostics": [],
+      "recommendations": []
+    },
+    {
+      "id": "workspace",
+      "label": "Workspace",
+      "total": 1,
+      "covered": 1,
+      "coverage": 100,
+      "confidence": 100,
+      "status": "pass",
+      "missingEntities": [],
+      "diagnostics": [],
+      "recommendations": []
+    },
+    {
+      "id": "openapi",
+      "label": "OpenAPI",
+      "total": 0,
+      "covered": 0,
+      "coverage": 0,
+      "confidence": 0,
+      "status": "unknown",
+      "missingEntities": [],
+      "diagnostics": [],
+      "recommendations": [
+        "Add OpenAPI documents to source inventory when API contracts exist."
+      ]
+    },
+    {
+      "id": "prisma",
+      "label": "Prisma",
+      "total": 0,
+      "covered": 0,
+      "coverage": 0,
+      "confidence": 0,
+      "status": "unknown",
+      "missingEntities": [],
+      "diagnostics": [],
+      "recommendations": [
+        "Add a Prisma frontend before relying on database model coverage."
+      ]
+    }
+  ],
+  "diagnostics": [],
+  "relationshipDistribution": {
+    "CALLS": 446,
+    "CONFIGURES": 3,
+    "CONTAINS": 2332,
+    "CREATES": 6,
+    "DEPENDS_ON": 23,
+    "EXECUTES": 6,
+    "EXPORTS": 509,
+    "EXTENDS": 12,
+    "IMPORTS": 1091,
+    "PROVIDES": 2,
+    "READS": 16,
+    "RETURNS": 47,
+    "THROWS": 2,
+    "USES": 160
+  },
+  "confidenceHistogram": {
+    "exact": 4655,
+    "inferred": 0,
+    "low": 0,
+    "unknown": 0
+  }
+}

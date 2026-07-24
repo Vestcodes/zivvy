@@ -1,0 +1,322 @@
+[
+  {
+    "id": "edge:reads:009mqsh",
+    "type": "READS",
+    "from": "mod:lib/boot-server.ts",
+    "to": "env:ZIVVY_DEV_MOCK",
+    "evidence": [
+      {
+        "kind": "syntax",
+        "confidence": "exact",
+        "span": {
+          "file": "lib/boot-server.ts",
+          "startLine": 24,
+          "startColumn": 3,
+          "endLine": 24,
+          "endColumn": 29
+        },
+        "description": "accesses environment variable ZIVVY_DEV_MOCK"
+      }
+    ]
+  },
+  {
+    "id": "edge:reads:0904g97",
+    "type": "READS",
+    "from": "fn:app/api/dev/session/route.ts:POST",
+    "to": "env:NODE_ENV",
+    "evidence": [
+      {
+        "kind": "syntax",
+        "confidence": "exact",
+        "span": {
+          "file": "app/api/dev/session/route.ts",
+          "startLine": 8,
+          "startColumn": 7,
+          "endLine": 8,
+          "endColumn": 27
+        },
+        "description": "accesses environment variable NODE_ENV"
+      }
+    ]
+  },
+  {
+    "id": "edge:reads:0flmfz8",
+    "type": "READS",
+    "from": "fn:app/dev/session/page.tsx:DevSessionPage",
+    "to": "env:NODE_ENV",
+    "evidence": [
+      {
+        "kind": "syntax",
+        "confidence": "exact",
+        "span": {
+          "file": "app/dev/session/page.tsx",
+          "startLine": 18,
+          "startColumn": 7,
+          "endLine": 18,
+          "endColumn": 27
+        },
+        "description": "accesses environment variable NODE_ENV"
+      }
+    ]
+  },
+  {
+    "id": "edge:reads:0n2hb3d",
+    "type": "READS",
+    "from": "mod:lib/boot-server.ts",
+    "to": "env:NEXT_PUBLIC_ZIVVY_DEV_MOCK",
+    "evidence": [
+      {
+        "kind": "syntax",
+        "confidence": "exact",
+        "span": {
+          "file": "lib/boot-server.ts",
+          "startLine": 23,
+          "startColumn": 3,
+          "endLine": 23,
+          "endColumn": 41
+        },
+        "description": "accesses environment variable NEXT_PUBLIC_ZIVVY_DEV_MOCK"
+      }
+    ]
+  },
+  {
+    "id": "edge:reads:0rvswi7",
+    "type": "READS",
+    "from": "mod:lib/frappe-meta.ts",
+    "to": "env:FRAPPE_ORIGIN",
+    "evidence": [
+      {
+        "kind": "syntax",
+        "confidence": "exact",
+        "span": {
+          "file": "lib/frappe-meta.ts",
+          "startLine": 4,
+          "startColumn": 3,
+          "endLine": 4,
+          "endColumn": 28
+        },
+        "description": "accesses environment variable FRAPPE_ORIGIN"
+      }
+    ]
+  },
+  {
+    "id": "edge:reads:0v8297j",
+    "type": "READS",
+    "from": "mod:lib/frappe-meta.ts",
+    "to": "env:NEXT_PUBLIC_FRAPPE_ORIGIN",
+    "evidence": [
+      {
+        "kind": "syntax",
+        "confidence": "exact",
+        "span": {
+          "file": "lib/frappe-meta.ts",
+          "startLine": 5,
+          "startColumn": 3,
+          "endLine": 5,
+          "endColumn": 40
+        },
+        "description": "accesses environment variable NEXT_PUBLIC_FRAPPE_ORIGIN"
+      }
+    ]
+  },
+  {
+    "id": "edge:reads:0wezo4c",
+    "type": "READS",
+    "from": "mod:lib/team.ts",
+    "to": "env:FRAPPE_ORIGIN",
+    "evidence": [
+      {
+        "kind": "syntax",
+        "confidence": "exact",
+        "span": {
+          "file": "lib/team.ts",
+          "startLine": 10,
+          "startColumn": 3,
+          "endLine": 10,
+          "endColumn": 28
+        },
+        "description": "accesses environment variable FRAPPE_ORIGIN"
+      }
+    ]
+  },
+  {
+    "id": "edge:reads:0y2ri74",
+    "type": "READS",
+    "from": "fn:app/api/dev/session/route.ts:DELETE",
+    "to": "env:NODE_ENV",
+    "evidence": [
+      {
+        "kind": "syntax",
+        "confidence": "exact",
+        "span": {
+          "file": "app/api/dev/session/route.ts",
+          "startLine": 38,
+          "startColumn": 7,
+          "endLine": 38,
+          "endColumn": 27
+        },
+        "description": "accesses environment variable NODE_ENV"
+      }
+    ]
+  },
+  {
+    "id": "edge:reads:146qxdn",
+    "type": "READS",
+    "from": "mod:lib/boot-server.ts",
+    "to": "env:FRAPPE_ORIGIN",
+    "evidence": [
+      {
+        "kind": "syntax",
+        "confidence": "exact",
+        "span": {
+          "file": "lib/boot-server.ts",
+          "startLine": 18,
+          "startColumn": 3,
+          "endLine": 18,
+          "endColumn": 28
+        },
+        "description": "accesses environment variable FRAPPE_ORIGIN"
+      }
+    ]
+  },
+  {
+    "id": "edge:reads:18o2mir",
+    "type": "READS",
+    "from": "mod:lib/boot-server.ts",
+    "to": "env:NEXT_PUBLIC_FRAPPE_ORIGIN",
+    "evidence": [
+      {
+        "kind": "syntax",
+        "confidence": "exact",
+        "span": {
+          "file": "lib/boot-server.ts",
+          "startLine": 19,
+          "startColumn": 3,
+          "endLine": 19,
+          "endColumn": 40
+        },
+        "description": "accesses environment variable NEXT_PUBLIC_FRAPPE_ORIGIN"
+      }
+    ]
+  },
+  {
+    "id": "edge:reads:1agmspx",
+    "type": "READS",
+    "from": "mod:lib/frappe-meta.ts",
+    "to": "env:ZIVVY_DEV_MOCK",
+    "evidence": [
+      {
+        "kind": "syntax",
+        "confidence": "exact",
+        "span": {
+          "file": "lib/frappe-meta.ts",
+          "startLine": 10,
+          "startColumn": 3,
+          "endLine": 10,
+          "endColumn": 29
+        },
+        "description": "accesses environment variable ZIVVY_DEV_MOCK"
+      }
+    ]
+  },
+  {
+    "id": "edge:reads:1iu80nf",
+    "type": "READS",
+    "from": "mod:lib/notifications.ts",
+    "to": "env:FRAPPE_ORIGIN",
+    "evidence": [
+      {
+        "kind": "syntax",
+        "confidence": "exact",
+        "span": {
+          "file": "lib/notifications.ts",
+          "startLine": 5,
+          "startColumn": 3,
+          "endLine": 5,
+          "endColumn": 28
+        },
+        "description": "accesses environment variable FRAPPE_ORIGIN"
+      }
+    ]
+  },
+  {
+    "id": "edge:reads:1ses9s8",
+    "type": "READS",
+    "from": "mod:lib/team.ts",
+    "to": "env:NEXT_PUBLIC_FRAPPE_ORIGIN",
+    "evidence": [
+      {
+        "kind": "syntax",
+        "confidence": "exact",
+        "span": {
+          "file": "lib/team.ts",
+          "startLine": 11,
+          "startColumn": 3,
+          "endLine": 11,
+          "endColumn": 40
+        },
+        "description": "accesses environment variable NEXT_PUBLIC_FRAPPE_ORIGIN"
+      }
+    ]
+  },
+  {
+    "id": "edge:reads:1t12tie",
+    "type": "READS",
+    "from": "mod:components/auto/print-preview.tsx",
+    "to": "env:NEXT_PUBLIC_FRAPPE_ORIGIN",
+    "evidence": [
+      {
+        "kind": "syntax",
+        "confidence": "exact",
+        "span": {
+          "file": "components/auto/print-preview.tsx",
+          "startLine": 34,
+          "startColumn": 8,
+          "endLine": 34,
+          "endColumn": 45
+        },
+        "description": "accesses environment variable NEXT_PUBLIC_FRAPPE_ORIGIN"
+      }
+    ]
+  },
+  {
+    "id": "edge:reads:1upqj83",
+    "type": "READS",
+    "from": "mod:lib/notifications.ts",
+    "to": "env:NEXT_PUBLIC_FRAPPE_ORIGIN",
+    "evidence": [
+      {
+        "kind": "syntax",
+        "confidence": "exact",
+        "span": {
+          "file": "lib/notifications.ts",
+          "startLine": 6,
+          "startColumn": 3,
+          "endLine": 6,
+          "endColumn": 40
+        },
+        "description": "accesses environment variable NEXT_PUBLIC_FRAPPE_ORIGIN"
+      }
+    ]
+  },
+  {
+    "id": "edge:reads:1y4gw2d",
+    "type": "READS",
+    "from": "mod:lib/frappe-meta.ts",
+    "to": "env:NEXT_PUBLIC_ZIVVY_DEV_MOCK",
+    "evidence": [
+      {
+        "kind": "syntax",
+        "confidence": "exact",
+        "span": {
+          "file": "lib/frappe-meta.ts",
+          "startLine": 9,
+          "startColumn": 3,
+          "endLine": 9,
+          "endColumn": 41
+        },
+        "description": "accesses environment variable NEXT_PUBLIC_ZIVVY_DEV_MOCK"
+      }
+    ]
+  }
+]

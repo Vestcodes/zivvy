@@ -1,0 +1,268 @@
+{
+  "id": "community-003",
+  "stableId": "community:0j0yu4n",
+  "nodeCount": 4,
+  "edgeCount": 5,
+  "nodeTypes": {
+    "Export": 1,
+    "Function": 2,
+    "Module": 1
+  },
+  "relationshipTypes": {
+    "CALLS": 1,
+    "CONTAINS": 3,
+    "EXPORTS": 1
+  },
+  "representativeNodes": [
+    {
+      "id": "mod:lib/relative-time.ts",
+      "type": "Module",
+      "name": "lib/relative-time.ts",
+      "file": "lib/relative-time.ts"
+    },
+    {
+      "id": "fn:lib/relative-time.ts:formatRelative",
+      "type": "Function",
+      "name": "formatRelative",
+      "file": "lib/relative-time.ts"
+    },
+    {
+      "id": "fn:lib/relative-time.ts:normalizeFrappeTs",
+      "type": "Function",
+      "name": "normalizeFrappeTs",
+      "file": "lib/relative-time.ts"
+    },
+    {
+      "id": "export:lib/relative-time.ts:formatRelative",
+      "type": "Export",
+      "name": "formatRelative",
+      "file": "lib/relative-time.ts"
+    }
+  ],
+  "representativeNodeIds": [
+    "export:lib/relative-time.ts:formatRelative",
+    "fn:lib/relative-time.ts:formatRelative",
+    "fn:lib/relative-time.ts:normalizeFrappeTs",
+    "mod:lib/relative-time.ts"
+  ],
+  "nodes": [
+    {
+      "id": "export:lib/relative-time.ts:formatRelative",
+      "type": "Export",
+      "name": "formatRelative",
+      "file": "lib/relative-time.ts",
+      "span": {
+        "file": "lib/relative-time.ts",
+        "startLine": 8,
+        "startColumn": 1,
+        "endLine": 30,
+        "endColumn": 2
+      },
+      "metadata": {
+        "language": "typescript",
+        "provenance": {
+          "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+          "parser": "typescript",
+          "parserVersion": "5.9.2",
+          "source": "typescript"
+        },
+        "exportKind": "value",
+        "localName": "formatRelative",
+        "declarationKind": "function"
+      }
+    },
+    {
+      "id": "fn:lib/relative-time.ts:formatRelative",
+      "type": "Function",
+      "name": "formatRelative",
+      "file": "lib/relative-time.ts",
+      "span": {
+        "file": "lib/relative-time.ts",
+        "startLine": 8,
+        "startColumn": 1,
+        "endLine": 30,
+        "endColumn": 2
+      },
+      "metadata": {
+        "language": "typescript",
+        "provenance": {
+          "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+          "parser": "typescript",
+          "parserVersion": "5.9.2",
+          "source": "typescript"
+        },
+        "async": false,
+        "generator": false,
+        "exported": true,
+        "default": false,
+        "parameters": 1,
+        "typeParameters": 0,
+        "declarationKind": "function"
+      }
+    },
+    {
+      "id": "fn:lib/relative-time.ts:normalizeFrappeTs",
+      "type": "Function",
+      "name": "normalizeFrappeTs",
+      "file": "lib/relative-time.ts",
+      "span": {
+        "file": "lib/relative-time.ts",
+        "startLine": 32,
+        "startColumn": 1,
+        "endLine": 42,
+        "endColumn": 2
+      },
+      "metadata": {
+        "language": "typescript",
+        "provenance": {
+          "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+          "parser": "typescript",
+          "parserVersion": "5.9.2",
+          "source": "typescript"
+        },
+        "async": false,
+        "generator": false,
+        "exported": false,
+        "default": false,
+        "parameters": 1,
+        "typeParameters": 0,
+        "declarationKind": "function"
+      }
+    },
+    {
+      "id": "mod:lib/relative-time.ts",
+      "type": "Module",
+      "name": "lib/relative-time.ts",
+      "file": "lib/relative-time.ts",
+      "span": {
+        "file": "lib/relative-time.ts",
+        "startLine": 8,
+        "startColumn": 1,
+        "endLine": 43,
+        "endColumn": 1
+      },
+      "metadata": {
+        "language": "typescript",
+        "provenance": {
+          "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+          "parser": "typescript",
+          "parserVersion": "5.9.2",
+          "source": "typescript"
+        },
+        "extension": ".ts"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge:calls:0ngxh9f",
+      "type": "CALLS",
+      "from": "fn:lib/relative-time.ts:formatRelative",
+      "to": "fn:lib/relative-time.ts:normalizeFrappeTs",
+      "evidence": [
+        {
+          "kind": "syntax",
+          "confidence": "exact",
+          "span": {
+            "file": "lib/relative-time.ts",
+            "startLine": 11,
+            "startColumn": 17,
+            "endLine": 11,
+            "endColumn": 47
+          },
+          "description": "calls target"
+        }
+      ]
+    },
+    {
+      "id": "edge:contains:0wu417e",
+      "type": "CONTAINS",
+      "from": "mod:lib/relative-time.ts",
+      "to": "fn:lib/relative-time.ts:normalizeFrappeTs",
+      "evidence": [
+        {
+          "kind": "syntax",
+          "confidence": "exact",
+          "span": {
+            "file": "lib/relative-time.ts",
+            "startLine": 32,
+            "startColumn": 1,
+            "endLine": 42,
+            "endColumn": 2
+          },
+          "description": "module contains Function"
+        }
+      ],
+      "metadata": {
+        "ownerKind": "Module"
+      }
+    },
+    {
+      "id": "edge:contains:17aam97",
+      "type": "CONTAINS",
+      "from": "mod:lib/relative-time.ts",
+      "to": "export:lib/relative-time.ts:formatRelative",
+      "evidence": [
+        {
+          "kind": "syntax",
+          "confidence": "exact",
+          "span": {
+            "file": "lib/relative-time.ts",
+            "startLine": 8,
+            "startColumn": 1,
+            "endLine": 30,
+            "endColumn": 2
+          },
+          "description": "module contains export"
+        }
+      ]
+    },
+    {
+      "id": "edge:contains:1hrz0t5",
+      "type": "CONTAINS",
+      "from": "mod:lib/relative-time.ts",
+      "to": "fn:lib/relative-time.ts:formatRelative",
+      "evidence": [
+        {
+          "kind": "syntax",
+          "confidence": "exact",
+          "span": {
+            "file": "lib/relative-time.ts",
+            "startLine": 8,
+            "startColumn": 1,
+            "endLine": 30,
+            "endColumn": 2
+          },
+          "description": "module contains Function"
+        }
+      ],
+      "metadata": {
+        "ownerKind": "Module"
+      }
+    },
+    {
+      "id": "edge:exports:1hp7yrl",
+      "type": "EXPORTS",
+      "from": "mod:lib/relative-time.ts",
+      "to": "fn:lib/relative-time.ts:formatRelative",
+      "evidence": [
+        {
+          "kind": "syntax",
+          "confidence": "exact",
+          "span": {
+            "file": "lib/relative-time.ts",
+            "startLine": 8,
+            "startColumn": 1,
+            "endLine": 30,
+            "endColumn": 2
+          },
+          "description": "exports formatRelative"
+        }
+      ],
+      "metadata": {
+        "exportNodeId": "export:lib/relative-time.ts:formatRelative",
+        "name": "formatRelative"
+      }
+    }
+  ]
+}

@@ -1,0 +1,554 @@
+[
+  {
+    "id": "edge:depends_on:046bnbz",
+    "type": "DEPENDS_ON",
+    "from": "pkg:zivvy-web",
+    "to": "dep:react",
+    "evidence": [
+      {
+        "kind": "config",
+        "confidence": "exact",
+        "span": {
+          "file": "package.json",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 1,
+          "endColumn": 1
+        },
+        "description": "package dependencies includes react"
+      }
+    ],
+    "metadata": {
+      "dependencyType": "dependencies",
+      "range": "^19.0.0"
+    }
+  },
+  {
+    "id": "edge:depends_on:07ipewk",
+    "type": "DEPENDS_ON",
+    "from": "pkg:zivvy-web",
+    "to": "dep:clsx",
+    "evidence": [
+      {
+        "kind": "config",
+        "confidence": "exact",
+        "span": {
+          "file": "package.json",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 1,
+          "endColumn": 1
+        },
+        "description": "package dependencies includes clsx"
+      }
+    ],
+    "metadata": {
+      "dependencyType": "dependencies",
+      "range": "^2.1.1"
+    }
+  },
+  {
+    "id": "edge:depends_on:07obo44",
+    "type": "DEPENDS_ON",
+    "from": "pkg:zivvy-web",
+    "to": "dep:@types/react-dom",
+    "evidence": [
+      {
+        "kind": "config",
+        "confidence": "exact",
+        "span": {
+          "file": "package.json",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 1,
+          "endColumn": 1
+        },
+        "description": "package devDependencies includes @types/react-dom"
+      }
+    ],
+    "metadata": {
+      "dependencyType": "devDependencies",
+      "range": "^19.0.2"
+    }
+  },
+  {
+    "id": "edge:depends_on:0bowyrc",
+    "type": "DEPENDS_ON",
+    "from": "pkg:zivvy-web",
+    "to": "dep:@tanstack/react-query",
+    "evidence": [
+      {
+        "kind": "config",
+        "confidence": "exact",
+        "span": {
+          "file": "package.json",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 1,
+          "endColumn": 1
+        },
+        "description": "package dependencies includes @tanstack/react-query"
+      }
+    ],
+    "metadata": {
+      "dependencyType": "dependencies",
+      "range": "^5.101.4"
+    }
+  },
+  {
+    "id": "edge:depends_on:0fuw390",
+    "type": "DEPENDS_ON",
+    "from": "pkg:zivvy-web",
+    "to": "dep:class-variance-authority",
+    "evidence": [
+      {
+        "kind": "config",
+        "confidence": "exact",
+        "span": {
+          "file": "package.json",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 1,
+          "endColumn": 1
+        },
+        "description": "package dependencies includes class-variance-authority"
+      }
+    ],
+    "metadata": {
+      "dependencyType": "dependencies",
+      "range": "^0.7.1"
+    }
+  },
+  {
+    "id": "edge:depends_on:0j3qdg2",
+    "type": "DEPENDS_ON",
+    "from": "pkg:zivvy-web",
+    "to": "dep:lucide-react",
+    "evidence": [
+      {
+        "kind": "config",
+        "confidence": "exact",
+        "span": {
+          "file": "package.json",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 1,
+          "endColumn": 1
+        },
+        "description": "package dependencies includes lucide-react"
+      }
+    ],
+    "metadata": {
+      "dependencyType": "dependencies",
+      "range": "^0.469.0"
+    }
+  },
+  {
+    "id": "edge:depends_on:0k2dodt",
+    "type": "DEPENDS_ON",
+    "from": "pkg:zivvy-web",
+    "to": "dep:postcss",
+    "evidence": [
+      {
+        "kind": "config",
+        "confidence": "exact",
+        "span": {
+          "file": "package.json",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 1,
+          "endColumn": 1
+        },
+        "description": "package devDependencies includes postcss"
+      }
+    ],
+    "metadata": {
+      "dependencyType": "devDependencies",
+      "range": "^8.5.0"
+    }
+  },
+  {
+    "id": "edge:depends_on:0svxdv6",
+    "type": "DEPENDS_ON",
+    "from": "pkg:zivvy-web",
+    "to": "dep:motion",
+    "evidence": [
+      {
+        "kind": "config",
+        "confidence": "exact",
+        "span": {
+          "file": "package.json",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 1,
+          "endColumn": 1
+        },
+        "description": "package dependencies includes motion"
+      }
+    ],
+    "metadata": {
+      "dependencyType": "dependencies",
+      "range": "^12.42.2"
+    }
+  },
+  {
+    "id": "edge:depends_on:0xklh52",
+    "type": "DEPENDS_ON",
+    "from": "pkg:zivvy-web",
+    "to": "dep:next-themes",
+    "evidence": [
+      {
+        "kind": "config",
+        "confidence": "exact",
+        "span": {
+          "file": "package.json",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 1,
+          "endColumn": 1
+        },
+        "description": "package dependencies includes next-themes"
+      }
+    ],
+    "metadata": {
+      "dependencyType": "dependencies",
+      "range": "^0.4.6"
+    }
+  },
+  {
+    "id": "edge:depends_on:0z3ksup",
+    "type": "DEPENDS_ON",
+    "from": "pkg:zivvy-web",
+    "to": "dep:tw-animate-css",
+    "evidence": [
+      {
+        "kind": "config",
+        "confidence": "exact",
+        "span": {
+          "file": "package.json",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 1,
+          "endColumn": 1
+        },
+        "description": "package dependencies includes tw-animate-css"
+      }
+    ],
+    "metadata": {
+      "dependencyType": "dependencies",
+      "range": "^1.4.0"
+    }
+  },
+  {
+    "id": "edge:depends_on:0zs9xms",
+    "type": "DEPENDS_ON",
+    "from": "pkg:zivvy-web",
+    "to": "dep:@radix-ui/react-icons",
+    "evidence": [
+      {
+        "kind": "config",
+        "confidence": "exact",
+        "span": {
+          "file": "package.json",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 1,
+          "endColumn": 1
+        },
+        "description": "package dependencies includes @radix-ui/react-icons"
+      }
+    ],
+    "metadata": {
+      "dependencyType": "dependencies",
+      "range": "^1.3.2"
+    }
+  },
+  {
+    "id": "edge:depends_on:101bxfv",
+    "type": "DEPENDS_ON",
+    "from": "pkg:zivvy-web",
+    "to": "dep:typescript",
+    "evidence": [
+      {
+        "kind": "config",
+        "confidence": "exact",
+        "span": {
+          "file": "package.json",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 1,
+          "endColumn": 1
+        },
+        "description": "package devDependencies includes typescript"
+      }
+    ],
+    "metadata": {
+      "dependencyType": "devDependencies",
+      "range": "^5.7.2"
+    }
+  },
+  {
+    "id": "edge:depends_on:10uaxoh",
+    "type": "DEPENDS_ON",
+    "from": "pkg:zivvy-web",
+    "to": "dep:next",
+    "evidence": [
+      {
+        "kind": "config",
+        "confidence": "exact",
+        "span": {
+          "file": "package.json",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 1,
+          "endColumn": 1
+        },
+        "description": "package dependencies includes next"
+      }
+    ],
+    "metadata": {
+      "dependencyType": "dependencies",
+      "range": "16.2.11"
+    }
+  },
+  {
+    "id": "edge:depends_on:1447umf",
+    "type": "DEPENDS_ON",
+    "from": "pkg:zivvy-web",
+    "to": "dep:tailwindcss",
+    "evidence": [
+      {
+        "kind": "config",
+        "confidence": "exact",
+        "span": {
+          "file": "package.json",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 1,
+          "endColumn": 1
+        },
+        "description": "package devDependencies includes tailwindcss"
+      }
+    ],
+    "metadata": {
+      "dependencyType": "devDependencies",
+      "range": "^4.0.0"
+    }
+  },
+  {
+    "id": "edge:depends_on:14t8k03",
+    "type": "DEPENDS_ON",
+    "from": "pkg:zivvy-web",
+    "to": "dep:radix-ui",
+    "evidence": [
+      {
+        "kind": "config",
+        "confidence": "exact",
+        "span": {
+          "file": "package.json",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 1,
+          "endColumn": 1
+        },
+        "description": "package dependencies includes radix-ui"
+      }
+    ],
+    "metadata": {
+      "dependencyType": "dependencies",
+      "range": "^1.6.4"
+    }
+  },
+  {
+    "id": "edge:depends_on:18amijm",
+    "type": "DEPENDS_ON",
+    "from": "pkg:zivvy-web",
+    "to": "dep:react-dom",
+    "evidence": [
+      {
+        "kind": "config",
+        "confidence": "exact",
+        "span": {
+          "file": "package.json",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 1,
+          "endColumn": 1
+        },
+        "description": "package dependencies includes react-dom"
+      }
+    ],
+    "metadata": {
+      "dependencyType": "dependencies",
+      "range": "^19.0.0"
+    }
+  },
+  {
+    "id": "edge:depends_on:1ep7pd1",
+    "type": "DEPENDS_ON",
+    "from": "pkg:zivvy-web",
+    "to": "dep:frappe-react-sdk",
+    "evidence": [
+      {
+        "kind": "config",
+        "confidence": "exact",
+        "span": {
+          "file": "package.json",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 1,
+          "endColumn": 1
+        },
+        "description": "package dependencies includes frappe-react-sdk"
+      }
+    ],
+    "metadata": {
+      "dependencyType": "dependencies",
+      "range": "^1.17.0"
+    }
+  },
+  {
+    "id": "edge:depends_on:1ffc7jd",
+    "type": "DEPENDS_ON",
+    "from": "pkg:zivvy-web",
+    "to": "dep:cmdk",
+    "evidence": [
+      {
+        "kind": "config",
+        "confidence": "exact",
+        "span": {
+          "file": "package.json",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 1,
+          "endColumn": 1
+        },
+        "description": "package dependencies includes cmdk"
+      }
+    ],
+    "metadata": {
+      "dependencyType": "dependencies",
+      "range": "^1.1.1"
+    }
+  },
+  {
+    "id": "edge:depends_on:1ju2yh5",
+    "type": "DEPENDS_ON",
+    "from": "pkg:zivvy-web",
+    "to": "dep:sonner",
+    "evidence": [
+      {
+        "kind": "config",
+        "confidence": "exact",
+        "span": {
+          "file": "package.json",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 1,
+          "endColumn": 1
+        },
+        "description": "package dependencies includes sonner"
+      }
+    ],
+    "metadata": {
+      "dependencyType": "dependencies",
+      "range": "^2.0.7"
+    }
+  },
+  {
+    "id": "edge:depends_on:1m6897a",
+    "type": "DEPENDS_ON",
+    "from": "pkg:zivvy-web",
+    "to": "dep:@types/node",
+    "evidence": [
+      {
+        "kind": "config",
+        "confidence": "exact",
+        "span": {
+          "file": "package.json",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 1,
+          "endColumn": 1
+        },
+        "description": "package devDependencies includes @types/node"
+      }
+    ],
+    "metadata": {
+      "dependencyType": "devDependencies",
+      "range": "^22.10.5"
+    }
+  },
+  {
+    "id": "edge:depends_on:1n62xp5",
+    "type": "DEPENDS_ON",
+    "from": "pkg:zivvy-web",
+    "to": "dep:@tailwindcss/postcss",
+    "evidence": [
+      {
+        "kind": "config",
+        "confidence": "exact",
+        "span": {
+          "file": "package.json",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 1,
+          "endColumn": 1
+        },
+        "description": "package devDependencies includes @tailwindcss/postcss"
+      }
+    ],
+    "metadata": {
+      "dependencyType": "devDependencies",
+      "range": "^4.0.0"
+    }
+  },
+  {
+    "id": "edge:depends_on:1w4wegt",
+    "type": "DEPENDS_ON",
+    "from": "pkg:zivvy-web",
+    "to": "dep:tailwind-merge",
+    "evidence": [
+      {
+        "kind": "config",
+        "confidence": "exact",
+        "span": {
+          "file": "package.json",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 1,
+          "endColumn": 1
+        },
+        "description": "package dependencies includes tailwind-merge"
+      }
+    ],
+    "metadata": {
+      "dependencyType": "dependencies",
+      "range": "^2.6.0"
+    }
+  },
+  {
+    "id": "edge:depends_on:1wa1gz9",
+    "type": "DEPENDS_ON",
+    "from": "pkg:zivvy-web",
+    "to": "dep:@types/react",
+    "evidence": [
+      {
+        "kind": "config",
+        "confidence": "exact",
+        "span": {
+          "file": "package.json",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 1,
+          "endColumn": 1
+        },
+        "description": "package devDependencies includes @types/react"
+      }
+    ],
+    "metadata": {
+      "dependencyType": "devDependencies",
+      "range": "^19.0.4"
+    }
+  }
+]

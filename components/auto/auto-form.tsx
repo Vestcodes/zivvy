@@ -7,6 +7,7 @@ import { UpgradeRequired } from "@/components/upgrade-required";
 import { getDoc, getDoctypeMeta, groupFieldsForForm } from "@/lib/frappe-meta";
 import { fetchBootinfo } from "@/lib/boot-server";
 import { tierAtLeast } from "@/lib/boot-types";
+import { computeNextAction } from "@/lib/next-action";
 
 interface Props {
   doctype: string;
@@ -97,13 +98,22 @@ export async function AutoForm({ doctype, name, basePath, title }: Props) {
     return <EmptyState title={title} basePath={basePath} reason="not-found" />;
   }
 
+  const initialDoc = (doc ?? { doctype }) as Record<string, unknown>;
+  const nextAction = computeNextAction({
+    meta,
+    doc: initialDoc,
+    isNew,
+    basePath
+  });
+
   return (
     <AutoFormClient
       meta={meta}
       groups={groups}
-      initialDoc={(doc ?? { doctype }) as Record<string, unknown>}
+      initialDoc={initialDoc}
       basePath={basePath}
       title={title}
+      initialNextAction={nextAction}
     />
   );
 }

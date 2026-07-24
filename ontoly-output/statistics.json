@@ -1,0 +1,71 @@
+{
+  "nodeCount": 2626,
+  "edgeCount": 4655,
+  "nodeKinds": {
+    "BuildTarget": 1,
+    "Class": 1,
+    "Configuration": 3,
+    "Dependency": 23,
+    "EnvironmentVariable": 5,
+    "Exception": 1,
+    "Export": 509,
+    "Framework": 2,
+    "Function": 530,
+    "Import": 1131,
+    "Interface": 99,
+    "Module": 238,
+    "Package": 18,
+    "Script": 6,
+    "Task": 6,
+    "TypeAlias": 52,
+    "Workspace": 1
+  },
+  "relationshipCounts": {
+    "CALLS": 446,
+    "CONFIGURES": 3,
+    "CONTAINS": 2332,
+    "CREATES": 6,
+    "DEPENDS_ON": 23,
+    "EXECUTES": 6,
+    "EXPORTS": 509,
+    "EXTENDS": 12,
+    "IMPORTS": 1091,
+    "PROVIDES": 2,
+    "READS": 16,
+    "RETURNS": 47,
+    "THROWS": 2,
+    "USES": 160
+  },
+  "averageDegree": 3.5453,
+  "maximumDegree": {
+    "nodeId": "pkg:next",
+    "degree": 186
+  },
+  "disconnectedComponents": 4,
+  "cycles": [
+    [
+      "config:pnpm-workspace.yaml:pnpm-workspace",
+      "workspace:zivvy-web"
+    ]
+  ],
+  "longestCallChain": [
+    "fn:app/(app)/dashboard/page.tsx:DashboardPage",
+    "fn:lib/dashboard-data.ts:fetchDashboardData",
+    "fn:lib/dashboard-data.ts:fetchKpis",
+    "fn:lib/dashboard-data.ts:sumField",
+    "fn:lib/frappe-meta.ts:reportviewGet",
+    "fn:lib/frappe-meta.ts:frappeServerCall",
+    "pkg:next"
+  ],
+  "mostImportedModule": {
+    "nodeId": "mod:lib/utils.ts",
+    "count": 88
+  },
+  "mostDependedUponService": {
+    "nodeId": null,
+    "count": 0
+  },
+  "graphDensity": 0.0007,
+  "largestComponent": 2574,
+  "averagePathLength": null
+}

@@ -1,0 +1,130 @@
+{
+  "frameworks": [
+    {
+      "id": "framework:Next.js",
+      "type": "Framework",
+      "name": "Next.js",
+      "metadata": {
+        "provenance": {
+          "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+          "parser": "repository",
+          "parserVersion": "1.0.0",
+          "source": "repository"
+        },
+        "category": "frontend",
+        "detectedBy": "package.json dependency",
+        "packageName": "next"
+      }
+    },
+    {
+      "id": "framework:React",
+      "type": "Framework",
+      "name": "React",
+      "metadata": {
+        "provenance": {
+          "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+          "parser": "repository",
+          "parserVersion": "1.0.0",
+          "source": "repository"
+        },
+        "category": "frontend",
+        "detectedBy": "package.json dependency",
+        "packageName": "react"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge:provides:119p3th",
+      "type": "PROVIDES",
+      "from": "dep:next",
+      "to": "framework:Next.js",
+      "evidence": [
+        {
+          "kind": "config",
+          "confidence": "exact",
+          "span": {
+            "file": "package.json",
+            "startLine": 1,
+            "startColumn": 1,
+            "endLine": 1,
+            "endColumn": 1
+          },
+          "description": "dependency provides framework"
+        }
+      ],
+      "metadata": {
+        "packageName": "next"
+      }
+    },
+    {
+      "id": "edge:provides:186kqbe",
+      "type": "PROVIDES",
+      "from": "dep:react",
+      "to": "framework:React",
+      "evidence": [
+        {
+          "kind": "config",
+          "confidence": "exact",
+          "span": {
+            "file": "package.json",
+            "startLine": 1,
+            "startColumn": 1,
+            "endLine": 1,
+            "endColumn": 1
+          },
+          "description": "dependency provides framework"
+        }
+      ],
+      "metadata": {
+        "packageName": "react"
+      }
+    },
+    {
+      "id": "edge:uses:0lub6ta",
+      "type": "USES",
+      "from": "pkg:zivvy-web",
+      "to": "framework:Next.js",
+      "evidence": [
+        {
+          "kind": "config",
+          "confidence": "exact",
+          "span": {
+            "file": "package.json",
+            "startLine": 1,
+            "startColumn": 1,
+            "endLine": 1,
+            "endColumn": 1
+          },
+          "description": "package uses framework through dependency"
+        }
+      ],
+      "metadata": {
+        "packageName": "next"
+      }
+    },
+    {
+      "id": "edge:uses:14xgm97",
+      "type": "USES",
+      "from": "pkg:zivvy-web",
+      "to": "framework:React",
+      "evidence": [
+        {
+          "kind": "config",
+          "confidence": "exact",
+          "span": {
+            "file": "package.json",
+            "startLine": 1,
+            "startColumn": 1,
+            "endLine": 1,
+            "endColumn": 1
+          },
+          "description": "package uses framework through dependency"
+        }
+      ],
+      "metadata": {
+        "packageName": "react"
+      }
+    }
+  ]
+}

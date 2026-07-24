@@ -1,0 +1,324 @@
+[
+  {
+    "id": "dep:@radix-ui/react-icons",
+    "type": "Dependency",
+    "name": "@radix-ui/react-icons",
+    "metadata": {
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+        "parser": "repository",
+        "parserVersion": "1.0.0",
+        "source": "repository"
+      },
+      "range": "^1.3.2"
+    }
+  },
+  {
+    "id": "dep:@tailwindcss/postcss",
+    "type": "Dependency",
+    "name": "@tailwindcss/postcss",
+    "metadata": {
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+        "parser": "repository",
+        "parserVersion": "1.0.0",
+        "source": "repository"
+      },
+      "range": "^4.0.0"
+    }
+  },
+  {
+    "id": "dep:@tanstack/react-query",
+    "type": "Dependency",
+    "name": "@tanstack/react-query",
+    "metadata": {
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+        "parser": "repository",
+        "parserVersion": "1.0.0",
+        "source": "repository"
+      },
+      "range": "^5.101.4"
+    }
+  },
+  {
+    "id": "dep:@types/node",
+    "type": "Dependency",
+    "name": "@types/node",
+    "metadata": {
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+        "parser": "repository",
+        "parserVersion": "1.0.0",
+        "source": "repository"
+      },
+      "range": "^22.10.5"
+    }
+  },
+  {
+    "id": "dep:@types/react",
+    "type": "Dependency",
+    "name": "@types/react",
+    "metadata": {
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+        "parser": "repository",
+        "parserVersion": "1.0.0",
+        "source": "repository"
+      },
+      "range": "^19.0.4"
+    }
+  },
+  {
+    "id": "dep:@types/react-dom",
+    "type": "Dependency",
+    "name": "@types/react-dom",
+    "metadata": {
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+        "parser": "repository",
+        "parserVersion": "1.0.0",
+        "source": "repository"
+      },
+      "range": "^19.0.2"
+    }
+  },
+  {
+    "id": "dep:class-variance-authority",
+    "type": "Dependency",
+    "name": "class-variance-authority",
+    "metadata": {
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+        "parser": "repository",
+        "parserVersion": "1.0.0",
+        "source": "repository"
+      },
+      "range": "^0.7.1"
+    }
+  },
+  {
+    "id": "dep:clsx",
+    "type": "Dependency",
+    "name": "clsx",
+    "metadata": {
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+        "parser": "repository",
+        "parserVersion": "1.0.0",
+        "source": "repository"
+      },
+      "range": "^2.1.1"
+    }
+  },
+  {
+    "id": "dep:cmdk",
+    "type": "Dependency",
+    "name": "cmdk",
+    "metadata": {
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+        "parser": "repository",
+        "parserVersion": "1.0.0",
+        "source": "repository"
+      },
+      "range": "^1.1.1"
+    }
+  },
+  {
+    "id": "dep:frappe-react-sdk",
+    "type": "Dependency",
+    "name": "frappe-react-sdk",
+    "metadata": {
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+        "parser": "repository",
+        "parserVersion": "1.0.0",
+        "source": "repository"
+      },
+      "range": "^1.17.0"
+    }
+  },
+  {
+    "id": "dep:lucide-react",
+    "type": "Dependency",
+    "name": "lucide-react",
+    "metadata": {
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+        "parser": "repository",
+        "parserVersion": "1.0.0",
+        "source": "repository"
+      },
+      "range": "^0.469.0"
+    }
+  },
+  {
+    "id": "dep:motion",
+    "type": "Dependency",
+    "name": "motion",
+    "metadata": {
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+        "parser": "repository",
+        "parserVersion": "1.0.0",
+        "source": "repository"
+      },
+      "range": "^12.42.2"
+    }
+  },
+  {
+    "id": "dep:next",
+    "type": "Dependency",
+    "name": "next",
+    "metadata": {
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+        "parser": "repository",
+        "parserVersion": "1.0.0",
+        "source": "repository"
+      },
+      "range": "16.2.11"
+    }
+  },
+  {
+    "id": "dep:next-themes",
+    "type": "Dependency",
+    "name": "next-themes",
+    "metadata": {
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+        "parser": "repository",
+        "parserVersion": "1.0.0",
+        "source": "repository"
+      },
+      "range": "^0.4.6"
+    }
+  },
+  {
+    "id": "dep:postcss",
+    "type": "Dependency",
+    "name": "postcss",
+    "metadata": {
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+        "parser": "repository",
+        "parserVersion": "1.0.0",
+        "source": "repository"
+      },
+      "range": "^8.5.0"
+    }
+  },
+  {
+    "id": "dep:radix-ui",
+    "type": "Dependency",
+    "name": "radix-ui",
+    "metadata": {
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+        "parser": "repository",
+        "parserVersion": "1.0.0",
+        "source": "repository"
+      },
+      "range": "^1.6.4"
+    }
+  },
+  {
+    "id": "dep:react",
+    "type": "Dependency",
+    "name": "react",
+    "metadata": {
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+        "parser": "repository",
+        "parserVersion": "1.0.0",
+        "source": "repository"
+      },
+      "range": "^19.0.0"
+    }
+  },
+  {
+    "id": "dep:react-dom",
+    "type": "Dependency",
+    "name": "react-dom",
+    "metadata": {
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+        "parser": "repository",
+        "parserVersion": "1.0.0",
+        "source": "repository"
+      },
+      "range": "^19.0.0"
+    }
+  },
+  {
+    "id": "dep:sonner",
+    "type": "Dependency",
+    "name": "sonner",
+    "metadata": {
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+        "parser": "repository",
+        "parserVersion": "1.0.0",
+        "source": "repository"
+      },
+      "range": "^2.0.7"
+    }
+  },
+  {
+    "id": "dep:tailwind-merge",
+    "type": "Dependency",
+    "name": "tailwind-merge",
+    "metadata": {
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+        "parser": "repository",
+        "parserVersion": "1.0.0",
+        "source": "repository"
+      },
+      "range": "^2.6.0"
+    }
+  },
+  {
+    "id": "dep:tailwindcss",
+    "type": "Dependency",
+    "name": "tailwindcss",
+    "metadata": {
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+        "parser": "repository",
+        "parserVersion": "1.0.0",
+        "source": "repository"
+      },
+      "range": "^4.0.0"
+    }
+  },
+  {
+    "id": "dep:tw-animate-css",
+    "type": "Dependency",
+    "name": "tw-animate-css",
+    "metadata": {
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+        "parser": "repository",
+        "parserVersion": "1.0.0",
+        "source": "repository"
+      },
+      "range": "^1.4.0"
+    }
+  },
+  {
+    "id": "dep:typescript",
+    "type": "Dependency",
+    "name": "typescript",
+    "metadata": {
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+        "parser": "repository",
+        "parserVersion": "1.0.0",
+        "source": "repository"
+      },
+      "range": "^5.7.2"
+    }
+  }
+]

@@ -1,0 +1,29 @@
+[
+  {
+    "id": "class:lib/frappe-client.ts:FrappeError",
+    "type": "Class",
+    "name": "FrappeError",
+    "file": "lib/frappe-client.ts",
+    "span": {
+      "file": "lib/frappe-client.ts",
+      "startLine": 35,
+      "startColumn": 1,
+      "endLine": 43,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "abstract": false,
+      "exported": true,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "class"
+    }
+  }
+]

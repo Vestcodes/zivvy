@@ -1,0 +1,344 @@
+{
+  "id": "community-002",
+  "stableId": "community:1yazeyg",
+  "nodeCount": 5,
+  "edgeCount": 7,
+  "nodeTypes": {
+    "Export": 2,
+    "Function": 2,
+    "Module": 1
+  },
+  "relationshipTypes": {
+    "CALLS": 1,
+    "CONTAINS": 4,
+    "EXPORTS": 2
+  },
+  "representativeNodes": [
+    {
+      "id": "mod:lib/mailto.ts",
+      "type": "Module",
+      "name": "lib/mailto.ts",
+      "file": "lib/mailto.ts"
+    },
+    {
+      "id": "fn:lib/mailto.ts:buildMailto",
+      "type": "Function",
+      "name": "buildMailto",
+      "file": "lib/mailto.ts"
+    },
+    {
+      "id": "fn:lib/mailto.ts:sanitizeMailField",
+      "type": "Function",
+      "name": "sanitizeMailField",
+      "file": "lib/mailto.ts"
+    },
+    {
+      "id": "export:lib/mailto.ts:buildMailto",
+      "type": "Export",
+      "name": "buildMailto",
+      "file": "lib/mailto.ts"
+    },
+    {
+      "id": "export:lib/mailto.ts:sanitizeMailField",
+      "type": "Export",
+      "name": "sanitizeMailField",
+      "file": "lib/mailto.ts"
+    }
+  ],
+  "representativeNodeIds": [
+    "export:lib/mailto.ts:buildMailto",
+    "export:lib/mailto.ts:sanitizeMailField",
+    "fn:lib/mailto.ts:buildMailto",
+    "fn:lib/mailto.ts:sanitizeMailField",
+    "mod:lib/mailto.ts"
+  ],
+  "nodes": [
+    {
+      "id": "export:lib/mailto.ts:buildMailto",
+      "type": "Export",
+      "name": "buildMailto",
+      "file": "lib/mailto.ts",
+      "span": {
+        "file": "lib/mailto.ts",
+        "startLine": 12,
+        "startColumn": 1,
+        "endLine": 26,
+        "endColumn": 2
+      },
+      "metadata": {
+        "language": "typescript",
+        "provenance": {
+          "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+          "parser": "typescript",
+          "parserVersion": "5.9.2",
+          "source": "typescript"
+        },
+        "exportKind": "value",
+        "localName": "buildMailto",
+        "declarationKind": "function"
+      }
+    },
+    {
+      "id": "export:lib/mailto.ts:sanitizeMailField",
+      "type": "Export",
+      "name": "sanitizeMailField",
+      "file": "lib/mailto.ts",
+      "span": {
+        "file": "lib/mailto.ts",
+        "startLine": 8,
+        "startColumn": 1,
+        "endLine": 10,
+        "endColumn": 2
+      },
+      "metadata": {
+        "language": "typescript",
+        "provenance": {
+          "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+          "parser": "typescript",
+          "parserVersion": "5.9.2",
+          "source": "typescript"
+        },
+        "exportKind": "value",
+        "localName": "sanitizeMailField",
+        "declarationKind": "function"
+      }
+    },
+    {
+      "id": "fn:lib/mailto.ts:buildMailto",
+      "type": "Function",
+      "name": "buildMailto",
+      "file": "lib/mailto.ts",
+      "span": {
+        "file": "lib/mailto.ts",
+        "startLine": 12,
+        "startColumn": 1,
+        "endLine": 26,
+        "endColumn": 2
+      },
+      "metadata": {
+        "language": "typescript",
+        "provenance": {
+          "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+          "parser": "typescript",
+          "parserVersion": "5.9.2",
+          "source": "typescript"
+        },
+        "async": false,
+        "generator": false,
+        "exported": true,
+        "default": false,
+        "parameters": 1,
+        "typeParameters": 0,
+        "declarationKind": "function"
+      }
+    },
+    {
+      "id": "fn:lib/mailto.ts:sanitizeMailField",
+      "type": "Function",
+      "name": "sanitizeMailField",
+      "file": "lib/mailto.ts",
+      "span": {
+        "file": "lib/mailto.ts",
+        "startLine": 8,
+        "startColumn": 1,
+        "endLine": 10,
+        "endColumn": 2
+      },
+      "metadata": {
+        "language": "typescript",
+        "provenance": {
+          "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+          "parser": "typescript",
+          "parserVersion": "5.9.2",
+          "source": "typescript"
+        },
+        "async": false,
+        "generator": false,
+        "exported": true,
+        "default": false,
+        "parameters": 1,
+        "typeParameters": 0,
+        "declarationKind": "function"
+      }
+    },
+    {
+      "id": "mod:lib/mailto.ts",
+      "type": "Module",
+      "name": "lib/mailto.ts",
+      "file": "lib/mailto.ts",
+      "span": {
+        "file": "lib/mailto.ts",
+        "startLine": 8,
+        "startColumn": 1,
+        "endLine": 27,
+        "endColumn": 1
+      },
+      "metadata": {
+        "language": "typescript",
+        "provenance": {
+          "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+          "parser": "typescript",
+          "parserVersion": "5.9.2",
+          "source": "typescript"
+        },
+        "extension": ".ts"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge:calls:0q9uphe",
+      "type": "CALLS",
+      "from": "fn:lib/mailto.ts:buildMailto",
+      "to": "fn:lib/mailto.ts:sanitizeMailField",
+      "evidence": [
+        {
+          "kind": "syntax",
+          "confidence": "exact",
+          "span": {
+            "file": "lib/mailto.ts",
+            "startLine": 21,
+            "startColumn": 24,
+            "endLine": 21,
+            "endColumn": 50
+          },
+          "description": "calls target"
+        }
+      ]
+    },
+    {
+      "id": "edge:contains:070rsb4",
+      "type": "CONTAINS",
+      "from": "mod:lib/mailto.ts",
+      "to": "export:lib/mailto.ts:buildMailto",
+      "evidence": [
+        {
+          "kind": "syntax",
+          "confidence": "exact",
+          "span": {
+            "file": "lib/mailto.ts",
+            "startLine": 12,
+            "startColumn": 1,
+            "endLine": 26,
+            "endColumn": 2
+          },
+          "description": "module contains export"
+        }
+      ]
+    },
+    {
+      "id": "edge:contains:0oa63ym",
+      "type": "CONTAINS",
+      "from": "mod:lib/mailto.ts",
+      "to": "fn:lib/mailto.ts:buildMailto",
+      "evidence": [
+        {
+          "kind": "syntax",
+          "confidence": "exact",
+          "span": {
+            "file": "lib/mailto.ts",
+            "startLine": 12,
+            "startColumn": 1,
+            "endLine": 26,
+            "endColumn": 2
+          },
+          "description": "module contains Function"
+        }
+      ],
+      "metadata": {
+        "ownerKind": "Module"
+      }
+    },
+    {
+      "id": "edge:contains:0w93zqw",
+      "type": "CONTAINS",
+      "from": "mod:lib/mailto.ts",
+      "to": "fn:lib/mailto.ts:sanitizeMailField",
+      "evidence": [
+        {
+          "kind": "syntax",
+          "confidence": "exact",
+          "span": {
+            "file": "lib/mailto.ts",
+            "startLine": 8,
+            "startColumn": 1,
+            "endLine": 10,
+            "endColumn": 2
+          },
+          "description": "module contains Function"
+        }
+      ],
+      "metadata": {
+        "ownerKind": "Module"
+      }
+    },
+    {
+      "id": "edge:contains:153tklm",
+      "type": "CONTAINS",
+      "from": "mod:lib/mailto.ts",
+      "to": "export:lib/mailto.ts:sanitizeMailField",
+      "evidence": [
+        {
+          "kind": "syntax",
+          "confidence": "exact",
+          "span": {
+            "file": "lib/mailto.ts",
+            "startLine": 8,
+            "startColumn": 1,
+            "endLine": 10,
+            "endColumn": 2
+          },
+          "description": "module contains export"
+        }
+      ]
+    },
+    {
+      "id": "edge:exports:1d2khk0",
+      "type": "EXPORTS",
+      "from": "mod:lib/mailto.ts",
+      "to": "fn:lib/mailto.ts:sanitizeMailField",
+      "evidence": [
+        {
+          "kind": "syntax",
+          "confidence": "exact",
+          "span": {
+            "file": "lib/mailto.ts",
+            "startLine": 8,
+            "startColumn": 1,
+            "endLine": 10,
+            "endColumn": 2
+          },
+          "description": "exports sanitizeMailField"
+        }
+      ],
+      "metadata": {
+        "exportNodeId": "export:lib/mailto.ts:sanitizeMailField",
+        "name": "sanitizeMailField"
+      }
+    },
+    {
+      "id": "edge:exports:1wq0z2e",
+      "type": "EXPORTS",
+      "from": "mod:lib/mailto.ts",
+      "to": "fn:lib/mailto.ts:buildMailto",
+      "evidence": [
+        {
+          "kind": "syntax",
+          "confidence": "exact",
+          "span": {
+            "file": "lib/mailto.ts",
+            "startLine": 12,
+            "startColumn": 1,
+            "endLine": 26,
+            "endColumn": 2
+          },
+          "description": "exports buildMailto"
+        }
+      ],
+      "metadata": {
+        "exportNodeId": "export:lib/mailto.ts:buildMailto",
+        "name": "buildMailto"
+      }
+    }
+  ]
+}

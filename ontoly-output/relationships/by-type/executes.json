@@ -1,0 +1,122 @@
+[
+  {
+    "id": "edge:executes:08mhq4m",
+    "type": "EXECUTES",
+    "from": "script:package.json:blog:generate",
+    "to": "task:package.json:zivvy-web:blog:generate",
+    "evidence": [
+      {
+        "kind": "config",
+        "confidence": "exact",
+        "span": {
+          "file": "package.json",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 1,
+          "endColumn": 1
+        },
+        "description": "script executes task"
+      }
+    ]
+  },
+  {
+    "id": "edge:executes:0e51ox2",
+    "type": "EXECUTES",
+    "from": "script:package.json:build",
+    "to": "task:package.json:zivvy-web:build",
+    "evidence": [
+      {
+        "kind": "config",
+        "confidence": "exact",
+        "span": {
+          "file": "package.json",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 1,
+          "endColumn": 1
+        },
+        "description": "script executes task"
+      }
+    ]
+  },
+  {
+    "id": "edge:executes:0ifv9hm",
+    "type": "EXECUTES",
+    "from": "script:package.json:start",
+    "to": "task:package.json:zivvy-web:start",
+    "evidence": [
+      {
+        "kind": "config",
+        "confidence": "exact",
+        "span": {
+          "file": "package.json",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 1,
+          "endColumn": 1
+        },
+        "description": "script executes task"
+      }
+    ]
+  },
+  {
+    "id": "edge:executes:0rm5p4i",
+    "type": "EXECUTES",
+    "from": "script:package.json:dev",
+    "to": "task:package.json:zivvy-web:dev",
+    "evidence": [
+      {
+        "kind": "config",
+        "confidence": "exact",
+        "span": {
+          "file": "package.json",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 1,
+          "endColumn": 1
+        },
+        "description": "script executes task"
+      }
+    ]
+  },
+  {
+    "id": "edge:executes:0ydp11q",
+    "type": "EXECUTES",
+    "from": "script:package.json:typecheck",
+    "to": "task:package.json:zivvy-web:typecheck",
+    "evidence": [
+      {
+        "kind": "config",
+        "confidence": "exact",
+        "span": {
+          "file": "package.json",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 1,
+          "endColumn": 1
+        },
+        "description": "script executes task"
+      }
+    ]
+  },
+  {
+    "id": "edge:executes:1upaagk",
+    "type": "EXECUTES",
+    "from": "script:package.json:lint",
+    "to": "task:package.json:zivvy-web:lint",
+    "evidence": [
+      {
+        "kind": "config",
+        "confidence": "exact",
+        "span": {
+          "file": "package.json",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 1,
+          "endColumn": 1
+        },
+        "description": "script executes task"
+      }
+    ]
+  }
+]

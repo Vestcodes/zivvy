@@ -1,0 +1,65 @@
+[
+  {
+    "id": "edge:configures:0bsoghp",
+    "type": "CONFIGURES",
+    "from": "config:tsconfig.json:tsconfig",
+    "to": "target:tsconfig.json:typescript",
+    "evidence": [
+      {
+        "kind": "config",
+        "confidence": "exact",
+        "span": {
+          "file": "tsconfig.json",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 1,
+          "endColumn": 1
+        },
+        "description": "tsconfig configures TypeScript build target"
+      }
+    ]
+  },
+  {
+    "id": "edge:configures:0vpaq75",
+    "type": "CONFIGURES",
+    "from": "config:pnpm-workspace.yaml:pnpm-workspace",
+    "to": "workspace:zivvy-web",
+    "evidence": [
+      {
+        "kind": "config",
+        "confidence": "exact",
+        "span": {
+          "file": "pnpm-workspace.yaml",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 1,
+          "endColumn": 1
+        },
+        "description": "pnpm workspace configures workspace"
+      }
+    ],
+    "metadata": {
+      "packagePatterns": []
+    }
+  },
+  {
+    "id": "edge:configures:1cwfrxx",
+    "type": "CONFIGURES",
+    "from": "config:package.json:package.json",
+    "to": "pkg:zivvy-web",
+    "evidence": [
+      {
+        "kind": "config",
+        "confidence": "exact",
+        "span": {
+          "file": "package.json",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 1,
+          "endColumn": 1
+        },
+        "description": "package manifest configures package"
+      }
+    ]
+  }
+]

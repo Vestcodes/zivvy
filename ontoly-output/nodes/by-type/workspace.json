@@ -1,0 +1,18 @@
+[
+  {
+    "id": "workspace:zivvy-web",
+    "type": "Workspace",
+    "name": "zivvy-web",
+    "metadata": {
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+        "parser": "repository",
+        "parserVersion": "1.0.0",
+        "source": "repository"
+      },
+      "root": "/Users/shrey/Desktop/work/zivvy-web",
+      "packageName": "zivvy-web",
+      "packageManager": "pnpm@11.6.0"
+    }
+  }
+]

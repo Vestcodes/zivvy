@@ -1,0 +1,140 @@
+[
+  {
+    "id": "script:package.json:blog:generate",
+    "type": "Script",
+    "name": "blog:generate",
+    "file": "package.json",
+    "span": {
+      "file": "package.json",
+      "startLine": 1,
+      "startColumn": 1,
+      "endLine": 1,
+      "endColumn": 1
+    },
+    "metadata": {
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+        "parser": "repository",
+        "parserVersion": "1.0.0",
+        "source": "repository"
+      },
+      "command": "node scripts/generate-blog-posts.mjs",
+      "packageId": "pkg:zivvy-web"
+    }
+  },
+  {
+    "id": "script:package.json:build",
+    "type": "Script",
+    "name": "build",
+    "file": "package.json",
+    "span": {
+      "file": "package.json",
+      "startLine": 1,
+      "startColumn": 1,
+      "endLine": 1,
+      "endColumn": 1
+    },
+    "metadata": {
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+        "parser": "repository",
+        "parserVersion": "1.0.0",
+        "source": "repository"
+      },
+      "command": "next build",
+      "packageId": "pkg:zivvy-web"
+    }
+  },
+  {
+    "id": "script:package.json:dev",
+    "type": "Script",
+    "name": "dev",
+    "file": "package.json",
+    "span": {
+      "file": "package.json",
+      "startLine": 1,
+      "startColumn": 1,
+      "endLine": 1,
+      "endColumn": 1
+    },
+    "metadata": {
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+        "parser": "repository",
+        "parserVersion": "1.0.0",
+        "source": "repository"
+      },
+      "command": "next dev -p 3000",
+      "packageId": "pkg:zivvy-web"
+    }
+  },
+  {
+    "id": "script:package.json:lint",
+    "type": "Script",
+    "name": "lint",
+    "file": "package.json",
+    "span": {
+      "file": "package.json",
+      "startLine": 1,
+      "startColumn": 1,
+      "endLine": 1,
+      "endColumn": 1
+    },
+    "metadata": {
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+        "parser": "repository",
+        "parserVersion": "1.0.0",
+        "source": "repository"
+      },
+      "command": "next lint",
+      "packageId": "pkg:zivvy-web"
+    }
+  },
+  {
+    "id": "script:package.json:start",
+    "type": "Script",
+    "name": "start",
+    "file": "package.json",
+    "span": {
+      "file": "package.json",
+      "startLine": 1,
+      "startColumn": 1,
+      "endLine": 1,
+      "endColumn": 1
+    },
+    "metadata": {
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+        "parser": "repository",
+        "parserVersion": "1.0.0",
+        "source": "repository"
+      },
+      "command": "next start -p ${PORT:-3000}",
+      "packageId": "pkg:zivvy-web"
+    }
+  },
+  {
+    "id": "script:package.json:typecheck",
+    "type": "Script",
+    "name": "typecheck",
+    "file": "package.json",
+    "span": {
+      "file": "package.json",
+      "startLine": 1,
+      "startColumn": 1,
+      "endLine": 1,
+      "endColumn": 1
+    },
+    "metadata": {
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+        "parser": "repository",
+        "parserVersion": "1.0.0",
+        "source": "repository"
+      },
+      "command": "tsc --noEmit",
+      "packageId": "pkg:zivvy-web"
+    }
+  }
+]

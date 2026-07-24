@@ -1,0 +1,34 @@
+{
+  "repository": "zivvy-web",
+  "graphHash": "13c6bdg",
+  "summary": {
+    "coverage": 100,
+    "confidence": 100,
+    "completeness": 100,
+    "consistency": 100,
+    "trustworthiness": 100
+  },
+  "diagnostics": [],
+  "relationshipDistribution": {
+    "CALLS": 446,
+    "CONFIGURES": 3,
+    "CONTAINS": 2332,
+    "CREATES": 6,
+    "DEPENDS_ON": 23,
+    "EXECUTES": 6,
+    "EXPORTS": 509,
+    "EXTENDS": 12,
+    "IMPORTS": 1091,
+    "PROVIDES": 2,
+    "READS": 16,
+    "RETURNS": 47,
+    "THROWS": 2,
+    "USES": 160
+  },
+  "confidenceHistogram": {
+    "exact": 4655,
+    "inferred": 0,
+    "low": 0,
+    "unknown": 0
+  }
+}

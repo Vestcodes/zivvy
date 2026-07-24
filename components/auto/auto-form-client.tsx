@@ -32,12 +32,15 @@ import { FieldView } from "@/components/auto/field-view";
 import { FieldInput } from "@/components/auto/field-input";
 import { ActivityTimeline } from "@/components/auto/activity-timeline";
 import { PrintButton } from "@/components/auto/print-preview";
+import { NextActionStrip } from "@/components/auto/next-action-strip";
 import { frappeCall, FrappeError } from "@/lib/frappe-client";
 import type { DoctypeMeta, FormGroup } from "@/lib/frappe-meta";
 import { cn } from "@/lib/utils";
 import { parseFrappeError, EMPTY_ERRORS, type ParsedFormError } from "@/lib/form-errors";
+import { computeNextAction, type NextAction } from "@/lib/next-action";
+import { densifyForm } from "@/lib/form-density";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, ChevronDown, ChevronUp } from "lucide-react";
 
 interface Props {
   meta: DoctypeMeta;
@@ -45,6 +48,9 @@ interface Props {
   initialDoc: Record<string, unknown>;
   basePath: string;
   title: string;
+  /** Server-computed next action for the initial doc state. Re-computed on
+   * the client whenever the doc changes so it stays live. */
+  initialNextAction?: NextAction | null;
 }
 
 
@@ -65,7 +71,14 @@ function shallowEqual(a: Record<string, unknown>, b: Record<string, unknown>): b
 
 type DialogKind = null | "discard" | "submit" | "cancel";
 
-export function AutoFormClient({ meta, groups, initialDoc, basePath, title }: Props) {
+export function AutoFormClient({
+  meta,
+  groups,
+  initialDoc,
+  basePath,
+  title,
+  initialNextAction
+}: Props) {
   const router = useRouter();
   const [doc, setDoc] = useState<Record<string, unknown>>(initialDoc);
   const initialRef = useRef(initialDoc);
@@ -77,10 +90,35 @@ export function AutoFormClient({ meta, groups, initialDoc, basePath, title }: Pr
   const [dialog, setDialog] = useState<DialogKind>(null);
   const [justSaved, setJustSaved] = useState(false);
   const [errors, setErrors] = useState<ParsedFormError>(EMPTY_ERRORS);
+  const [showAllDetail, setShowAllDetail] = useState(false);
 
   const docstatus = Number((doc.docstatus as number | undefined) ?? 0);
   const isNew = doc.__islocal === 1 || !doc.name;
   const dirty = useMemo(() => editing && !shallowEqual(doc, initialRef.current), [doc, editing]);
+
+  // Progressive form density: split each section into essentials + details.
+  const densified = useMemo(() => densifyForm(groups), [groups]);
+
+  // Live next-action — recomputes as the user edits so the strip stays honest.
+  const nextAction = useMemo<NextAction | null>(() => {
+    return computeNextAction({ meta, doc, isNew, basePath });
+  }, [meta, doc, isNew, basePath]);
+
+  const displayedNextAction = nextAction ?? initialNextAction ?? null;
+
+  const focusField = useCallback((fieldname: string) => {
+    // Ensure the field is visible — if it's a detail field, un-fold first.
+    setShowAllDetail(true);
+    requestAnimationFrame(() => {
+      const el = document.querySelector<HTMLElement>(
+        `[data-field="${fieldname}"] input, [data-field="${fieldname}"] textarea, [data-field="${fieldname}"] [role="combobox"]`
+      );
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "center" });
+        el.focus({ preventScroll: true });
+      }
+    });
+  }, []);
 
   const updateField = useCallback((fieldname: string, value: unknown) => {
     setDoc((prev) => ({ ...prev, [fieldname]: value }));
@@ -192,6 +230,39 @@ export function AutoFormClient({ meta, groups, initialDoc, basePath, title }: Pr
     }
   }, [dirty, onDiscard]);
 
+  const executeNextAction = useCallback((action: NextAction) => {
+    switch (action.kind) {
+      case "fill":
+        if (action.targetField) {
+          if (!editing) setEditing(true);
+          focusField(action.targetField);
+        }
+        return;
+      case "submit":
+        if (isNew || dirty) {
+          onSave();
+        } else {
+          setDialog("submit");
+        }
+        return;
+      case "cancel":
+        setDialog("cancel");
+        return;
+      case "amend":
+        toast.info("Amend is coming soon", {
+          description: "For now, copy the numbers into a new draft."
+        });
+        return;
+      case "link":
+        if (action.href) router.push(action.href);
+        return;
+      case "review":
+      case "empty":
+      default:
+        return;
+    }
+  }, [editing, isNew, dirty, focusField, onSave, router]);
+
   // Fade the "Saved" chip out after 4 seconds
   useEffect(() => {
     if (!justSaved) return;
@@ -291,39 +362,91 @@ export function AutoFormClient({ meta, groups, initialDoc, basePath, title }: Pr
           </div>
         </div>
 
-        {groups.map((section) => (
-          <Card key={section.label} className="border-border/70 bg-card shadow-sm">
-            <CardContent className="space-y-4 py-6">
-              {section.label && (
-                <h2 className="font-display text-lg tracking-tight">{section.label}</h2>
+        {(errors.formError || errors.hasFieldErrors) && (
+          <Alert variant="destructive" role="alert">
+            <AlertCircle className="size-4" />
+            <AlertTitle>
+              {errors.hasFieldErrors
+                ? "Please fix the highlighted fields"
+                : "Something didn't work"}
+            </AlertTitle>
+            {errors.formError && (
+              <AlertDescription>{errors.formError}</AlertDescription>
+            )}
+          </Alert>
+        )}
+
+        <NextActionStrip action={displayedNextAction} onExecute={executeNextAction} />
+
+        {densified.sections.map((section, sectionIdx) => {
+          const hasEssentials = section.columns.some((c) =>
+            c.fields.some((f) => f.tier === "essential")
+          );
+          if (!hasEssentials && !showAllDetail) return null;
+          return (
+            <Card
+              key={`${section.label}-${sectionIdx}`}
+              className="border-border/70 bg-card shadow-sm"
+            >
+              <CardContent className="space-y-4 py-6">
+                {section.label && (
+                  <h2 className="font-display text-lg tracking-tight">{section.label}</h2>
+                )}
+                <div
+                  className={
+                    section.columns.length > 1
+                      ? "grid gap-6 md:grid-cols-2"
+                      : "grid gap-6"
+                  }
+                >
+                  {section.columns.map((col, i) => (
+                    <div key={i} className="grid gap-4">
+                      {col.fields
+                        .filter(({ tier }) => showAllDetail || tier === "essential")
+                        .map(({ field: f }) =>
+                          editing ? (
+                            <FieldInput
+                              key={f.fieldname}
+                              field={f}
+                              value={doc[f.fieldname]}
+                              error={errors.fieldErrors[f.fieldname]}
+                              onChange={(v) => updateField(f.fieldname, v)}
+                            />
+                          ) : (
+                            <FieldView key={f.fieldname} field={f} value={doc[f.fieldname]} />
+                          )
+                        )}
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          );
+        })}
+
+        {densified.totalDetail > 0 && (
+          <div className="flex justify-center pt-1">
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={() => setShowAllDetail((v) => !v)}
+              className="text-muted-foreground hover:text-foreground"
+            >
+              {showAllDetail ? (
+                <>
+                  <ChevronUp className="size-3.5" />
+                  Hide detail fields
+                </>
+              ) : (
+                <>
+                  <ChevronDown className="size-3.5" />
+                  Show all fields ({densified.totalDetail} more)
+                </>
               )}
-              <div
-                className={
-                  section.columns.length > 1
-                    ? "grid gap-6 md:grid-cols-2"
-                    : "grid gap-6"
-                }
-              >
-                {section.columns.map((col, i) => (
-                  <div key={i} className="grid gap-4">
-                    {col.fields.map((f) => (
-                      editing ? (
-                        <FieldInput
-                          key={f.fieldname}
-                          field={f}
-                          value={doc[f.fieldname]}
-                          onChange={(v) => updateField(f.fieldname, v)}
-                        />
-                      ) : (
-                        <FieldView key={f.fieldname} field={f} value={doc[f.fieldname]} />
-                      )
-                    ))}
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+            </Button>
+          </div>
+        )}
 
         {!isNew && !editing && (
           <ActivityTimeline

@@ -1,0 +1,242 @@
+[
+  {
+    "id": "edge:extends:01i44p3",
+    "type": "EXTENDS",
+    "from": "iface:components/ui/bento-grid.tsx:BentoGridProps",
+    "to": "pkg:react",
+    "evidence": [
+      {
+        "kind": "syntax",
+        "confidence": "exact",
+        "span": {
+          "file": "components/ui/bento-grid.tsx",
+          "startLine": 7,
+          "startColumn": 34,
+          "endLine": 7,
+          "endColumn": 65
+        },
+        "description": "extends heritage type"
+      }
+    ]
+  },
+  {
+    "id": "edge:extends:03itagb",
+    "type": "EXTENDS",
+    "from": "iface:components/ui/animated-list.tsx:AnimatedListProps",
+    "to": "pkg:react",
+    "evidence": [
+      {
+        "kind": "syntax",
+        "confidence": "exact",
+        "span": {
+          "file": "components/ui/animated-list.tsx",
+          "startLine": 28,
+          "startColumn": 44,
+          "endLine": 28,
+          "endColumn": 75
+        },
+        "description": "extends heritage type"
+      }
+    ]
+  },
+  {
+    "id": "edge:extends:03vzfly",
+    "type": "EXTENDS",
+    "from": "iface:components/ui/magic-card.tsx:MagicCardOrbProps",
+    "to": "iface:components/ui/magic-card.tsx:MagicCardBaseProps",
+    "evidence": [
+      {
+        "kind": "syntax",
+        "confidence": "exact",
+        "span": {
+          "file": "components/ui/magic-card.tsx",
+          "startLine": 36,
+          "startColumn": 37,
+          "endLine": 36,
+          "endColumn": 55
+        },
+        "description": "extends heritage type"
+      }
+    ]
+  },
+  {
+    "id": "edge:extends:0i4j2gx",
+    "type": "EXTENDS",
+    "from": "iface:components/ui/magic-card.tsx:MagicCardGradientProps",
+    "to": "iface:components/ui/magic-card.tsx:MagicCardBaseProps",
+    "evidence": [
+      {
+        "kind": "syntax",
+        "confidence": "exact",
+        "span": {
+          "file": "components/ui/magic-card.tsx",
+          "startLine": 22,
+          "startColumn": 42,
+          "endLine": 22,
+          "endColumn": 60
+        },
+        "description": "extends heritage type"
+      }
+    ]
+  },
+  {
+    "id": "edge:extends:0zccjj5",
+    "type": "EXTENDS",
+    "from": "iface:components/ui/shimmer-button.tsx:ShimmerButtonProps",
+    "to": "pkg:react",
+    "evidence": [
+      {
+        "kind": "syntax",
+        "confidence": "exact",
+        "span": {
+          "file": "components/ui/shimmer-button.tsx",
+          "startLine": 5,
+          "startColumn": 45,
+          "endLine": 5,
+          "endColumn": 79
+        },
+        "description": "extends heritage type"
+      }
+    ]
+  },
+  {
+    "id": "edge:extends:13tpbtq",
+    "type": "EXTENDS",
+    "from": "iface:components/ui/marquee.tsx:MarqueeProps",
+    "to": "pkg:react",
+    "evidence": [
+      {
+        "kind": "syntax",
+        "confidence": "exact",
+        "span": {
+          "file": "components/ui/marquee.tsx",
+          "startLine": 7,
+          "startColumn": 32,
+          "endLine": 7,
+          "endColumn": 63
+        },
+        "description": "extends heritage type"
+      }
+    ]
+  },
+  {
+    "id": "edge:extends:16vvuk4",
+    "type": "EXTENDS",
+    "from": "iface:components/ui/animated-grid-pattern.tsx:AnimatedGridPatternProps",
+    "to": "pkg:react",
+    "evidence": [
+      {
+        "kind": "syntax",
+        "confidence": "exact",
+        "span": {
+          "file": "components/ui/animated-grid-pattern.tsx",
+          "startLine": 15,
+          "startColumn": 51,
+          "endLine": 15,
+          "endColumn": 82
+        },
+        "description": "extends heritage type"
+      }
+    ]
+  },
+  {
+    "id": "edge:extends:17ln2pj",
+    "type": "EXTENDS",
+    "from": "iface:components/ui/retro-grid.tsx:RetroGridProps",
+    "to": "pkg:react",
+    "evidence": [
+      {
+        "kind": "syntax",
+        "confidence": "exact",
+        "span": {
+          "file": "components/ui/retro-grid.tsx",
+          "startLine": 251,
+          "startColumn": 34,
+          "endLine": 251,
+          "endColumn": 64
+        },
+        "description": "extends heritage type"
+      }
+    ]
+  },
+  {
+    "id": "edge:extends:1ipbb8o",
+    "type": "EXTENDS",
+    "from": "iface:components/ui/animated-shiny-text.tsx:AnimatedShinyTextProps",
+    "to": "pkg:react",
+    "evidence": [
+      {
+        "kind": "syntax",
+        "confidence": "exact",
+        "span": {
+          "file": "components/ui/animated-shiny-text.tsx",
+          "startLine": 9,
+          "startColumn": 49,
+          "endLine": 9,
+          "endColumn": 81
+        },
+        "description": "extends heritage type"
+      }
+    ]
+  },
+  {
+    "id": "edge:extends:1jfr4zv",
+    "type": "EXTENDS",
+    "from": "iface:components/ui/number-ticker.tsx:NumberTickerProps",
+    "to": "pkg:react",
+    "evidence": [
+      {
+        "kind": "syntax",
+        "confidence": "exact",
+        "span": {
+          "file": "components/ui/number-ticker.tsx",
+          "startLine": 8,
+          "startColumn": 37,
+          "endLine": 8,
+          "endColumn": 69
+        },
+        "description": "extends heritage type"
+      }
+    ]
+  },
+  {
+    "id": "edge:extends:1pgoo49",
+    "type": "EXTENDS",
+    "from": "iface:components/ui/bento-grid.tsx:BentoCardProps",
+    "to": "pkg:react",
+    "evidence": [
+      {
+        "kind": "syntax",
+        "confidence": "exact",
+        "span": {
+          "file": "components/ui/bento-grid.tsx",
+          "startLine": 12,
+          "startColumn": 34,
+          "endLine": 12,
+          "endColumn": 65
+        },
+        "description": "extends heritage type"
+      }
+    ]
+  },
+  {
+    "id": "edge:extends:1s4g13m",
+    "type": "EXTENDS",
+    "from": "iface:components/ui/blur-fade.tsx:BlurFadeProps",
+    "to": "pkg:motion",
+    "evidence": [
+      {
+        "kind": "syntax",
+        "confidence": "exact",
+        "span": {
+          "file": "components/ui/blur-fade.tsx",
+          "startLine": 15,
+          "startColumn": 33,
+          "endLine": 15,
+          "endColumn": 44
+        },
+        "description": "extends heritage type"
+      }
+    ]
+  }
+]

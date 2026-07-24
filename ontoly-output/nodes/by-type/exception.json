@@ -1,0 +1,24 @@
+[
+  {
+    "id": "exception:Error",
+    "type": "Exception",
+    "name": "Error",
+    "span": {
+      "file": "components/ui/sidebar.tsx",
+      "startLine": 50,
+      "startColumn": 11,
+      "endLine": 50,
+      "endColumn": 73
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "thrownConstructor": "Error"
+    }
+  }
+]

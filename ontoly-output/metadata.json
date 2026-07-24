@@ -1,0 +1,12 @@
+{
+  "generatedAt": "1970-01-01T00:00:00.000Z",
+  "deterministicHash": "13c6bdg",
+  "fileCount": 416,
+  "nodeCount": 2626,
+  "edgeCount": 4655,
+  "parserVersions": {
+    "openapi": "1.0.0",
+    "typescript": "5.9.2",
+    "repository": "1.0.0"
+  }
+}

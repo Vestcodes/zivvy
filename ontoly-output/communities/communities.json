@@ -1,0 +1,262 @@
+[
+  {
+    "id": "community-000",
+    "stableId": "community:1pb1k97",
+    "nodeCount": 2574,
+    "edgeCount": 4597,
+    "nodeTypes": {
+      "Class": 1,
+      "EnvironmentVariable": 5,
+      "Exception": 1,
+      "Export": 506,
+      "Function": 526,
+      "Import": 1131,
+      "Interface": 99,
+      "Module": 236,
+      "Package": 17,
+      "TypeAlias": 52
+    },
+    "relationshipTypes": {
+      "CALLS": 444,
+      "CONTAINS": 2315,
+      "CREATES": 6,
+      "EXPORTS": 506,
+      "EXTENDS": 12,
+      "IMPORTS": 1091,
+      "READS": 16,
+      "RETURNS": 47,
+      "THROWS": 2,
+      "USES": 158
+    },
+    "representativeNodes": [
+      {
+        "id": "pkg:next",
+        "type": "Package",
+        "name": "next"
+      },
+      {
+        "id": "fn:lib/utils.ts:cn",
+        "type": "Function",
+        "name": "cn",
+        "file": "lib/utils.ts"
+      },
+      {
+        "id": "pkg:react",
+        "type": "Package",
+        "name": "react"
+      },
+      {
+        "id": "mod:components/ui/sidebar.tsx",
+        "type": "Module",
+        "name": "components/ui/sidebar.tsx",
+        "file": "components/ui/sidebar.tsx"
+      },
+      {
+        "id": "mod:lib/utils.ts",
+        "type": "Module",
+        "name": "lib/utils.ts",
+        "file": "lib/utils.ts"
+      },
+      {
+        "id": "pkg:lucide-react",
+        "type": "Package",
+        "name": "lucide-react"
+      },
+      {
+        "id": "mod:components/ui/button.tsx",
+        "type": "Module",
+        "name": "components/ui/button.tsx",
+        "file": "components/ui/button.tsx"
+      },
+      {
+        "id": "mod:components/ui/dropdown-menu.tsx",
+        "type": "Module",
+        "name": "components/ui/dropdown-menu.tsx",
+        "file": "components/ui/dropdown-menu.tsx"
+      },
+      {
+        "id": "mod:components/ui/context-menu.tsx",
+        "type": "Module",
+        "name": "components/ui/context-menu.tsx",
+        "file": "components/ui/context-menu.tsx"
+      },
+      {
+        "id": "mod:components/ui/card.tsx",
+        "type": "Module",
+        "name": "components/ui/card.tsx",
+        "file": "components/ui/card.tsx"
+      }
+    ]
+  },
+  {
+    "id": "community-001",
+    "stableId": "community:1taai57",
+    "nodeCount": 43,
+    "edgeCount": 46,
+    "nodeTypes": {
+      "BuildTarget": 1,
+      "Configuration": 3,
+      "Dependency": 23,
+      "Framework": 2,
+      "Package": 1,
+      "Script": 6,
+      "Task": 6,
+      "Workspace": 1
+    },
+    "relationshipTypes": {
+      "CONFIGURES": 3,
+      "CONTAINS": 10,
+      "DEPENDS_ON": 23,
+      "EXECUTES": 6,
+      "PROVIDES": 2,
+      "USES": 2
+    },
+    "representativeNodes": [
+      {
+        "id": "pkg:zivvy-web",
+        "type": "Package",
+        "name": "zivvy-web",
+        "file": "package.json"
+      },
+      {
+        "id": "workspace:zivvy-web",
+        "type": "Workspace",
+        "name": "zivvy-web"
+      },
+      {
+        "id": "config:package.json:package.json",
+        "type": "Configuration",
+        "name": "package.json",
+        "file": "package.json"
+      },
+      {
+        "id": "config:pnpm-workspace.yaml:pnpm-workspace",
+        "type": "Configuration",
+        "name": "pnpm-workspace",
+        "file": "pnpm-workspace.yaml"
+      },
+      {
+        "id": "config:tsconfig.json:tsconfig",
+        "type": "Configuration",
+        "name": "tsconfig",
+        "file": "tsconfig.json"
+      },
+      {
+        "id": "dep:next",
+        "type": "Dependency",
+        "name": "next"
+      },
+      {
+        "id": "dep:react",
+        "type": "Dependency",
+        "name": "react"
+      },
+      {
+        "id": "framework:Next.js",
+        "type": "Framework",
+        "name": "Next.js"
+      },
+      {
+        "id": "framework:React",
+        "type": "Framework",
+        "name": "React"
+      },
+      {
+        "id": "script:package.json:blog:generate",
+        "type": "Script",
+        "name": "blog:generate",
+        "file": "package.json"
+      }
+    ]
+  },
+  {
+    "id": "community-002",
+    "stableId": "community:1yazeyg",
+    "nodeCount": 5,
+    "edgeCount": 7,
+    "nodeTypes": {
+      "Export": 2,
+      "Function": 2,
+      "Module": 1
+    },
+    "relationshipTypes": {
+      "CALLS": 1,
+      "CONTAINS": 4,
+      "EXPORTS": 2
+    },
+    "representativeNodes": [
+      {
+        "id": "mod:lib/mailto.ts",
+        "type": "Module",
+        "name": "lib/mailto.ts",
+        "file": "lib/mailto.ts"
+      },
+      {
+        "id": "fn:lib/mailto.ts:buildMailto",
+        "type": "Function",
+        "name": "buildMailto",
+        "file": "lib/mailto.ts"
+      },
+      {
+        "id": "fn:lib/mailto.ts:sanitizeMailField",
+        "type": "Function",
+        "name": "sanitizeMailField",
+        "file": "lib/mailto.ts"
+      },
+      {
+        "id": "export:lib/mailto.ts:buildMailto",
+        "type": "Export",
+        "name": "buildMailto",
+        "file": "lib/mailto.ts"
+      },
+      {
+        "id": "export:lib/mailto.ts:sanitizeMailField",
+        "type": "Export",
+        "name": "sanitizeMailField",
+        "file": "lib/mailto.ts"
+      }
+    ]
+  },
+  {
+    "id": "community-003",
+    "stableId": "community:0j0yu4n",
+    "nodeCount": 4,
+    "edgeCount": 5,
+    "nodeTypes": {
+      "Export": 1,
+      "Function": 2,
+      "Module": 1
+    },
+    "relationshipTypes": {
+      "CALLS": 1,
+      "CONTAINS": 3,
+      "EXPORTS": 1
+    },
+    "representativeNodes": [
+      {
+        "id": "mod:lib/relative-time.ts",
+        "type": "Module",
+        "name": "lib/relative-time.ts",
+        "file": "lib/relative-time.ts"
+      },
+      {
+        "id": "fn:lib/relative-time.ts:formatRelative",
+        "type": "Function",
+        "name": "formatRelative",
+        "file": "lib/relative-time.ts"
+      },
+      {
+        "id": "fn:lib/relative-time.ts:normalizeFrappeTs",
+        "type": "Function",
+        "name": "normalizeFrappeTs",
+        "file": "lib/relative-time.ts"
+      },
+      {
+        "id": "export:lib/relative-time.ts:formatRelative",
+        "type": "Export",
+        "name": "formatRelative",
+        "file": "lib/relative-time.ts"
+      }
+    ]
+  }
+]

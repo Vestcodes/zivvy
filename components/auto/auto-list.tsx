@@ -18,6 +18,8 @@ import { AutoListPagination } from "@/components/auto/auto-list-pagination";
 import { AutoListKeyboard } from "@/components/auto/auto-list-keyboard";
 import { UpgradeRequired } from "@/components/upgrade-required";
 import { SavedViewsBar } from "@/components/auto/saved-views-bar";
+import { NextActionStrip } from "@/components/auto/next-action-strip";
+import { computeListAction } from "@/lib/next-action";
 import {
   frappeGetCount,
   getDoctypeMeta,
@@ -141,6 +143,10 @@ export async function AutoList({
           </Button>
         </div>
       </header>
+
+      <NextActionStrip
+        action={computeListAction({ meta, total: count, basePath, title })}
+      />
 
       <SavedViewsBar
         doctype={doctype}

@@ -1,0 +1,26 @@
+[
+  {
+    "id": "target:tsconfig.json:typescript",
+    "type": "BuildTarget",
+    "name": "typescript",
+    "file": "tsconfig.json",
+    "span": {
+      "file": "tsconfig.json",
+      "startLine": 1,
+      "startColumn": 1,
+      "endLine": 1,
+      "endColumn": 1
+    },
+    "metadata": {
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+        "parser": "repository",
+        "parserVersion": "1.0.0",
+        "source": "repository"
+      },
+      "tool": "typescript",
+      "module": "esnext",
+      "target": "ES2022"
+    }
+  }
+]

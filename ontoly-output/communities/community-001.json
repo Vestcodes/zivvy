@@ -1,0 +1,1885 @@
+{
+  "id": "community-001",
+  "stableId": "community:1taai57",
+  "nodeCount": 43,
+  "edgeCount": 46,
+  "nodeTypes": {
+    "BuildTarget": 1,
+    "Configuration": 3,
+    "Dependency": 23,
+    "Framework": 2,
+    "Package": 1,
+    "Script": 6,
+    "Task": 6,
+    "Workspace": 1
+  },
+  "relationshipTypes": {
+    "CONFIGURES": 3,
+    "CONTAINS": 10,
+    "DEPENDS_ON": 23,
+    "EXECUTES": 6,
+    "PROVIDES": 2,
+    "USES": 2
+  },
+  "representativeNodes": [
+    {
+      "id": "pkg:zivvy-web",
+      "type": "Package",
+      "name": "zivvy-web",
+      "file": "package.json"
+    },
+    {
+      "id": "workspace:zivvy-web",
+      "type": "Workspace",
+      "name": "zivvy-web"
+    },
+    {
+      "id": "config:package.json:package.json",
+      "type": "Configuration",
+      "name": "package.json",
+      "file": "package.json"
+    },
+    {
+      "id": "config:pnpm-workspace.yaml:pnpm-workspace",
+      "type": "Configuration",
+      "name": "pnpm-workspace",
+      "file": "pnpm-workspace.yaml"
+    },
+    {
+      "id": "config:tsconfig.json:tsconfig",
+      "type": "Configuration",
+      "name": "tsconfig",
+      "file": "tsconfig.json"
+    },
+    {
+      "id": "dep:next",
+      "type": "Dependency",
+      "name": "next"
+    },
+    {
+      "id": "dep:react",
+      "type": "Dependency",
+      "name": "react"
+    },
+    {
+      "id": "framework:Next.js",
+      "type": "Framework",
+      "name": "Next.js"
+    },
+    {
+      "id": "framework:React",
+      "type": "Framework",
+      "name": "React"
+    },
+    {
+      "id": "script:package.json:blog:generate",
+      "type": "Script",
+      "name": "blog:generate",
+      "file": "package.json"
+    }
+  ],
+  "representativeNodeIds": [
+    "config:package.json:package.json",
+    "config:pnpm-workspace.yaml:pnpm-workspace",
+    "config:tsconfig.json:tsconfig",
+    "dep:next",
+    "dep:react",
+    "framework:Next.js",
+    "framework:React",
+    "pkg:zivvy-web",
+    "script:package.json:blog:generate",
+    "workspace:zivvy-web"
+  ],
+  "nodes": [
+    {
+      "id": "config:package.json:package.json",
+      "type": "Configuration",
+      "name": "package.json",
+      "file": "package.json",
+      "span": {
+        "file": "package.json",
+        "startLine": 1,
+        "startColumn": 1,
+        "endLine": 1,
+        "endColumn": 1
+      },
+      "metadata": {
+        "provenance": {
+          "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+          "parser": "repository",
+          "parserVersion": "1.0.0",
+          "source": "repository"
+        },
+        "configurationKind": "package-manifest"
+      }
+    },
+    {
+      "id": "config:pnpm-workspace.yaml:pnpm-workspace",
+      "type": "Configuration",
+      "name": "pnpm-workspace",
+      "file": "pnpm-workspace.yaml",
+      "span": {
+        "file": "pnpm-workspace.yaml",
+        "startLine": 1,
+        "startColumn": 1,
+        "endLine": 1,
+        "endColumn": 1
+      },
+      "metadata": {
+        "provenance": {
+          "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+          "parser": "repository",
+          "parserVersion": "1.0.0",
+          "source": "repository"
+        },
+        "configurationKind": "workspace"
+      }
+    },
+    {
+      "id": "config:tsconfig.json:tsconfig",
+      "type": "Configuration",
+      "name": "tsconfig",
+      "file": "tsconfig.json",
+      "span": {
+        "file": "tsconfig.json",
+        "startLine": 1,
+        "startColumn": 1,
+        "endLine": 1,
+        "endColumn": 1
+      },
+      "metadata": {
+        "provenance": {
+          "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+          "parser": "repository",
+          "parserVersion": "1.0.0",
+          "source": "repository"
+        },
+        "configurationKind": "typescript"
+      }
+    },
+    {
+      "id": "dep:@radix-ui/react-icons",
+      "type": "Dependency",
+      "name": "@radix-ui/react-icons",
+      "metadata": {
+        "provenance": {
+          "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+          "parser": "repository",
+          "parserVersion": "1.0.0",
+          "source": "repository"
+        },
+        "range": "^1.3.2"
+      }
+    },
+    {
+      "id": "dep:@tailwindcss/postcss",
+      "type": "Dependency",
+      "name": "@tailwindcss/postcss",
+      "metadata": {
+        "provenance": {
+          "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+          "parser": "repository",
+          "parserVersion": "1.0.0",
+          "source": "repository"
+        },
+        "range": "^4.0.0"
+      }
+    },
+    {
+      "id": "dep:@tanstack/react-query",
+      "type": "Dependency",
+      "name": "@tanstack/react-query",
+      "metadata": {
+        "provenance": {
+          "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+          "parser": "repository",
+          "parserVersion": "1.0.0",
+          "source": "repository"
+        },
+        "range": "^5.101.4"
+      }
+    },
+    {
+      "id": "dep:@types/node",
+      "type": "Dependency",
+      "name": "@types/node",
+      "metadata": {
+        "provenance": {
+          "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+          "parser": "repository",
+          "parserVersion": "1.0.0",
+          "source": "repository"
+        },
+        "range": "^22.10.5"
+      }
+    },
+    {
+      "id": "dep:@types/react",
+      "type": "Dependency",
+      "name": "@types/react",
+      "metadata": {
+        "provenance": {
+          "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+          "parser": "repository",
+          "parserVersion": "1.0.0",
+          "source": "repository"
+        },
+        "range": "^19.0.4"
+      }
+    },
+    {
+      "id": "dep:@types/react-dom",
+      "type": "Dependency",
+      "name": "@types/react-dom",
+      "metadata": {
+        "provenance": {
+          "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+          "parser": "repository",
+          "parserVersion": "1.0.0",
+          "source": "repository"
+        },
+        "range": "^19.0.2"
+      }
+    },
+    {
+      "id": "dep:class-variance-authority",
+      "type": "Dependency",
+      "name": "class-variance-authority",
+      "metadata": {
+        "provenance": {
+          "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+          "parser": "repository",
+          "parserVersion": "1.0.0",
+          "source": "repository"
+        },
+        "range": "^0.7.1"
+      }
+    },
+    {
+      "id": "dep:clsx",
+      "type": "Dependency",
+      "name": "clsx",
+      "metadata": {
+        "provenance": {
+          "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+          "parser": "repository",
+          "parserVersion": "1.0.0",
+          "source": "repository"
+        },
+        "range": "^2.1.1"
+      }
+    },
+    {
+      "id": "dep:cmdk",
+      "type": "Dependency",
+      "name": "cmdk",
+      "metadata": {
+        "provenance": {
+          "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+          "parser": "repository",
+          "parserVersion": "1.0.0",
+          "source": "repository"
+        },
+        "range": "^1.1.1"
+      }
+    },
+    {
+      "id": "dep:frappe-react-sdk",
+      "type": "Dependency",
+      "name": "frappe-react-sdk",
+      "metadata": {
+        "provenance": {
+          "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+          "parser": "repository",
+          "parserVersion": "1.0.0",
+          "source": "repository"
+        },
+        "range": "^1.17.0"
+      }
+    },
+    {
+      "id": "dep:lucide-react",
+      "type": "Dependency",
+      "name": "lucide-react",
+      "metadata": {
+        "provenance": {
+          "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+          "parser": "repository",
+          "parserVersion": "1.0.0",
+          "source": "repository"
+        },
+        "range": "^0.469.0"
+      }
+    },
+    {
+      "id": "dep:motion",
+      "type": "Dependency",
+      "name": "motion",
+      "metadata": {
+        "provenance": {
+          "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+          "parser": "repository",
+          "parserVersion": "1.0.0",
+          "source": "repository"
+        },
+        "range": "^12.42.2"
+      }
+    },
+    {
+      "id": "dep:next",
+      "type": "Dependency",
+      "name": "next",
+      "metadata": {
+        "provenance": {
+          "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+          "parser": "repository",
+          "parserVersion": "1.0.0",
+          "source": "repository"
+        },
+        "range": "16.2.11"
+      }
+    },
+    {
+      "id": "dep:next-themes",
+      "type": "Dependency",
+      "name": "next-themes",
+      "metadata": {
+        "provenance": {
+          "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+          "parser": "repository",
+          "parserVersion": "1.0.0",
+          "source": "repository"
+        },
+        "range": "^0.4.6"
+      }
+    },
+    {
+      "id": "dep:postcss",
+      "type": "Dependency",
+      "name": "postcss",
+      "metadata": {
+        "provenance": {
+          "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+          "parser": "repository",
+          "parserVersion": "1.0.0",
+          "source": "repository"
+        },
+        "range": "^8.5.0"
+      }
+    },
+    {
+      "id": "dep:radix-ui",
+      "type": "Dependency",
+      "name": "radix-ui",
+      "metadata": {
+        "provenance": {
+          "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+          "parser": "repository",
+          "parserVersion": "1.0.0",
+          "source": "repository"
+        },
+        "range": "^1.6.4"
+      }
+    },
+    {
+      "id": "dep:react",
+      "type": "Dependency",
+      "name": "react",
+      "metadata": {
+        "provenance": {
+          "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+          "parser": "repository",
+          "parserVersion": "1.0.0",
+          "source": "repository"
+        },
+        "range": "^19.0.0"
+      }
+    },
+    {
+      "id": "dep:react-dom",
+      "type": "Dependency",
+      "name": "react-dom",
+      "metadata": {
+        "provenance": {
+          "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+          "parser": "repository",
+          "parserVersion": "1.0.0",
+          "source": "repository"
+        },
+        "range": "^19.0.0"
+      }
+    },
+    {
+      "id": "dep:sonner",
+      "type": "Dependency",
+      "name": "sonner",
+      "metadata": {
+        "provenance": {
+          "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+          "parser": "repository",
+          "parserVersion": "1.0.0",
+          "source": "repository"
+        },
+        "range": "^2.0.7"
+      }
+    },
+    {
+      "id": "dep:tailwind-merge",
+      "type": "Dependency",
+      "name": "tailwind-merge",
+      "metadata": {
+        "provenance": {
+          "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+          "parser": "repository",
+          "parserVersion": "1.0.0",
+          "source": "repository"
+        },
+        "range": "^2.6.0"
+      }
+    },
+    {
+      "id": "dep:tailwindcss",
+      "type": "Dependency",
+      "name": "tailwindcss",
+      "metadata": {
+        "provenance": {
+          "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+          "parser": "repository",
+          "parserVersion": "1.0.0",
+          "source": "repository"
+        },
+        "range": "^4.0.0"
+      }
+    },
+    {
+      "id": "dep:tw-animate-css",
+      "type": "Dependency",
+      "name": "tw-animate-css",
+      "metadata": {
+        "provenance": {
+          "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+          "parser": "repository",
+          "parserVersion": "1.0.0",
+          "source": "repository"
+        },
+        "range": "^1.4.0"
+      }
+    },
+    {
+      "id": "dep:typescript",
+      "type": "Dependency",
+      "name": "typescript",
+      "metadata": {
+        "provenance": {
+          "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+          "parser": "repository",
+          "parserVersion": "1.0.0",
+          "source": "repository"
+        },
+        "range": "^5.7.2"
+      }
+    },
+    {
+      "id": "framework:Next.js",
+      "type": "Framework",
+      "name": "Next.js",
+      "metadata": {
+        "provenance": {
+          "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+          "parser": "repository",
+          "parserVersion": "1.0.0",
+          "source": "repository"
+        },
+        "category": "frontend",
+        "detectedBy": "package.json dependency",
+        "packageName": "next"
+      }
+    },
+    {
+      "id": "framework:React",
+      "type": "Framework",
+      "name": "React",
+      "metadata": {
+        "provenance": {
+          "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+          "parser": "repository",
+          "parserVersion": "1.0.0",
+          "source": "repository"
+        },
+        "category": "frontend",
+        "detectedBy": "package.json dependency",
+        "packageName": "react"
+      }
+    },
+    {
+      "id": "pkg:zivvy-web",
+      "type": "Package",
+      "name": "zivvy-web",
+      "file": "package.json",
+      "span": {
+        "file": "package.json",
+        "startLine": 1,
+        "startColumn": 1,
+        "endLine": 1,
+        "endColumn": 1
+      },
+      "metadata": {
+        "provenance": {
+          "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+          "parser": "repository",
+          "parserVersion": "1.0.0",
+          "source": "repository"
+        },
+        "local": true,
+        "path": ".",
+        "private": true,
+        "version": "0.1.0"
+      }
+    },
+    {
+      "id": "script:package.json:blog:generate",
+      "type": "Script",
+      "name": "blog:generate",
+      "file": "package.json",
+      "span": {
+        "file": "package.json",
+        "startLine": 1,
+        "startColumn": 1,
+        "endLine": 1,
+        "endColumn": 1
+      },
+      "metadata": {
+        "provenance": {
+          "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+          "parser": "repository",
+          "parserVersion": "1.0.0",
+          "source": "repository"
+        },
+        "command": "node scripts/generate-blog-posts.mjs",
+        "packageId": "pkg:zivvy-web"
+      }
+    },
+    {
+      "id": "script:package.json:build",
+      "type": "Script",
+      "name": "build",
+      "file": "package.json",
+      "span": {
+        "file": "package.json",
+        "startLine": 1,
+        "startColumn": 1,
+        "endLine": 1,
+        "endColumn": 1
+      },
+      "metadata": {
+        "provenance": {
+          "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+          "parser": "repository",
+          "parserVersion": "1.0.0",
+          "source": "repository"
+        },
+        "command": "next build",
+        "packageId": "pkg:zivvy-web"
+      }
+    },
+    {
+      "id": "script:package.json:dev",
+      "type": "Script",
+      "name": "dev",
+      "file": "package.json",
+      "span": {
+        "file": "package.json",
+        "startLine": 1,
+        "startColumn": 1,
+        "endLine": 1,
+        "endColumn": 1
+      },
+      "metadata": {
+        "provenance": {
+          "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+          "parser": "repository",
+          "parserVersion": "1.0.0",
+          "source": "repository"
+        },
+        "command": "next dev -p 3000",
+        "packageId": "pkg:zivvy-web"
+      }
+    },
+    {
+      "id": "script:package.json:lint",
+      "type": "Script",
+      "name": "lint",
+      "file": "package.json",
+      "span": {
+        "file": "package.json",
+        "startLine": 1,
+        "startColumn": 1,
+        "endLine": 1,
+        "endColumn": 1
+      },
+      "metadata": {
+        "provenance": {
+          "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+          "parser": "repository",
+          "parserVersion": "1.0.0",
+          "source": "repository"
+        },
+        "command": "next lint",
+        "packageId": "pkg:zivvy-web"
+      }
+    },
+    {
+      "id": "script:package.json:start",
+      "type": "Script",
+      "name": "start",
+      "file": "package.json",
+      "span": {
+        "file": "package.json",
+        "startLine": 1,
+        "startColumn": 1,
+        "endLine": 1,
+        "endColumn": 1
+      },
+      "metadata": {
+        "provenance": {
+          "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+          "parser": "repository",
+          "parserVersion": "1.0.0",
+          "source": "repository"
+        },
+        "command": "next start -p ${PORT:-3000}",
+        "packageId": "pkg:zivvy-web"
+      }
+    },
+    {
+      "id": "script:package.json:typecheck",
+      "type": "Script",
+      "name": "typecheck",
+      "file": "package.json",
+      "span": {
+        "file": "package.json",
+        "startLine": 1,
+        "startColumn": 1,
+        "endLine": 1,
+        "endColumn": 1
+      },
+      "metadata": {
+        "provenance": {
+          "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+          "parser": "repository",
+          "parserVersion": "1.0.0",
+          "source": "repository"
+        },
+        "command": "tsc --noEmit",
+        "packageId": "pkg:zivvy-web"
+      }
+    },
+    {
+      "id": "target:tsconfig.json:typescript",
+      "type": "BuildTarget",
+      "name": "typescript",
+      "file": "tsconfig.json",
+      "span": {
+        "file": "tsconfig.json",
+        "startLine": 1,
+        "startColumn": 1,
+        "endLine": 1,
+        "endColumn": 1
+      },
+      "metadata": {
+        "provenance": {
+          "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+          "parser": "repository",
+          "parserVersion": "1.0.0",
+          "source": "repository"
+        },
+        "tool": "typescript",
+        "module": "esnext",
+        "target": "ES2022"
+      }
+    },
+    {
+      "id": "task:package.json:zivvy-web:blog:generate",
+      "type": "Task",
+      "name": "zivvy-web:blog:generate",
+      "file": "package.json",
+      "span": {
+        "file": "package.json",
+        "startLine": 1,
+        "startColumn": 1,
+        "endLine": 1,
+        "endColumn": 1
+      },
+      "metadata": {
+        "provenance": {
+          "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+          "parser": "repository",
+          "parserVersion": "1.0.0",
+          "source": "repository"
+        },
+        "command": "node scripts/generate-blog-posts.mjs",
+        "source": "package.json"
+      }
+    },
+    {
+      "id": "task:package.json:zivvy-web:build",
+      "type": "Task",
+      "name": "zivvy-web:build",
+      "file": "package.json",
+      "span": {
+        "file": "package.json",
+        "startLine": 1,
+        "startColumn": 1,
+        "endLine": 1,
+        "endColumn": 1
+      },
+      "metadata": {
+        "provenance": {
+          "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+          "parser": "repository",
+          "parserVersion": "1.0.0",
+          "source": "repository"
+        },
+        "command": "next build",
+        "source": "package.json"
+      }
+    },
+    {
+      "id": "task:package.json:zivvy-web:dev",
+      "type": "Task",
+      "name": "zivvy-web:dev",
+      "file": "package.json",
+      "span": {
+        "file": "package.json",
+        "startLine": 1,
+        "startColumn": 1,
+        "endLine": 1,
+        "endColumn": 1
+      },
+      "metadata": {
+        "provenance": {
+          "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+          "parser": "repository",
+          "parserVersion": "1.0.0",
+          "source": "repository"
+        },
+        "command": "next dev -p 3000",
+        "source": "package.json"
+      }
+    },
+    {
+      "id": "task:package.json:zivvy-web:lint",
+      "type": "Task",
+      "name": "zivvy-web:lint",
+      "file": "package.json",
+      "span": {
+        "file": "package.json",
+        "startLine": 1,
+        "startColumn": 1,
+        "endLine": 1,
+        "endColumn": 1
+      },
+      "metadata": {
+        "provenance": {
+          "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+          "parser": "repository",
+          "parserVersion": "1.0.0",
+          "source": "repository"
+        },
+        "command": "next lint",
+        "source": "package.json"
+      }
+    },
+    {
+      "id": "task:package.json:zivvy-web:start",
+      "type": "Task",
+      "name": "zivvy-web:start",
+      "file": "package.json",
+      "span": {
+        "file": "package.json",
+        "startLine": 1,
+        "startColumn": 1,
+        "endLine": 1,
+        "endColumn": 1
+      },
+      "metadata": {
+        "provenance": {
+          "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+          "parser": "repository",
+          "parserVersion": "1.0.0",
+          "source": "repository"
+        },
+        "command": "next start -p ${PORT:-3000}",
+        "source": "package.json"
+      }
+    },
+    {
+      "id": "task:package.json:zivvy-web:typecheck",
+      "type": "Task",
+      "name": "zivvy-web:typecheck",
+      "file": "package.json",
+      "span": {
+        "file": "package.json",
+        "startLine": 1,
+        "startColumn": 1,
+        "endLine": 1,
+        "endColumn": 1
+      },
+      "metadata": {
+        "provenance": {
+          "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+          "parser": "repository",
+          "parserVersion": "1.0.0",
+          "source": "repository"
+        },
+        "command": "tsc --noEmit",
+        "source": "package.json"
+      }
+    },
+    {
+      "id": "workspace:zivvy-web",
+      "type": "Workspace",
+      "name": "zivvy-web",
+      "metadata": {
+        "provenance": {
+          "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+          "parser": "repository",
+          "parserVersion": "1.0.0",
+          "source": "repository"
+        },
+        "root": "/Users/shrey/Desktop/work/zivvy-web",
+        "packageName": "zivvy-web",
+        "packageManager": "pnpm@11.6.0"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge:configures:0bsoghp",
+      "type": "CONFIGURES",
+      "from": "config:tsconfig.json:tsconfig",
+      "to": "target:tsconfig.json:typescript",
+      "evidence": [
+        {
+          "kind": "config",
+          "confidence": "exact",
+          "span": {
+            "file": "tsconfig.json",
+            "startLine": 1,
+            "startColumn": 1,
+            "endLine": 1,
+            "endColumn": 1
+          },
+          "description": "tsconfig configures TypeScript build target"
+        }
+      ]
+    },
+    {
+      "id": "edge:configures:0vpaq75",
+      "type": "CONFIGURES",
+      "from": "config:pnpm-workspace.yaml:pnpm-workspace",
+      "to": "workspace:zivvy-web",
+      "evidence": [
+        {
+          "kind": "config",
+          "confidence": "exact",
+          "span": {
+            "file": "pnpm-workspace.yaml",
+            "startLine": 1,
+            "startColumn": 1,
+            "endLine": 1,
+            "endColumn": 1
+          },
+          "description": "pnpm workspace configures workspace"
+        }
+      ],
+      "metadata": {
+        "packagePatterns": []
+      }
+    },
+    {
+      "id": "edge:configures:1cwfrxx",
+      "type": "CONFIGURES",
+      "from": "config:package.json:package.json",
+      "to": "pkg:zivvy-web",
+      "evidence": [
+        {
+          "kind": "config",
+          "confidence": "exact",
+          "span": {
+            "file": "package.json",
+            "startLine": 1,
+            "startColumn": 1,
+            "endLine": 1,
+            "endColumn": 1
+          },
+          "description": "package manifest configures package"
+        }
+      ]
+    },
+    {
+      "id": "edge:contains:04ryxvh",
+      "type": "CONTAINS",
+      "from": "workspace:zivvy-web",
+      "to": "config:pnpm-workspace.yaml:pnpm-workspace",
+      "evidence": [
+        {
+          "kind": "config",
+          "confidence": "exact",
+          "span": {
+            "file": "pnpm-workspace.yaml",
+            "startLine": 1,
+            "startColumn": 1,
+            "endLine": 1,
+            "endColumn": 1
+          },
+          "description": "workspace contains configuration"
+        }
+      ]
+    },
+    {
+      "id": "edge:contains:0aw704b",
+      "type": "CONTAINS",
+      "from": "pkg:zivvy-web",
+      "to": "script:package.json:blog:generate",
+      "evidence": [
+        {
+          "kind": "config",
+          "confidence": "exact",
+          "span": {
+            "file": "package.json",
+            "startLine": 1,
+            "startColumn": 1,
+            "endLine": 1,
+            "endColumn": 1
+          },
+          "description": "package contains script"
+        }
+      ]
+    },
+    {
+      "id": "edge:contains:0hcq6zi",
+      "type": "CONTAINS",
+      "from": "workspace:zivvy-web",
+      "to": "config:package.json:package.json",
+      "evidence": [
+        {
+          "kind": "config",
+          "confidence": "exact",
+          "span": {
+            "file": "package.json",
+            "startLine": 1,
+            "startColumn": 1,
+            "endLine": 1,
+            "endColumn": 1
+          },
+          "description": "workspace contains configuration"
+        }
+      ]
+    },
+    {
+      "id": "edge:contains:0i1w2za",
+      "type": "CONTAINS",
+      "from": "pkg:zivvy-web",
+      "to": "script:package.json:start",
+      "evidence": [
+        {
+          "kind": "config",
+          "confidence": "exact",
+          "span": {
+            "file": "package.json",
+            "startLine": 1,
+            "startColumn": 1,
+            "endLine": 1,
+            "endColumn": 1
+          },
+          "description": "package contains script"
+        }
+      ]
+    },
+    {
+      "id": "edge:contains:0lwia0e",
+      "type": "CONTAINS",
+      "from": "pkg:zivvy-web",
+      "to": "script:package.json:build",
+      "evidence": [
+        {
+          "kind": "config",
+          "confidence": "exact",
+          "span": {
+            "file": "package.json",
+            "startLine": 1,
+            "startColumn": 1,
+            "endLine": 1,
+            "endColumn": 1
+          },
+          "description": "package contains script"
+        }
+      ]
+    },
+    {
+      "id": "edge:contains:1eb4ihb",
+      "type": "CONTAINS",
+      "from": "workspace:zivvy-web",
+      "to": "pkg:zivvy-web",
+      "evidence": [
+        {
+          "kind": "config",
+          "confidence": "exact",
+          "span": {
+            "file": "package.json",
+            "startLine": 1,
+            "startColumn": 1,
+            "endLine": 1,
+            "endColumn": 1
+          },
+          "description": "workspace contains package"
+        }
+      ]
+    },
+    {
+      "id": "edge:contains:1mjnh65",
+      "type": "CONTAINS",
+      "from": "pkg:zivvy-web",
+      "to": "script:package.json:dev",
+      "evidence": [
+        {
+          "kind": "config",
+          "confidence": "exact",
+          "span": {
+            "file": "package.json",
+            "startLine": 1,
+            "startColumn": 1,
+            "endLine": 1,
+            "endColumn": 1
+          },
+          "description": "package contains script"
+        }
+      ]
+    },
+    {
+      "id": "edge:contains:1o2ap5r",
+      "type": "CONTAINS",
+      "from": "pkg:zivvy-web",
+      "to": "script:package.json:lint",
+      "evidence": [
+        {
+          "kind": "config",
+          "confidence": "exact",
+          "span": {
+            "file": "package.json",
+            "startLine": 1,
+            "startColumn": 1,
+            "endLine": 1,
+            "endColumn": 1
+          },
+          "description": "package contains script"
+        }
+      ]
+    },
+    {
+      "id": "edge:contains:1vq5g8q",
+      "type": "CONTAINS",
+      "from": "workspace:zivvy-web",
+      "to": "config:tsconfig.json:tsconfig",
+      "evidence": [
+        {
+          "kind": "config",
+          "confidence": "exact",
+          "span": {
+            "file": "tsconfig.json",
+            "startLine": 1,
+            "startColumn": 1,
+            "endLine": 1,
+            "endColumn": 1
+          },
+          "description": "workspace contains configuration"
+        }
+      ]
+    },
+    {
+      "id": "edge:contains:1w6z15y",
+      "type": "CONTAINS",
+      "from": "pkg:zivvy-web",
+      "to": "script:package.json:typecheck",
+      "evidence": [
+        {
+          "kind": "config",
+          "confidence": "exact",
+          "span": {
+            "file": "package.json",
+            "startLine": 1,
+            "startColumn": 1,
+            "endLine": 1,
+            "endColumn": 1
+          },
+          "description": "package contains script"
+        }
+      ]
+    },
+    {
+      "id": "edge:depends_on:046bnbz",
+      "type": "DEPENDS_ON",
+      "from": "pkg:zivvy-web",
+      "to": "dep:react",
+      "evidence": [
+        {
+          "kind": "config",
+          "confidence": "exact",
+          "span": {
+            "file": "package.json",
+            "startLine": 1,
+            "startColumn": 1,
+            "endLine": 1,
+            "endColumn": 1
+          },
+          "description": "package dependencies includes react"
+        }
+      ],
+      "metadata": {
+        "dependencyType": "dependencies",
+        "range": "^19.0.0"
+      }
+    },
+    {
+      "id": "edge:depends_on:07ipewk",
+      "type": "DEPENDS_ON",
+      "from": "pkg:zivvy-web",
+      "to": "dep:clsx",
+      "evidence": [
+        {
+          "kind": "config",
+          "confidence": "exact",
+          "span": {
+            "file": "package.json",
+            "startLine": 1,
+            "startColumn": 1,
+            "endLine": 1,
+            "endColumn": 1
+          },
+          "description": "package dependencies includes clsx"
+        }
+      ],
+      "metadata": {
+        "dependencyType": "dependencies",
+        "range": "^2.1.1"
+      }
+    },
+    {
+      "id": "edge:depends_on:07obo44",
+      "type": "DEPENDS_ON",
+      "from": "pkg:zivvy-web",
+      "to": "dep:@types/react-dom",
+      "evidence": [
+        {
+          "kind": "config",
+          "confidence": "exact",
+          "span": {
+            "file": "package.json",
+            "startLine": 1,
+            "startColumn": 1,
+            "endLine": 1,
+            "endColumn": 1
+          },
+          "description": "package devDependencies includes @types/react-dom"
+        }
+      ],
+      "metadata": {
+        "dependencyType": "devDependencies",
+        "range": "^19.0.2"
+      }
+    },
+    {
+      "id": "edge:depends_on:0bowyrc",
+      "type": "DEPENDS_ON",
+      "from": "pkg:zivvy-web",
+      "to": "dep:@tanstack/react-query",
+      "evidence": [
+        {
+          "kind": "config",
+          "confidence": "exact",
+          "span": {
+            "file": "package.json",
+            "startLine": 1,
+            "startColumn": 1,
+            "endLine": 1,
+            "endColumn": 1
+          },
+          "description": "package dependencies includes @tanstack/react-query"
+        }
+      ],
+      "metadata": {
+        "dependencyType": "dependencies",
+        "range": "^5.101.4"
+      }
+    },
+    {
+      "id": "edge:depends_on:0fuw390",
+      "type": "DEPENDS_ON",
+      "from": "pkg:zivvy-web",
+      "to": "dep:class-variance-authority",
+      "evidence": [
+        {
+          "kind": "config",
+          "confidence": "exact",
+          "span": {
+            "file": "package.json",
+            "startLine": 1,
+            "startColumn": 1,
+            "endLine": 1,
+            "endColumn": 1
+          },
+          "description": "package dependencies includes class-variance-authority"
+        }
+      ],
+      "metadata": {
+        "dependencyType": "dependencies",
+        "range": "^0.7.1"
+      }
+    },
+    {
+      "id": "edge:depends_on:0j3qdg2",
+      "type": "DEPENDS_ON",
+      "from": "pkg:zivvy-web",
+      "to": "dep:lucide-react",
+      "evidence": [
+        {
+          "kind": "config",
+          "confidence": "exact",
+          "span": {
+            "file": "package.json",
+            "startLine": 1,
+            "startColumn": 1,
+            "endLine": 1,
+            "endColumn": 1
+          },
+          "description": "package dependencies includes lucide-react"
+        }
+      ],
+      "metadata": {
+        "dependencyType": "dependencies",
+        "range": "^0.469.0"
+      }
+    },
+    {
+      "id": "edge:depends_on:0k2dodt",
+      "type": "DEPENDS_ON",
+      "from": "pkg:zivvy-web",
+      "to": "dep:postcss",
+      "evidence": [
+        {
+          "kind": "config",
+          "confidence": "exact",
+          "span": {
+            "file": "package.json",
+            "startLine": 1,
+            "startColumn": 1,
+            "endLine": 1,
+            "endColumn": 1
+          },
+          "description": "package devDependencies includes postcss"
+        }
+      ],
+      "metadata": {
+        "dependencyType": "devDependencies",
+        "range": "^8.5.0"
+      }
+    },
+    {
+      "id": "edge:depends_on:0svxdv6",
+      "type": "DEPENDS_ON",
+      "from": "pkg:zivvy-web",
+      "to": "dep:motion",
+      "evidence": [
+        {
+          "kind": "config",
+          "confidence": "exact",
+          "span": {
+            "file": "package.json",
+            "startLine": 1,
+            "startColumn": 1,
+            "endLine": 1,
+            "endColumn": 1
+          },
+          "description": "package dependencies includes motion"
+        }
+      ],
+      "metadata": {
+        "dependencyType": "dependencies",
+        "range": "^12.42.2"
+      }
+    },
+    {
+      "id": "edge:depends_on:0xklh52",
+      "type": "DEPENDS_ON",
+      "from": "pkg:zivvy-web",
+      "to": "dep:next-themes",
+      "evidence": [
+        {
+          "kind": "config",
+          "confidence": "exact",
+          "span": {
+            "file": "package.json",
+            "startLine": 1,
+            "startColumn": 1,
+            "endLine": 1,
+            "endColumn": 1
+          },
+          "description": "package dependencies includes next-themes"
+        }
+      ],
+      "metadata": {
+        "dependencyType": "dependencies",
+        "range": "^0.4.6"
+      }
+    },
+    {
+      "id": "edge:depends_on:0z3ksup",
+      "type": "DEPENDS_ON",
+      "from": "pkg:zivvy-web",
+      "to": "dep:tw-animate-css",
+      "evidence": [
+        {
+          "kind": "config",
+          "confidence": "exact",
+          "span": {
+            "file": "package.json",
+            "startLine": 1,
+            "startColumn": 1,
+            "endLine": 1,
+            "endColumn": 1
+          },
+          "description": "package dependencies includes tw-animate-css"
+        }
+      ],
+      "metadata": {
+        "dependencyType": "dependencies",
+        "range": "^1.4.0"
+      }
+    },
+    {
+      "id": "edge:depends_on:0zs9xms",
+      "type": "DEPENDS_ON",
+      "from": "pkg:zivvy-web",
+      "to": "dep:@radix-ui/react-icons",
+      "evidence": [
+        {
+          "kind": "config",
+          "confidence": "exact",
+          "span": {
+            "file": "package.json",
+            "startLine": 1,
+            "startColumn": 1,
+            "endLine": 1,
+            "endColumn": 1
+          },
+          "description": "package dependencies includes @radix-ui/react-icons"
+        }
+      ],
+      "metadata": {
+        "dependencyType": "dependencies",
+        "range": "^1.3.2"
+      }
+    },
+    {
+      "id": "edge:depends_on:101bxfv",
+      "type": "DEPENDS_ON",
+      "from": "pkg:zivvy-web",
+      "to": "dep:typescript",
+      "evidence": [
+        {
+          "kind": "config",
+          "confidence": "exact",
+          "span": {
+            "file": "package.json",
+            "startLine": 1,
+            "startColumn": 1,
+            "endLine": 1,
+            "endColumn": 1
+          },
+          "description": "package devDependencies includes typescript"
+        }
+      ],
+      "metadata": {
+        "dependencyType": "devDependencies",
+        "range": "^5.7.2"
+      }
+    },
+    {
+      "id": "edge:depends_on:10uaxoh",
+      "type": "DEPENDS_ON",
+      "from": "pkg:zivvy-web",
+      "to": "dep:next",
+      "evidence": [
+        {
+          "kind": "config",
+          "confidence": "exact",
+          "span": {
+            "file": "package.json",
+            "startLine": 1,
+            "startColumn": 1,
+            "endLine": 1,
+            "endColumn": 1
+          },
+          "description": "package dependencies includes next"
+        }
+      ],
+      "metadata": {
+        "dependencyType": "dependencies",
+        "range": "16.2.11"
+      }
+    },
+    {
+      "id": "edge:depends_on:1447umf",
+      "type": "DEPENDS_ON",
+      "from": "pkg:zivvy-web",
+      "to": "dep:tailwindcss",
+      "evidence": [
+        {
+          "kind": "config",
+          "confidence": "exact",
+          "span": {
+            "file": "package.json",
+            "startLine": 1,
+            "startColumn": 1,
+            "endLine": 1,
+            "endColumn": 1
+          },
+          "description": "package devDependencies includes tailwindcss"
+        }
+      ],
+      "metadata": {
+        "dependencyType": "devDependencies",
+        "range": "^4.0.0"
+      }
+    },
+    {
+      "id": "edge:depends_on:14t8k03",
+      "type": "DEPENDS_ON",
+      "from": "pkg:zivvy-web",
+      "to": "dep:radix-ui",
+      "evidence": [
+        {
+          "kind": "config",
+          "confidence": "exact",
+          "span": {
+            "file": "package.json",
+            "startLine": 1,
+            "startColumn": 1,
+            "endLine": 1,
+            "endColumn": 1
+          },
+          "description": "package dependencies includes radix-ui"
+        }
+      ],
+      "metadata": {
+        "dependencyType": "dependencies",
+        "range": "^1.6.4"
+      }
+    },
+    {
+      "id": "edge:depends_on:18amijm",
+      "type": "DEPENDS_ON",
+      "from": "pkg:zivvy-web",
+      "to": "dep:react-dom",
+      "evidence": [
+        {
+          "kind": "config",
+          "confidence": "exact",
+          "span": {
+            "file": "package.json",
+            "startLine": 1,
+            "startColumn": 1,
+            "endLine": 1,
+            "endColumn": 1
+          },
+          "description": "package dependencies includes react-dom"
+        }
+      ],
+      "metadata": {
+        "dependencyType": "dependencies",
+        "range": "^19.0.0"
+      }
+    },
+    {
+      "id": "edge:depends_on:1ep7pd1",
+      "type": "DEPENDS_ON",
+      "from": "pkg:zivvy-web",
+      "to": "dep:frappe-react-sdk",
+      "evidence": [
+        {
+          "kind": "config",
+          "confidence": "exact",
+          "span": {
+            "file": "package.json",
+            "startLine": 1,
+            "startColumn": 1,
+            "endLine": 1,
+            "endColumn": 1
+          },
+          "description": "package dependencies includes frappe-react-sdk"
+        }
+      ],
+      "metadata": {
+        "dependencyType": "dependencies",
+        "range": "^1.17.0"
+      }
+    },
+    {
+      "id": "edge:depends_on:1ffc7jd",
+      "type": "DEPENDS_ON",
+      "from": "pkg:zivvy-web",
+      "to": "dep:cmdk",
+      "evidence": [
+        {
+          "kind": "config",
+          "confidence": "exact",
+          "span": {
+            "file": "package.json",
+            "startLine": 1,
+            "startColumn": 1,
+            "endLine": 1,
+            "endColumn": 1
+          },
+          "description": "package dependencies includes cmdk"
+        }
+      ],
+      "metadata": {
+        "dependencyType": "dependencies",
+        "range": "^1.1.1"
+      }
+    },
+    {
+      "id": "edge:depends_on:1ju2yh5",
+      "type": "DEPENDS_ON",
+      "from": "pkg:zivvy-web",
+      "to": "dep:sonner",
+      "evidence": [
+        {
+          "kind": "config",
+          "confidence": "exact",
+          "span": {
+            "file": "package.json",
+            "startLine": 1,
+            "startColumn": 1,
+            "endLine": 1,
+            "endColumn": 1
+          },
+          "description": "package dependencies includes sonner"
+        }
+      ],
+      "metadata": {
+        "dependencyType": "dependencies",
+        "range": "^2.0.7"
+      }
+    },
+    {
+      "id": "edge:depends_on:1m6897a",
+      "type": "DEPENDS_ON",
+      "from": "pkg:zivvy-web",
+      "to": "dep:@types/node",
+      "evidence": [
+        {
+          "kind": "config",
+          "confidence": "exact",
+          "span": {
+            "file": "package.json",
+            "startLine": 1,
+            "startColumn": 1,
+            "endLine": 1,
+            "endColumn": 1
+          },
+          "description": "package devDependencies includes @types/node"
+        }
+      ],
+      "metadata": {
+        "dependencyType": "devDependencies",
+        "range": "^22.10.5"
+      }
+    },
+    {
+      "id": "edge:depends_on:1n62xp5",
+      "type": "DEPENDS_ON",
+      "from": "pkg:zivvy-web",
+      "to": "dep:@tailwindcss/postcss",
+      "evidence": [
+        {
+          "kind": "config",
+          "confidence": "exact",
+          "span": {
+            "file": "package.json",
+            "startLine": 1,
+            "startColumn": 1,
+            "endLine": 1,
+            "endColumn": 1
+          },
+          "description": "package devDependencies includes @tailwindcss/postcss"
+        }
+      ],
+      "metadata": {
+        "dependencyType": "devDependencies",
+        "range": "^4.0.0"
+      }
+    },
+    {
+      "id": "edge:depends_on:1w4wegt",
+      "type": "DEPENDS_ON",
+      "from": "pkg:zivvy-web",
+      "to": "dep:tailwind-merge",
+      "evidence": [
+        {
+          "kind": "config",
+          "confidence": "exact",
+          "span": {
+            "file": "package.json",
+            "startLine": 1,
+            "startColumn": 1,
+            "endLine": 1,
+            "endColumn": 1
+          },
+          "description": "package dependencies includes tailwind-merge"
+        }
+      ],
+      "metadata": {
+        "dependencyType": "dependencies",
+        "range": "^2.6.0"
+      }
+    },
+    {
+      "id": "edge:depends_on:1wa1gz9",
+      "type": "DEPENDS_ON",
+      "from": "pkg:zivvy-web",
+      "to": "dep:@types/react",
+      "evidence": [
+        {
+          "kind": "config",
+          "confidence": "exact",
+          "span": {
+            "file": "package.json",
+            "startLine": 1,
+            "startColumn": 1,
+            "endLine": 1,
+            "endColumn": 1
+          },
+          "description": "package devDependencies includes @types/react"
+        }
+      ],
+      "metadata": {
+        "dependencyType": "devDependencies",
+        "range": "^19.0.4"
+      }
+    },
+    {
+      "id": "edge:executes:08mhq4m",
+      "type": "EXECUTES",
+      "from": "script:package.json:blog:generate",
+      "to": "task:package.json:zivvy-web:blog:generate",
+      "evidence": [
+        {
+          "kind": "config",
+          "confidence": "exact",
+          "span": {
+            "file": "package.json",
+            "startLine": 1,
+            "startColumn": 1,
+            "endLine": 1,
+            "endColumn": 1
+          },
+          "description": "script executes task"
+        }
+      ]
+    },
+    {
+      "id": "edge:executes:0e51ox2",
+      "type": "EXECUTES",
+      "from": "script:package.json:build",
+      "to": "task:package.json:zivvy-web:build",
+      "evidence": [
+        {
+          "kind": "config",
+          "confidence": "exact",
+          "span": {
+            "file": "package.json",
+            "startLine": 1,
+            "startColumn": 1,
+            "endLine": 1,
+            "endColumn": 1
+          },
+          "description": "script executes task"
+        }
+      ]
+    },
+    {
+      "id": "edge:executes:0ifv9hm",
+      "type": "EXECUTES",
+      "from": "script:package.json:start",
+      "to": "task:package.json:zivvy-web:start",
+      "evidence": [
+        {
+          "kind": "config",
+          "confidence": "exact",
+          "span": {
+            "file": "package.json",
+            "startLine": 1,
+            "startColumn": 1,
+            "endLine": 1,
+            "endColumn": 1
+          },
+          "description": "script executes task"
+        }
+      ]
+    },
+    {
+      "id": "edge:executes:0rm5p4i",
+      "type": "EXECUTES",
+      "from": "script:package.json:dev",
+      "to": "task:package.json:zivvy-web:dev",
+      "evidence": [
+        {
+          "kind": "config",
+          "confidence": "exact",
+          "span": {
+            "file": "package.json",
+            "startLine": 1,
+            "startColumn": 1,
+            "endLine": 1,
+            "endColumn": 1
+          },
+          "description": "script executes task"
+        }
+      ]
+    },
+    {
+      "id": "edge:executes:0ydp11q",
+      "type": "EXECUTES",
+      "from": "script:package.json:typecheck",
+      "to": "task:package.json:zivvy-web:typecheck",
+      "evidence": [
+        {
+          "kind": "config",
+          "confidence": "exact",
+          "span": {
+            "file": "package.json",
+            "startLine": 1,
+            "startColumn": 1,
+            "endLine": 1,
+            "endColumn": 1
+          },
+          "description": "script executes task"
+        }
+      ]
+    },
+    {
+      "id": "edge:executes:1upaagk",
+      "type": "EXECUTES",
+      "from": "script:package.json:lint",
+      "to": "task:package.json:zivvy-web:lint",
+      "evidence": [
+        {
+          "kind": "config",
+          "confidence": "exact",
+          "span": {
+            "file": "package.json",
+            "startLine": 1,
+            "startColumn": 1,
+            "endLine": 1,
+            "endColumn": 1
+          },
+          "description": "script executes task"
+        }
+      ]
+    },
+    {
+      "id": "edge:provides:119p3th",
+      "type": "PROVIDES",
+      "from": "dep:next",
+      "to": "framework:Next.js",
+      "evidence": [
+        {
+          "kind": "config",
+          "confidence": "exact",
+          "span": {
+            "file": "package.json",
+            "startLine": 1,
+            "startColumn": 1,
+            "endLine": 1,
+            "endColumn": 1
+          },
+          "description": "dependency provides framework"
+        }
+      ],
+      "metadata": {
+        "packageName": "next"
+      }
+    },
+    {
+      "id": "edge:provides:186kqbe",
+      "type": "PROVIDES",
+      "from": "dep:react",
+      "to": "framework:React",
+      "evidence": [
+        {
+          "kind": "config",
+          "confidence": "exact",
+          "span": {
+            "file": "package.json",
+            "startLine": 1,
+            "startColumn": 1,
+            "endLine": 1,
+            "endColumn": 1
+          },
+          "description": "dependency provides framework"
+        }
+      ],
+      "metadata": {
+        "packageName": "react"
+      }
+    },
+    {
+      "id": "edge:uses:0lub6ta",
+      "type": "USES",
+      "from": "pkg:zivvy-web",
+      "to": "framework:Next.js",
+      "evidence": [
+        {
+          "kind": "config",
+          "confidence": "exact",
+          "span": {
+            "file": "package.json",
+            "startLine": 1,
+            "startColumn": 1,
+            "endLine": 1,
+            "endColumn": 1
+          },
+          "description": "package uses framework through dependency"
+        }
+      ],
+      "metadata": {
+        "packageName": "next"
+      }
+    },
+    {
+      "id": "edge:uses:14xgm97",
+      "type": "USES",
+      "from": "pkg:zivvy-web",
+      "to": "framework:React",
+      "evidence": [
+        {
+          "kind": "config",
+          "confidence": "exact",
+          "span": {
+            "file": "package.json",
+            "startLine": 1,
+            "startColumn": 1,
+            "endLine": 1,
+            "endColumn": 1
+          },
+          "description": "package uses framework through dependency"
+        }
+      ],
+      "metadata": {
+        "packageName": "react"
+      }
+    }
+  ]
+}

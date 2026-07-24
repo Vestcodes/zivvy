@@ -1,0 +1,401 @@
+[
+  {
+    "id": "pkg:@radix-ui/react-icons",
+    "type": "Package",
+    "name": "@radix-ui/react-icons",
+    "span": {
+      "file": "components/ui/bento-grid.tsx",
+      "startLine": 2,
+      "startColumn": 1,
+      "endLine": 2,
+      "endColumn": 55
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "external": true
+    }
+  },
+  {
+    "id": "pkg:@tanstack/react-query",
+    "type": "Package",
+    "name": "@tanstack/react-query",
+    "span": {
+      "file": "components/query-provider.tsx",
+      "startLine": 4,
+      "startColumn": 1,
+      "endLine": 4,
+      "endColumn": 74
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "external": true
+    }
+  },
+  {
+    "id": "pkg:class-variance-authority",
+    "type": "Package",
+    "name": "class-variance-authority",
+    "span": {
+      "file": "components/ui/alert.tsx",
+      "startLine": 2,
+      "startColumn": 1,
+      "endLine": 2,
+      "endColumn": 66
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "external": true
+    }
+  },
+  {
+    "id": "pkg:clsx",
+    "type": "Package",
+    "name": "clsx",
+    "span": {
+      "file": "lib/utils.ts",
+      "startLine": 1,
+      "startColumn": 1,
+      "endLine": 1,
+      "endColumn": 46
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "external": true
+    }
+  },
+  {
+    "id": "pkg:cmdk",
+    "type": "Package",
+    "name": "cmdk",
+    "span": {
+      "file": "components/ui/command.tsx",
+      "startLine": 4,
+      "startColumn": 1,
+      "endLine": 4,
+      "endColumn": 51
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "external": true
+    }
+  },
+  {
+    "id": "pkg:lucide-react",
+    "type": "Package",
+    "name": "lucide-react",
+    "span": {
+      "file": "app/(app)/finance/reports/page.tsx",
+      "startLine": 3,
+      "startColumn": 1,
+      "endLine": 10,
+      "endColumn": 23
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "external": true
+    }
+  },
+  {
+    "id": "pkg:motion",
+    "type": "Package",
+    "name": "motion",
+    "span": {
+      "file": "components/ui/animated-grid-pattern.tsx",
+      "startLine": 11,
+      "startColumn": 1,
+      "endLine": 11,
+      "endColumn": 38
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "external": true
+    }
+  },
+  {
+    "id": "pkg:next",
+    "type": "Package",
+    "name": "next",
+    "span": {
+      "file": "app/(app)/[mod]/[doctype]/[name]/page.tsx",
+      "startLine": 2,
+      "startColumn": 1,
+      "endLine": 2,
+      "endColumn": 38
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "external": true
+    }
+  },
+  {
+    "id": "pkg:next-themes",
+    "type": "Package",
+    "name": "next-themes",
+    "span": {
+      "file": "components/theme-provider.tsx",
+      "startLine": 4,
+      "startColumn": 1,
+      "endLine": 4,
+      "endColumn": 67
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "external": true
+    }
+  },
+  {
+    "id": "pkg:node:fs",
+    "type": "Package",
+    "name": "node:fs",
+    "span": {
+      "file": "lib/blog.ts",
+      "startLine": 1,
+      "startColumn": 1,
+      "endLine": 1,
+      "endColumn": 26
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "external": true
+    }
+  },
+  {
+    "id": "pkg:node:path",
+    "type": "Package",
+    "name": "node:path",
+    "span": {
+      "file": "lib/blog.ts",
+      "startLine": 2,
+      "startColumn": 1,
+      "endLine": 2,
+      "endColumn": 30
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "external": true
+    }
+  },
+  {
+    "id": "pkg:radix-ui",
+    "type": "Package",
+    "name": "radix-ui",
+    "span": {
+      "file": "components/ui/accordion.tsx",
+      "startLine": 5,
+      "startColumn": 1,
+      "endLine": 5,
+      "endColumn": 59
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "external": true
+    }
+  },
+  {
+    "id": "pkg:react",
+    "type": "Package",
+    "name": "react",
+    "span": {
+      "file": "components/app/awesomebar.tsx",
+      "startLine": 3,
+      "startColumn": 1,
+      "endLine": 3,
+      "endColumn": 45
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "external": true
+    }
+  },
+  {
+    "id": "pkg:react-dom",
+    "type": "Package",
+    "name": "react-dom",
+    "span": {
+      "file": "components/ui/hero-video-dialog.tsx",
+      "startLine": 4,
+      "startColumn": 1,
+      "endLine": 4,
+      "endColumn": 41
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "external": true
+    }
+  },
+  {
+    "id": "pkg:server-only",
+    "type": "Package",
+    "name": "server-only",
+    "span": {
+      "file": "lib/team.ts",
+      "startLine": 1,
+      "startColumn": 1,
+      "endLine": 1,
+      "endColumn": 22
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "external": true
+    }
+  },
+  {
+    "id": "pkg:sonner",
+    "type": "Package",
+    "name": "sonner",
+    "span": {
+      "file": "components/app/launcher-topbar.tsx",
+      "startLine": 5,
+      "startColumn": 1,
+      "endLine": 5,
+      "endColumn": 32
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "external": true
+    }
+  },
+  {
+    "id": "pkg:tailwind-merge",
+    "type": "Package",
+    "name": "tailwind-merge",
+    "span": {
+      "file": "lib/utils.ts",
+      "startLine": 2,
+      "startColumn": 1,
+      "endLine": 2,
+      "endColumn": 42
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "external": true
+    }
+  },
+  {
+    "id": "pkg:zivvy-web",
+    "type": "Package",
+    "name": "zivvy-web",
+    "file": "package.json",
+    "span": {
+      "file": "package.json",
+      "startLine": 1,
+      "startColumn": 1,
+      "endLine": 1,
+      "endColumn": 1
+    },
+    "metadata": {
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+        "parser": "repository",
+        "parserVersion": "1.0.0",
+        "source": "repository"
+      },
+      "local": true,
+      "path": ".",
+      "private": true,
+      "version": "0.1.0"
+    }
+  }
+]

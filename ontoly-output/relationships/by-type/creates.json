@@ -1,0 +1,122 @@
+[
+  {
+    "id": "edge:creates:0ceqlp3",
+    "type": "CREATES",
+    "from": "fn:app/opengraph-image.tsx:Image",
+    "to": "pkg:next",
+    "evidence": [
+      {
+        "kind": "syntax",
+        "confidence": "exact",
+        "span": {
+          "file": "app/opengraph-image.tsx",
+          "startLine": 8,
+          "startColumn": 10,
+          "endLine": 115,
+          "endColumn": 4
+        },
+        "description": "creates instance"
+      }
+    ]
+  },
+  {
+    "id": "edge:creates:116acik",
+    "type": "CREATES",
+    "from": "fn:lib/frappe-client.ts:frappeCall",
+    "to": "class:lib/frappe-client.ts:FrappeError",
+    "evidence": [
+      {
+        "kind": "syntax",
+        "confidence": "exact",
+        "span": {
+          "file": "lib/frappe-client.ts",
+          "startLine": 78,
+          "startColumn": 11,
+          "endLine": 78,
+          "endColumn": 59
+        },
+        "description": "creates instance"
+      }
+    ]
+  },
+  {
+    "id": "edge:creates:1j35xg1",
+    "type": "CREATES",
+    "from": "fn:components/query-provider.tsx:makeQueryClient",
+    "to": "pkg:@tanstack/react-query",
+    "evidence": [
+      {
+        "kind": "syntax",
+        "confidence": "exact",
+        "span": {
+          "file": "components/query-provider.tsx",
+          "startLine": 7,
+          "startColumn": 10,
+          "endLine": 16,
+          "endColumn": 5
+        },
+        "description": "creates instance"
+      }
+    ]
+  },
+  {
+    "id": "edge:creates:1ju8p4t",
+    "type": "CREATES",
+    "from": "fn:app/apple-icon.tsx:AppleIcon",
+    "to": "pkg:next",
+    "evidence": [
+      {
+        "kind": "syntax",
+        "confidence": "exact",
+        "span": {
+          "file": "app/apple-icon.tsx",
+          "startLine": 7,
+          "startColumn": 10,
+          "endLine": 28,
+          "endColumn": 4
+        },
+        "description": "creates instance"
+      }
+    ]
+  },
+  {
+    "id": "edge:creates:1nyfq45",
+    "type": "CREATES",
+    "from": "fn:app/api/dev/session/route.ts:POST",
+    "to": "pkg:next",
+    "evidence": [
+      {
+        "kind": "syntax",
+        "confidence": "exact",
+        "span": {
+          "file": "app/api/dev/session/route.ts",
+          "startLine": 9,
+          "startColumn": 12,
+          "endLine": 9,
+          "endColumn": 62
+        },
+        "description": "creates instance"
+      }
+    ]
+  },
+  {
+    "id": "edge:creates:1o54s06",
+    "type": "CREATES",
+    "from": "fn:app/api/dev/session/route.ts:DELETE",
+    "to": "pkg:next",
+    "evidence": [
+      {
+        "kind": "syntax",
+        "confidence": "exact",
+        "span": {
+          "file": "app/api/dev/session/route.ts",
+          "startLine": 39,
+          "startColumn": 12,
+          "endLine": 39,
+          "endColumn": 62
+        },
+        "description": "creates instance"
+      }
+    ]
+  }
+]

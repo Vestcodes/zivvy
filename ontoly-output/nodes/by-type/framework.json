@@ -1,0 +1,34 @@
+[
+  {
+    "id": "framework:Next.js",
+    "type": "Framework",
+    "name": "Next.js",
+    "metadata": {
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+        "parser": "repository",
+        "parserVersion": "1.0.0",
+        "source": "repository"
+      },
+      "category": "frontend",
+      "detectedBy": "package.json dependency",
+      "packageName": "next"
+    }
+  },
+  {
+    "id": "framework:React",
+    "type": "Framework",
+    "name": "React",
+    "metadata": {
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-compiler:repository-intelligence",
+        "parser": "repository",
+        "parserVersion": "1.0.0",
+        "source": "repository"
+      },
+      "category": "frontend",
+      "detectedBy": "package.json dependency",
+      "packageName": "react"
+    }
+  }
+]

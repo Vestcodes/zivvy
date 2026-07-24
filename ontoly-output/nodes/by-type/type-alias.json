@@ -1,0 +1,1562 @@
+[
+  {
+    "id": "type:app/blog/[slug]/page.tsx:Props",
+    "type": "TypeAlias",
+    "name": "Props",
+    "file": "app/blog/[slug]/page.tsx",
+    "span": {
+      "file": "app/blog/[slug]/page.tsx",
+      "startLine": 16,
+      "startColumn": 1,
+      "endLine": 18,
+      "endColumn": 3
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "type-alias",
+      "union": false,
+      "intersection": false,
+      "mapped": false,
+      "conditional": false
+    }
+  },
+  {
+    "id": "type:app/blog/page.tsx:Props",
+    "type": "TypeAlias",
+    "name": "Props",
+    "file": "app/blog/page.tsx",
+    "span": {
+      "file": "app/blog/page.tsx",
+      "startLine": 26,
+      "startColumn": 1,
+      "endLine": 28,
+      "endColumn": 3
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "type-alias",
+      "union": false,
+      "intersection": false,
+      "mapped": false,
+      "conditional": false
+    }
+  },
+  {
+    "id": "type:components/app/app-launcher-data.ts:AppCategoryKey",
+    "type": "TypeAlias",
+    "name": "AppCategoryKey",
+    "file": "components/app/app-launcher-data.ts",
+    "span": {
+      "file": "components/app/app-launcher-data.ts",
+      "startLine": 70,
+      "startColumn": 1,
+      "endLine": 83,
+      "endColumn": 13
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": true,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "type-alias",
+      "union": true,
+      "intersection": false,
+      "mapped": false,
+      "conditional": false
+    }
+  },
+  {
+    "id": "type:components/auth/auth-panel.tsx:Mode",
+    "type": "TypeAlias",
+    "name": "Mode",
+    "file": "components/auth/auth-panel.tsx",
+    "span": {
+      "file": "components/auth/auth-panel.tsx",
+      "startLine": 10,
+      "startColumn": 1,
+      "endLine": 10,
+      "endColumn": 43
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "type-alias",
+      "union": true,
+      "intersection": false,
+      "mapped": false,
+      "conditional": false
+    }
+  },
+  {
+    "id": "type:components/auth/signup-form.tsx:Status",
+    "type": "TypeAlias",
+    "name": "Status",
+    "file": "components/auth/signup-form.tsx",
+    "span": {
+      "file": "components/auth/signup-form.tsx",
+      "startLine": 18,
+      "startColumn": 1,
+      "endLine": 18,
+      "endColumn": 69
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "type-alias",
+      "union": true,
+      "intersection": false,
+      "mapped": false,
+      "conditional": false
+    }
+  },
+  {
+    "id": "type:components/auto/auto-form-client.tsx:DialogKind",
+    "type": "TypeAlias",
+    "name": "DialogKind",
+    "file": "components/auto/auto-form-client.tsx",
+    "span": {
+      "file": "components/auto/auto-form-client.tsx",
+      "startLine": 66,
+      "startColumn": 1,
+      "endLine": 66,
+      "endColumn": 58
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "type-alias",
+      "union": true,
+      "intersection": false,
+      "mapped": false,
+      "conditional": false
+    }
+  },
+  {
+    "id": "type:components/auto/saved-views-bar.tsx:DialogMode",
+    "type": "TypeAlias",
+    "name": "DialogMode",
+    "file": "components/auto/saved-views-bar.tsx",
+    "span": {
+      "file": "components/auto/saved-views-bar.tsx",
+      "startLine": 53,
+      "startColumn": 1,
+      "endLine": 53,
+      "endColumn": 44
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "type-alias",
+      "union": true,
+      "intersection": false,
+      "mapped": false,
+      "conditional": false
+    }
+  },
+  {
+    "id": "type:components/billing/billing-success.tsx:Status",
+    "type": "TypeAlias",
+    "name": "Status",
+    "file": "components/billing/billing-success.tsx",
+    "span": {
+      "file": "components/billing/billing-success.tsx",
+      "startLine": 10,
+      "startColumn": 1,
+      "endLine": 10,
+      "endColumn": 51
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "type-alias",
+      "union": true,
+      "intersection": false,
+      "mapped": false,
+      "conditional": false
+    }
+  },
+  {
+    "id": "type:components/site/blog/blog-cta.tsx:Props",
+    "type": "TypeAlias",
+    "name": "Props",
+    "file": "components/site/blog/blog-cta.tsx",
+    "span": {
+      "file": "components/site/blog/blog-cta.tsx",
+      "startLine": 6,
+      "startColumn": 1,
+      "endLine": 11,
+      "endColumn": 3
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "type-alias",
+      "union": false,
+      "intersection": false,
+      "mapped": false,
+      "conditional": false
+    }
+  },
+  {
+    "id": "type:components/site/blog/blog-index.tsx:Props",
+    "type": "TypeAlias",
+    "name": "Props",
+    "file": "components/site/blog/blog-index.tsx",
+    "span": {
+      "file": "components/site/blog/blog-index.tsx",
+      "startLine": 12,
+      "startColumn": 1,
+      "endLine": 21,
+      "endColumn": 3
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "type-alias",
+      "union": false,
+      "intersection": false,
+      "mapped": false,
+      "conditional": false
+    }
+  },
+  {
+    "id": "type:components/site/contact-form.tsx:Status",
+    "type": "TypeAlias",
+    "name": "Status",
+    "file": "components/site/contact-form.tsx",
+    "span": {
+      "file": "components/site/contact-form.tsx",
+      "startLine": 11,
+      "startColumn": 1,
+      "endLine": 11,
+      "endColumn": 46
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "type-alias",
+      "union": true,
+      "intersection": false,
+      "mapped": false,
+      "conditional": false
+    }
+  },
+  {
+    "id": "type:components/site/marketing/alternative-page.tsx:Props",
+    "type": "TypeAlias",
+    "name": "Props",
+    "file": "components/site/marketing/alternative-page.tsx",
+    "span": {
+      "file": "components/site/marketing/alternative-page.tsx",
+      "startLine": 18,
+      "startColumn": 1,
+      "endLine": 22,
+      "endColumn": 3
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "type-alias",
+      "union": false,
+      "intersection": false,
+      "mapped": false,
+      "conditional": false
+    }
+  },
+  {
+    "id": "type:components/site/marketing/alternatives-hub.tsx:Props",
+    "type": "TypeAlias",
+    "name": "Props",
+    "file": "components/site/marketing/alternatives-hub.tsx",
+    "span": {
+      "file": "components/site/marketing/alternatives-hub.tsx",
+      "startLine": 26,
+      "startColumn": 1,
+      "endLine": 28,
+      "endColumn": 3
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "type-alias",
+      "union": false,
+      "intersection": false,
+      "mapped": false,
+      "conditional": false
+    }
+  },
+  {
+    "id": "type:components/site/marketing/compare-hub.tsx:Props",
+    "type": "TypeAlias",
+    "name": "Props",
+    "file": "components/site/marketing/compare-hub.tsx",
+    "span": {
+      "file": "components/site/marketing/compare-hub.tsx",
+      "startLine": 28,
+      "startColumn": 1,
+      "endLine": 30,
+      "endColumn": 3
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "type-alias",
+      "union": false,
+      "intersection": false,
+      "mapped": false,
+      "conditional": false
+    }
+  },
+  {
+    "id": "type:components/site/marketing/compare-page.tsx:Props",
+    "type": "TypeAlias",
+    "name": "Props",
+    "file": "components/site/marketing/compare-page.tsx",
+    "span": {
+      "file": "components/site/marketing/compare-page.tsx",
+      "startLine": 17,
+      "startColumn": 1,
+      "endLine": 21,
+      "endColumn": 3
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "type-alias",
+      "union": false,
+      "intersection": false,
+      "mapped": false,
+      "conditional": false
+    }
+  },
+  {
+    "id": "type:components/site/marketing/detail-page.tsx:Props",
+    "type": "TypeAlias",
+    "name": "Props",
+    "file": "components/site/marketing/detail-page.tsx",
+    "span": {
+      "file": "components/site/marketing/detail-page.tsx",
+      "startLine": 25,
+      "startColumn": 1,
+      "endLine": 29,
+      "endColumn": 3
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "type-alias",
+      "union": false,
+      "intersection": false,
+      "mapped": false,
+      "conditional": false
+    }
+  },
+  {
+    "id": "type:components/site/marketing/features-hub.tsx:Props",
+    "type": "TypeAlias",
+    "name": "Props",
+    "file": "components/site/marketing/features-hub.tsx",
+    "span": {
+      "file": "components/site/marketing/features-hub.tsx",
+      "startLine": 86,
+      "startColumn": 1,
+      "endLine": 88,
+      "endColumn": 3
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "type-alias",
+      "union": false,
+      "intersection": false,
+      "mapped": false,
+      "conditional": false
+    }
+  },
+  {
+    "id": "type:components/site/marketing/hub-page.tsx:Props",
+    "type": "TypeAlias",
+    "name": "Props",
+    "file": "components/site/marketing/hub-page.tsx",
+    "span": {
+      "file": "components/site/marketing/hub-page.tsx",
+      "startLine": 19,
+      "startColumn": 1,
+      "endLine": 29,
+      "endColumn": 3
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "type-alias",
+      "union": false,
+      "intersection": false,
+      "mapped": false,
+      "conditional": false
+    }
+  },
+  {
+    "id": "type:components/site/marketing/industries-hub.tsx:Props",
+    "type": "TypeAlias",
+    "name": "Props",
+    "file": "components/site/marketing/industries-hub.tsx",
+    "span": {
+      "file": "components/site/marketing/industries-hub.tsx",
+      "startLine": 89,
+      "startColumn": 1,
+      "endLine": 91,
+      "endColumn": 3
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "type-alias",
+      "union": false,
+      "intersection": false,
+      "mapped": false,
+      "conditional": false
+    }
+  },
+  {
+    "id": "type:components/site/marketing/integrations-hub.tsx:Props",
+    "type": "TypeAlias",
+    "name": "Props",
+    "file": "components/site/marketing/integrations-hub.tsx",
+    "span": {
+      "file": "components/site/marketing/integrations-hub.tsx",
+      "startLine": 29,
+      "startColumn": 1,
+      "endLine": 31,
+      "endColumn": 3
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "type-alias",
+      "union": false,
+      "intersection": false,
+      "mapped": false,
+      "conditional": false
+    }
+  },
+  {
+    "id": "type:components/site/marketing/solutions-detail.tsx:Props",
+    "type": "TypeAlias",
+    "name": "Props",
+    "file": "components/site/marketing/solutions-detail.tsx",
+    "span": {
+      "file": "components/site/marketing/solutions-detail.tsx",
+      "startLine": 25,
+      "startColumn": 1,
+      "endLine": 27,
+      "endColumn": 3
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "type-alias",
+      "union": false,
+      "intersection": false,
+      "mapped": false,
+      "conditional": false
+    }
+  },
+  {
+    "id": "type:components/site/marketing/solutions-hub.tsx:Props",
+    "type": "TypeAlias",
+    "name": "Props",
+    "file": "components/site/marketing/solutions-hub.tsx",
+    "span": {
+      "file": "components/site/marketing/solutions-hub.tsx",
+      "startLine": 107,
+      "startColumn": 1,
+      "endLine": 109,
+      "endColumn": 3
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "type-alias",
+      "union": false,
+      "intersection": false,
+      "mapped": false,
+      "conditional": false
+    }
+  },
+  {
+    "id": "type:components/site/marketing/use-cases-hub.tsx:Props",
+    "type": "TypeAlias",
+    "name": "Props",
+    "file": "components/site/marketing/use-cases-hub.tsx",
+    "span": {
+      "file": "components/site/marketing/use-cases-hub.tsx",
+      "startLine": 53,
+      "startColumn": 1,
+      "endLine": 55,
+      "endColumn": 3
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "type-alias",
+      "union": false,
+      "intersection": false,
+      "mapped": false,
+      "conditional": false
+    }
+  },
+  {
+    "id": "type:components/site/pricing-compare.tsx:Row",
+    "type": "TypeAlias",
+    "name": "Row",
+    "file": "components/site/pricing-compare.tsx",
+    "span": {
+      "file": "components/site/pricing-compare.tsx",
+      "startLine": 3,
+      "startColumn": 1,
+      "endLine": 3,
+      "endColumn": 78
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "type-alias",
+      "union": false,
+      "intersection": false,
+      "mapped": false,
+      "conditional": false
+    }
+  },
+  {
+    "id": "type:components/site/pricing-preview.tsx:Billing",
+    "type": "TypeAlias",
+    "name": "Billing",
+    "file": "components/site/pricing-preview.tsx",
+    "span": {
+      "file": "components/site/pricing-preview.tsx",
+      "startLine": 13,
+      "startColumn": 1,
+      "endLine": 13,
+      "endColumn": 37
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "type-alias",
+      "union": true,
+      "intersection": false,
+      "mapped": false,
+      "conditional": false
+    }
+  },
+  {
+    "id": "type:components/site/pricing-preview.tsx:Plan",
+    "type": "TypeAlias",
+    "name": "Plan",
+    "file": "components/site/pricing-preview.tsx",
+    "span": {
+      "file": "components/site/pricing-preview.tsx",
+      "startLine": 15,
+      "startColumn": 1,
+      "endLine": 24,
+      "endColumn": 3
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "type-alias",
+      "union": false,
+      "intersection": false,
+      "mapped": false,
+      "conditional": false
+    }
+  },
+  {
+    "id": "type:components/site/product-tour-video.tsx:Props",
+    "type": "TypeAlias",
+    "name": "Props",
+    "file": "components/site/product-tour-video.tsx",
+    "span": {
+      "file": "components/site/product-tour-video.tsx",
+      "startLine": 11,
+      "startColumn": 1,
+      "endLine": 21,
+      "endColumn": 3
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "type-alias",
+      "union": false,
+      "intersection": false,
+      "mapped": false,
+      "conditional": false
+    }
+  },
+  {
+    "id": "type:components/stock/barcode-scan-client.tsx:ScanResult",
+    "type": "TypeAlias",
+    "name": "ScanResult",
+    "file": "components/stock/barcode-scan-client.tsx",
+    "span": {
+      "file": "components/stock/barcode-scan-client.tsx",
+      "startLine": 12,
+      "startColumn": 1,
+      "endLine": 17,
+      "endColumn": 3
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "type-alias",
+      "union": false,
+      "intersection": false,
+      "mapped": false,
+      "conditional": false
+    }
+  },
+  {
+    "id": "type:components/ui/animated-grid-pattern.tsx:Square",
+    "type": "TypeAlias",
+    "name": "Square",
+    "file": "components/ui/animated-grid-pattern.tsx",
+    "span": {
+      "file": "components/ui/animated-grid-pattern.tsx",
+      "startLine": 27,
+      "startColumn": 1,
+      "endLine": 31,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "type-alias",
+      "union": false,
+      "intersection": false,
+      "mapped": false,
+      "conditional": false
+    }
+  },
+  {
+    "id": "type:components/ui/blur-fade.tsx:MarginType",
+    "type": "TypeAlias",
+    "name": "MarginType",
+    "file": "components/ui/blur-fade.tsx",
+    "span": {
+      "file": "components/ui/blur-fade.tsx",
+      "startLine": 13,
+      "startColumn": 1,
+      "endLine": 13,
+      "endColumn": 45
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "type-alias",
+      "union": false,
+      "intersection": false,
+      "mapped": false,
+      "conditional": false
+    }
+  },
+  {
+    "id": "type:components/ui/hero-video-dialog.tsx:AnimationStyle",
+    "type": "TypeAlias",
+    "name": "AnimationStyle",
+    "file": "components/ui/hero-video-dialog.tsx",
+    "span": {
+      "file": "components/ui/hero-video-dialog.tsx",
+      "startLine": 10,
+      "startColumn": 1,
+      "endLine": 18,
+      "endColumn": 24
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "type-alias",
+      "union": true,
+      "intersection": false,
+      "mapped": false,
+      "conditional": false
+    }
+  },
+  {
+    "id": "type:components/ui/magic-card.tsx:MagicCardProps",
+    "type": "TypeAlias",
+    "name": "MagicCardProps",
+    "file": "components/ui/magic-card.tsx",
+    "span": {
+      "file": "components/ui/magic-card.tsx",
+      "startLine": 50,
+      "startColumn": 1,
+      "endLine": 50,
+      "endColumn": 65
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "type-alias",
+      "union": true,
+      "intersection": false,
+      "mapped": false,
+      "conditional": false
+    }
+  },
+  {
+    "id": "type:components/ui/magic-card.tsx:ResetReason",
+    "type": "TypeAlias",
+    "name": "ResetReason",
+    "file": "components/ui/magic-card.tsx",
+    "span": {
+      "file": "components/ui/magic-card.tsx",
+      "startLine": 51,
+      "startColumn": 1,
+      "endLine": 51,
+      "endColumn": 57
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "type-alias",
+      "union": true,
+      "intersection": false,
+      "mapped": false,
+      "conditional": false
+    }
+  },
+  {
+    "id": "type:components/ui/sidebar.tsx:SidebarContextProps",
+    "type": "TypeAlias",
+    "name": "SidebarContextProps",
+    "file": "components/ui/sidebar.tsx",
+    "span": {
+      "file": "components/ui/sidebar.tsx",
+      "startLine": 35,
+      "startColumn": 1,
+      "endLine": 43,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "type-alias",
+      "union": false,
+      "intersection": false,
+      "mapped": false,
+      "conditional": false
+    }
+  },
+  {
+    "id": "type:components/ui/spotlight.tsx:SpotlightProps",
+    "type": "TypeAlias",
+    "name": "SpotlightProps",
+    "file": "components/ui/spotlight.tsx",
+    "span": {
+      "file": "components/ui/spotlight.tsx",
+      "startLine": 4,
+      "startColumn": 1,
+      "endLine": 7,
+      "endColumn": 3
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "type-alias",
+      "union": false,
+      "intersection": false,
+      "mapped": false,
+      "conditional": false
+    }
+  },
+  {
+    "id": "type:components/ui/text-animate.tsx:AnimationType",
+    "type": "TypeAlias",
+    "name": "AnimationType",
+    "file": "components/ui/text-animate.tsx",
+    "span": {
+      "file": "components/ui/text-animate.tsx",
+      "startLine": 14,
+      "startColumn": 1,
+      "endLine": 14,
+      "endColumn": 60
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "type-alias",
+      "union": true,
+      "intersection": false,
+      "mapped": false,
+      "conditional": false
+    }
+  },
+  {
+    "id": "type:components/ui/text-animate.tsx:AnimationVariant",
+    "type": "TypeAlias",
+    "name": "AnimationVariant",
+    "file": "components/ui/text-animate.tsx",
+    "span": {
+      "file": "components/ui/text-animate.tsx",
+      "startLine": 15,
+      "startColumn": 1,
+      "endLine": 25,
+      "endColumn": 16
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "type-alias",
+      "union": true,
+      "intersection": false,
+      "mapped": false,
+      "conditional": false
+    }
+  },
+  {
+    "id": "type:components/ui/text-animate.tsx:MotionElementType",
+    "type": "TypeAlias",
+    "name": "MotionElementType",
+    "file": "components/ui/text-animate.tsx",
+    "span": {
+      "file": "components/ui/text-animate.tsx",
+      "startLine": 42,
+      "startColumn": 1,
+      "endLine": 45,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "type-alias",
+      "union": false,
+      "intersection": false,
+      "mapped": false,
+      "conditional": false
+    }
+  },
+  {
+    "id": "type:lib/blog.ts:BlogFaq",
+    "type": "TypeAlias",
+    "name": "BlogFaq",
+    "file": "lib/blog.ts",
+    "span": {
+      "file": "lib/blog.ts",
+      "startLine": 9,
+      "startColumn": 1,
+      "endLine": 12,
+      "endColumn": 3
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": true,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "type-alias",
+      "union": false,
+      "intersection": false,
+      "mapped": false,
+      "conditional": false
+    }
+  },
+  {
+    "id": "type:lib/blog.ts:BlogLink",
+    "type": "TypeAlias",
+    "name": "BlogLink",
+    "file": "lib/blog.ts",
+    "span": {
+      "file": "lib/blog.ts",
+      "startLine": 4,
+      "startColumn": 1,
+      "endLine": 7,
+      "endColumn": 3
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": true,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "type-alias",
+      "union": false,
+      "intersection": false,
+      "mapped": false,
+      "conditional": false
+    }
+  },
+  {
+    "id": "type:lib/blog.ts:BlogPost",
+    "type": "TypeAlias",
+    "name": "BlogPost",
+    "file": "lib/blog.ts",
+    "span": {
+      "file": "lib/blog.ts",
+      "startLine": 24,
+      "startColumn": 1,
+      "endLine": 38,
+      "endColumn": 3
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": true,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "type-alias",
+      "union": false,
+      "intersection": false,
+      "mapped": false,
+      "conditional": false
+    }
+  },
+  {
+    "id": "type:lib/blog.ts:BlogSection",
+    "type": "TypeAlias",
+    "name": "BlogSection",
+    "file": "lib/blog.ts",
+    "span": {
+      "file": "lib/blog.ts",
+      "startLine": 14,
+      "startColumn": 1,
+      "endLine": 22,
+      "endColumn": 39
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": true,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "type-alias",
+      "union": true,
+      "intersection": false,
+      "mapped": false,
+      "conditional": false
+    }
+  },
+  {
+    "id": "type:lib/boot-types.ts:ZivvyTier",
+    "type": "TypeAlias",
+    "name": "ZivvyTier",
+    "file": "lib/boot-types.ts",
+    "span": {
+      "file": "lib/boot-types.ts",
+      "startLine": 9,
+      "startColumn": 1,
+      "endLine": 9,
+      "endColumn": 53
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": true,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "type-alias",
+      "union": true,
+      "intersection": false,
+      "mapped": false,
+      "conditional": false
+    }
+  },
+  {
+    "id": "type:lib/frappe-client.ts:FrappeResponse",
+    "type": "TypeAlias",
+    "name": "FrappeResponse",
+    "file": "lib/frappe-client.ts",
+    "span": {
+      "file": "lib/frappe-client.ts",
+      "startLine": 6,
+      "startColumn": 1,
+      "endLine": 10,
+      "endColumn": 3
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": true,
+      "default": false,
+      "typeParameters": 1,
+      "declarationKind": "type-alias",
+      "union": false,
+      "intersection": false,
+      "mapped": false,
+      "conditional": false
+    }
+  },
+  {
+    "id": "type:lib/marketing-content.ts:AlternativeDetail",
+    "type": "TypeAlias",
+    "name": "AlternativeDetail",
+    "file": "lib/marketing-content.ts",
+    "span": {
+      "file": "lib/marketing-content.ts",
+      "startLine": 39,
+      "startColumn": 1,
+      "endLine": 50,
+      "endColumn": 3
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": true,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "type-alias",
+      "union": false,
+      "intersection": false,
+      "mapped": false,
+      "conditional": false
+    }
+  },
+  {
+    "id": "type:lib/marketing-content.ts:CompareDetail",
+    "type": "TypeAlias",
+    "name": "CompareDetail",
+    "file": "lib/marketing-content.ts",
+    "span": {
+      "file": "lib/marketing-content.ts",
+      "startLine": 26,
+      "startColumn": 1,
+      "endLine": 37,
+      "endColumn": 3
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": true,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "type-alias",
+      "union": false,
+      "intersection": false,
+      "mapped": false,
+      "conditional": false
+    }
+  },
+  {
+    "id": "type:lib/marketing-content.ts:CompareRow",
+    "type": "TypeAlias",
+    "name": "CompareRow",
+    "file": "lib/marketing-content.ts",
+    "span": {
+      "file": "lib/marketing-content.ts",
+      "startLine": 20,
+      "startColumn": 1,
+      "endLine": 24,
+      "endColumn": 3
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": true,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "type-alias",
+      "union": false,
+      "intersection": false,
+      "mapped": false,
+      "conditional": false
+    }
+  },
+  {
+    "id": "type:lib/marketing-content.ts:FaqItem",
+    "type": "TypeAlias",
+    "name": "FaqItem",
+    "file": "lib/marketing-content.ts",
+    "span": {
+      "file": "lib/marketing-content.ts",
+      "startLine": 1,
+      "startColumn": 1,
+      "endLine": 4,
+      "endColumn": 3
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": true,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "type-alias",
+      "union": false,
+      "intersection": false,
+      "mapped": false,
+      "conditional": false
+    }
+  },
+  {
+    "id": "type:lib/marketing-content.ts:HubCardItem",
+    "type": "TypeAlias",
+    "name": "HubCardItem",
+    "file": "lib/marketing-content.ts",
+    "span": {
+      "file": "lib/marketing-content.ts",
+      "startLine": 52,
+      "startColumn": 1,
+      "endLine": 56,
+      "endColumn": 3
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": true,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "type-alias",
+      "union": false,
+      "intersection": false,
+      "mapped": false,
+      "conditional": false
+    }
+  },
+  {
+    "id": "type:lib/marketing-content.ts:MarketingDetail",
+    "type": "TypeAlias",
+    "name": "MarketingDetail",
+    "file": "lib/marketing-content.ts",
+    "span": {
+      "file": "lib/marketing-content.ts",
+      "startLine": 6,
+      "startColumn": 1,
+      "endLine": 18,
+      "endColumn": 3
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": true,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "type-alias",
+      "union": false,
+      "intersection": false,
+      "mapped": false,
+      "conditional": false
+    }
+  },
+  {
+    "id": "type:lib/status.ts:StatusTone",
+    "type": "TypeAlias",
+    "name": "StatusTone",
+    "file": "lib/status.ts",
+    "span": {
+      "file": "lib/status.ts",
+      "startLine": 7,
+      "startColumn": 1,
+      "endLine": 13,
+      "endColumn": 15
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": true,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "type-alias",
+      "union": true,
+      "intersection": false,
+      "mapped": false,
+      "conditional": false
+    }
+  },
+  {
+    "id": "type:lib/team-roles.ts:AssignableRole",
+    "type": "TypeAlias",
+    "name": "AssignableRole",
+    "file": "lib/team-roles.ts",
+    "span": {
+      "file": "lib/team-roles.ts",
+      "startLine": 39,
+      "startColumn": 1,
+      "endLine": 39,
+      "endColumn": 64
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": true,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "type-alias",
+      "union": false,
+      "intersection": false,
+      "mapped": false,
+      "conditional": false
+    }
+  }
+]

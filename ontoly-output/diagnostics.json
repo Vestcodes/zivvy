@@ -1,0 +1,20 @@
+[
+  {
+    "id": "diag:typescript_broken_import:1v02gxt",
+    "code": "TYPESCRIPT_BROKEN_IMPORT",
+    "severity": "warning",
+    "message": "Could not resolve import \"./globals.css\" from app/layout.tsx.",
+    "span": {
+      "file": "app/layout.tsx",
+      "startLine": 9,
+      "startColumn": 1,
+      "endLine": 9,
+      "endColumn": 24
+    },
+    "metadata": {
+      "file": "app/layout.tsx",
+      "specifier": "./globals.css",
+      "analyzer": "typescript"
+    }
+  }
+]

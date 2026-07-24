@@ -1,0 +1,112 @@
+[
+  {
+    "id": "env:FRAPPE_ORIGIN",
+    "type": "EnvironmentVariable",
+    "name": "FRAPPE_ORIGIN",
+    "span": {
+      "file": "lib/team.ts",
+      "startLine": 10,
+      "startColumn": 3,
+      "endLine": 10,
+      "endColumn": 28
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "consumedIn": "lib/team.ts"
+    }
+  },
+  {
+    "id": "env:NEXT_PUBLIC_FRAPPE_ORIGIN",
+    "type": "EnvironmentVariable",
+    "name": "NEXT_PUBLIC_FRAPPE_ORIGIN",
+    "span": {
+      "file": "lib/boot-server.ts",
+      "startLine": 19,
+      "startColumn": 3,
+      "endLine": 19,
+      "endColumn": 40
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "consumedIn": "lib/boot-server.ts"
+    }
+  },
+  {
+    "id": "env:NEXT_PUBLIC_ZIVVY_DEV_MOCK",
+    "type": "EnvironmentVariable",
+    "name": "NEXT_PUBLIC_ZIVVY_DEV_MOCK",
+    "span": {
+      "file": "lib/frappe-meta.ts",
+      "startLine": 9,
+      "startColumn": 3,
+      "endLine": 9,
+      "endColumn": 41
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "consumedIn": "lib/frappe-meta.ts"
+    }
+  },
+  {
+    "id": "env:NODE_ENV",
+    "type": "EnvironmentVariable",
+    "name": "NODE_ENV",
+    "span": {
+      "file": "app/dev/session/page.tsx",
+      "startLine": 18,
+      "startColumn": 7,
+      "endLine": 18,
+      "endColumn": 27
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "consumedIn": "app/dev/session/page.tsx"
+    }
+  },
+  {
+    "id": "env:ZIVVY_DEV_MOCK",
+    "type": "EnvironmentVariable",
+    "name": "ZIVVY_DEV_MOCK",
+    "span": {
+      "file": "lib/frappe-meta.ts",
+      "startLine": 10,
+      "startColumn": 3,
+      "endLine": 10,
+      "endColumn": 29
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "consumedIn": "lib/frappe-meta.ts"
+    }
+  }
+]

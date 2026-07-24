@@ -1,0 +1,2576 @@
+[
+  {
+    "id": "iface:app/(app)/[mod]/[doctype]/[name]/page.tsx:Props",
+    "type": "Interface",
+    "name": "Props",
+    "file": "app/(app)/[mod]/[doctype]/[name]/page.tsx",
+    "span": {
+      "file": "app/(app)/[mod]/[doctype]/[name]/page.tsx",
+      "startLine": 6,
+      "startColumn": 1,
+      "endLine": 8,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:app/(app)/[mod]/[doctype]/page.tsx:Props",
+    "type": "Interface",
+    "name": "Props",
+    "file": "app/(app)/[mod]/[doctype]/page.tsx",
+    "span": {
+      "file": "app/(app)/[mod]/[doctype]/page.tsx",
+      "startLine": 6,
+      "startColumn": 1,
+      "endLine": 9,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:app/(app)/[mod]/page.tsx:Props",
+    "type": "Interface",
+    "name": "Props",
+    "file": "app/(app)/[mod]/page.tsx",
+    "span": {
+      "file": "app/(app)/[mod]/page.tsx",
+      "startLine": 3,
+      "startColumn": 1,
+      "endLine": 5,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:app/(app)/sales/invoices/[id]/page.tsx:FrappeInvoiceDoc",
+    "type": "Interface",
+    "name": "FrappeInvoiceDoc",
+    "file": "app/(app)/sales/invoices/[id]/page.tsx",
+    "span": {
+      "file": "app/(app)/sales/invoices/[id]/page.tsx",
+      "startLine": 74,
+      "startColumn": 1,
+      "endLine": 91,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:app/(app)/sales/invoices/[id]/page.tsx:FrappeInvoiceItem",
+    "type": "Interface",
+    "name": "FrappeInvoiceItem",
+    "file": "app/(app)/sales/invoices/[id]/page.tsx",
+    "span": {
+      "file": "app/(app)/sales/invoices/[id]/page.tsx",
+      "startLine": 65,
+      "startColumn": 1,
+      "endLine": 72,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:app/(app)/sales/invoices/[id]/page.tsx:Props",
+    "type": "Interface",
+    "name": "Props",
+    "file": "app/(app)/sales/invoices/[id]/page.tsx",
+    "span": {
+      "file": "app/(app)/sales/invoices/[id]/page.tsx",
+      "startLine": 8,
+      "startColumn": 1,
+      "endLine": 10,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:app/alternatives/[slug]/page.tsx:Props",
+    "type": "Interface",
+    "name": "Props",
+    "file": "app/alternatives/[slug]/page.tsx",
+    "span": {
+      "file": "app/alternatives/[slug]/page.tsx",
+      "startLine": 6,
+      "startColumn": 1,
+      "endLine": 8,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:app/compare/[slug]/page.tsx:Props",
+    "type": "Interface",
+    "name": "Props",
+    "file": "app/compare/[slug]/page.tsx",
+    "span": {
+      "file": "app/compare/[slug]/page.tsx",
+      "startLine": 6,
+      "startColumn": 1,
+      "endLine": 8,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:app/dev/session/page.tsx:Props",
+    "type": "Interface",
+    "name": "Props",
+    "file": "app/dev/session/page.tsx",
+    "span": {
+      "file": "app/dev/session/page.tsx",
+      "startLine": 13,
+      "startColumn": 1,
+      "endLine": 15,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:app/features/[slug]/page.tsx:Props",
+    "type": "Interface",
+    "name": "Props",
+    "file": "app/features/[slug]/page.tsx",
+    "span": {
+      "file": "app/features/[slug]/page.tsx",
+      "startLine": 6,
+      "startColumn": 1,
+      "endLine": 8,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:app/industries/[slug]/page.tsx:Props",
+    "type": "Interface",
+    "name": "Props",
+    "file": "app/industries/[slug]/page.tsx",
+    "span": {
+      "file": "app/industries/[slug]/page.tsx",
+      "startLine": 6,
+      "startColumn": 1,
+      "endLine": 8,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:app/integrations/[slug]/page.tsx:Props",
+    "type": "Interface",
+    "name": "Props",
+    "file": "app/integrations/[slug]/page.tsx",
+    "span": {
+      "file": "app/integrations/[slug]/page.tsx",
+      "startLine": 6,
+      "startColumn": 1,
+      "endLine": 8,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:app/solutions/[slug]/page.tsx:Props",
+    "type": "Interface",
+    "name": "Props",
+    "file": "app/solutions/[slug]/page.tsx",
+    "span": {
+      "file": "app/solutions/[slug]/page.tsx",
+      "startLine": 6,
+      "startColumn": 1,
+      "endLine": 8,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:app/update-password/page.tsx:Props",
+    "type": "Interface",
+    "name": "Props",
+    "file": "app/update-password/page.tsx",
+    "span": {
+      "file": "app/update-password/page.tsx",
+      "startLine": 11,
+      "startColumn": 1,
+      "endLine": 13,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:app/use-cases/[slug]/page.tsx:Props",
+    "type": "Interface",
+    "name": "Props",
+    "file": "app/use-cases/[slug]/page.tsx",
+    "span": {
+      "file": "app/use-cases/[slug]/page.tsx",
+      "startLine": 6,
+      "startColumn": 1,
+      "endLine": 8,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:components/app/app-launcher-data.ts:AppCategory",
+    "type": "Interface",
+    "name": "AppCategory",
+    "file": "components/app/app-launcher-data.ts",
+    "span": {
+      "file": "components/app/app-launcher-data.ts",
+      "startLine": 85,
+      "startColumn": 1,
+      "endLine": 88,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": true,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:components/app/app-launcher-data.ts:AppTile",
+    "type": "Interface",
+    "name": "AppTile",
+    "file": "components/app/app-launcher-data.ts",
+    "span": {
+      "file": "components/app/app-launcher-data.ts",
+      "startLine": 60,
+      "startColumn": 1,
+      "endLine": 68,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": true,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:components/app/app-topbar.tsx:TopbarProps",
+    "type": "Interface",
+    "name": "TopbarProps",
+    "file": "components/app/app-topbar.tsx",
+    "span": {
+      "file": "components/app/app-topbar.tsx",
+      "startLine": 62,
+      "startColumn": 1,
+      "endLine": 65,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:components/app/notifications.tsx:Props",
+    "type": "Interface",
+    "name": "Props",
+    "file": "components/app/notifications.tsx",
+    "span": {
+      "file": "components/app/notifications.tsx",
+      "startLine": 25,
+      "startColumn": 1,
+      "endLine": 28,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:components/app/sidebar-nav.ts:ModuleNav",
+    "type": "Interface",
+    "name": "ModuleNav",
+    "file": "components/app/sidebar-nav.ts",
+    "span": {
+      "file": "components/app/sidebar-nav.ts",
+      "startLine": 67,
+      "startColumn": 1,
+      "endLine": 72,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": true,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:components/app/sidebar-nav.ts:NavItem",
+    "type": "Interface",
+    "name": "NavItem",
+    "file": "components/app/sidebar-nav.ts",
+    "span": {
+      "file": "components/app/sidebar-nav.ts",
+      "startLine": 58,
+      "startColumn": 1,
+      "endLine": 65,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": true,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:components/auth/reset-form.tsx:Props",
+    "type": "Interface",
+    "name": "Props",
+    "file": "components/auth/reset-form.tsx",
+    "span": {
+      "file": "components/auth/reset-form.tsx",
+      "startLine": 11,
+      "startColumn": 1,
+      "endLine": 13,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:components/auth/signin-form.tsx:Props",
+    "type": "Interface",
+    "name": "Props",
+    "file": "components/auth/signin-form.tsx",
+    "span": {
+      "file": "components/auth/signin-form.tsx",
+      "startLine": 12,
+      "startColumn": 1,
+      "endLine": 14,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:components/auth/update-password-form.tsx:Props",
+    "type": "Interface",
+    "name": "Props",
+    "file": "components/auth/update-password-form.tsx",
+    "span": {
+      "file": "components/auth/update-password-form.tsx",
+      "startLine": 13,
+      "startColumn": 1,
+      "endLine": 15,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:components/auto/activity-timeline.tsx:Props",
+    "type": "Interface",
+    "name": "Props",
+    "file": "components/auto/activity-timeline.tsx",
+    "span": {
+      "file": "components/auto/activity-timeline.tsx",
+      "startLine": 25,
+      "startColumn": 1,
+      "endLine": 32,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:components/auto/activity-timeline.tsx:TimelineEvent",
+    "type": "Interface",
+    "name": "TimelineEvent",
+    "file": "components/auto/activity-timeline.tsx",
+    "span": {
+      "file": "components/auto/activity-timeline.tsx",
+      "startLine": 17,
+      "startColumn": 1,
+      "endLine": 23,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:components/auto/auto-form-client.tsx:Props",
+    "type": "Interface",
+    "name": "Props",
+    "file": "components/auto/auto-form-client.tsx",
+    "span": {
+      "file": "components/auto/auto-form-client.tsx",
+      "startLine": 42,
+      "startColumn": 1,
+      "endLine": 48,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:components/auto/auto-form.tsx:Props",
+    "type": "Interface",
+    "name": "Props",
+    "file": "components/auto/auto-form.tsx",
+    "span": {
+      "file": "components/auto/auto-form.tsx",
+      "startLine": 11,
+      "startColumn": 1,
+      "endLine": 16,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:components/auto/auto-list-keyboard.tsx:Props",
+    "type": "Interface",
+    "name": "Props",
+    "file": "components/auto/auto-list-keyboard.tsx",
+    "span": {
+      "file": "components/auto/auto-list-keyboard.tsx",
+      "startLine": 7,
+      "startColumn": 1,
+      "endLine": 11,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:components/auto/auto-list-pagination.tsx:Props",
+    "type": "Interface",
+    "name": "Props",
+    "file": "components/auto/auto-list-pagination.tsx",
+    "span": {
+      "file": "components/auto/auto-list-pagination.tsx",
+      "startLine": 7,
+      "startColumn": 1,
+      "endLine": 12,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:components/auto/auto-list-search.tsx:Props",
+    "type": "Interface",
+    "name": "Props",
+    "file": "components/auto/auto-list-search.tsx",
+    "span": {
+      "file": "components/auto/auto-list-search.tsx",
+      "startLine": 8,
+      "startColumn": 1,
+      "endLine": 10,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:components/auto/auto-list.tsx:Props",
+    "type": "Interface",
+    "name": "Props",
+    "file": "components/auto/auto-list.tsx",
+    "span": {
+      "file": "components/auto/auto-list.tsx",
+      "startLine": 30,
+      "startColumn": 1,
+      "endLine": 37,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:components/auto/field-input.tsx:Props",
+    "type": "Interface",
+    "name": "Props",
+    "file": "components/auto/field-input.tsx",
+    "span": {
+      "file": "components/auto/field-input.tsx",
+      "startLine": 10,
+      "startColumn": 1,
+      "endLine": 16,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:components/auto/link-field.tsx:LinkOption",
+    "type": "Interface",
+    "name": "LinkOption",
+    "file": "components/auto/link-field.tsx",
+    "span": {
+      "file": "components/auto/link-field.tsx",
+      "startLine": 20,
+      "startColumn": 1,
+      "endLine": 23,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:components/auto/link-field.tsx:Props",
+    "type": "Interface",
+    "name": "Props",
+    "file": "components/auto/link-field.tsx",
+    "span": {
+      "file": "components/auto/link-field.tsx",
+      "startLine": 9,
+      "startColumn": 1,
+      "endLine": 18,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:components/auto/print-preview.tsx:Props",
+    "type": "Interface",
+    "name": "Props",
+    "file": "components/auto/print-preview.tsx",
+    "span": {
+      "file": "components/auto/print-preview.tsx",
+      "startLine": 26,
+      "startColumn": 1,
+      "endLine": 29,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:components/auto/saved-views-bar.tsx:Props",
+    "type": "Interface",
+    "name": "Props",
+    "file": "components/auto/saved-views-bar.tsx",
+    "span": {
+      "file": "components/auto/saved-views-bar.tsx",
+      "startLine": 47,
+      "startColumn": 1,
+      "endLine": 51,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:components/boot-provider.tsx:EntitlementResult",
+    "type": "Interface",
+    "name": "EntitlementResult",
+    "file": "components/boot-provider.tsx",
+    "span": {
+      "file": "components/boot-provider.tsx",
+      "startLine": 39,
+      "startColumn": 1,
+      "endLine": 43,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": true,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:components/dashboard/dashboard-kpis.tsx:KpiProps",
+    "type": "Interface",
+    "name": "KpiProps",
+    "file": "components/dashboard/dashboard-kpis.tsx",
+    "span": {
+      "file": "components/dashboard/dashboard-kpis.tsx",
+      "startLine": 6,
+      "startColumn": 1,
+      "endLine": 9,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:components/dashboard/dashboard-kpis.tsx:KpiTile",
+    "type": "Interface",
+    "name": "KpiTile",
+    "file": "components/dashboard/dashboard-kpis.tsx",
+    "span": {
+      "file": "components/dashboard/dashboard-kpis.tsx",
+      "startLine": 11,
+      "startColumn": 1,
+      "endLine": 18,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:components/seo/json-ld.tsx:BreadcrumbItemLd",
+    "type": "Interface",
+    "name": "BreadcrumbItemLd",
+    "file": "components/seo/json-ld.tsx",
+    "span": {
+      "file": "components/seo/json-ld.tsx",
+      "startLine": 126,
+      "startColumn": 1,
+      "endLine": 129,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": true,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:components/seo/json-ld.tsx:FaqEntry",
+    "type": "Interface",
+    "name": "FaqEntry",
+    "file": "components/seo/json-ld.tsx",
+    "span": {
+      "file": "components/seo/json-ld.tsx",
+      "startLine": 102,
+      "startColumn": 1,
+      "endLine": 105,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:components/seo/json-ld.tsx:JsonLdProps",
+    "type": "Interface",
+    "name": "JsonLdProps",
+    "file": "components/seo/json-ld.tsx",
+    "span": {
+      "file": "components/seo/json-ld.tsx",
+      "startLine": 12,
+      "startColumn": 1,
+      "endLine": 14,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:components/seo/json-ld.tsx:ProductJsonLdProps",
+    "type": "Interface",
+    "name": "ProductJsonLdProps",
+    "file": "components/seo/json-ld.tsx",
+    "span": {
+      "file": "components/seo/json-ld.tsx",
+      "startLine": 148,
+      "startColumn": 1,
+      "endLine": 153,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:components/settings/team-list.tsx:Props",
+    "type": "Interface",
+    "name": "Props",
+    "file": "components/settings/team-list.tsx",
+    "span": {
+      "file": "components/settings/team-list.tsx",
+      "startLine": 57,
+      "startColumn": 1,
+      "endLine": 62,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:components/site/pricing-preview.tsx:Props",
+    "type": "Interface",
+    "name": "Props",
+    "file": "components/site/pricing-preview.tsx",
+    "span": {
+      "file": "components/site/pricing-preview.tsx",
+      "startLine": 69,
+      "startColumn": 1,
+      "endLine": 72,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:components/ui/animated-grid-pattern.tsx:AnimatedGridPatternProps",
+    "type": "Interface",
+    "name": "AnimatedGridPatternProps",
+    "file": "components/ui/animated-grid-pattern.tsx",
+    "span": {
+      "file": "components/ui/animated-grid-pattern.tsx",
+      "startLine": 15,
+      "startColumn": 1,
+      "endLine": 25,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": true,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:components/ui/animated-list.tsx:AnimatedListProps",
+    "type": "Interface",
+    "name": "AnimatedListProps",
+    "file": "components/ui/animated-list.tsx",
+    "span": {
+      "file": "components/ui/animated-list.tsx",
+      "startLine": 28,
+      "startColumn": 1,
+      "endLine": 31,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": true,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:components/ui/animated-shiny-text.tsx:AnimatedShinyTextProps",
+    "type": "Interface",
+    "name": "AnimatedShinyTextProps",
+    "file": "components/ui/animated-shiny-text.tsx",
+    "span": {
+      "file": "components/ui/animated-shiny-text.tsx",
+      "startLine": 9,
+      "startColumn": 1,
+      "endLine": 11,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": true,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:components/ui/bento-grid.tsx:BentoCardProps",
+    "type": "Interface",
+    "name": "BentoCardProps",
+    "file": "components/ui/bento-grid.tsx",
+    "span": {
+      "file": "components/ui/bento-grid.tsx",
+      "startLine": 12,
+      "startColumn": 1,
+      "endLine": 20,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:components/ui/bento-grid.tsx:BentoGridProps",
+    "type": "Interface",
+    "name": "BentoGridProps",
+    "file": "components/ui/bento-grid.tsx",
+    "span": {
+      "file": "components/ui/bento-grid.tsx",
+      "startLine": 7,
+      "startColumn": 1,
+      "endLine": 10,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:components/ui/blur-fade.tsx:BlurFadeProps",
+    "type": "Interface",
+    "name": "BlurFadeProps",
+    "file": "components/ui/blur-fade.tsx",
+    "span": {
+      "file": "components/ui/blur-fade.tsx",
+      "startLine": 15,
+      "startColumn": 1,
+      "endLine": 29,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:components/ui/border-beam.tsx:BorderBeamProps",
+    "type": "Interface",
+    "name": "BorderBeamProps",
+    "file": "components/ui/border-beam.tsx",
+    "span": {
+      "file": "components/ui/border-beam.tsx",
+      "startLine": 7,
+      "startColumn": 1,
+      "endLine": 52,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:components/ui/dot-pattern.tsx:DotPatternProps",
+    "type": "Interface",
+    "name": "DotPatternProps",
+    "file": "components/ui/dot-pattern.tsx",
+    "span": {
+      "file": "components/ui/dot-pattern.tsx",
+      "startLine": 21,
+      "startColumn": 1,
+      "endLine": 32,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:components/ui/hero-video-dialog.tsx:HeroVideoProps",
+    "type": "Interface",
+    "name": "HeroVideoProps",
+    "file": "components/ui/hero-video-dialog.tsx",
+    "span": {
+      "file": "components/ui/hero-video-dialog.tsx",
+      "startLine": 20,
+      "startColumn": 1,
+      "endLine": 28,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:components/ui/magic-card.tsx:MagicCardBaseProps",
+    "type": "Interface",
+    "name": "MagicCardBaseProps",
+    "file": "components/ui/magic-card.tsx",
+    "span": {
+      "file": "components/ui/magic-card.tsx",
+      "startLine": 14,
+      "startColumn": 1,
+      "endLine": 20,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:components/ui/magic-card.tsx:MagicCardGradientProps",
+    "type": "Interface",
+    "name": "MagicCardGradientProps",
+    "file": "components/ui/magic-card.tsx",
+    "span": {
+      "file": "components/ui/magic-card.tsx",
+      "startLine": 22,
+      "startColumn": 1,
+      "endLine": 34,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:components/ui/magic-card.tsx:MagicCardOrbProps",
+    "type": "Interface",
+    "name": "MagicCardOrbProps",
+    "file": "components/ui/magic-card.tsx",
+    "span": {
+      "file": "components/ui/magic-card.tsx",
+      "startLine": 36,
+      "startColumn": 1,
+      "endLine": 48,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:components/ui/marquee.tsx:MarqueeProps",
+    "type": "Interface",
+    "name": "MarqueeProps",
+    "file": "components/ui/marquee.tsx",
+    "span": {
+      "file": "components/ui/marquee.tsx",
+      "startLine": 7,
+      "startColumn": 1,
+      "endLine": 36,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:components/ui/number-ticker.tsx:NumberTickerProps",
+    "type": "Interface",
+    "name": "NumberTickerProps",
+    "file": "components/ui/number-ticker.tsx",
+    "span": {
+      "file": "components/ui/number-ticker.tsx",
+      "startLine": 8,
+      "startColumn": 1,
+      "endLine": 14,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:components/ui/orbiting-circles.tsx:OrbitingCirclesProps",
+    "type": "Interface",
+    "name": "OrbitingCirclesProps",
+    "file": "components/ui/orbiting-circles.tsx",
+    "span": {
+      "file": "components/ui/orbiting-circles.tsx",
+      "startLine": 5,
+      "startColumn": 1,
+      "endLine": 15,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": true,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:components/ui/retro-grid.tsx:ProgramInfo",
+    "type": "Interface",
+    "name": "ProgramInfo",
+    "file": "components/ui/retro-grid.tsx",
+    "span": {
+      "file": "components/ui/retro-grid.tsx",
+      "startLine": 283,
+      "startColumn": 1,
+      "endLine": 295,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:components/ui/retro-grid.tsx:RetroGridProps",
+    "type": "Interface",
+    "name": "RetroGridProps",
+    "file": "components/ui/retro-grid.tsx",
+    "span": {
+      "file": "components/ui/retro-grid.tsx",
+      "startLine": 251,
+      "startColumn": 1,
+      "endLine": 281,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:components/ui/reveal.tsx:Props",
+    "type": "Interface",
+    "name": "Props",
+    "file": "components/ui/reveal.tsx",
+    "span": {
+      "file": "components/ui/reveal.tsx",
+      "startLine": 6,
+      "startColumn": 1,
+      "endLine": 16,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:components/ui/shimmer-button.tsx:ShimmerButtonProps",
+    "type": "Interface",
+    "name": "ShimmerButtonProps",
+    "file": "components/ui/shimmer-button.tsx",
+    "span": {
+      "file": "components/ui/shimmer-button.tsx",
+      "startLine": 5,
+      "startColumn": 1,
+      "endLine": 13,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": true,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:components/ui/shine-border.tsx:ShineBorderProps",
+    "type": "Interface",
+    "name": "ShineBorderProps",
+    "file": "components/ui/shine-border.tsx",
+    "span": {
+      "file": "components/ui/shine-border.tsx",
+      "startLine": 7,
+      "startColumn": 1,
+      "endLine": 23,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:components/ui/sparkles-text.tsx:Sparkle",
+    "type": "Interface",
+    "name": "Sparkle",
+    "file": "components/ui/sparkles-text.tsx",
+    "span": {
+      "file": "components/ui/sparkles-text.tsx",
+      "startLine": 8,
+      "startColumn": 1,
+      "endLine": 16,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:components/ui/sparkles-text.tsx:SparklesTextProps",
+    "type": "Interface",
+    "name": "SparklesTextProps",
+    "file": "components/ui/sparkles-text.tsx",
+    "span": {
+      "file": "components/ui/sparkles-text.tsx",
+      "startLine": 42,
+      "startColumn": 1,
+      "endLine": 85,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:components/ui/status-badge.tsx:Props",
+    "type": "Interface",
+    "name": "Props",
+    "file": "components/ui/status-badge.tsx",
+    "span": {
+      "file": "components/ui/status-badge.tsx",
+      "startLine": 8,
+      "startColumn": 1,
+      "endLine": 12,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:components/ui/text-animate.tsx:TextAnimateProps",
+    "type": "Interface",
+    "name": "TextAnimateProps",
+    "file": "components/ui/text-animate.tsx",
+    "span": {
+      "file": "components/ui/text-animate.tsx",
+      "startLine": 47,
+      "startColumn": 1,
+      "endLine": 96,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:hooks/use-notifications.ts:NotificationsData",
+    "type": "Interface",
+    "name": "NotificationsData",
+    "file": "hooks/use-notifications.ts",
+    "span": {
+      "file": "hooks/use-notifications.ts",
+      "startLine": 10,
+      "startColumn": 1,
+      "endLine": 13,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:lib/billing-client.ts:MyPlan",
+    "type": "Interface",
+    "name": "MyPlan",
+    "file": "lib/billing-client.ts",
+    "span": {
+      "file": "lib/billing-client.ts",
+      "startLine": 4,
+      "startColumn": 1,
+      "endLine": 14,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": true,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:lib/boot-server.ts:RawPlan",
+    "type": "Interface",
+    "name": "RawPlan",
+    "file": "lib/boot-server.ts",
+    "span": {
+      "file": "lib/boot-server.ts",
+      "startLine": 64,
+      "startColumn": 1,
+      "endLine": 78,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:lib/boot-server.ts:RawTenantValues",
+    "type": "Interface",
+    "name": "RawTenantValues",
+    "file": "lib/boot-server.ts",
+    "span": {
+      "file": "lib/boot-server.ts",
+      "startLine": 85,
+      "startColumn": 1,
+      "endLine": 100,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:lib/boot-server.ts:RawUserValues",
+    "type": "Interface",
+    "name": "RawUserValues",
+    "file": "lib/boot-server.ts",
+    "span": {
+      "file": "lib/boot-server.ts",
+      "startLine": 80,
+      "startColumn": 1,
+      "endLine": 83,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:lib/boot-types.ts:Bootinfo",
+    "type": "Interface",
+    "name": "Bootinfo",
+    "file": "lib/boot-types.ts",
+    "span": {
+      "file": "lib/boot-types.ts",
+      "startLine": 51,
+      "startColumn": 1,
+      "endLine": 60,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": true,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:lib/boot-types.ts:ZivvyBoot",
+    "type": "Interface",
+    "name": "ZivvyBoot",
+    "file": "lib/boot-types.ts",
+    "span": {
+      "file": "lib/boot-types.ts",
+      "startLine": 29,
+      "startColumn": 1,
+      "endLine": 49,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": true,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:lib/boot-types.ts:ZivvyTenantSummary",
+    "type": "Interface",
+    "name": "ZivvyTenantSummary",
+    "file": "lib/boot-types.ts",
+    "span": {
+      "file": "lib/boot-types.ts",
+      "startLine": 11,
+      "startColumn": 1,
+      "endLine": 27,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": true,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:lib/dashboard-data.ts:ActivityItem",
+    "type": "Interface",
+    "name": "ActivityItem",
+    "file": "lib/dashboard-data.ts",
+    "span": {
+      "file": "lib/dashboard-data.ts",
+      "startLine": 191,
+      "startColumn": 1,
+      "endLine": 198,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": true,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:lib/dashboard-data.ts:AttentionItem",
+    "type": "Interface",
+    "name": "AttentionItem",
+    "file": "lib/dashboard-data.ts",
+    "span": {
+      "file": "lib/dashboard-data.ts",
+      "startLine": 122,
+      "startColumn": 1,
+      "endLine": 128,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": true,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:lib/dashboard-data.ts:DashboardData",
+    "type": "Interface",
+    "name": "DashboardData",
+    "file": "lib/dashboard-data.ts",
+    "span": {
+      "file": "lib/dashboard-data.ts",
+      "startLine": 301,
+      "startColumn": 1,
+      "endLine": 305,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": true,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:lib/dashboard-data.ts:KpiData",
+    "type": "Interface",
+    "name": "KpiData",
+    "file": "lib/dashboard-data.ts",
+    "span": {
+      "file": "lib/dashboard-data.ts",
+      "startLine": 64,
+      "startColumn": 1,
+      "endLine": 77,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": true,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:lib/form-errors.ts:ParsedFormError",
+    "type": "Interface",
+    "name": "ParsedFormError",
+    "file": "lib/form-errors.ts",
+    "span": {
+      "file": "lib/form-errors.ts",
+      "startLine": 12,
+      "startColumn": 1,
+      "endLine": 19,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": true,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:lib/frappe-meta.ts:DocField",
+    "type": "Interface",
+    "name": "DocField",
+    "file": "lib/frappe-meta.ts",
+    "span": {
+      "file": "lib/frappe-meta.ts",
+      "startLine": 12,
+      "startColumn": 1,
+      "endLine": 27,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": true,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:lib/frappe-meta.ts:DoctypeMeta",
+    "type": "Interface",
+    "name": "DoctypeMeta",
+    "file": "lib/frappe-meta.ts",
+    "span": {
+      "file": "lib/frappe-meta.ts",
+      "startLine": 29,
+      "startColumn": 1,
+      "endLine": 41,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": true,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:lib/frappe-meta.ts:FormColumn",
+    "type": "Interface",
+    "name": "FormColumn",
+    "file": "lib/frappe-meta.ts",
+    "span": {
+      "file": "lib/frappe-meta.ts",
+      "startLine": 163,
+      "startColumn": 1,
+      "endLine": 166,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": true,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:lib/frappe-meta.ts:FormGroup",
+    "type": "Interface",
+    "name": "FormGroup",
+    "file": "lib/frappe-meta.ts",
+    "span": {
+      "file": "lib/frappe-meta.ts",
+      "startLine": 157,
+      "startColumn": 1,
+      "endLine": 161,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": true,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:lib/frappe-meta.ts:ListRow",
+    "type": "Interface",
+    "name": "ListRow",
+    "file": "lib/frappe-meta.ts",
+    "span": {
+      "file": "lib/frappe-meta.ts",
+      "startLine": 97,
+      "startColumn": 1,
+      "endLine": 100,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": true,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:lib/gating.ts:GatedItem",
+    "type": "Interface",
+    "name": "GatedItem",
+    "file": "lib/gating.ts",
+    "span": {
+      "file": "lib/gating.ts",
+      "startLine": 9,
+      "startColumn": 1,
+      "endLine": 16,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": true,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:lib/gating.ts:GatingStatus",
+    "type": "Interface",
+    "name": "GatingStatus",
+    "file": "lib/gating.ts",
+    "span": {
+      "file": "lib/gating.ts",
+      "startLine": 18,
+      "startColumn": 1,
+      "endLine": 24,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": true,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:lib/keyboard.ts:Shortcut",
+    "type": "Interface",
+    "name": "Shortcut",
+    "file": "lib/keyboard.ts",
+    "span": {
+      "file": "lib/keyboard.ts",
+      "startLine": 6,
+      "startColumn": 1,
+      "endLine": 10,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": true,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:lib/mock-invoice.ts:Invoice",
+    "type": "Interface",
+    "name": "Invoice",
+    "file": "lib/mock-invoice.ts",
+    "span": {
+      "file": "lib/mock-invoice.ts",
+      "startLine": 9,
+      "startColumn": 1,
+      "endLine": 26,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": true,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:lib/mock-invoice.ts:InvoiceItem",
+    "type": "Interface",
+    "name": "InvoiceItem",
+    "file": "lib/mock-invoice.ts",
+    "span": {
+      "file": "lib/mock-invoice.ts",
+      "startLine": 1,
+      "startColumn": 1,
+      "endLine": 7,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": true,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:lib/notifications.ts:Notification",
+    "type": "Interface",
+    "name": "Notification",
+    "file": "lib/notifications.ts",
+    "span": {
+      "file": "lib/notifications.ts",
+      "startLine": 9,
+      "startColumn": 1,
+      "endLine": 19,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": true,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:lib/saved-views.ts:SavedView",
+    "type": "Interface",
+    "name": "SavedView",
+    "file": "lib/saved-views.ts",
+    "span": {
+      "file": "lib/saved-views.ts",
+      "startLine": 15,
+      "startColumn": 1,
+      "endLine": 24,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": true,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:lib/saved-views.ts:SavedViewStore",
+    "type": "Interface",
+    "name": "SavedViewStore",
+    "file": "lib/saved-views.ts",
+    "span": {
+      "file": "lib/saved-views.ts",
+      "startLine": 26,
+      "startColumn": 1,
+      "endLine": 29,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": true,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:lib/saved-views.ts:Scope",
+    "type": "Interface",
+    "name": "Scope",
+    "file": "lib/saved-views.ts",
+    "span": {
+      "file": "lib/saved-views.ts",
+      "startLine": 33,
+      "startColumn": 1,
+      "endLine": 37,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": true,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:lib/status.ts:ToneConfig",
+    "type": "Interface",
+    "name": "ToneConfig",
+    "file": "lib/status.ts",
+    "span": {
+      "file": "lib/status.ts",
+      "startLine": 15,
+      "startColumn": 1,
+      "endLine": 20,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": false,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  },
+  {
+    "id": "iface:lib/team-roles.ts:TeamMember",
+    "type": "Interface",
+    "name": "TeamMember",
+    "file": "lib/team-roles.ts",
+    "span": {
+      "file": "lib/team-roles.ts",
+      "startLine": 9,
+      "startColumn": 1,
+      "endLine": 17,
+      "endColumn": 2
+    },
+    "metadata": {
+      "language": "typescript",
+      "provenance": {
+        "passId": "@0xsarwagya/ontoly-parser-typescript:frontend",
+        "parser": "typescript",
+        "parserVersion": "5.9.2",
+        "source": "typescript"
+      },
+      "exported": true,
+      "default": false,
+      "typeParameters": 0,
+      "declarationKind": "interface"
+    }
+  }
+]

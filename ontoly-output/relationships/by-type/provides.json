@@ -1,0 +1,48 @@
+[
+  {
+    "id": "edge:provides:119p3th",
+    "type": "PROVIDES",
+    "from": "dep:next",
+    "to": "framework:Next.js",
+    "evidence": [
+      {
+        "kind": "config",
+        "confidence": "exact",
+        "span": {
+          "file": "package.json",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 1,
+          "endColumn": 1
+        },
+        "description": "dependency provides framework"
+      }
+    ],
+    "metadata": {
+      "packageName": "next"
+    }
+  },
+  {
+    "id": "edge:provides:186kqbe",
+    "type": "PROVIDES",
+    "from": "dep:react",
+    "to": "framework:React",
+    "evidence": [
+      {
+        "kind": "config",
+        "confidence": "exact",
+        "span": {
+          "file": "package.json",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 1,
+          "endColumn": 1
+        },
+        "description": "dependency provides framework"
+      }
+    ],
+    "metadata": {
+      "packageName": "react"
+    }
+  }
+]
