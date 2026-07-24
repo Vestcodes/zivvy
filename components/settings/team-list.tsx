@@ -42,8 +42,8 @@ import {
   AlertDialogTitle
 } from "@/components/ui/alert-dialog";
 import { frappeCall, FrappeError } from "@/lib/frappe-client";
-import type { TeamMember } from "@/lib/team";
-import { ASSIGNABLE_ROLES } from "@/lib/team";
+import type { TeamMember } from "@/lib/team-roles";
+import { ASSIGNABLE_ROLES } from "@/lib/team-roles";
 import { cn } from "@/lib/utils";
 import { formatDate } from "@/lib/format";
 import {

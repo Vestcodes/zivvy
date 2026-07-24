@@ -1,19 +1,14 @@
+import "server-only";
+
 import { cookies } from "next/headers";
+import type { TeamMember } from "@/lib/team-roles";
+export type { TeamMember } from "@/lib/team-roles";
+export { ASSIGNABLE_ROLES } from "@/lib/team-roles";
 
 const FRAPPE_ORIGIN =
   process.env.FRAPPE_ORIGIN ||
   process.env.NEXT_PUBLIC_FRAPPE_ORIGIN ||
   "https://zivvy.xyz";
-
-export interface TeamMember {
-  name: string;
-  full_name: string;
-  email: string;
-  enabled: boolean;
-  user_type: string;
-  last_login: string | null;
-  roles: string[];
-}
 
 async function serverCall<T = unknown>(
   method: string,
@@ -124,21 +119,3 @@ export async function fetchTeamMembers(tenantName?: string | null): Promise<Team
   }));
 }
 
-export const ASSIGNABLE_ROLES = [
-  "System Manager",
-  "Accounts Manager",
-  "Accounts User",
-  "Sales Manager",
-  "Sales User",
-  "Purchase Manager",
-  "Purchase User",
-  "Stock Manager",
-  "Stock User",
-  "Manufacturing Manager",
-  "Manufacturing User",
-  "HR Manager",
-  "HR User",
-  "Projects Manager",
-  "Projects User",
-  "Support Team"
-] as const;
