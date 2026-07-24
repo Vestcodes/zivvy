@@ -37,6 +37,7 @@ import {
   HardHat,
   Building2,
   Hammer,
+  Code,
   ListChecks,
   Clock3,
   ClipboardCheck,
@@ -326,6 +327,7 @@ export const MODULE_NAVS: Record<string, ModuleNav> = {
     subtitle: "Team, billing, preferences",
     items: [
       { label: "Team", href: "/settings/team", icon: UserCog },
+      { label: "Developer", href: "/settings/developer", icon: Code },
       { label: "Billing", href: "/billing", icon: CreditCard },
       { label: "Settings", href: "/settings", icon: Settings },
       { label: "Help", href: "/help", icon: LifeBuoy }
