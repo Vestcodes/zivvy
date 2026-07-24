@@ -40,6 +40,7 @@ export default async function Image() {
           </div>
           <div
             style={{
+              display: "flex",
               fontSize: 34,
               fontWeight: 600,
               letterSpacing: "-0.02em"
@@ -49,9 +50,18 @@ export default async function Image() {
           </div>
         </div>
 
-        <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center" }}>
+        <div
+          style={{
+            flex: 1,
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center"
+          }}
+        >
           <div
             style={{
+              display: "flex",
+              flexWrap: "wrap",
               fontSize: 84,
               lineHeight: 1.02,
               fontWeight: 700,
@@ -59,11 +69,11 @@ export default async function Image() {
               maxWidth: 940
             }}
           >
-            The clean way to run{" "}
-            <span style={{ fontStyle: "italic", color: "#178262" }}>your whole business</span>.
+            The clean way to run your whole business.
           </div>
           <div
             style={{
+              display: "flex",
               fontSize: 30,
               marginTop: 28,
               color: "#5a687c",
@@ -86,6 +96,7 @@ export default async function Image() {
         >
           <div
             style={{
+              display: "flex",
               padding: "10px 18px",
               borderRadius: 999,
               background: "#ffffff",
@@ -96,7 +107,7 @@ export default async function Image() {
           >
             Free · 2 seats included
           </div>
-          <div>zivvy.xyz</div>
+          <div style={{ display: "flex" }}>zivvy.xyz</div>
         </div>
       </div>
     ),
