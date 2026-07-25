@@ -5,9 +5,9 @@ import {
   featureDetails,
   industryDetails,
   integrationDetails,
-  solutionDetails,
   useCaseDetails
 } from "@/lib/marketing-content";
+import { solutionProfiles } from "@/lib/solutions-content";
 import { getAllBlogPosts } from "@/lib/blog";
 import { SITE_ORIGIN } from "@/lib/seo";
 
@@ -64,7 +64,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const solutions: Entry[] = [
     entry("/solutions", 0.8, "monthly", now),
-    ...solutionDetails.map((item) => entry(`/solutions/${item.slug}`, 0.8, "monthly", now))
+    ...solutionProfiles.map((item) => entry(`/solutions/${item.slug}`, 0.8, "monthly", now))
   ];
 
   const industries: Entry[] = [
