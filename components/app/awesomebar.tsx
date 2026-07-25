@@ -56,7 +56,7 @@ export function AwesomebarTrigger() {
         variant="outline"
         size="sm"
         onClick={() => setOpen(true)}
-        className="h-8 w-full max-w-56 justify-between text-muted-foreground"
+        className="w-full max-w-56 justify-between text-muted-foreground"
       >
         <span className="inline-flex min-w-0 items-center gap-2">
           <Search className="size-4 shrink-0" />

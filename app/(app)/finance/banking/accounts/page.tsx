@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ChevronRight, Plus } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
@@ -12,7 +11,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { reportviewGet, type ListRow } from "@/lib/frappe-meta";
+import { AutoListNewButton } from "@/components/auto/auto-list-new-button";
+import {
+  getDoctypeMeta,
+  groupFieldsForForm,
+  reportviewGet,
+  type ListRow
+} from "@/lib/frappe-meta";
 
 export const metadata: Metadata = { title: "Bank accounts — Zivvy" };
 
@@ -32,22 +37,26 @@ function maskAccountNumber(no?: string): string {
 }
 
 export default async function BankAccountsPage() {
-  const res = await reportviewGet({
-    doctype: "Bank Account",
-    fields: [
-      "name",
-      "account_name",
-      "bank",
-      "bank_account_no",
-      "account_currency",
-      "is_default",
-      "disabled",
-    ],
-    order_by: "account_name asc",
-    page_length: 100,
-  });
+  const [res, meta] = await Promise.all([
+    reportviewGet({
+      doctype: "Bank Account",
+      fields: [
+        "name",
+        "account_name",
+        "bank",
+        "bank_account_no",
+        "account_currency",
+        "is_default",
+        "disabled",
+      ],
+      order_by: "account_name asc",
+      page_length: 100,
+    }),
+    getDoctypeMeta("Bank Account"),
+  ]);
 
   const rows = (res?.values ?? []) as BankAccount[];
+  const newGroups = meta ? groupFieldsForForm(meta, { isNew: true }) : [];
 
   return (
     <div className="mx-auto w-full max-w-6xl space-y-4">
@@ -58,11 +67,14 @@ export default async function BankAccountsPage() {
             All bank accounts linked to your companies.
           </p>
         </div>
-        <Button asChild size="sm">
-          <Link href="/finance/banking/accounts/new">
-            <Plus className="h-4 w-4 mr-1.5" /> New
-          </Link>
-        </Button>
+        {meta ? (
+          <AutoListNewButton
+            meta={meta}
+            groups={newGroups}
+            basePath="/finance/banking/accounts"
+            title="Bank accounts"
+          />
+        ) : null}
       </header>
 
       <Card>

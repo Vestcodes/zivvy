@@ -80,7 +80,7 @@ export function AddonsHub({ addons }: AddonsHubProps) {
                   <ArrowRight className="size-4" />
                 </span>
               </MovingBorderButton>
-              <Button asChild variant="outline" size="lg">
+              <Button asChild variant="outline" size="lg" className="h-12 px-6">
                 <Link href="/pricing">See core pricing</Link>
               </Button>
             </div>

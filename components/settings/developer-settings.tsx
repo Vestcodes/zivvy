@@ -266,7 +266,7 @@ function ApiKeysTab({ tenant, currentUser }: { tenant: string; currentUser: stri
                   {key.enabled && (
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" className="h-8 w-8">
+                        <Button variant="ghost" size="icon-sm">
                           <MoreHorizontal className="h-4 w-4" />
                         </Button>
                       </DropdownMenuTrigger>
@@ -483,7 +483,7 @@ function WebhooksTab({ tenant }: { tenant: string }) {
                   </div>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0">
+                      <Button variant="ghost" size="icon-sm" className="shrink-0">
                         <MoreHorizontal className="h-4 w-4" />
                       </Button>
                     </DropdownMenuTrigger>

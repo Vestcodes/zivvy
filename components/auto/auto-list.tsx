@@ -1,6 +1,5 @@
 import Link from "next/link";
-import { ChevronRight, Plus } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { ChevronRight } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -12,6 +11,7 @@ import {
 import { Card } from "@/components/ui/card";
 import { FieldCell } from "@/components/auto/field-cell";
 import { AutoListEmpty } from "@/components/auto/auto-list-empty";
+import { AutoListNewButton } from "@/components/auto/auto-list-new-button";
 import { AutoListSkeleton } from "@/components/auto/auto-list-skeleton";
 import { AutoListSearch } from "@/components/auto/auto-list-search";
 import { AutoListPagination } from "@/components/auto/auto-list-pagination";
@@ -23,6 +23,7 @@ import { computeListAction } from "@/lib/next-action";
 import {
   frappeGetCount,
   getDoctypeMeta,
+  groupFieldsForForm,
   listViewFields,
   reportviewGet
 } from "@/lib/frappe-meta";
@@ -69,6 +70,7 @@ export async function AutoList({
   }
 
   const listFields = listViewFields(meta);
+  const newGroups = groupFieldsForForm(meta, { isNew: true });
   const fieldNames = ["name", ...listFields.map((f) => f.fieldname).filter((f) => f !== "name")];
   const orderBy = meta.sort_field
     ? `\`tab${doctype}\`.\`${meta.sort_field}\` ${meta.sort_order ?? "DESC"}`
@@ -135,12 +137,12 @@ export async function AutoList({
         </div>
         <div className="flex items-center gap-2">
           <AutoListSearch placeholder={`Search ${title.toLowerCase()}…`} />
-          <Button asChild variant="polished" size="sm">
-            <Link href={`${basePath}/new`}>
-              <Plus />
-              New
-            </Link>
-          </Button>
+          <AutoListNewButton
+            meta={meta}
+            groups={newGroups}
+            basePath={basePath}
+            title={title}
+          />
         </div>
       </header>
 

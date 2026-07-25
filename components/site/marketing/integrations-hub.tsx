@@ -532,7 +532,7 @@ export function IntegrationsHubPage({ items }: Props) {
                   <ArrowRight className="size-4" />
                 </span>
               </MovingBorderButton>
-              <Button asChild variant="outline">
+              <Button asChild variant="outline" size="lg" className="h-11 px-6">
                 <a href={DOCS_URL} target="_blank" rel="noreferrer">
                   Read docs
                 </a>

@@ -499,7 +499,7 @@ export function MarketingDetailPage({ sectionLabel, sectionHref, entry }: Props)
                     <ArrowRight className="size-4" />
                   </span>
                 </MovingBorderButton>
-                <Button asChild variant="outline" size="lg">
+                <Button asChild variant="outline" size="lg" className="h-11 px-6">
                   <Link href="/pricing">See pricing</Link>
                 </Button>
               </div>
