@@ -14,6 +14,7 @@ import { BentoGrid, BentoGridItem } from "@/components/ui/aceternity";
 import { AnimatedGridPattern } from "@/components/ui/animated-grid-pattern";
 import { Marquee } from "@/components/ui/marquee";
 import { BlurFade } from "@/components/ui/blur-fade";
+import { BrandLogo } from "@/components/site/brand-logo";
 import { cn } from "@/lib/utils";
 
 /* ---------- Reusable BentoGridItem headers (visuals) ---------- */
@@ -92,26 +93,28 @@ function ApiHeader() {
 }
 
 const INTEGRATION_LOGOS = [
-  "Slack",
-  "Stripe",
-  "HubSpot",
-  "Shopify",
-  "QuickBooks",
-  "Zapier",
-  "Google Drive",
-  "Salesforce",
+  "slack",
+  "stripe",
+  "hubspot",
+  "shopify",
+  "quickbooks",
+  "zapier",
+  "googledrive",
+  "salesforce",
+  "notion",
+  "github",
 ];
 
 function IntegrationsHeader() {
   return (
-    <div className="relative flex h-full min-h-[6rem] w-full flex-1 overflow-hidden rounded-xl border border-border/60 bg-card/70 py-2">
+    <div className="relative flex h-full min-h-[6rem] w-full flex-1 items-center overflow-hidden rounded-xl border border-border/60 bg-card/70 py-2">
       <Marquee pauseOnHover className="[--duration:22s]">
-        {INTEGRATION_LOGOS.map((name) => (
+        {INTEGRATION_LOGOS.map((slug) => (
           <span
-            key={name}
-            className="mx-1.5 rounded-md border border-border/70 bg-background/70 px-3 py-1 text-xs font-medium"
+            key={slug}
+            className="mx-2 flex size-10 items-center justify-center rounded-md border border-border/70 bg-background/70"
           >
-            {name}
+            <BrandLogo slug={slug} className="size-8 text-muted-foreground" />
           </span>
         ))}
       </Marquee>

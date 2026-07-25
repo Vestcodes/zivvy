@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { SiteHeader } from "@/components/site/header";
 import { SiteFooter } from "@/components/site/footer";
+import { BrandLogo } from "@/components/site/brand-logo";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -29,6 +30,17 @@ interface AddonsHubProps {
 }
 
 const DASHBOARD_URL = "https://zivvy.xyz/settings/addons";
+
+/**
+ * Which brand marks to show on each addon card. Keyed by addon slug so
+ * new addons can be wired up here without touching the card JSX.
+ */
+const ADDON_BRAND_SLUGS: Record<string, string[]> = {
+  "ecommerce-integrations": ["shopify", "amazon", "unicommerce"],
+  "erpnext-datev": ["datev"],
+  "digital-signer": ["digital-signer"],
+  "payments-processor": ["payments-processor"]
+};
 
 export function AddonsHub({ addons }: AddonsHubProps) {
   return (
@@ -141,6 +153,25 @@ export function AddonsHub({ addons }: AddonsHubProps) {
                     >
                       {addon.description}
                     </CardItem>
+
+                    {ADDON_BRAND_SLUGS[addon.slug]?.length ? (
+                      <CardItem
+                        translateZ={35}
+                        className="mt-4 flex w-full items-center gap-2"
+                      >
+                        {ADDON_BRAND_SLUGS[addon.slug]!.map((brandSlug) => (
+                          <span
+                            key={brandSlug}
+                            className="flex size-8 items-center justify-center rounded-md border border-border/50 bg-background/60"
+                          >
+                            <BrandLogo
+                              slug={brandSlug}
+                              className="size-6 text-muted-foreground"
+                            />
+                          </span>
+                        ))}
+                      </CardItem>
+                    ) : null}
 
                     <CardItem
                       translateZ={30}

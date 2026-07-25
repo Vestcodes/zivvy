@@ -19,6 +19,7 @@ import {
   Spotlight
 } from "@/components/ui/aceternity";
 import { AddonSubscribeForm } from "@/components/site/marketing/addon-subscribe";
+import { BrandLogo } from "@/components/site/brand-logo";
 import {
   BreadcrumbJsonLd,
   FaqJsonLd
@@ -40,6 +41,14 @@ interface AddonDetailPageProps {
 }
 
 const DASHBOARD_URL = "https://zivvy.xyz/settings/addons";
+
+/** Brand marks to feature at the top of each addon's detail hero. */
+const ADDON_BRAND_SLUGS: Record<string, string[]> = {
+  "ecommerce-integrations": ["shopify", "amazon", "unicommerce"],
+  "erpnext-datev": ["datev"],
+  "digital-signer": ["digital-signer"],
+  "payments-processor": ["payments-processor"]
+};
 
 /**
  * Extract a currency symbol + numeric value from the addon price string
@@ -155,6 +164,24 @@ export function AddonDetailPage({ addon, loggedIn }: AddonDetailPageProps) {
                 >
                   {addon.category} add-on
                 </Badge>
+                {ADDON_BRAND_SLUGS[addon.slug]?.length ? (
+                  <div
+                    className="mt-5 flex items-center gap-3"
+                    aria-label="Tools unlocked by this add-on"
+                  >
+                    {ADDON_BRAND_SLUGS[addon.slug]!.map((brandSlug) => (
+                      <span
+                        key={brandSlug}
+                        className="flex size-12 items-center justify-center rounded-xl border border-border/60 bg-background/70 shadow-sm"
+                      >
+                        <BrandLogo
+                          slug={brandSlug}
+                          className="size-8 text-foreground/80"
+                        />
+                      </span>
+                    ))}
+                  </div>
+                ) : null}
                 <h1 className="mt-4 font-display text-4xl font-bold tracking-tight sm:text-5xl">
                   {addon.hero}
                 </h1>

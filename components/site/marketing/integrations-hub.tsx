@@ -4,20 +4,11 @@ import { useMemo, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { motion } from "motion/react";
-import {
-  ArrowRight,
-  Cloud,
-  Code2,
-  Database,
-  Hash,
-  Link2,
-  MessageCircle,
-  Webhook,
-  Zap
-} from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import type { HubCardItem } from "@/lib/marketing-content";
 import { SiteHeader } from "@/components/site/header";
 import { SiteFooter } from "@/components/site/footer";
+import { BrandLogo } from "@/components/site/brand-logo";
 import { Button } from "@/components/ui/button";
 import { AnimatedShinyText } from "@/components/ui/animated-shiny-text";
 import { Badge } from "@/components/ui/badge";
@@ -51,6 +42,26 @@ const PATTERN_CHIPS = [
   "Audit-friendly"
 ];
 
+// Marquee'd brand logo strip — ~14 tools the app talks to. Order matters:
+// we alternate categories so the marquee doesn't cluster all payments
+// brands together.
+const LOGO_STRIP = [
+  "slack",
+  "stripe",
+  "shopify",
+  "hubspot",
+  "notion",
+  "quickbooks",
+  "salesforce",
+  "zapier",
+  "googledrive",
+  "plaid",
+  "twilio",
+  "github",
+  "posthog",
+  "xero"
+];
+
 const CATEGORIES = [
   "All",
   "Payments",
@@ -77,27 +88,27 @@ function NetworkDiagram() {
   const driveRef = useRef<HTMLDivElement>(null);
   const zapierRef = useRef<HTMLDivElement>(null);
   const sfdcRef = useRef<HTMLDivElement>(null);
-  const apiRef = useRef<HTMLDivElement>(null);
+  const stripeRef = useRef<HTMLDivElement>(null);
 
   const left: Array<{
     label: string;
-    icon: React.ComponentType<{ className?: string }>;
+    slug: string;
     ref: React.RefObject<HTMLDivElement | null>;
     curvature: number;
   }> = [
-    { label: "Slack", icon: MessageCircle, ref: slackRef, curvature: -55 },
-    { label: "HubSpot", icon: Database, ref: hubspotRef, curvature: 0 },
-    { label: "Drive", icon: Cloud, ref: driveRef, curvature: 55 }
+    { label: "Slack", slug: "slack", ref: slackRef, curvature: -55 },
+    { label: "HubSpot", slug: "hubspot", ref: hubspotRef, curvature: 0 },
+    { label: "Google Drive", slug: "googledrive", ref: driveRef, curvature: 55 }
   ];
   const right: Array<{
     label: string;
-    icon: React.ComponentType<{ className?: string }>;
+    slug: string;
     ref: React.RefObject<HTMLDivElement | null>;
     curvature: number;
   }> = [
-    { label: "Zapier", icon: Zap, ref: zapierRef, curvature: -55 },
-    { label: "SFDC", icon: Hash, ref: sfdcRef, curvature: 0 },
-    { label: "API", icon: Code2, ref: apiRef, curvature: 55 }
+    { label: "Zapier", slug: "zapier", ref: zapierRef, curvature: -55 },
+    { label: "Salesforce", slug: "salesforce", ref: sfdcRef, curvature: 0 },
+    { label: "Stripe", slug: "stripe", ref: stripeRef, curvature: 55 }
   ];
 
   return (
@@ -106,20 +117,17 @@ function NetworkDiagram() {
       className="relative mx-auto flex h-[360px] w-full max-w-md items-center justify-between px-4"
     >
       <div className="flex flex-col items-center gap-6">
-        {left.map((sat) => {
-          const Icon = sat.icon;
-          return (
-            <div
-              key={sat.label}
-              ref={sat.ref}
-              className="relative z-10 flex size-12 items-center justify-center rounded-xl border border-border/70 bg-card/80 shadow-sm backdrop-blur transition-transform hover:scale-105"
-              title={sat.label}
-              aria-label={sat.label}
-            >
-              <Icon className="size-5 text-foreground/80" />
-            </div>
-          );
-        })}
+        {left.map((sat) => (
+          <div
+            key={sat.label}
+            ref={sat.ref}
+            className="relative z-10 flex size-12 items-center justify-center rounded-xl border border-border/70 bg-card/80 shadow-sm backdrop-blur transition-transform hover:scale-105"
+            title={sat.label}
+            aria-label={sat.label}
+          >
+            <BrandLogo slug={sat.slug} className="size-6 text-foreground/80" />
+          </div>
+        ))}
       </div>
 
       <div
@@ -131,20 +139,17 @@ function NetworkDiagram() {
       </div>
 
       <div className="flex flex-col items-center gap-6">
-        {right.map((sat) => {
-          const Icon = sat.icon;
-          return (
-            <div
-              key={sat.label}
-              ref={sat.ref}
-              className="relative z-10 flex size-12 items-center justify-center rounded-xl border border-primary/30 bg-primary/5 shadow-sm backdrop-blur transition-transform hover:scale-105"
-              title={sat.label}
-              aria-label={sat.label}
-            >
-              <Icon className="size-5 text-primary" />
-            </div>
-          );
-        })}
+        {right.map((sat) => (
+          <div
+            key={sat.label}
+            ref={sat.ref}
+            className="relative z-10 flex size-12 items-center justify-center rounded-xl border border-primary/30 bg-primary/5 shadow-sm backdrop-blur transition-transform hover:scale-105"
+            title={sat.label}
+            aria-label={sat.label}
+          >
+            <BrandLogo slug={sat.slug} className="size-6 text-primary" />
+          </div>
+        ))}
       </div>
 
       {[...left, ...right].map((sat, idx) => {
@@ -383,6 +388,32 @@ export function IntegrationsHubPage({ items }: Props) {
           </BlurFade>
         </section>
 
+        <section className="mx-auto max-w-6xl px-6 pb-2 pt-10">
+          <BlurFade>
+            <p className="mb-3 text-center text-xs font-medium uppercase tracking-wide text-muted-foreground">
+              Works with the tools you already use
+            </p>
+          </BlurFade>
+          <div className="relative overflow-hidden rounded-xl border border-border/60 bg-card/40 py-3">
+            <Marquee pauseOnHover className="[--duration:32s]">
+              {LOGO_STRIP.map((slug) => (
+                <div
+                  key={slug}
+                  className="mx-3 flex items-center justify-center"
+                  title={slug}
+                >
+                  <BrandLogo
+                    slug={slug}
+                    className="size-8 text-muted-foreground/80 transition-colors hover:text-foreground"
+                  />
+                </div>
+              ))}
+            </Marquee>
+            <div className="pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-background to-transparent" />
+            <div className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-background to-transparent" />
+          </div>
+        </section>
+
         <section className="mx-auto max-w-6xl px-6 pb-3 pt-8">
           <BlurFade>
             <CategoryPills
@@ -414,15 +445,11 @@ export function IntegrationsHubPage({ items }: Props) {
                       ) : null}
                       <div className="mb-3 flex items-center justify-between">
                         <div className="flex size-9 items-center justify-center rounded-lg border border-border/70 bg-background/70">
-                          {index % 4 === 0 ? (
-                            <Zap className="size-4 text-primary" />
-                          ) : index % 4 === 1 ? (
-                            <Cloud className="size-4 text-primary" />
-                          ) : index % 4 === 2 ? (
-                            <Webhook className="size-4 text-primary" />
-                          ) : (
-                            <Link2 className="size-4 text-primary" />
-                          )}
+                          <BrandLogo
+                            slug={item.slug}
+                            label={item.title}
+                            className="size-5 text-primary"
+                          />
                         </div>
                         {item.category ? (
                           <Badge variant="outline" className="text-[10px] font-medium">
