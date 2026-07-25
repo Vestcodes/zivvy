@@ -279,7 +279,13 @@ export function FeaturesHubPage({ deepDives }: Props) {
                     <Link href="/login#signup">Start free</Link>
                   </Button>
                   <Button asChild variant="outline" size="lg">
-                    <Link href="/support/docs">Read the API docs</Link>
+                    <a
+                      href="https://integrate.zivvy.xyz/docs"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Read the API docs
+                    </a>
                   </Button>
                 </div>
               </BlurFade>
@@ -386,7 +392,13 @@ export function FeaturesHubPage({ deepDives }: Props) {
                 <Link href="/login#signup">Start free</Link>
               </Button>
               <Button asChild variant="outline" size="lg">
-                <Link href="/support/docs">Read API docs</Link>
+                <a
+                  href="https://integrate.zivvy.xyz/docs"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Read API docs
+                </a>
               </Button>
             </div>
           </div>

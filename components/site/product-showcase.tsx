@@ -213,7 +213,7 @@ const MODULES = [
   {
     title: "Add-ons",
     description: "Extend workflows without touching your core setup.",
-    href: "/pricing",
+    href: "/addons",
     icon: <Boxes className="size-4 text-primary" />,
     header: <AddonHeader />,
     className: "md:col-span-3",

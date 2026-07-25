@@ -333,7 +333,13 @@ export function UseCasesHubPage({ items }: Props) {
                 <Link href="/features/workflow-builder">Open workflow builder</Link>
               </Button>
               <Button asChild variant="outline">
-                <Link href="/support/docs">Read the API docs</Link>
+                <a
+                  href="https://integrate.zivvy.xyz/docs"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Read the API docs
+                </a>
               </Button>
             </div>
           </div>
