@@ -7,6 +7,7 @@ import { ArrowRight, Check, GitCompareArrows, Minus, Scale } from "lucide-react"
 import type { HubCardItem } from "@/lib/marketing-content";
 import { SiteHeader } from "@/components/site/header";
 import { SiteFooter } from "@/components/site/footer";
+import { LogoMark } from "@/components/site/logo";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { BlurFade } from "@/components/ui/blur-fade";
@@ -158,8 +159,8 @@ function DirectionAwareCompareCard({
           <Badge className={cn("text-[10px]", TIER_BADGE[meta.tier])}>{meta.tier}</Badge>
         </div>
         <div className="mb-5 grid grid-cols-[1fr_auto_1fr] items-center gap-3">
-          <div className="rounded-xl border border-primary/30 bg-primary/10 px-3 py-3 text-center">
-            <p className="text-xs font-medium uppercase tracking-wide text-primary">Zivvy</p>
+          <div className="flex items-center justify-center rounded-xl border border-primary/30 bg-primary/10 px-3 py-3 text-center">
+            <LogoMark className="size-6" />
           </div>
           <div className="flex size-9 items-center justify-center rounded-full border border-border/70 bg-background text-xs font-semibold text-muted-foreground">
             vs
@@ -283,9 +284,9 @@ export function CompareHubPage({ items }: Props) {
                   <div className="flex items-center gap-3">
                     <div
                       aria-hidden
-                      className="flex size-12 items-center justify-center rounded-2xl border border-primary/40 bg-primary-gradient font-display text-xl font-bold text-primary-foreground shadow-md shadow-primary/30"
+                      className="flex size-12 items-center justify-center rounded-2xl border border-primary/40 shadow-md shadow-primary/30"
                     >
-                      Z
+                      <LogoMark className="size-12" />
                     </div>
                     <div>
                       <p className="font-display text-xl font-semibold">One tenant.</p>

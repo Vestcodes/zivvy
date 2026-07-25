@@ -5,6 +5,7 @@ import { ArrowRight, CheckCircle2, XCircle } from "lucide-react";
 import type { CompareDetail } from "@/lib/marketing-content";
 import { SiteHeader } from "@/components/site/header";
 import { SiteFooter } from "@/components/site/footer";
+import { LogoMark } from "@/components/site/logo";
 import { Button } from "@/components/ui/button";
 import { BlurFade } from "@/components/ui/blur-fade";
 import { BorderBeam } from "@/components/ui/border-beam";
@@ -72,9 +73,9 @@ export function CompareDetailPage({ sectionLabel, sectionHref, entry }: Props) {
               <p className="mt-4 max-w-3xl text-lg text-muted-foreground">{entry.description}</p>
 
               <div className="mt-8 grid max-w-xl grid-cols-[1fr_auto_1fr] items-center gap-3">
-                <div className="relative overflow-hidden rounded-xl border border-primary/35 bg-primary/10 px-4 py-3 text-center">
+                <div className="relative flex items-center justify-center overflow-hidden rounded-xl border border-primary/35 bg-primary/10 px-4 py-3 text-center">
                   <BorderBeam size={50} duration={6} colorFrom="#34d399" colorTo="#0f766e" />
-                  <p className="text-sm font-semibold text-primary">Zivvy</p>
+                  <LogoMark className="size-6" />
                 </div>
                 <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                   vs

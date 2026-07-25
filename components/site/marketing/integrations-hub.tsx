@@ -218,28 +218,40 @@ function CategoryPills({
   );
 }
 
-// Rough coverage arcs for the world map — connects a few regions to a
-// central hub to visualise "integrations everywhere".
+// Coverage arcs for the world map — real geographic endpoints stitched
+// across regions to visualise "integrations everywhere".
 const MAP_CONNECTIONS = [
   {
-    start: { lat: 40.7128, lng: -74.006, label: "New York" },
-    end: { lat: 51.5074, lng: -0.1278, label: "London" }
+    start: { lat: 37.77, lng: -122.42, label: "San Francisco" },
+    end: { lat: 40.71, lng: -74.0, label: "New York" }
   },
   {
-    start: { lat: 51.5074, lng: -0.1278, label: "London" },
-    end: { lat: 1.3521, lng: 103.8198, label: "Singapore" }
+    start: { lat: 40.71, lng: -74.0, label: "New York" },
+    end: { lat: 51.5, lng: -0.13, label: "London" }
   },
   {
-    start: { lat: 40.7128, lng: -74.006, label: "New York" },
-    end: { lat: -33.8688, lng: 151.2093, label: "Sydney" }
+    start: { lat: 51.5, lng: -0.13, label: "London" },
+    end: { lat: 50.11, lng: 8.68, label: "Frankfurt" }
   },
   {
-    start: { lat: -23.5505, lng: -46.6333, label: "São Paulo" },
-    end: { lat: 51.5074, lng: -0.1278, label: "London" }
+    start: { lat: 50.11, lng: 8.68, label: "Frankfurt" },
+    end: { lat: 19.07, lng: 72.87, label: "Mumbai" }
   },
   {
-    start: { lat: 35.6762, lng: 139.6503, label: "Tokyo" },
-    end: { lat: 37.7749, lng: -122.4194, label: "San Francisco" }
+    start: { lat: 19.07, lng: 72.87, label: "Mumbai" },
+    end: { lat: 1.35, lng: 103.82, label: "Singapore" }
+  },
+  {
+    start: { lat: 1.35, lng: 103.82, label: "Singapore" },
+    end: { lat: -33.87, lng: 151.21, label: "Sydney" }
+  },
+  {
+    start: { lat: -23.55, lng: -46.63, label: "São Paulo" },
+    end: { lat: 40.71, lng: -74.0, label: "New York" }
+  },
+  {
+    start: { lat: 25.2, lng: 55.27, label: "Dubai" },
+    end: { lat: 51.5, lng: -0.13, label: "London" }
   }
 ];
 
@@ -318,7 +330,7 @@ export function IntegrationsHubPage({ items }: Props) {
               </p>
             </div>
             <div className="relative overflow-hidden rounded-2xl border border-border/70 bg-card/40 p-2 sm:p-4">
-              <WorldMap dots={MAP_CONNECTIONS} lineColor="#34d399" />
+              <WorldMap dots={MAP_CONNECTIONS} lineColor="#0f766e" />
             </div>
           </BlurFade>
         </section>
