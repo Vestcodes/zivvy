@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --testTimeout=10000",
-    "validate": "zapier-platform validate",
-    "push": "zapier-platform push"
+    "validate": "zapier validate",
+    "push": "zapier push"
   },
   "engines": {
     "node": ">=18",

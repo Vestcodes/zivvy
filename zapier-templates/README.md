@@ -39,11 +39,12 @@ Two ways to use them (Zapier docs–compliant):
 ```bash
 cd zapier-templates/integration
 npm install
-npx zapier-platform login
-npx zapier-platform register "Zivvy"
-npx zapier-platform validate
+# CLI binary is `zapier` (from devDependency zapier-platform-cli), not `zapier-platform`.
+npx zapier login
+npx zapier register "Zivvy"
+npx zapier validate
 npm test
-npx zapier-platform push
+npx zapier push
 ```
 
 Then in Zapier: use private app **Zivvy** → pick e.g. **New Lead** / **Sales Order Submitted**.
