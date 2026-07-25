@@ -35,11 +35,11 @@ export default async function AppLayout({ children }: { children: React.ReactNod
     <TooltipProvider delayDuration={200}>
       <SidebarProvider>
         <AppSidebar />
-        <SidebarInset>
+        <SidebarInset className="min-w-0 overflow-x-hidden">
           <Suspense fallback={<AppTopbar />}>
             <TopbarWithData />
           </Suspense>
-          <div className="flex flex-1 flex-col gap-4 p-4 md:p-5 lg:px-6 lg:py-5">
+          <div className="flex min-w-0 flex-1 flex-col gap-4 p-4 md:p-5 lg:px-6 lg:py-5">
             {children}
           </div>
         </SidebarInset>
