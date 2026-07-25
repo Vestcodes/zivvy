@@ -284,7 +284,7 @@ function AnnouncementBar() {
   if (!ready || dismissed) return null;
 
   return (
-    <div className="relative border-b border-border/60 bg-muted/40 text-foreground">
+    <div className="relative border-b border-border/60 bg-background text-foreground">
       <div className="mx-auto flex h-8 max-w-6xl items-center justify-center gap-2 px-6 text-[12.5px]">
         <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-2 py-0.5 text-[10.5px] font-semibold uppercase tracking-wider text-primary">
           <span className="inline-block size-1.5 rounded-full bg-primary" />
