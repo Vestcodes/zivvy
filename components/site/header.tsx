@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion } from "motion/react";
 import {
   ArrowRight,
+  Bot,
   Boxes,
   BookOpen,
   Code2,
@@ -172,6 +173,12 @@ const PRODUCT_MEGA: MegaColumn[] = [
         icon: Webhook
       },
       {
+        href: "/developers/mcp",
+        label: "MCP server",
+        description: "Wire Claude to your workspace.",
+        icon: Bot
+      },
+      {
         href: "/blog",
         label: "Blog",
         description: "Product notes and playbooks.",
@@ -252,6 +259,7 @@ const MOBILE_SECTIONS = [
       { href: API_DOCS_URL, label: "Docs", external: true },
       { href: API_DOCS_URL, label: "API reference", external: true },
       { href: "/developers/webhooks", label: "Webhooks" },
+      { href: "/developers/mcp", label: "MCP server" },
       { href: "/support/changelog", label: "Changelog" }
     ]
   },

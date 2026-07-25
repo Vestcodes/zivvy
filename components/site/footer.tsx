@@ -45,6 +45,7 @@ const COLUMNS: { title: string; links: FooterLink[] }[] = [
       { href: API_DOCS_URL, label: "Docs", external: true },
       { href: OPENAPI_URL, label: "OpenAPI", external: true },
       { href: "/developers/webhooks", label: "Webhooks" },
+      { href: "/developers/mcp", label: "MCP server" },
       { href: "/support", label: "Support" },
       { href: "/support/changelog", label: "Changelog" }
     ]

@@ -58,7 +58,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   // Developer-facing pages.
   const developers: Entry[] = [
-    entry("/developers/webhooks", 0.7, "monthly", now)
+    entry("/developers/webhooks", 0.7, "monthly", now),
+    entry("/developers/mcp", 0.7, "monthly", now)
   ];
 
   // Hubs + their detail pages.
