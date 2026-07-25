@@ -70,7 +70,7 @@ export function AddonsHub({ addons }: AddonsHubProps) {
                 target="_blank"
                 rel="noreferrer"
                 borderRadius="9999px"
-                containerClassName="h-12"
+                containerClassName="h-12 w-auto !md:col-span-1"
                 className="border-primary/40 bg-primary/90 px-6 text-sm font-semibold text-primary-foreground dark:bg-primary/90"
                 borderClassName="bg-[radial-gradient(theme(colors.emerald.400)_40%,transparent_60%)]"
                 duration={3500}
@@ -202,14 +202,14 @@ export function AddonsHub({ addons }: AddonsHubProps) {
             ))}
           </div>
 
-          <div className="mt-14 text-center">
+          <div className="mt-14 flex flex-col items-center gap-3 text-center">
             <MovingBorderButton
               as="a"
               href={DASHBOARD_URL}
               target="_blank"
               rel="noreferrer"
               borderRadius="9999px"
-              containerClassName="h-12"
+              containerClassName="h-12 w-auto !md:col-span-1"
               className="border-primary/40 bg-primary/90 px-6 text-sm font-semibold text-primary-foreground dark:bg-primary/90"
               borderClassName="bg-[radial-gradient(theme(colors.emerald.400)_40%,transparent_60%)]"
               duration={3500}
@@ -219,7 +219,7 @@ export function AddonsHub({ addons }: AddonsHubProps) {
                 <ArrowRight className="size-4" />
               </span>
             </MovingBorderButton>
-            <p className="mt-3 text-xs text-muted-foreground">
+            <p className="text-xs text-muted-foreground">
               Opens {DASHBOARD_URL.replace("https://", "")}
             </p>
           </div>
