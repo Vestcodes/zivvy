@@ -1,7 +1,8 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import Link from "next/link";
-import { ArrowRight, Check, Map, Minus, Route } from "lucide-react";
+import { ArrowRight, Map, Route } from "lucide-react";
 import type { HubCardItem } from "@/lib/marketing-content";
 import { SiteHeader } from "@/components/site/header";
 import { SiteFooter } from "@/components/site/footer";
@@ -10,11 +11,22 @@ import { Button } from "@/components/ui/button";
 import { AnimatedList } from "@/components/ui/animated-list";
 import { AnimatedShinyText } from "@/components/ui/animated-shiny-text";
 import { BlurFade } from "@/components/ui/blur-fade";
-import { BorderBeam } from "@/components/ui/border-beam";
-import { MagicCard } from "@/components/ui/magic-card";
 import { ShineBorder } from "@/components/ui/shine-border";
 import { TextAnimate } from "@/components/ui/text-animate";
 import { cn } from "@/lib/utils";
+
+const Compare = dynamic(
+  () => import("@/components/ui/aceternity/compare").then((m) => m.Compare),
+  { ssr: false }
+);
+
+const HoverBorderGradient = dynamic(
+  () =>
+    import("@/components/ui/aceternity/hover-border-gradient").then(
+      (m) => m.HoverBorderGradient
+    ),
+  { ssr: false }
+);
 
 type Tier = "Free" | "Pro" | "Business";
 
@@ -24,10 +36,60 @@ const TIER_BADGE: Record<Tier, string> = {
   Business: "bg-foreground text-background border-transparent"
 };
 
-const ALTERNATIVE_META: Record<string, { category: string; tier: Tier }> = {
-  odoo: { category: "ERP suite", tier: "Business" },
-  zoho: { category: "App bundle", tier: "Pro" },
-  "legacy-erp": { category: "Legacy ERP", tier: "Business" }
+type AlternativeMeta = {
+  category: string;
+  tier: Tier;
+  whySwitch: string;
+  savings: string;
+  bullets: string[];
+};
+
+const ALTERNATIVE_META: Record<string, AlternativeMeta> = {
+  odoo: {
+    category: "ERP suite",
+    tier: "Business",
+    whySwitch: "Cut the module-per-app SKU bloat",
+    savings: "One line item · $1,620/mo saved",
+    bullets: [
+      "Map Odoo modules → Zivvy resources",
+      "Import customers, invoices, open orders",
+      "Cut over reporting last, retire on flip"
+    ]
+  },
+  zoho: {
+    category: "App bundle",
+    tier: "Pro",
+    whySwitch: "One tenant instead of an app-per-workflow",
+    savings: "Fewer auth models · faster onboarding",
+    bullets: [
+      "Consolidate CRM + Books + Inventory",
+      "Same webhook stream for every module",
+      "Roles by scope, not by app"
+    ]
+  },
+  "legacy-erp": {
+    category: "Legacy ERP",
+    tier: "Business",
+    whySwitch: "Retire the SFTP + SOAP + VPN stack",
+    savings: "REST-first · webhook-first surface",
+    bullets: [
+      "Every resource is a REST endpoint",
+      "Signed webhooks with replay + retries",
+      "Multi-region deploys with failover"
+    ]
+  }
+};
+
+const DEFAULT_META: AlternativeMeta = {
+  category: "Alternative",
+  tier: "Pro",
+  whySwitch: "Faster to run, cheaper to change",
+  savings: "One tenant · one webhook stream",
+  bullets: [
+    "REST + webhook per resource",
+    "Seat-based, one line item",
+    "Written cut-over plan"
+  ]
 };
 
 const MIGRATION_STREAM = [
@@ -36,13 +98,6 @@ const MIGRATION_STREAM = [
   "Import customers & open orders",
   "Train owners on day-1 workflows",
   "Cut over reporting, then retire legacy"
-];
-
-const TEASER_ROWS = [
-  { row: "Pricing model", zivvy: "Seat-based, one line item", other: "Modules, add-ons, quotes" },
-  { row: "API surface", zivvy: "Every resource is REST + webhooks", other: "Varies per module" },
-  { row: "Tenant model", zivvy: "One tenant, roles by scope", other: "Often instance-per-BU" },
-  { row: "Time to first value", zivvy: "Days", other: "Weeks to quarters" }
 ];
 
 type Props = {
@@ -63,65 +118,56 @@ export function AlternativesHubPage({ items }: Props) {
                 "radial-gradient(ellipse 70% 55% at 50% -10%, color-mix(in oklab, var(--primary) 12%, transparent), transparent 75%)"
             }}
           />
-          <div className="relative mx-auto max-w-4xl px-6 pb-4 pt-20 text-center sm:pt-24">
-            <BlurFade>
-              <div className="mb-5 inline-flex items-center justify-center gap-1.5 rounded-full border border-border/60 bg-background/70 px-3 py-1 backdrop-blur">
-                <Route className="size-3.5 text-primary" />
-                <AnimatedShinyText className="text-xs font-medium text-muted-foreground">
-                  Alternatives · migration paths · low drama
-                </AnimatedShinyText>
-              </div>
-              <TextAnimate
-                as="h1"
-                by="word"
-                animation="blurInUp"
-                className="font-display text-4xl font-bold tracking-tight sm:text-5xl"
-              >
-                Looking for alternatives?
-              </TextAnimate>
-              <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-                Same tenant boundary, same REST + webhook surface — different lift-and-shift path per
-                incumbent. Not feature-bingo scorecards.
-              </p>
-            </BlurFade>
-          </div>
-
-          <div className="relative mx-auto mt-8 max-w-3xl px-6">
-            <BlurFade delay={0.08}>
-              <div className="relative overflow-hidden rounded-2xl border border-border/70 bg-card/60 shadow-lg shadow-primary/5">
-                <ShineBorder shineColor={["#34d399", "#0f766e"]} duration={14} />
-                <div className="grid grid-cols-[1.5fr_1fr_1fr] gap-0 border-b border-border/50 bg-background/60 text-xs font-medium">
-                  <div className="px-4 py-3 text-muted-foreground">Capability</div>
-                  <div className="border-l border-border/50 px-4 py-3 text-center text-primary">
-                    Zivvy
-                  </div>
-                  <div className="border-l border-border/50 px-4 py-3 text-center text-muted-foreground">
-                    Incumbent
-                  </div>
+          <div className="relative mx-auto grid max-w-6xl gap-8 px-6 pb-6 pt-20 sm:pt-24 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+            <div>
+              <BlurFade>
+                <div className="mb-5 inline-flex items-center justify-center gap-1.5 rounded-full border border-border/60 bg-background/70 px-3 py-1 backdrop-blur">
+                  <Route className="size-3.5 text-primary" />
+                  <AnimatedShinyText className="text-xs font-medium text-muted-foreground">
+                    Alternatives · migration paths · low drama
+                  </AnimatedShinyText>
                 </div>
-                {TEASER_ROWS.map((r, i) => (
-                  <div
-                    key={r.row}
-                    className={cn(
-                      "grid grid-cols-[1.5fr_1fr_1fr] gap-0 text-sm",
-                      i !== TEASER_ROWS.length - 1 && "border-b border-border/40"
-                    )}
-                  >
-                    <div className="px-4 py-3 font-medium">{r.row}</div>
-                    <div className="flex items-center gap-2 border-l border-border/40 bg-primary/5 px-4 py-3">
-                      <Check className="size-3.5 shrink-0 text-primary" />
-                      <span className="text-xs">{r.zivvy}</span>
-                    </div>
-                    <div className="flex items-center gap-2 border-l border-border/40 px-4 py-3">
-                      <Minus className="size-3.5 shrink-0 text-muted-foreground" />
-                      <span className="text-xs text-muted-foreground">{r.other}</span>
-                    </div>
-                  </div>
-                ))}
+                <TextAnimate
+                  as="h1"
+                  by="word"
+                  animation="blurInUp"
+                  className="font-display text-4xl font-bold tracking-tight sm:text-5xl"
+                >
+                  Slide it — see the before, see the after.
+                </TextAnimate>
+                <p className="mt-4 max-w-xl text-lg text-muted-foreground">
+                  Same tenant boundary, same REST + webhook surface — different lift-and-shift path per
+                  incumbent. Not feature-bingo scorecards.
+                </p>
+                <div className="mt-6 flex flex-wrap items-center gap-3">
+                  <Button asChild variant="polished">
+                    <Link href="/contact">Plan a migration</Link>
+                  </Button>
+                  <Button asChild variant="outline">
+                    <Link href="/compare">See side-by-sides</Link>
+                  </Button>
+                </div>
+              </BlurFade>
+            </div>
+            <BlurFade delay={0.1}>
+              <div className="relative mx-auto w-full max-w-md">
+                <div className="pointer-events-none absolute -inset-4 -z-10 rounded-3xl bg-primary/10 blur-2xl" />
+                <div className="relative rounded-3xl border border-border/70 bg-card/40 p-3 shadow-xl shadow-primary/10">
+                  <Compare
+                    firstImage="/marketing/before-legacy.svg"
+                    secondImage="/marketing/after-zivvy.svg"
+                    className="h-[280px] w-full sm:h-[320px]"
+                    firstImageClassName="object-cover"
+                    secondImageClassname="object-cover"
+                    slideMode="hover"
+                    autoplay
+                    autoplayDuration={5200}
+                  />
+                </div>
+                <p className="mt-2 text-center text-xs text-muted-foreground">
+                  Hover or drag to compare the incumbent stack against a single tenant.
+                </p>
               </div>
-              <p className="mt-2 text-center text-xs text-muted-foreground">
-                Teaser view — every alternative below expands each row into a rollout plan.
-              </p>
             </BlurFade>
           </div>
         </section>
@@ -129,27 +175,31 @@ export function AlternativesHubPage({ items }: Props) {
         <section className="mx-auto grid max-w-6xl gap-6 px-6 pb-8 pt-14 lg:grid-cols-[1fr_0.9fr]">
           <div className="grid gap-4 sm:grid-cols-2">
             {items.map((item, index) => {
-              const meta = ALTERNATIVE_META[item.slug] ?? {
-                category: "Alternative",
-                tier: "Pro" as Tier
-              };
+              const meta = ALTERNATIVE_META[item.slug] ?? DEFAULT_META;
               return (
                 <BlurFade key={item.slug} delay={0.04 + index * 0.04}>
-                  <Link href={`/alternatives/${item.slug}`} className="group block h-full">
-                    <MagicCard
-                      className="relative h-full overflow-hidden rounded-2xl border border-border/70 bg-card/70 p-5"
-                      gradientFrom="#34d399"
-                      gradientTo="#0f766e"
-                      gradientColor="rgba(27, 152, 114, 0.1)"
+                  <HoverBorderGradient
+                    as="div"
+                    containerClassName={cn(
+                      "rounded-2xl w-full h-full block",
+                      // aceternity ships two hardcoded bg-black fills — swap for our card token
+                      "[&>.bg-black]:!bg-card [&>.bg-black]:!text-foreground"
+                    )}
+                    className="w-full h-full !p-0 rounded-2xl"
+                    duration={2.4}
+                  >
+                    <Link
+                      href={`/alternatives/${item.slug}`}
+                      className="group block h-full rounded-2xl p-5"
                     >
-                      <BorderBeam
-                        size={70}
-                        duration={9}
-                        delay={index * 0.8}
-                        colorFrom="#34d399"
-                        colorTo="#0f766e"
-                        borderWidth={1.25}
-                      />
+                      <div className="mb-3 flex flex-wrap items-center gap-1.5">
+                        <Badge
+                          variant="outline"
+                          className="border-primary/40 bg-primary/10 text-[10px] font-medium text-primary"
+                        >
+                          Why switch · {meta.whySwitch}
+                        </Badge>
+                      </div>
                       <div className="mb-2 flex items-center justify-between gap-2">
                         <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
                           Migration path
@@ -163,16 +213,27 @@ export function AlternativesHubPage({ items }: Props) {
                           </Badge>
                         </div>
                       </div>
-                      <h2 className="mt-2 font-display text-lg font-semibold group-hover:text-primary">
+                      <h2 className="mt-1 font-display text-lg font-semibold group-hover:text-primary">
                         {item.title}
                       </h2>
                       <p className="mt-2 text-sm text-muted-foreground">{item.description}</p>
+                      <ul className="mt-3 space-y-1.5 text-sm">
+                        {meta.bullets.map((b) => (
+                          <li key={b} className="flex items-start gap-2 text-foreground/90">
+                            <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-primary" />
+                            <span>{b}</span>
+                          </li>
+                        ))}
+                      </ul>
+                      <div className="mt-3 rounded-md border border-border/50 bg-background/40 px-2.5 py-1.5 font-mono text-[11px] text-muted-foreground">
+                        {meta.savings}
+                      </div>
                       <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-primary">
                         Open migration guide
                         <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
                       </span>
-                    </MagicCard>
-                  </Link>
+                    </Link>
+                  </HoverBorderGradient>
                 </BlurFade>
               );
             })}

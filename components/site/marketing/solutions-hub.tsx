@@ -1,5 +1,6 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -25,6 +26,19 @@ import { NumberTicker } from "@/components/ui/number-ticker";
 import { ShineBorder } from "@/components/ui/shine-border";
 import { TextAnimate } from "@/components/ui/text-animate";
 import { cn } from "@/lib/utils";
+
+const BackgroundBeams = dynamic(
+  () =>
+    import("@/components/ui/aceternity/background-beams").then(
+      (m) => m.BackgroundBeams
+    ),
+  { ssr: false }
+);
+
+const Timeline = dynamic(
+  () => import("@/components/ui/aceternity/timeline").then((m) => m.Timeline),
+  { ssr: false }
+);
 
 type Tier = "Free" | "Pro" | "Business";
 
@@ -146,6 +160,75 @@ const STATS: Stat[] = [
   }
 ];
 
+type JourneyStage = {
+  title: string;
+  heading: string;
+  body: string;
+  bullets: string[];
+};
+
+const JOURNEY: JourneyStage[] = [
+  {
+    title: "Research",
+    heading: "Trace every resource before you migrate.",
+    body: "Every capability is a REST endpoint, a webhook event, and a form. Read the tenant model before you commit — no gated docs, no NDA.",
+    bullets: [
+      "Open API reference at integrate.zivvy.xyz/docs",
+      "Sandbox tenant with seeded data",
+      "Compare tables in /compare"
+    ]
+  },
+  {
+    title: "Migrate",
+    heading: "Cut over the incumbent one workflow at a time.",
+    body: "Bring your existing customers, invoices, and open orders. Pilot one business unit — the rest follows the same import path.",
+    bullets: [
+      "CSV + REST-based import for every doctype",
+      "Dry-run migrations with rollback",
+      "Written cut-over sequence per incumbent"
+    ]
+  },
+  {
+    title: "Automate",
+    heading: "Wire webhooks to the tools you already run.",
+    body: "Every state change fires a webhook. Route it to Slack, your ledger, or a queue — the same event on every tier.",
+    bullets: [
+      "Signed webhooks with replay + retries",
+      "Per-tenant subscription topics",
+      "Approvals and roles inline, not bolted on"
+    ]
+  },
+  {
+    title: "Scale",
+    heading: "Turn on manufacturing, quality, and assets when ready.",
+    body: "Same tenant, same auth boundary. Business-tier modules turn on by plan — not by spinning up another instance.",
+    bullets: [
+      "Multi-region deploys with automated failover",
+      "Per-tenant audit trails and row-level RBAC",
+      "Manufacturing-grade BOMs and work orders"
+    ]
+  }
+];
+
+function JourneyContent({ stage }: { stage: JourneyStage }) {
+  return (
+    <div className="rounded-2xl border border-border/70 bg-card/60 p-6">
+      <h4 className="font-display text-lg font-semibold text-foreground sm:text-xl">
+        {stage.heading}
+      </h4>
+      <p className="mt-2 text-sm text-muted-foreground">{stage.body}</p>
+      <ul className="mt-4 space-y-2 text-sm">
+        {stage.bullets.map((b) => (
+          <li key={b} className="flex items-start gap-2 text-foreground/90">
+            <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-primary" />
+            <span>{b}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
 type Props = {
   items: HubCardItem[];
 };
@@ -155,14 +238,11 @@ export function SolutionsHubPage({ items }: Props) {
     <>
       <SiteHeader />
       <main>
-        <section className="relative overflow-hidden">
-          <DotPattern
-            className={cn(
-              "pointer-events-none absolute inset-0 -z-10 text-primary/25",
-              "[mask-image:radial-gradient(560px_circle_at_50%_-10%,white,transparent)]"
-            )}
-          />
-          <div className="relative mx-auto max-w-5xl px-6 pb-4 pt-20 text-center sm:pt-24">
+        <section className="relative overflow-hidden bg-background">
+          <div className="absolute inset-0 -z-10 opacity-70">
+            <BackgroundBeams />
+          </div>
+          <div className="relative mx-auto max-w-5xl px-6 pb-6 pt-24 text-center sm:pt-28">
             <BlurFade>
               <div className="mb-5 inline-flex items-center justify-center rounded-full border border-border/60 bg-background/70 px-3 py-1 backdrop-blur">
                 <AnimatedShinyText className="text-xs font-medium text-muted-foreground">
@@ -184,7 +264,7 @@ export function SolutionsHubPage({ items }: Props) {
             </BlurFade>
           </div>
 
-          <div className="relative mx-auto mt-10 max-w-5xl px-6">
+          <div className="relative mx-auto mt-10 max-w-5xl px-6 pb-8">
             <div className="grid gap-3 sm:grid-cols-3">
               {STATS.map((stat, idx) => (
                 <BlurFade key={stat.label} delay={0.06 + idx * 0.06}>
@@ -215,44 +295,72 @@ export function SolutionsHubPage({ items }: Props) {
           </div>
         </section>
 
-        <section className="mx-auto max-w-6xl px-6 pb-4 pt-14">
-          <BlurFade delay={0.05}>
-            <BentoGrid className="auto-rows-[13.5rem] lg:auto-rows-[15rem]">
-              {items.map((item) => {
-                const meta = SOLUTION_META[item.slug] ?? {
-                  Icon: Rocket,
-                  className: "col-span-3 lg:col-span-1",
-                  category: "Team",
-                  tier: "Pro" as Tier,
-                  background: <div className="absolute inset-0 bg-muted/30" />
-                };
-                return (
-                  <BentoCard
-                    key={item.slug}
-                    name={item.title}
-                    className={meta.className}
-                    Icon={meta.Icon}
-                    description={item.description}
-                    href={`/solutions/${item.slug}`}
-                    cta="Open solution"
-                    background={
-                      <>
-                        {meta.background}
-                        <div className="absolute right-3 top-3 flex items-center gap-1.5 z-10">
-                          <Badge variant="outline" className="bg-background/70 text-[10px] backdrop-blur">
-                            {meta.category}
-                          </Badge>
-                          <Badge className={cn("text-[10px]", TIER_BADGE[meta.tier])}>
-                            {meta.tier}
-                          </Badge>
-                        </div>
-                      </>
-                    }
-                  />
-                );
-              })}
-            </BentoGrid>
-          </BlurFade>
+        <section className="relative">
+          <div className="mx-auto max-w-6xl px-6 pt-8 text-center">
+            <BlurFade>
+              <p className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                The solution-adoption journey
+              </p>
+              <h2 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">
+                Research → Migrate → Automate → Scale
+              </h2>
+            </BlurFade>
+          </div>
+          <Timeline
+            hideDefaultHeader
+            data={JOURNEY.map((stage) => ({
+              title: stage.title,
+              content: <JourneyContent stage={stage} />
+            }))}
+          />
+        </section>
+
+        <section className="relative mx-auto max-w-6xl px-6 pb-4 pt-6">
+          <div className="relative overflow-hidden rounded-3xl border border-border/60 bg-card/40 p-4 sm:p-6">
+            <DotPattern
+              className={cn(
+                "pointer-events-none absolute inset-0 -z-10 text-primary/25",
+                "[mask-image:radial-gradient(560px_circle_at_50%_0%,white,transparent)]"
+              )}
+            />
+            <BlurFade delay={0.05}>
+              <BentoGrid className="auto-rows-[13.5rem] lg:auto-rows-[15rem]">
+                {items.map((item) => {
+                  const meta = SOLUTION_META[item.slug] ?? {
+                    Icon: Rocket,
+                    className: "col-span-3 lg:col-span-1",
+                    category: "Team",
+                    tier: "Pro" as Tier,
+                    background: <div className="absolute inset-0 bg-muted/30" />
+                  };
+                  return (
+                    <BentoCard
+                      key={item.slug}
+                      name={item.title}
+                      className={meta.className}
+                      Icon={meta.Icon}
+                      description={item.description}
+                      href={`/solutions/${item.slug}`}
+                      cta="Open solution"
+                      background={
+                        <>
+                          {meta.background}
+                          <div className="absolute right-3 top-3 z-10 flex items-center gap-1.5">
+                            <Badge variant="outline" className="bg-background/70 text-[10px] backdrop-blur">
+                              {meta.category}
+                            </Badge>
+                            <Badge className={cn("text-[10px]", TIER_BADGE[meta.tier])}>
+                              {meta.tier}
+                            </Badge>
+                          </div>
+                        </>
+                      }
+                    />
+                  );
+                })}
+              </BentoGrid>
+            </BlurFade>
+          </div>
         </section>
 
         <section className="mx-auto grid max-w-6xl gap-4 px-6 pb-6 pt-10 md:grid-cols-2">

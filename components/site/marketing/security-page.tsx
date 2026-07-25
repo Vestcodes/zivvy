@@ -4,63 +4,26 @@ import Link from "next/link";
 import {
   ArrowRight,
   Cookie,
-  Database,
   FileText,
   Fingerprint,
   KeyRound,
-  Lock,
-  Server,
   ShieldAlert,
   ShieldCheck,
-  UserRoundCog,
-  Webhook,
-  Workflow
+  Webhook
 } from "lucide-react";
 import { SiteHeader } from "@/components/site/header";
 import { SiteFooter } from "@/components/site/footer";
 import { Button } from "@/components/ui/button";
 import { AnimatedShinyText } from "@/components/ui/animated-shiny-text";
 import { BlurFade } from "@/components/ui/blur-fade";
-import { BorderBeam } from "@/components/ui/border-beam";
-import { DotPattern } from "@/components/ui/dot-pattern";
-import { MagicCard } from "@/components/ui/magic-card";
-import { OrbitingCircles } from "@/components/ui/orbiting-circles";
 import { ShineBorder } from "@/components/ui/shine-border";
-import { TextAnimate } from "@/components/ui/text-animate";
+import {
+  BentoGrid,
+  BentoGridItem,
+  InfiniteMovingCards,
+  SparklesCore
+} from "@/components/ui/aceternity";
 import { cn } from "@/lib/utils";
-
-const SECURITY_AREAS = [
-  {
-    title: "Encryption",
-    body: "Traffic is encrypted in transit and operational data is protected with modern encryption standards.",
-    Icon: Lock
-  },
-  {
-    title: "Access control",
-    body: "Role-based permissions and tenant-aware boundaries protect sensitive workflows and business records.",
-    Icon: UserRoundCog
-  },
-  {
-    title: "Data handling",
-    body: "Teams choose regional preference — India, EU, or US — and keep operational data aligned with policy.",
-    Icon: Database
-  },
-  {
-    title: "Infrastructure",
-    body: "Production workloads run with managed infrastructure controls, health checks, and monitored services.",
-    Icon: Server
-  },
-  {
-    title: "Privacy practices",
-    body: "Privacy principles are reflected in product behavior, legal terms, and support operations.",
-    Icon: ShieldCheck
-  },
-  {
-    title: "Operational resilience",
-    body: "Workflow events, timeline history, and deployment safeguards help reduce operational and security risk.",
-    Icon: Workflow
-  }
-];
 
 /**
  * Concrete posture — the actual controls in the product today. Written
@@ -72,60 +35,88 @@ const SECURITY_POSTURE = [
     Icon: Webhook,
     title: "HMAC-signed webhooks",
     body:
-      "Every webhook body is signed with an HMAC-SHA256 header using your workspace secret. Verify before acting; rotate at any time from settings."
-  },
-  {
-    Icon: KeyRound,
-    title: "Per-tenant API keys",
-    body:
-      "API keys are scoped to a single workspace. A leaked key cannot read another tenant's data — the check happens at the request layer, not in application code."
+      "Every webhook body is signed with an HMAC-SHA256 header using your workspace secret. Verify before acting; rotate at any time from settings.",
+    className: "md:col-span-2"
   },
   {
     Icon: Fingerprint,
     title: "Cross-tenant isolation",
     body:
-      "Every row is bound to a tenant. Queries carry the tenant context and reject cross-tenant reads at the ORM boundary. No shared caches leak across workspaces."
+      "Every row is bound to a tenant. Queries carry the tenant context and reject cross-tenant reads at the ORM boundary. No shared caches leak across workspaces.",
+    className: ""
   },
   {
-    Icon: Cookie,
-    title: "Session cookies",
+    Icon: KeyRound,
+    title: "Per-tenant API keys",
     body:
-      "HTTP-only, Secure, SameSite=Lax session cookies with short sliding expiry. Sessions are revocable per device from the account panel."
+      "API keys are scoped to a single workspace. A leaked key cannot read another tenant's data — the check happens at the request layer, not in application code.",
+    className: ""
   },
   {
     Icon: ShieldAlert,
     title: "CSRF token",
     body:
-      "State-changing requests require a double-submit CSRF token bound to the session. Read-only endpoints and public webhooks are exempt by design."
+      "State-changing requests require a double-submit CSRF token bound to the session. Read-only endpoints and public webhooks are exempt by design.",
+    className: ""
+  },
+  {
+    Icon: Cookie,
+    title: "Session cookies",
+    body:
+      "HTTP-only, Secure, SameSite=Lax session cookies with short sliding expiry. Sessions are revocable per device from the account panel.",
+    className: ""
   },
   {
     Icon: FileText,
     title: "GDPR posture",
     body:
-      "EU-region workspaces stay in EU infrastructure. Data-subject requests (access, deletion, portability) are handled from the account panel. DPA available on request."
+      "EU-region workspaces stay in EU infrastructure. Data-subject requests (access, deletion, portability) are handled from the account panel. DPA available on request.",
+    className: "md:col-span-2"
   }
 ];
 
 /**
  * Third-party attestations. We are honest about the ones we're pursuing
  * versus the ones we hold — do NOT flip a "tracking" badge to "certified"
- * without paperwork attached.
+ * without paperwork attached. Rendered inside <InfiniteMovingCards>, so
+ * the payload shape maps to that component's props (quote/name/title).
  */
-const COMPLIANCE_BADGES = [
+const CERT_CARDS = [
   {
-    label: "SOC 2 Type II",
-    status: "In progress",
-    body: "Audit scoping underway with a third-party assessor. Type I first, then Type II window."
+    quote:
+      "Audit scoping underway with a third-party assessor. Type I first, then Type II window.",
+    name: "SOC 2 Type II",
+    title: "In progress"
   },
   {
-    label: "GDPR",
-    status: "Ready",
-    body: "EU-region hosting, DPA available, data-subject workflows shipped. Sub-processors listed publicly."
+    quote:
+      "EU-region hosting, DPA available, data-subject workflows shipped. Sub-processors listed publicly.",
+    name: "GDPR",
+    title: "Ready"
   },
   {
-    label: "ISO/IEC 27001",
-    status: "Tracking",
-    body: "Controls mapped internally. Formal certification pursued after SOC 2."
+    quote:
+      "Controls mapped internally. Formal certification pursued after SOC 2.",
+    name: "ISO/IEC 27001",
+    title: "Planned"
+  },
+  {
+    quote:
+      "PCI scope kept intentionally out-of-band — payments run through Polar and Stripe as the merchant of record.",
+    name: "PCI DSS",
+    title: "Out of scope by design"
+  },
+  {
+    quote:
+      "Regional India workspaces stay in India infrastructure. Consent, notice, and grievance workflows in the account panel.",
+    name: "DPDP Act (India)",
+    title: "Ready"
+  },
+  {
+    quote:
+      "HIPAA controls not covered — Zivvy is not marketed for regulated healthcare data. Business Associate Agreements are declined.",
+    name: "HIPAA",
+    title: "Not covered"
   }
 ];
 
@@ -135,32 +126,49 @@ export function SecurityPageContent() {
       <SiteHeader />
       <main>
         <section className="relative overflow-hidden">
-          <DotPattern
-            className={cn(
-              "pointer-events-none absolute inset-0 -z-10 text-primary/25",
-              "[mask-image:radial-gradient(480px_circle_at_30%_-5%,white,transparent)]"
-            )}
-          />
-          <div className="relative mx-auto grid max-w-6xl gap-10 px-6 pb-10 pt-20 lg:grid-cols-[1.15fr_0.85fr] lg:items-center sm:pt-24">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 -z-10"
+          >
+            <SparklesCore
+              className="h-full w-full"
+              background="transparent"
+              minSize={0.5}
+              maxSize={1.4}
+              particleDensity={90}
+              particleColor="#34d399"
+              speed={1}
+            />
+            <div
+              className={cn(
+                "absolute inset-0",
+                "[mask-image:radial-gradient(600px_circle_at_50%_20%,white,transparent)]"
+              )}
+              style={{
+                background:
+                  "radial-gradient(ellipse 60% 50% at 50% -10%, color-mix(in oklab, var(--primary) 18%, transparent), transparent 75%)"
+              }}
+            />
+          </div>
+          <div className="relative mx-auto max-w-4xl px-6 pb-14 pt-20 text-center sm:pt-24">
             <BlurFade>
+              <div className="mx-auto mb-6 flex size-20 items-center justify-center rounded-2xl border border-primary/40 bg-primary/10 shadow-[0_0_60px_-15px_theme(colors.emerald.400)]">
+                <ShieldCheck className="size-10 text-primary" />
+              </div>
               <div className="mb-5 inline-flex items-center justify-center rounded-full border border-border/60 bg-background/70 px-3 py-1 backdrop-blur">
                 <AnimatedShinyText className="text-xs font-medium text-muted-foreground">
                   Security · regions · roles · audit
                 </AnimatedShinyText>
               </div>
-              <TextAnimate
-                as="h1"
-                by="word"
-                animation="blurInUp"
-                className="font-display text-4xl font-bold tracking-tight sm:text-5xl"
-              >
+              <h1 className="font-display text-4xl font-bold tracking-tight sm:text-6xl">
                 Security and trust
-              </TextAnimate>
-              <p className="mt-4 max-w-xl text-lg text-muted-foreground">
-                Security is a product responsibility, not just a legal checkbox. Controls, regions,
-                and audit trails are part of how Zivvy runs day to day.
+              </h1>
+              <p className="mx-auto mt-4 max-w-xl text-lg text-muted-foreground">
+                Security is a product responsibility, not just a legal checkbox.
+                Controls, regions, and audit trails are part of how Zivvy runs
+                day to day.
               </p>
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
                 <Button asChild variant="polished">
                   <Link href="/contact">
                     Ask a security question
@@ -175,61 +183,11 @@ export function SecurityPageContent() {
                 </Button>
               </div>
             </BlurFade>
-
-            <BlurFade delay={0.1}>
-              <div className="relative mx-auto flex h-[260px] w-full max-w-sm items-center justify-center">
-                <OrbitingCircles radius={100} iconSize={34} duration={24}>
-                  {["TLS", "RBAC", "IN", "EU"].map((label) => (
-                    <span
-                      key={label}
-                      className="flex size-9 items-center justify-center rounded-full border border-border/70 bg-card text-[10px] font-semibold"
-                    >
-                      {label}
-                    </span>
-                  ))}
-                </OrbitingCircles>
-                <OrbitingCircles radius={150} iconSize={30} duration={30} reverse>
-                  {["US", "Logs", "Keys"].map((label) => (
-                    <span
-                      key={label}
-                      className="flex size-8 items-center justify-center rounded-full border border-primary/30 bg-primary/10 text-[10px] font-semibold text-primary"
-                    >
-                      {label}
-                    </span>
-                  ))}
-                </OrbitingCircles>
-                <div className="absolute flex size-16 items-center justify-center rounded-2xl border border-primary/40 bg-primary/15">
-                  <ShieldCheck className="size-7 text-primary" />
-                </div>
-              </div>
-            </BlurFade>
-          </div>
-        </section>
-
-        <section className="mx-auto max-w-6xl px-6 pb-12">
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {SECURITY_AREAS.map((area, index) => (
-              <BlurFade key={area.title} delay={0.03 + index * 0.03}>
-                <MagicCard
-                  className="relative h-full overflow-hidden rounded-2xl border border-border/70 bg-card/70 p-5"
-                  gradientFrom="#34d399"
-                  gradientTo="#0f766e"
-                  gradientColor="rgba(27, 152, 114, 0.08)"
-                >
-                  {index === 0 ? (
-                    <BorderBeam size={55} duration={8} colorFrom="#34d399" colorTo="#0f766e" />
-                  ) : null}
-                  <area.Icon className="size-5 text-primary" />
-                  <h2 className="mt-3 font-display text-xl font-semibold">{area.title}</h2>
-                  <p className="mt-2 text-sm text-muted-foreground">{area.body}</p>
-                </MagicCard>
-              </BlurFade>
-            ))}
           </div>
         </section>
 
         <section
-          className="mx-auto max-w-6xl px-6 pb-12"
+          className="mx-auto max-w-6xl px-6 pb-14"
           aria-labelledby="security-posture"
         >
           <BlurFade>
@@ -240,27 +198,40 @@ export function SecurityPageContent() {
               What ships in the product today
             </h2>
             <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
-              Every row here maps to a control you can verify. We do not list controls we
-              are only planning.
+              Every row here maps to a control you can verify. We do not list
+              controls we are only planning.
             </p>
           </BlurFade>
-          <div className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {SECURITY_POSTURE.map((item, index) => (
-              <BlurFade key={item.title} delay={0.03 + index * 0.03}>
-                <div className="h-full rounded-2xl border border-border/70 bg-card/60 p-5">
+          <BentoGrid className="mt-8 max-w-none gap-4 md:auto-rows-[13rem] md:grid-cols-3">
+            {SECURITY_POSTURE.map((item) => (
+              <BentoGridItem
+                key={item.title}
+                className={cn(
+                  "border-border/70 bg-card/60 dark:bg-card/40",
+                  item.className
+                )}
+                icon={
                   <div className="flex size-9 items-center justify-center rounded-lg border border-border/70 bg-background/70 text-primary">
                     <item.Icon className="size-4" />
                   </div>
-                  <h3 className="mt-3 font-display text-lg font-semibold">{item.title}</h3>
-                  <p className="mt-2 text-sm text-muted-foreground">{item.body}</p>
-                </div>
-              </BlurFade>
+                }
+                title={
+                  <span className="text-base font-semibold text-foreground">
+                    {item.title}
+                  </span>
+                }
+                description={
+                  <span className="text-sm leading-relaxed text-muted-foreground">
+                    {item.body}
+                  </span>
+                }
+              />
             ))}
-          </div>
+          </BentoGrid>
         </section>
 
         <section
-          className="mx-auto max-w-6xl px-6 pb-12"
+          className="mx-auto max-w-6xl px-6 pb-14"
           aria-labelledby="security-badges"
         >
           <BlurFade>
@@ -271,61 +242,40 @@ export function SecurityPageContent() {
               Attestations
             </h2>
             <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
-              We publish where we are on each certification. When status changes, this
-              page changes — no fabricated seals.
+              We publish where we are on each certification. When status
+              changes, this page changes — no fabricated seals.
             </p>
           </BlurFade>
-          <div className="mt-6 grid gap-4 md:grid-cols-3">
-            {COMPLIANCE_BADGES.map((badge, index) => (
-              <BlurFade key={badge.label} delay={0.03 + index * 0.03}>
-                <div className="h-full rounded-2xl border border-border/70 bg-card/60 p-5">
-                  <div className="flex items-center justify-between gap-3">
-                    <div className="font-display text-lg font-semibold">{badge.label}</div>
-                    <span
-                      className={cn(
-                        "rounded-full border px-2 py-0.5 text-[11px] font-medium",
-                        badge.status === "Ready"
-                          ? "border-primary/40 bg-primary/10 text-primary"
-                          : "border-border/70 bg-muted/40 text-muted-foreground"
-                      )}
-                    >
-                      {badge.status}
-                    </span>
-                  </div>
-                  <p className="mt-3 text-sm text-muted-foreground">{badge.body}</p>
-                </div>
-              </BlurFade>
-            ))}
+          <div className="mt-8 rounded-2xl border border-border/60 bg-card/40 py-4">
+            <InfiniteMovingCards
+              items={CERT_CARDS}
+              direction="left"
+              speed="slow"
+              pauseOnHover
+              className="[&_li]:border-border/70 [&_li]:bg-card/70 [&_li]:!bg-none dark:[&_li]:bg-card/60"
+            />
           </div>
           <p className="mt-4 text-xs text-muted-foreground">
-            Report a vulnerability at{" "}
-            <a
-              href="/.well-known/security.txt"
-              className="text-primary underline-offset-2 hover:underline"
-            >
-              /.well-known/security.txt
-            </a>
-            {" "}or email{" "}
-            <a
-              href="mailto:security@zivvy.xyz"
-              className="text-primary underline-offset-2 hover:underline"
-            >
-              security@zivvy.xyz
-            </a>
-            .
+            Statuses are shown on each card — <em>Ready</em>, <em>In
+            progress</em>, <em>Planned</em>, or clearly marked <em>Not
+            covered</em>. We never render a seal we do not hold.
           </p>
         </section>
 
-        <section className="mx-auto max-w-3xl px-6 pb-20 text-center">
+        <section className="mx-auto max-w-3xl px-6 pb-16 text-center">
           <div className="relative overflow-hidden rounded-2xl border border-border/70 bg-card/70 px-6 py-8">
             <ShineBorder shineColor={["#34d399", "#0f766e"]} duration={14} />
             <h2 className="font-display text-2xl font-semibold tracking-tight">
               Need a deeper questionnaire?
             </h2>
             <p className="mt-3 text-sm text-muted-foreground">
-              Contact us for vendor security reviews — we&apos;ll share what we can without inventing
-              certifications we don&apos;t have. Need processing terms? Start with the{" "}
-              <Link href="/dpa" className="text-primary underline-offset-2 hover:underline">
+              Contact us for vendor security reviews — we&apos;ll share what we
+              can without inventing certifications we don&apos;t have. Need
+              processing terms? Start with the{" "}
+              <Link
+                href="/dpa"
+                className="text-primary underline-offset-2 hover:underline"
+              >
                 DPA summary
               </Link>
               .
@@ -338,6 +288,31 @@ export function SecurityPageContent() {
                 <Link href="/privacy">Privacy policy</Link>
               </Button>
             </div>
+          </div>
+        </section>
+
+        <section className="mx-auto max-w-3xl px-6 pb-20">
+          <div className="rounded-2xl border border-dashed border-border/60 bg-card/30 p-5 text-center text-xs text-muted-foreground">
+            <p className="font-medium text-foreground">
+              Report a vulnerability
+            </p>
+            <p className="mt-1.5">
+              Machine-readable disclosure lives at{" "}
+              <a
+                href="/.well-known/security.txt"
+                className="text-primary underline-offset-2 hover:underline"
+              >
+                /.well-known/security.txt
+              </a>
+              . Humans, email{" "}
+              <a
+                href="mailto:security@zivvy.xyz"
+                className="text-primary underline-offset-2 hover:underline"
+              >
+                security@zivvy.xyz
+              </a>
+              . PGP fingerprint on request.
+            </p>
           </div>
         </section>
       </main>

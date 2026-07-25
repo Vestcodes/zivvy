@@ -215,6 +215,7 @@ export const APPS: AppTile[] = [
 
   // SETUP
   { label: "Team",              href: "/settings/team",          icon: UserCog,          gradient: "from-[#64748b] to-[#334155]", category: "setup" },
+  { label: "Add-ons",           href: "/settings/addons",        icon: Package,          gradient: "from-[#a855f7] to-[#6b21a8]", category: "setup" },
   { label: "Developer",         href: "/settings/developer",     icon: Code,             gradient: "from-[#22c55e] to-[#15803d]", category: "setup" },
   { label: "Billing",           href: "/billing",                icon: CreditCard,       gradient: "from-[#94a3b8] to-[#475569]", category: "setup" },
   { label: "Settings",          href: "/settings",               icon: Settings,         gradient: "from-[#71717a] to-[#3f3f46]", category: "setup" },

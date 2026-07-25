@@ -3,72 +3,71 @@
 import Link from "next/link";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { BlurFade } from "@/components/ui/blur-fade";
-import { DotPattern } from "@/components/ui/dot-pattern";
-import { ShimmerButton } from "@/components/ui/shimmer-button";
-import { cn } from "@/lib/utils";
+import {
+  MovingBorderButton,
+  WavyBackground,
+} from "@/components/ui/aceternity";
 
+/**
+ * Final CTA — full-width Wavy canvas with the Start free / Book a demo pair.
+ */
 export function ClosingCta() {
   return (
-    <section className="relative overflow-hidden py-20 sm:py-28">
-      <DotPattern
-        glow
-        className={cn(
-          "pointer-events-none absolute inset-0 -z-10 text-primary/40",
-          "[mask-image:radial-gradient(450px_circle_at_center,white,transparent)]"
-        )}
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10"
-        style={{
-          background:
-            "radial-gradient(ellipse 60% 60% at 50% 40%, color-mix(in oklab, var(--primary) 14%, transparent), transparent 70%)"
-        }}
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-px"
-        style={{
-          background:
-            "linear-gradient(to right, transparent, color-mix(in oklab, var(--primary) 30%, transparent), transparent)"
-        }}
-      />
-      <BlurFade>
-        <div className="mx-auto max-w-3xl px-6 text-center">
-          <div className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-background/60 px-3 py-1 text-xs font-medium backdrop-blur">
-            <Sparkles className="size-3.5 text-primary" />
-            <span>2 seats free forever — no credit card</span>
-          </div>
-          <h2 className="mt-6 font-display text-4xl leading-[1.05] tracking-tight sm:text-6xl">
-            Ship your business.
-            <br />
-            <span className="italic text-foreground/85">Not another spreadsheet.</span>
-          </h2>
-          <p className="mx-auto mt-5 max-w-xl text-lg text-muted-foreground">
-            Set up in twenty minutes. Migrate from whatever you&apos;re on. Cancel any time. Nothing to
-            lose.
-          </p>
-          <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <Link href="/login#signup" className="inline-flex">
-              <ShimmerButton
-                className="h-12 px-7 text-base"
-                background="linear-gradient(180deg, color-mix(in oklab, var(--primary) 88%, white), var(--primary))"
-                shimmerColor="#ecfdf5"
-                borderRadius="0.75rem"
-              >
-                <span className="inline-flex items-center gap-2">
-                  Start free
-                  <ArrowRight className="size-4" />
-                </span>
-              </ShimmerButton>
-            </Link>
-            <Button asChild variant="outline" size="lg" className="h-12 px-6 text-base">
-              <Link href="/contact">Talk to a human</Link>
-            </Button>
-          </div>
+    <section className="relative isolate overflow-hidden">
+      <WavyBackground
+        containerClassName="!h-auto py-20 sm:py-28"
+        className="mx-auto flex max-w-3xl flex-col items-center px-6 text-center"
+        colors={[
+          "#34d399",
+          "#0f766e",
+          "#22d3ee",
+          "#818cf8",
+          "#a78bfa",
+        ]}
+        backgroundFill="#020617"
+        waveOpacity={0.45}
+        blur={12}
+        speed="slow"
+      >
+        <div className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-medium text-white backdrop-blur">
+          <Sparkles className="size-3.5 text-emerald-300" />
+          <span>2 seats free forever — no credit card</span>
         </div>
-      </BlurFade>
+
+        <h2 className="mt-6 font-display text-4xl leading-[1.05] tracking-tight text-white sm:text-6xl">
+          Ship your business.
+          <br />
+          <span className="italic text-white/85">Not another spreadsheet.</span>
+        </h2>
+        <p className="mx-auto mt-5 max-w-xl text-lg text-white/80">
+          Set up in twenty minutes. Migrate from whatever you&apos;re on. Cancel
+          any time. Nothing to lose.
+        </p>
+
+        <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+          <Link href="/login#signup" className="inline-flex">
+            <MovingBorderButton
+              borderRadius="0.75rem"
+              duration={2600}
+              className="h-12 !bg-primary !text-primary-foreground !border-transparent px-7 text-base font-semibold shadow-elevation-md"
+              containerClassName="h-12 w-auto !md:col-span-1"
+            >
+              <span className="inline-flex items-center gap-2">
+                Start free
+                <ArrowRight className="size-4" />
+              </span>
+            </MovingBorderButton>
+          </Link>
+          <Button
+            asChild
+            variant="outline"
+            size="lg"
+            className="h-12 border-white/25 bg-white/10 px-6 text-base text-white hover:bg-white/20 hover:text-white"
+          >
+            <Link href="/contact">Book a demo</Link>
+          </Button>
+        </div>
+      </WavyBackground>
     </section>
   );
 }

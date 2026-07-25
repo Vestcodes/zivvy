@@ -1,16 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Check } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  WobbleCard,
+  GlowingEffect,
+  MovingBorderButton
+} from "@/components/ui/aceternity";
 import { Badge } from "@/components/ui/badge";
-import { BorderBeam } from "@/components/ui/border-beam";
 import { Reveal } from "@/components/ui/reveal";
+import { usePricingBilling } from "@/components/site/pricing-billing-provider";
 import { cn } from "@/lib/utils";
-
-type Billing = "monthly" | "annual";
 
 type Plan = {
   slug: "free" | "pro" | "business";
@@ -71,29 +71,21 @@ interface Props {
   className?: string;
 }
 
+/**
+ * Tier cards for /pricing. The billing cycle comes from
+ * `<PricingBillingProvider>` (toggle lives in the hero). Cards render as
+ * Aceternity `<WobbleCard>` for the parallax-on-hover feel; the featured
+ * Pro card gets a `<GlowingEffect>` border sweep plus a subtle scale. All
+ * three CTAs are `<MovingBorderButton>`s so the primary action reads as
+ * "clickable" everywhere.
+ */
 export function PricingPreview({ showIntro = true, className }: Props = {}) {
-  const [billing, setBilling] = useState<Billing>("monthly");
-
-  // Sync from URL on mount and on nav
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const params = new URLSearchParams(window.location.search);
-    const b = params.get("billing");
-    if (b === "annual" || b === "monthly") setBilling(b);
-  }, []);
-
-  function updateBilling(next: Billing) {
-    setBilling(next);
-    if (typeof window !== "undefined") {
-      const url = new URL(window.location.href);
-      if (next === "monthly") url.searchParams.delete("billing");
-      else url.searchParams.set("billing", next);
-      history.replaceState(null, "", url.toString());
-    }
-  }
+  const { billing } = usePricingBilling();
 
   return (
-    <section className={cn("mx-auto max-w-6xl px-6 pb-16 pt-8 sm:pb-24", className)}>
+    <section
+      className={cn("mx-auto max-w-6xl px-6 pb-16 pt-8 sm:pb-24", className)}
+    >
       {showIntro && (
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl">
@@ -105,123 +97,125 @@ export function PricingPreview({ showIntro = true, className }: Props = {}) {
         </div>
       )}
 
-      <div className={cn("mx-auto flex justify-center", showIntro ? "mt-8" : "")}>
-        <div className="inline-flex items-center rounded-full border border-border/70 bg-card p-1 text-sm">
-          <button
-            type="button"
-            onClick={() => updateBilling("monthly")}
-            className={cn(
-              "rounded-full px-4 py-1.5 font-medium transition-colors",
-              billing === "monthly"
-                ? "bg-primary text-primary-foreground shadow-sm"
-                : "text-muted-foreground hover:text-foreground"
-            )}
-            aria-pressed={billing === "monthly"}
-          >
-            Monthly
-          </button>
-          <button
-            type="button"
-            onClick={() => updateBilling("annual")}
-            className={cn(
-              "inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 font-medium transition-colors",
-              billing === "annual"
-                ? "bg-primary text-primary-foreground shadow-sm"
-                : "text-muted-foreground hover:text-foreground"
-            )}
-            aria-pressed={billing === "annual"}
-          >
-            Annual
-            <span
-              className={cn(
-                "rounded-full px-1.5 py-0.5 text-[10px] font-semibold",
-                billing === "annual"
-                  ? "bg-primary-foreground/15 text-primary-foreground"
-                  : "bg-primary/10 text-primary"
-              )}
-            >
-              −20%
-            </span>
-          </button>
-        </div>
-      </div>
-
-      <div className="mt-10 grid gap-4 lg:grid-cols-3">
+      <div
+        className={cn(
+          "grid gap-6 md:gap-5 lg:grid-cols-3 lg:items-stretch",
+          showIntro ? "mt-10" : "mt-2"
+        )}
+      >
         {PLANS.map((plan, i) => {
           const price = billing === "annual" ? plan.annual : plan.monthly;
           const isFree = plan.slug === "free";
-          const isRibbon = plan.highlighted;
+          const isFeatured = plan.highlighted;
           const href = `/login#signup?plan=${plan.slug}&billing=${billing}`;
+
+          const container = isFeatured
+            ? "relative lg:scale-[1.02] lg:z-10 bg-card/95 dark:bg-card/70 ring-2 ring-primary/40 shadow-elevation-md"
+            : "relative bg-card/60 hover:bg-card/80";
+
           return (
-            <Reveal key={plan.slug} delay={i * 80}>
-            <Card
-              className={cn(
-                "relative h-full overflow-hidden border-border/70 transition-all duration-[var(--duration-base)]",
-                isRibbon
-                  ? "ring-2 ring-primary/40 shadow-elevation-md"
-                  : "bg-card/60 hover:-translate-y-0.5 hover:shadow-elevation-md"
-              )}
-            >
-              {isRibbon && (
-                <>
-                  <BorderBeam size={120} duration={8} colorFrom="#34d399" colorTo="#0f766e" />
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    <Badge className="border-transparent bg-primary px-3 py-1 text-primary-foreground shadow-md">
+            <Reveal key={plan.slug} delay={i * 80} className="h-full">
+              <WobbleCard
+                containerClassName={cn(
+                  "h-full rounded-2xl border border-border/70 text-foreground",
+                  container
+                )}
+                className="p-6 sm:p-7 flex h-full flex-col"
+              >
+                {/* GlowingEffect only fires on the featured card. */}
+                {isFeatured && (
+                  <GlowingEffect
+                    disabled={false}
+                    glow
+                    proximity={80}
+                    spread={40}
+                    blur={0}
+                    borderWidth={2}
+                    movementDuration={1.4}
+                  />
+                )}
+
+                <div className="relative flex items-center justify-between">
+                  <h3 className="font-display text-xl font-semibold tracking-tight">
+                    {plan.name}
+                  </h3>
+                  {isFeatured && (
+                    <Badge className="border-transparent bg-primary px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-primary-foreground shadow-sm">
                       Most popular
                     </Badge>
-                  </div>
-                </>
-              )}
-              <CardHeader>
-                <CardTitle className="font-display text-xl">{plan.name}</CardTitle>
-                <CardDescription>{plan.desc}</CardDescription>
-                <div className="mt-4 flex items-baseline gap-1">
-                  <span className="font-display text-4xl font-bold tracking-tight tabular-nums">
-                    ${price}
-                  </span>
-                  {!isFree && (
-                    <span className="text-sm text-muted-foreground">
-                      per seat / month
-                    </span>
                   )}
                 </div>
-                {billing === "annual" && !isFree && (
-                  <p className="text-xs text-muted-foreground">
-                    billed as{" "}
-                    <span className="font-mono tabular-nums text-foreground">
-                      ${plan.annual * 12}
-                    </span>
-                    /seat/year
+
+                <div className="relative">
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    {plan.desc}
                   </p>
-                )}
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-2.5">
+
+                  <div className="mt-5 flex items-baseline gap-1">
+                    <span className="font-display text-4xl font-bold tracking-tight tabular-nums">
+                      ${price}
+                    </span>
+                    {!isFree && (
+                      <span className="text-sm text-muted-foreground">
+                        per seat / month
+                      </span>
+                    )}
+                  </div>
+                  {billing === "annual" && !isFree && (
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      billed as{" "}
+                      <span className="font-mono tabular-nums text-foreground">
+                        ${plan.annual * 12}
+                      </span>
+                      /seat/year
+                    </p>
+                  )}
+                </div>
+
+                <ul className="relative mt-6 flex-1 space-y-2.5">
                   {plan.features.map((feature) => (
-                    <li key={feature} className="flex items-start gap-2 text-sm">
+                    <li
+                      key={feature}
+                      className="flex items-start gap-2 text-sm"
+                    >
                       <Check className="mt-0.5 size-4 shrink-0 text-primary" />
                       <span>{feature}</span>
                     </li>
                   ))}
                 </ul>
-              </CardContent>
-              <CardFooter>
-                <Button
-                  asChild
-                  className="w-full"
-                  variant={isRibbon ? "polished" : "outline"}
-                >
-                  <Link href={href}>{plan.cta}</Link>
-                </Button>
-              </CardFooter>
-            </Card>
+
+                <div className="relative mt-6">
+                  <MovingBorderButton
+                    as={Link}
+                    href={href}
+                    duration={isFeatured ? 2400 : 4000}
+                    borderRadius="0.75rem"
+                    containerClassName="w-full h-11 text-base"
+                    borderClassName={cn(
+                      "h-16 w-16 opacity-90",
+                      isFeatured
+                        ? "bg-[radial-gradient(var(--primary)_40%,transparent_60%)]"
+                        : "bg-[radial-gradient(color-mix(in_oklab,var(--primary)_65%,transparent)_40%,transparent_60%)]"
+                    )}
+                    className={cn(
+                      "h-full w-full text-sm font-medium",
+                      isFeatured
+                        ? "bg-primary text-primary-foreground border-transparent"
+                        : "bg-background/85 text-foreground border border-border/70 backdrop-blur"
+                    )}
+                  >
+                    {plan.cta}
+                  </MovingBorderButton>
+                </div>
+              </WobbleCard>
             </Reveal>
           );
         })}
       </div>
 
       <p className="mt-8 text-center text-xs text-muted-foreground">
-        All plans include unlimited data · no card required on Free · cancel anytime
+        All plans include unlimited data · no card required on Free · cancel
+        anytime
       </p>
     </section>
   );

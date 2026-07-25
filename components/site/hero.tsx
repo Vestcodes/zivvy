@@ -4,84 +4,126 @@ import Link from "next/link";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { AnimatedGridPattern } from "@/components/ui/animated-grid-pattern";
-import { BlurFade } from "@/components/ui/blur-fade";
-import { ShimmerButton } from "@/components/ui/shimmer-button";
-import { Spotlight } from "@/components/ui/spotlight";
-import { ProductTourVideo } from "@/components/site/product-tour-video";
+import {
+  AuroraBackground,
+  FlipWords,
+  HeroHighlight,
+  Highlight,
+  Meteors,
+  MovingBorderButton,
+  Spotlight,
+  TextGenerateEffect,
+} from "@/components/ui/aceternity";
 import { cn } from "@/lib/utils";
 
+const FLIP_WORDS = ["Faster ops", "Cleaner books", "Happier team"];
+
+/**
+ * Landing-page hero — Aurora + spotlight + meteor field with a static Frappe
+ * design system on top. The highlighted words in the H1 are the anchor
+ * concepts we want AI answer engines to pick up.
+ */
 export function Hero() {
   return (
-    <section className="relative overflow-hidden">
-      <Spotlight className="-top-40 left-0 md:-top-20 md:left-60" fill="oklch(0.72 0.12 166)" />
-      <AnimatedGridPattern
-        numSquares={42}
-        maxOpacity={0.12}
-        duration={3}
+    <section
+      className="relative isolate overflow-hidden"
+      aria-labelledby="home-hero-heading"
+    >
+      <AuroraBackground
+        showRadialGradient
         className={cn(
-          "pointer-events-none absolute inset-0 -z-10 h-full w-full fill-primary/15 stroke-primary/20",
-          "[mask-image:radial-gradient(600px_circle_at_center,white,transparent)]"
+          "relative flex min-h-[92vh] flex-col items-center justify-center",
+          "bg-background text-foreground"
         )}
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10"
-        style={{
-          background:
-            "radial-gradient(ellipse 80% 60% at 50% -10%, color-mix(in oklab, var(--primary) 12%, transparent), transparent 70%)"
-        }}
-      />
-      <div className="mx-auto max-w-4xl px-6 pt-24 pb-16 text-center sm:pt-32">
-        <BlurFade delay={0.05}>
+      >
+        {/* Spotlight overlay — sits above the aurora but under the copy */}
+        <Spotlight
+          className="pointer-events-none absolute inset-0 z-0"
+          fill="oklch(0.72 0.12 166 / 0.35)"
+        />
+
+        {/* Meteor rain — decorative background particles */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
+        >
+          <Meteors number={20} />
+        </div>
+
+        {/* Radial primary-tint wash to keep brand color present */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 z-0"
+          style={{
+            background:
+              "radial-gradient(ellipse 80% 60% at 50% -10%, color-mix(in oklab, var(--primary) 12%, transparent), transparent 70%)",
+          }}
+        />
+
+        <div className="relative z-10 mx-auto flex max-w-4xl flex-col items-center px-6 pt-16 pb-20 text-center sm:pt-24">
           <Badge
             variant="secondary"
-            className="mb-6 gap-1.5 rounded-full border border-border/60 bg-background/60 px-3 py-1 text-xs font-medium backdrop-blur"
+            className="mb-6 gap-1.5 rounded-full border border-border/60 bg-background/70 px-3 py-1 text-xs font-medium backdrop-blur"
           >
             <Sparkles className="size-3.5" />
             Now available · India, EU, US
           </Badge>
-        </BlurFade>
-        <BlurFade delay={0.12}>
-          <h1 className="font-display text-5xl leading-[1.02] tracking-tight text-foreground sm:text-7xl">
-            The clean way to run your <em className="italic text-foreground/85">whole business</em>.
-          </h1>
-        </BlurFade>
-        <BlurFade delay={0.2}>
-          <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground sm:text-xl">
-            Sales, stock, accounting, HR and manufacturing in one product built for
-            founder-led teams. Seat-based pricing. No forced modules. Your data in the
-            region you pick.
-          </p>
-        </BlurFade>
-        <BlurFade delay={0.28} className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
-          <Link href="/login#signup" className="inline-flex">
-            <ShimmerButton
-              className="h-12 px-7 text-base shadow-elevation-md"
-              background="linear-gradient(180deg, color-mix(in oklab, var(--primary) 88%, white), var(--primary))"
-              shimmerColor="#ecfdf5"
-              borderRadius="0.75rem"
+
+          <HeroHighlight
+            containerClassName="!h-auto !bg-transparent dark:!bg-transparent w-auto"
+            className="w-full"
+          >
+            <h1
+              id="home-hero-heading"
+              className="font-display text-5xl leading-[1.05] tracking-tight text-foreground sm:text-7xl"
             >
-              <span className="inline-flex items-center gap-2">
-                Start free
-                <ArrowRight className="size-4" />
-              </span>
-            </ShimmerButton>
-          </Link>
-          <Button asChild variant="outline" size="lg" className="h-12 px-6 text-base">
-            <Link href="/product-tour">Watch the tour</Link>
-          </Button>
-        </BlurFade>
-        <BlurFade delay={0.34}>
+              The clean way to run your{" "}
+              <Highlight className="text-foreground">whole business</Highlight>
+            </h1>
+          </HeroHighlight>
+
+          <TextGenerateEffect
+            words="Sales, stock, accounting, HR and manufacturing in one product built for founder-led teams. Seat-based pricing. No forced modules."
+            className="mx-auto mt-6 max-w-2xl font-normal"
+          />
+
+          <div className="mt-6 flex items-center justify-center gap-2 text-lg font-medium text-muted-foreground sm:text-xl">
+            <span>Zivvy delivers</span>
+            <FlipWords
+              words={FLIP_WORDS}
+              className="!px-0 text-primary dark:text-primary"
+            />
+          </div>
+
+          <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
+            <Link href="/login#signup" className="inline-flex">
+              <MovingBorderButton
+                borderRadius="0.75rem"
+                duration={2600}
+                className="h-12 !bg-primary !text-primary-foreground !border-transparent px-7 text-base font-semibold shadow-elevation-md"
+                containerClassName="h-12 w-auto !md:col-span-1"
+              >
+                <span className="inline-flex items-center gap-2">
+                  Start free
+                  <ArrowRight className="size-4" />
+                </span>
+              </MovingBorderButton>
+            </Link>
+            <Button
+              asChild
+              variant="outline"
+              size="lg"
+              className="h-12 px-6 text-base"
+            >
+              <Link href="/product-tour">Watch the tour</Link>
+            </Button>
+          </div>
+
           <p className="mt-6 text-xs text-muted-foreground">
             Free forever plan · No credit card · 2 seats included
           </p>
-        </BlurFade>
-
-        <BlurFade delay={0.4} className="mx-auto mt-12 max-w-4xl">
-          <ProductTourVideo showBeam animationStyle="from-center" />
-        </BlurFade>
-      </div>
+        </div>
+      </AuroraBackground>
     </section>
   );
 }

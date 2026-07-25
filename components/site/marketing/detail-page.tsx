@@ -1,8 +1,18 @@
 "use client";
 
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
-import { ArrowRight, Check, Copy, ExternalLink, Radio, Sparkles } from "lucide-react";
+import {
+  ArrowRight,
+  Check,
+  Copy,
+  ExternalLink,
+  Radio,
+  Sparkles,
+  ShieldCheck,
+  Workflow
+} from "lucide-react";
 import { toast } from "sonner";
 import type { CodeExample, MarketingDetail } from "@/lib/marketing-content";
 import { SiteHeader } from "@/components/site/header";
@@ -19,12 +29,24 @@ import { Badge } from "@/components/ui/badge";
 import { BlurFade } from "@/components/ui/blur-fade";
 import { BorderBeam } from "@/components/ui/border-beam";
 import { DotPattern } from "@/components/ui/dot-pattern";
-import { MagicCard } from "@/components/ui/magic-card";
 import { NumberTicker } from "@/components/ui/number-ticker";
 import { ShineBorder } from "@/components/ui/shine-border";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Spotlight } from "@/components/ui/spotlight";
 import { TextAnimate } from "@/components/ui/text-animate";
+import {
+  AceternityTabs,
+  MovingBorderButton,
+  StickyScroll,
+  TracingBeam
+} from "@/components/ui/aceternity";
 import { cn } from "@/lib/utils";
+
+// Meteors uses Math.random in render, so it must be client-only to avoid
+// SSR/CSR mismatches.
+const Meteors = dynamic(
+  () => import("@/components/ui/aceternity/meteors").then((mod) => mod.Meteors),
+  { ssr: false }
+);
 
 type Props = {
   sectionLabel: string;
@@ -92,7 +114,60 @@ export function MarketingDetailPage({ sectionLabel, sectionHref, entry }: Props)
   const hasEndpoints = (entry.apiEndpoints?.length ?? 0) > 0;
   const hasEvents = (entry.webhookEvents?.length ?? 0) > 0;
   const showIntegrationSection = hasCode || hasEndpoints;
-  const defaultTab = entry.codeExamples?.[0]?.language ?? "curl";
+
+  const stickyContent = [
+    {
+      title: "The snag",
+      description: entry.problem,
+      content: (
+        <div className="flex h-full w-full items-center justify-center p-6 text-white">
+          <div className="flex flex-col items-center gap-3 text-center">
+            <div className="flex size-14 items-center justify-center rounded-2xl border border-white/25 bg-white/10 backdrop-blur">
+              <Workflow className="size-6" />
+            </div>
+            <p className="text-xs font-mono uppercase tracking-[0.14em] text-white/70">
+              Before Zivvy
+            </p>
+            <p className="max-w-[14rem] text-sm leading-snug text-white/85">
+              Handoffs go missing, owners are unclear, audits get painful.
+            </p>
+          </div>
+        </div>
+      )
+    },
+    {
+      title: "How Zivvy helps",
+      description: entry.solution,
+      content: (
+        <div className="flex h-full w-full items-center justify-center p-6 text-white">
+          <div className="flex flex-col items-center gap-3 text-center">
+            <div className="flex size-14 items-center justify-center rounded-2xl border border-white/25 bg-white/10 backdrop-blur">
+              <ShieldCheck className="size-6" />
+            </div>
+            <p className="text-xs font-mono uppercase tracking-[0.14em] text-white/70">
+              With Zivvy
+            </p>
+            <p className="max-w-[14rem] text-sm leading-snug text-white/85">
+              One owner. One audit trail. One workflow for the whole team.
+            </p>
+          </div>
+        </div>
+      )
+    }
+  ];
+
+  const codeTabs = hasCode
+    ? entry.codeExamples!.map((ex) => ({
+        title: ex.language.toUpperCase(),
+        value: ex.language,
+        content: (
+          <div className="w-full rounded-2xl border border-border/70 bg-card/60 p-4 sm:p-5">
+            <p className="mb-2 text-xs text-muted-foreground">{ex.label}</p>
+            <CodeBlock example={ex} />
+          </div>
+        )
+      }))
+    : [];
 
   return (
     <>
@@ -136,304 +211,314 @@ export function MarketingDetailPage({ sectionLabel, sectionHref, entry }: Props)
           </div>
         ) : null}
 
-        <section className="relative overflow-hidden">
-          <DotPattern
-            className={cn(
-              "pointer-events-none absolute inset-0 -z-10 text-primary/25",
-              "[mask-image:radial-gradient(480px_circle_at_20%_0%,white,transparent)]"
-            )}
-          />
-          <div className="mx-auto max-w-3xl px-6 pb-10 pt-20 sm:pt-24">
-            <BlurFade>
-              <Link
-                href={sectionHref}
-                className="text-xs font-medium uppercase tracking-wide text-muted-foreground hover:text-foreground"
-              >
-                {sectionLabel}
-              </Link>
-              <TextAnimate
-                as="h1"
-                by="word"
-                animation="blurInUp"
-                className="mt-4 font-display text-4xl font-bold tracking-tight sm:text-5xl"
-              >
-                {entry.title}
-              </TextAnimate>
-              <p className="mt-4 max-w-2xl text-lg text-muted-foreground">{entry.description}</p>
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <Button asChild variant="polished" size="lg">
-                  <Link href={entry.ctaHref}>
-                    {entry.ctaLabel}
-                    <ArrowRight className="size-4" />
-                  </Link>
-                </Button>
-                <Button asChild variant="outline" size="lg">
-                  <Link href="/product-tour">See product tour</Link>
-                </Button>
-                {entry.docsUrl ? (
-                  <Button asChild variant="ghost" size="lg">
-                    <a href={entry.docsUrl} target="_blank" rel="noreferrer">
-                      Read API docs
-                      <ExternalLink className="size-4" />
-                    </a>
-                  </Button>
-                ) : null}
-              </div>
-            </BlurFade>
-          </div>
-        </section>
-
-        <section className="mx-auto grid max-w-5xl gap-6 px-6 py-6 md:grid-cols-2">
-          <BlurFade>
-            <div className="relative h-full overflow-hidden rounded-2xl border border-border/70 bg-card/60 p-6">
-              <ShineBorder shineColor={["#34d399", "#0f766e", "#34d399"]} duration={12} />
-              <h2 className="font-display text-xl font-semibold">The snag</h2>
-              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{entry.problem}</p>
-            </div>
-          </BlurFade>
-          <BlurFade delay={0.08}>
-            <div className="relative h-full overflow-hidden rounded-2xl">
-              <MagicCard
-                className="h-full rounded-2xl border border-border/70 bg-card/70 p-6"
-                gradientFrom="#34d399"
-                gradientTo="#0f766e"
-                gradientColor="rgba(27, 152, 114, 0.1)"
-              >
-                <BorderBeam size={70} duration={7} colorFrom="#34d399" colorTo="#0f766e" />
-                <h2 className="font-display text-xl font-semibold">How Zivvy helps</h2>
-                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{entry.solution}</p>
-              </MagicCard>
-            </div>
-          </BlurFade>
-        </section>
-
-        <section className="mx-auto max-w-5xl px-6 py-10">
-          <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
-            <div>
-              <h2 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">
-                What you get
-              </h2>
-              <ul className="mt-6 space-y-3">
-                {entry.benefits.map((benefit, idx) => (
-                  <BlurFade key={benefit} delay={0.03 + idx * 0.03}>
-                    <li className="flex items-start gap-3 rounded-xl border border-border/50 bg-background/40 px-4 py-3">
-                      <Check className="mt-0.5 size-4 shrink-0 text-primary" />
-                      <span className="text-sm text-muted-foreground">{benefit}</span>
-                    </li>
-                  </BlurFade>
-                ))}
-              </ul>
-            </div>
-            <BlurFade delay={0.1}>
-              <div className="relative overflow-hidden rounded-2xl border border-border/70 bg-card/60 p-5">
-                <ShineBorder shineColor={["#0f766e", "#34d399"]} duration={16} />
-                <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                  Workflow stream
+        <TracingBeam className="max-w-5xl">
+          <section className="relative overflow-hidden">
+            <DotPattern
+              className={cn(
+                "pointer-events-none absolute inset-0 -z-10 text-primary/25",
+                "[mask-image:radial-gradient(480px_circle_at_20%_0%,white,transparent)]"
+              )}
+            />
+            <Spotlight
+              className="-top-40 left-0 md:-top-20 md:left-60"
+              fill="rgba(52, 211, 153, 0.35)"
+            />
+            <div className="relative mx-auto max-w-3xl px-6 pb-10 pt-20 sm:pt-24">
+              <BlurFade>
+                <Link
+                  href={sectionHref}
+                  className="text-xs font-medium uppercase tracking-wide text-muted-foreground hover:text-foreground"
+                >
+                  {sectionLabel}
+                </Link>
+                <TextAnimate
+                  as="h1"
+                  by="word"
+                  animation="blurInUp"
+                  className="mt-4 font-display text-4xl font-bold tracking-tight sm:text-5xl"
+                >
+                  {entry.title}
+                </TextAnimate>
+                <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
+                  {entry.description}
                 </p>
-                <div className="mt-4 min-h-[11rem]">
-                  <AnimatedList delay={1400} className="gap-2">
-                    {entry.useCases.map((useCase) => (
-                      <div
-                        key={useCase}
-                        className="w-full rounded-xl border border-border/60 bg-background/70 px-3 py-2.5 text-left text-sm text-foreground/90 shadow-sm"
-                      >
-                        {useCase}
-                      </div>
-                    ))}
-                  </AnimatedList>
-                </div>
-              </div>
-            </BlurFade>
-          </div>
-        </section>
-
-        <section className="mx-auto max-w-5xl px-6 py-6">
-          <h2 className="font-display text-2xl font-semibold tracking-tight">Common uses</h2>
-          <ol className="mt-6 grid gap-3 sm:grid-cols-3">
-            {entry.useCases.slice(0, 3).map((useCase, idx) => (
-              <BlurFade key={useCase} delay={0.04 + idx * 0.04}>
-                <li className="relative h-full overflow-hidden rounded-xl border border-border/60 bg-card/50 p-4">
-                  {idx === 0 ? (
-                    <BorderBeam size={50} duration={6} colorFrom="#34d399" colorTo="#0f766e" />
+                <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                  <Button asChild variant="polished" size="lg">
+                    <Link href={entry.ctaHref}>
+                      {entry.ctaLabel}
+                      <ArrowRight className="size-4" />
+                    </Link>
+                  </Button>
+                  <Button asChild variant="outline" size="lg">
+                    <Link href="/product-tour">See product tour</Link>
+                  </Button>
+                  {entry.docsUrl ? (
+                    <Button asChild variant="ghost" size="lg">
+                      <a href={entry.docsUrl} target="_blank" rel="noreferrer">
+                        Read API docs
+                        <ExternalLink className="size-4" />
+                      </a>
+                    </Button>
                   ) : null}
-                  <p className="font-mono text-xs text-muted-foreground">
-                    {String(idx + 1).padStart(2, "0")}
-                  </p>
-                  <p className="mt-2 text-sm text-foreground/90">{useCase}</p>
-                </li>
+                </div>
               </BlurFade>
-            ))}
-          </ol>
-        </section>
+            </div>
+          </section>
 
-        {showIntegrationSection ? (
           <section className="mx-auto max-w-5xl px-6 py-8">
             <BlurFade>
-              <div className="flex items-baseline justify-between gap-4">
-                <h2 className="font-display text-2xl font-semibold tracking-tight">
-                  Integration code
-                </h2>
-                {entry.docsUrl ? (
-                  <a
-                    href={entry.docsUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"
-                  >
-                    Open API reference
-                    <ExternalLink className="size-3.5" />
-                  </a>
-                ) : null}
+              <div className="overflow-hidden rounded-2xl border border-border/70 bg-card/40">
+                <StickyScroll
+                  content={stickyContent}
+                  contentClassName="border border-white/10 shadow-2xl"
+                />
               </div>
-              {hasCode ? (
-                <div className="mt-5 rounded-2xl border border-border/70 bg-card/50 p-4 sm:p-5">
-                  <Tabs defaultValue={defaultTab} className="gap-4">
-                    <TabsList className="flex-wrap">
-                      {entry.codeExamples!.map((ex) => (
-                        <TabsTrigger key={ex.language} value={ex.language}>
-                          <span className="font-mono text-[11px] uppercase tracking-wide">
-                            {ex.language}
-                          </span>
-                          <span className="hidden text-xs text-muted-foreground sm:inline">
-                            · {ex.label}
-                          </span>
-                        </TabsTrigger>
-                      ))}
-                    </TabsList>
-                    {entry.codeExamples!.map((ex) => (
-                      <TabsContent key={ex.language} value={ex.language} className="mt-0">
-                        <p className="mb-2 text-xs text-muted-foreground">{ex.label}</p>
-                        <CodeBlock example={ex} />
-                      </TabsContent>
+            </BlurFade>
+          </section>
+
+          <section className="mx-auto max-w-5xl px-6 py-10">
+            <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
+              <div>
+                <h2 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">
+                  What you get
+                </h2>
+                <div className="relative mt-6 overflow-hidden rounded-2xl border border-border/60 bg-card/40 p-5">
+                  <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden [mask-image:radial-gradient(400px_circle_at_50%_0%,black,transparent_70%)]">
+                    <Meteors number={16} />
+                  </div>
+                  <ul className="relative space-y-3">
+                    {entry.benefits.map((benefit, idx) => (
+                      <BlurFade key={benefit} delay={0.03 + idx * 0.03}>
+                        <li className="flex items-start gap-3 rounded-xl border border-border/50 bg-background/60 px-4 py-3 backdrop-blur">
+                          <Check className="mt-0.5 size-4 shrink-0 text-primary" />
+                          <span className="text-sm text-muted-foreground">{benefit}</span>
+                        </li>
+                      </BlurFade>
                     ))}
-                  </Tabs>
+                  </ul>
                 </div>
-              ) : null}
-              {hasEndpoints ? (
-                <div className="mt-5">
+              </div>
+              <BlurFade delay={0.1}>
+                <div className="relative overflow-hidden rounded-2xl border border-border/70 bg-card/60 p-5">
+                  <ShineBorder shineColor={["#0f766e", "#34d399"]} duration={16} />
                   <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                    API endpoints
+                    Workflow stream
                   </p>
-                  <div className="mt-2 flex flex-wrap gap-2">
-                    {entry.apiEndpoints!.map((endpoint) => (
-                      <Badge
-                        key={endpoint}
-                        variant="outline"
-                        className="font-mono text-[11px] font-medium"
-                      >
-                        {endpoint}
-                      </Badge>
-                    ))}
+                  <div className="mt-4 min-h-[11rem]">
+                    <AnimatedList delay={1400} className="gap-2">
+                      {entry.useCases.map((useCase) => (
+                        <div
+                          key={useCase}
+                          className="w-full rounded-xl border border-border/60 bg-background/70 px-3 py-2.5 text-left text-sm text-foreground/90 shadow-sm"
+                        >
+                          {useCase}
+                        </div>
+                      ))}
+                    </AnimatedList>
                   </div>
                 </div>
-              ) : null}
-            </BlurFade>
+              </BlurFade>
+            </div>
           </section>
-        ) : null}
 
-        {hasEvents ? (
           <section className="mx-auto max-w-5xl px-6 py-6">
-            <BlurFade>
-              <div className="rounded-2xl border border-border/70 bg-card/50 p-5">
-                <div className="flex items-center gap-2">
-                  <Radio className="size-4 text-primary" />
-                  <h2 className="font-display text-lg font-semibold tracking-tight">
-                    Events emitted
+            <h2 className="font-display text-2xl font-semibold tracking-tight">Common uses</h2>
+            <ol className="mt-6 grid gap-3 sm:grid-cols-3">
+              {entry.useCases.slice(0, 3).map((useCase, idx) => (
+                <BlurFade key={useCase} delay={0.04 + idx * 0.04}>
+                  <li className="relative h-full overflow-hidden rounded-xl border border-border/60 bg-card/50 p-4">
+                    {idx === 0 ? (
+                      <BorderBeam size={50} duration={6} colorFrom="#34d399" colorTo="#0f766e" />
+                    ) : null}
+                    <p className="font-mono text-xs text-muted-foreground">
+                      {String(idx + 1).padStart(2, "0")}
+                    </p>
+                    <p className="mt-2 text-sm text-foreground/90">{useCase}</p>
+                  </li>
+                </BlurFade>
+              ))}
+            </ol>
+          </section>
+
+          {showIntegrationSection ? (
+            <section className="mx-auto max-w-5xl px-6 py-8">
+              <BlurFade>
+                <div className="flex items-baseline justify-between gap-4">
+                  <h2 className="font-display text-2xl font-semibold tracking-tight">
+                    Integration code
                   </h2>
+                  {entry.docsUrl ? (
+                    <a
+                      href={entry.docsUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"
+                    >
+                      Open API reference
+                      <ExternalLink className="size-3.5" />
+                    </a>
+                  ) : null}
                 </div>
-                <p className="mt-1 text-xs text-muted-foreground">
-                  HMAC-SHA256 signed webhooks, retried for 24 hours.
-                </p>
-                <ul className="mt-4 flex flex-wrap gap-2">
-                  {entry.webhookEvents!.map((event) => (
-                    <li key={event}>
-                      <Badge
-                        variant="secondary"
-                        className="font-mono text-[11px] font-medium"
-                      >
-                        {event}
-                      </Badge>
-                    </li>
-                  ))}
-                </ul>
+                {hasCode ? (
+                  <div className="relative mt-5">
+                    <AceternityTabs
+                      tabs={codeTabs}
+                      containerClassName="gap-1"
+                      tabClassName="text-xs font-mono uppercase tracking-wide text-muted-foreground data-[active=true]:text-foreground"
+                      activeTabClassName="!bg-primary/15 border border-primary/40"
+                      contentClassName="mt-8"
+                      contentWrapperClassName="h-[520px] mt-2"
+                    />
+                  </div>
+                ) : null}
+                {hasEndpoints ? (
+                  <div className="mt-5">
+                    <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                      API endpoints
+                    </p>
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      {entry.apiEndpoints!.map((endpoint) => (
+                        <Badge
+                          key={endpoint}
+                          variant="outline"
+                          className="font-mono text-[11px] font-medium"
+                        >
+                          {endpoint}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
+              </BlurFade>
+            </section>
+          ) : null}
+
+          {hasEvents ? (
+            <section className="mx-auto max-w-5xl px-6 py-6">
+              <BlurFade>
+                <div className="rounded-2xl border border-border/70 bg-card/50 p-5">
+                  <div className="flex items-center gap-2">
+                    <Radio className="size-4 text-primary" />
+                    <h2 className="font-display text-lg font-semibold tracking-tight">
+                      Events emitted
+                    </h2>
+                  </div>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    HMAC-SHA256 signed webhooks, retried for 24 hours.
+                  </p>
+                  <ul className="mt-4 flex flex-wrap gap-2">
+                    {entry.webhookEvents!.map((event) => (
+                      <li key={event}>
+                        <Badge
+                          variant="secondary"
+                          className="font-mono text-[11px] font-medium"
+                        >
+                          {event}
+                        </Badge>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </BlurFade>
+            </section>
+          ) : null}
+
+          <section className="mx-auto max-w-5xl px-6 py-8">
+            <BlurFade>
+              <div className="grid gap-3 rounded-2xl border border-border/70 bg-card/50 p-5 sm:grid-cols-3 sm:p-6">
+                <div className="rounded-xl border border-border/50 bg-background/50 px-4 py-4 text-center">
+                  <p className="font-display text-3xl font-semibold tracking-tight">
+                    <NumberTicker value={2} />
+                  </p>
+                  <p className="mt-1 text-xs text-muted-foreground">free seats forever</p>
+                </div>
+                <div className="rounded-xl border border-border/50 bg-background/50 px-4 py-4 text-center">
+                  <p className="font-display text-3xl font-semibold tracking-tight">
+                    <NumberTicker value={0} />
+                  </p>
+                  <p className="mt-1 text-xs text-muted-foreground">card required to start</p>
+                </div>
+                <div className="rounded-xl border border-border/50 bg-background/50 px-4 py-4 text-center">
+                  <p className="font-display text-3xl font-semibold tracking-tight">1</p>
+                  <p className="mt-1 text-xs text-muted-foreground">workspace for the workflow</p>
+                </div>
               </div>
             </BlurFade>
           </section>
-        ) : null}
 
-        <section className="mx-auto max-w-5xl px-6 py-8">
-          <BlurFade>
-            <div className="grid gap-3 rounded-2xl border border-border/70 bg-card/50 p-5 sm:grid-cols-3 sm:p-6">
-              <div className="rounded-xl border border-border/50 bg-background/50 px-4 py-4 text-center">
-                <p className="font-display text-3xl font-semibold tracking-tight">
-                  <NumberTicker value={2} />
-                </p>
-                <p className="mt-1 text-xs text-muted-foreground">free seats forever</p>
+          <section className="mx-auto max-w-3xl px-6 py-10">
+            <h2 className="text-center font-display text-2xl font-semibold tracking-tight sm:text-3xl">
+              Questions
+            </h2>
+            <Accordion
+              type="single"
+              collapsible
+              className="mt-8 space-y-2"
+            >
+              {entry.faqs.map((faq) => (
+                <div key={faq.q} className="group relative rounded-xl">
+                  <div
+                    aria-hidden
+                    className="pointer-events-none absolute -inset-px rounded-xl bg-gradient-to-r from-primary/30 via-primary/5 to-primary/30 opacity-0 blur-[2px] transition-opacity duration-300 group-hover:opacity-100"
+                  />
+                  <AccordionItem
+                    value={faq.q}
+                    className="relative overflow-hidden rounded-xl border border-border/70 bg-card/70 px-2 transition-colors group-hover:border-primary/40"
+                  >
+                    <AccordionTrigger className="px-4 text-left text-sm font-medium">
+                      {faq.q}
+                    </AccordionTrigger>
+                    <AccordionContent className="px-4 text-sm text-muted-foreground">
+                      {faq.a}
+                    </AccordionContent>
+                  </AccordionItem>
+                </div>
+              ))}
+            </Accordion>
+          </section>
+
+          <section className="mx-auto max-w-3xl px-6 pb-20 pt-4 text-center">
+            <div className="relative overflow-hidden rounded-2xl border border-border/70 bg-card/70 px-6 py-8">
+              <ShineBorder shineColor={["#34d399", "#0f766e"]} duration={14} />
+              <h2 className="font-display text-3xl font-semibold tracking-tight">
+                Ready to try it?
+              </h2>
+              <p className="mt-3 text-muted-foreground">Free plan. Two seats. No card.</p>
+              <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
+                <MovingBorderButton
+                  as={Link}
+                  href={entry.ctaHref}
+                  borderRadius="0.65rem"
+                  duration={3800}
+                  containerClassName="h-11 w-full sm:w-auto text-sm"
+                  borderClassName="bg-[radial-gradient(circle,rgba(52,211,153,0.9)_40%,transparent_60%)]"
+                  className="!bg-primary !text-primary-foreground !border-primary/60 px-6 font-medium"
+                >
+                  <span className="inline-flex items-center gap-2">
+                    {entry.ctaLabel}
+                    <ArrowRight className="size-4" />
+                  </span>
+                </MovingBorderButton>
+                <Button asChild variant="outline" size="lg">
+                  <Link href="/pricing">See pricing</Link>
+                </Button>
               </div>
-              <div className="rounded-xl border border-border/50 bg-background/50 px-4 py-4 text-center">
-                <p className="font-display text-3xl font-semibold tracking-tight">
-                  <NumberTicker value={0} />
-                </p>
-                <p className="mt-1 text-xs text-muted-foreground">card required to start</p>
-              </div>
-              <div className="rounded-xl border border-border/50 bg-background/50 px-4 py-4 text-center">
-                <p className="font-display text-3xl font-semibold tracking-tight">1</p>
-                <p className="mt-1 text-xs text-muted-foreground">workspace for the workflow</p>
+              <div className="mt-5 flex flex-wrap items-center justify-center gap-2 text-xs text-muted-foreground">
+                <Link href={sectionHref} className="hover:text-foreground">
+                  More {sectionLabel.toLowerCase()}
+                </Link>
+                <span>·</span>
+                <Link href="/compare" className="hover:text-foreground">
+                  Compare
+                </Link>
+                <span>·</span>
+                <Link href="/solutions" className="hover:text-foreground">
+                  Solutions
+                </Link>
               </div>
             </div>
-          </BlurFade>
-        </section>
-
-        <section className="mx-auto max-w-3xl px-6 py-10">
-          <h2 className="text-center font-display text-2xl font-semibold tracking-tight sm:text-3xl">
-            Questions
-          </h2>
-          <Accordion
-            type="single"
-            collapsible
-            className="mt-8 rounded-xl border border-border/70 bg-card/60 px-2"
-          >
-            {entry.faqs.map((faq) => (
-              <AccordionItem key={faq.q} value={faq.q} className="border-border/60 last:border-b-0">
-                <AccordionTrigger className="px-4 text-left text-sm font-medium">
-                  {faq.q}
-                </AccordionTrigger>
-                <AccordionContent className="px-4 text-sm text-muted-foreground">
-                  {faq.a}
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
-        </section>
-
-        <section className="mx-auto max-w-3xl px-6 pb-20 pt-4 text-center">
-          <div className="relative overflow-hidden rounded-2xl border border-border/70 bg-card/70 px-6 py-8">
-            <ShineBorder shineColor={["#34d399", "#0f766e"]} duration={14} />
-            <h2 className="font-display text-3xl font-semibold tracking-tight">Ready to try it?</h2>
-            <p className="mt-3 text-muted-foreground">Free plan. Two seats. No card.</p>
-            <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <Button asChild variant="polished" size="lg">
-                <Link href={entry.ctaHref}>{entry.ctaLabel}</Link>
-              </Button>
-              <Button asChild variant="outline" size="lg">
-                <Link href="/pricing">See pricing</Link>
-              </Button>
-            </div>
-            <div className="mt-5 flex flex-wrap items-center justify-center gap-2 text-xs text-muted-foreground">
-              <Link href={sectionHref} className="hover:text-foreground">
-                More {sectionLabel.toLowerCase()}
-              </Link>
-              <span>·</span>
-              <Link href="/compare" className="hover:text-foreground">
-                Compare
-              </Link>
-              <span>·</span>
-              <Link href="/solutions" className="hover:text-foreground">
-                Solutions
-              </Link>
-            </div>
-          </div>
-        </section>
+          </section>
+        </TracingBeam>
       </main>
       <SiteFooter />
     </>

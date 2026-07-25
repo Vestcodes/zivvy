@@ -1,6 +1,8 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import Link from "next/link";
+import { useState } from "react";
 import {
   ArrowRight,
   Banknote,
@@ -14,7 +16,6 @@ import {
   ScanLine,
   ShieldCheck,
   UsersRound,
-  Webhook,
   Workflow
 } from "lucide-react";
 import type { HubCardItem } from "@/lib/marketing-content";
@@ -24,13 +25,23 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { AnimatedShinyText } from "@/components/ui/animated-shiny-text";
 import { BlurFade } from "@/components/ui/blur-fade";
-import { BorderBeam } from "@/components/ui/border-beam";
-import { DotPattern } from "@/components/ui/dot-pattern";
 import { MagicCard } from "@/components/ui/magic-card";
 import { Marquee } from "@/components/ui/marquee";
 import { ShineBorder } from "@/components/ui/shine-border";
-import { TextAnimate } from "@/components/ui/text-animate";
 import { cn } from "@/lib/utils";
+
+const Spotlight = dynamic(
+  () => import("@/components/ui/aceternity/spotlight").then((m) => m.Spotlight),
+  { ssr: false }
+);
+
+const TextGenerateEffect = dynamic(
+  () =>
+    import("@/components/ui/aceternity/text-generate-effect").then(
+      (m) => m.TextGenerateEffect
+    ),
+  { ssr: false }
+);
 
 type Tier = "Free" | "Pro" | "Business";
 
@@ -155,79 +166,83 @@ const DEEP_DIVE_META: Record<string, { category: string; tier: Tier }> = {
   "workflow-builder": { category: "Automation", tier: "Business" }
 };
 
-const CAPABILITY_CHIPS = [
-  "REST resources",
-  "Webhook events",
-  "Forms",
-  "Approvals",
-  "Roles & scopes",
-  "Multi-tenant",
-  "Region tax",
-  "Dashboards"
+const PRINCIPLE_CHIPS = [
+  "REST-first",
+  "Webhook-first",
+  "Single tenant",
+  "Roles by scope",
+  "Region defaults",
+  "Zero add-on SKUs",
+  "Forms match API",
+  "Audit by default",
+  "Approvals inline",
+  "Deterministic IDs"
 ];
 
 type Props = {
   deepDives: HubCardItem[];
 };
 
-function MockBrowserFrame() {
+/**
+ * Icon-based focus grid — hovered card lifts + brightens, siblings blur + soften.
+ * Same interaction contract as Aceternity's FocusCards, adapted for icon content.
+ */
+function FocusFeatureGrid({
+  features,
+  tier
+}: {
+  features: FeatureRow[];
+  tier: Tier;
+}) {
+  const [hovered, setHovered] = useState<number | null>(null);
+
   return (
-    <div className="relative mx-auto mt-10 w-full max-w-3xl overflow-hidden rounded-2xl border border-border/70 bg-card/70 shadow-lg shadow-primary/5">
-      <ShineBorder shineColor={["#34d399", "#0f766e"]} duration={16} />
-      {/* browser chrome */}
-      <div className="flex items-center gap-2 border-b border-border/60 bg-background/60 px-4 py-2.5">
-        <span className="size-2.5 rounded-full bg-red-400/70" />
-        <span className="size-2.5 rounded-full bg-amber-400/70" />
-        <span className="size-2.5 rounded-full bg-emerald-400/70" />
-        <div className="ml-3 flex flex-1 items-center gap-2 rounded-md border border-border/50 bg-background/70 px-3 py-1 text-xs text-muted-foreground">
-          <span className="text-primary">https://</span>
-          <span>app.zivvy.xyz</span>
-          <span className="text-muted-foreground/60">/dashboard</span>
-        </div>
-      </div>
-      {/* mock dashboard content */}
-      <div className="grid gap-3 p-4 sm:grid-cols-3">
-        <div className="col-span-3 flex items-center justify-between rounded-xl border border-border/60 bg-background/60 px-3 py-2 text-xs">
-          <div className="flex items-center gap-2">
-            <Webhook className="size-3.5 text-primary" />
-            <span className="font-mono text-muted-foreground">
-              POST /webhooks · invoice.settled
-            </span>
-          </div>
-          <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-medium text-emerald-600 dark:text-emerald-400">
-            200 OK
-          </span>
-        </div>
-        {[
-          { label: "Open quotes", value: "48" },
-          { label: "Stock alerts", value: "6" },
-          { label: "AR outstanding", value: "$92k" }
-        ].map((stat) => (
+    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {features.map(({ icon: Icon, title, desc, category }, idx) => (
+        <div
+          key={title}
+          onMouseEnter={() => setHovered(idx)}
+          onMouseLeave={() => setHovered(null)}
+          className={cn(
+            "relative overflow-hidden rounded-2xl border border-border/70 bg-card/70 p-5 transition-all duration-300 ease-out",
+            hovered !== null && hovered !== idx && "scale-[0.98] opacity-60 blur-[1px]",
+            hovered === idx &&
+              "-translate-y-0.5 border-primary/40 shadow-lg shadow-primary/10 bg-card/90"
+          )}
+        >
           <div
-            key={stat.label}
-            className="rounded-xl border border-border/60 bg-background/60 p-3"
-          >
-            <p className="text-[10px] uppercase tracking-wide text-muted-foreground">
-              {stat.label}
-            </p>
-            <p className="mt-1 font-display text-lg font-semibold">{stat.value}</p>
-          </div>
-        ))}
-        <div className="col-span-3 rounded-xl border border-border/60 bg-background/50 p-3">
-          <div className="flex items-end gap-1.5">
-            {[38, 62, 44, 71, 58, 82, 54, 66, 74, 48, 61, 79].map((h, i) => (
+            aria-hidden
+            className={cn(
+              "pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300",
+              hovered === idx && "opacity-100"
+            )}
+            style={{
+              background:
+                "radial-gradient(320px circle at 20% 0%, color-mix(in oklab, var(--primary) 12%, transparent), transparent 60%)"
+            }}
+          />
+          <div className="relative">
+            <div className="mb-3 flex items-center justify-between gap-2">
               <div
-                key={i}
-                className="flex-1 rounded-sm bg-primary/70"
-                style={{ height: `${h}%`, minHeight: 4 }}
-              />
-            ))}
+                className={cn(
+                  "flex size-9 items-center justify-center rounded-lg border border-border/60 bg-background/70 transition-colors",
+                  hovered === idx && "border-primary/40 bg-primary/10"
+                )}
+              >
+                <Icon className="size-4 text-primary" />
+              </div>
+              <div className="flex items-center gap-1.5">
+                <Badge variant="outline" className="text-[10px] font-medium">
+                  {category}
+                </Badge>
+                <Badge className={cn("text-[10px]", TIER_BADGE[tier])}>{tier}</Badge>
+              </div>
+            </div>
+            <h3 className="mt-1 font-display text-base font-semibold">{title}</h3>
+            <p className="mt-2 text-sm text-muted-foreground">{desc}</p>
           </div>
-          <p className="mt-2 text-[10px] uppercase tracking-wide text-muted-foreground">
-            /reports/cash-in · last 12 weeks
-          </p>
         </div>
-      </div>
+      ))}
     </div>
   );
 }
@@ -237,40 +252,42 @@ export function FeaturesHubPage({ deepDives }: Props) {
     <>
       <SiteHeader />
       <main>
-        <section className="relative overflow-hidden">
-          <DotPattern
-            className={cn(
-              "pointer-events-none absolute inset-0 -z-10 text-primary/25",
-              "[mask-image:radial-gradient(560px_circle_at_50%_-10%,white,transparent)]"
-            )}
-          />
-          <div className="relative mx-auto max-w-5xl px-6 pb-4 pt-20 text-center sm:pt-24">
-            <BlurFade>
-              <div className="mb-5 inline-flex items-center justify-center rounded-full border border-border/60 bg-background/70 px-3 py-1 backdrop-blur">
-                <AnimatedShinyText className="text-xs font-medium text-muted-foreground">
-                  Features · Free · Pro · Business
-                </AnimatedShinyText>
-              </div>
-              <TextAnimate
-                as="h1"
-                by="word"
-                animation="blurInUp"
-                className="font-display text-4xl font-bold tracking-tight sm:text-5xl"
-              >
-                Every capability, one tenant
-              </TextAnimate>
-              <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-                Every capability is a REST endpoint, a webhook event, and a form in the same
-                tenant. You pay for what you turn on — not for another SKU.
-              </p>
-            </BlurFade>
-            <BlurFade delay={0.08}>
-              <MockBrowserFrame />
-            </BlurFade>
-          </div>
+        <section className="relative">
+          <Spotlight
+            className="relative w-full"
+            fill="color-mix(in oklab, var(--primary) 45%, transparent)"
+          >
+            <div className="relative mx-auto max-w-5xl px-6 pb-6 pt-20 text-center sm:pt-24">
+              <BlurFade>
+                <div className="mb-5 inline-flex items-center justify-center rounded-full border border-border/60 bg-background/70 px-3 py-1 backdrop-blur">
+                  <AnimatedShinyText className="text-xs font-medium text-muted-foreground">
+                    Features · Free · Pro · Business
+                  </AnimatedShinyText>
+                </div>
+              </BlurFade>
+              <TextGenerateEffect
+                words="Every capability, one tenant, one API."
+                className="mx-auto max-w-3xl font-display text-4xl font-bold tracking-tight sm:text-5xl"
+              />
+              <BlurFade delay={0.15}>
+                <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
+                  Every capability is a REST endpoint, a webhook event, and a form in the same
+                  tenant. You pay for what you turn on — not for another SKU.
+                </p>
+                <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+                  <Button asChild variant="polished" size="lg">
+                    <Link href="/login#signup">Start free</Link>
+                  </Button>
+                  <Button asChild variant="outline" size="lg">
+                    <Link href="/support/docs">Read the API docs</Link>
+                  </Button>
+                </div>
+              </BlurFade>
+            </div>
+          </Spotlight>
         </section>
 
-        <div className="mx-auto max-w-6xl px-6 pb-10 pt-10">
+        <div className="mx-auto max-w-6xl px-6 pb-10 pt-14">
           {TIERS.map(({ tier, tagline, features }, tierIdx) => (
             <BlurFade key={tier} delay={0.04 + tierIdx * 0.05}>
               <div className="mt-14 first:mt-0">
@@ -280,41 +297,21 @@ export function FeaturesHubPage({ deepDives }: Props) {
                     {tagline}
                   </h2>
                 </div>
-                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                  {features.map(({ icon: Icon, title, desc, category }, idx) => (
-                    <MagicCard
-                      key={title}
-                      className="relative overflow-hidden rounded-2xl border border-border/70 bg-card/70 p-5"
-                      gradientFrom="#34d399"
-                      gradientTo="#0f766e"
-                      gradientColor="rgba(27, 152, 114, 0.08)"
-                    >
-                      {tierIdx === 1 && idx === 0 ? (
-                        <BorderBeam size={55} duration={7} colorFrom="#34d399" colorTo="#0f766e" />
-                      ) : null}
-                      <div className="mb-3 flex items-center justify-between gap-2">
-                        <Icon className="size-5 text-primary" />
-                        <div className="flex items-center gap-1.5">
-                          <Badge variant="outline" className="text-[10px] font-medium">
-                            {category}
-                          </Badge>
-                          <Badge className={cn("text-[10px]", TIER_BADGE[tier])}>{tier}</Badge>
-                        </div>
-                      </div>
-                      <h3 className="mt-1 font-display text-base font-semibold">{title}</h3>
-                      <p className="mt-2 text-sm text-muted-foreground">{desc}</p>
-                    </MagicCard>
-                  ))}
-                </div>
+                <FocusFeatureGrid features={features} tier={tier} />
               </div>
             </BlurFade>
           ))}
         </div>
 
-        <section className="mx-auto max-w-6xl px-6 py-8">
+        <section className="mx-auto max-w-6xl px-6 py-10">
+          <BlurFade>
+            <p className="mb-3 text-center text-xs font-medium uppercase tracking-wide text-muted-foreground">
+              Design principles behind every feature
+            </p>
+          </BlurFade>
           <div className="relative overflow-hidden rounded-xl border border-border/60 bg-background/40 py-2">
-            <Marquee pauseOnHover className="[--duration:30s]">
-              {CAPABILITY_CHIPS.map((chip) => (
+            <Marquee reverse pauseOnHover className="[--duration:32s]">
+              {PRINCIPLE_CHIPS.map((chip) => (
                 <div
                   key={chip}
                   className="mx-2 rounded-lg border border-border/70 bg-card/80 px-4 py-2 text-sm font-medium shadow-sm"

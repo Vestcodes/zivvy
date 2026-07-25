@@ -7,11 +7,14 @@ import { SiteFooter } from "@/components/site/footer";
 import { Button } from "@/components/ui/button";
 import { AnimatedShinyText } from "@/components/ui/animated-shiny-text";
 import { BlurFade } from "@/components/ui/blur-fade";
-import { BorderBeam } from "@/components/ui/border-beam";
-import { MagicCard } from "@/components/ui/magic-card";
-import { Marquee } from "@/components/ui/marquee";
+import { NumberTicker } from "@/components/ui/number-ticker";
 import { ShineBorder } from "@/components/ui/shine-border";
-import { TextAnimate } from "@/components/ui/text-animate";
+import {
+  BentoGrid,
+  BentoGridItem,
+  TextGenerateEffect,
+  Timeline
+} from "@/components/ui/aceternity";
 
 const VALUES = [
   {
@@ -28,25 +31,94 @@ const VALUES = [
   }
 ];
 
-const PRINCIPLES = [
-  "No vanity metrics",
-  "Seat-based pricing",
-  "Region choice",
-  "Self-host on Business",
-  "Honest roadmap",
-  "Free forever plan"
+/**
+ * "By the numbers" — conservative, defensible placeholders. Each row is
+ * split into a numeric value (rendered with <NumberTicker>) and a
+ * separate suffix so the ticker animates cleanly.
+ */
+const NUMBERS: {
+  value: number;
+  suffix?: string;
+  label: string;
+  sub: string;
+}[] = [
+  { value: 3, label: "regions", sub: "India · EU · US" },
+  {
+    value: 20,
+    suffix: " min",
+    label: "typical setup",
+    sub: "from signup to first invoice"
+  },
+  {
+    value: 130,
+    suffix: "+",
+    label: "REST endpoints",
+    sub: "full-surface API"
+  },
+  { value: 0, label: "forced modules", sub: "turn on what you use" }
 ];
 
-/**
- * "By the numbers" — kept intentionally conservative. These are safe,
- * defensible placeholders; do not pump them up. When accurate figures land,
- * update `value` and `label` here.
- */
-const NUMBERS = [
-  { value: "3", label: "regions", sub: "India · EU · US" },
-  { value: "20 min", label: "typical setup", sub: "from signup to first invoice" },
-  { value: "130+", label: "REST endpoints", sub: "full-surface API" },
-  { value: "0", label: "forced modules", sub: "turn on what you use" }
+const MILESTONES: { title: string; content: React.ReactNode }[] = [
+  {
+    title: "2026",
+    content: (
+      <div>
+        <h4 className="mb-2 font-display text-base font-semibold text-foreground sm:text-lg">
+          Zivvy launches.
+        </h4>
+        <p className="text-sm leading-relaxed text-muted-foreground sm:text-base">
+          Owner-first ERP goes live with three regions, seat-based pricing,
+          and a free forever plan. Sales, CRM, stock, and accounting all
+          ship on day one.
+        </p>
+      </div>
+    )
+  },
+  {
+    title: "H1 2026",
+    content: (
+      <div>
+        <h4 className="mb-2 font-display text-base font-semibold text-foreground sm:text-lg">
+          Integrations foundation.
+        </h4>
+        <p className="text-sm leading-relaxed text-muted-foreground sm:text-base">
+          HMAC-signed webhooks, per-tenant API keys, and a 130+ endpoint
+          REST surface. Add-ons for commerce sync and DATEV export land
+          in the same window.
+        </p>
+      </div>
+    )
+  },
+  {
+    title: "H2 2026",
+    content: (
+      <div>
+        <h4 className="mb-2 font-display text-base font-semibold text-foreground sm:text-lg">
+          Manufacturing + assets.
+        </h4>
+        <p className="text-sm leading-relaxed text-muted-foreground sm:text-base">
+          BOMs, work orders, and asset lifecycles for teams on the
+          Business plan. Batch payments and in-ERP signing move out of
+          beta.
+        </p>
+      </div>
+    )
+  },
+  {
+    title: "2027",
+    content: (
+      <div>
+        <h4 className="mb-2 font-display text-base font-semibold text-foreground sm:text-lg">
+          Self-host on Business.
+        </h4>
+        <p className="text-sm leading-relaxed text-muted-foreground sm:text-base">
+          A packaged self-host artifact for regulated teams that need
+          fully in-boundary infrastructure — same product, same API,
+          your metal.
+        </p>
+      </div>
+    )
+  }
 ];
 
 export function AboutPageContent() {
@@ -70,18 +142,13 @@ export function AboutPageContent() {
                   About · mission · values
                 </AnimatedShinyText>
               </div>
-              <TextAnimate
-                as="h1"
-                by="word"
-                animation="blurInUp"
-                className="font-display text-4xl font-bold tracking-tight sm:text-5xl"
-              >
+              <h1 className="font-display text-4xl font-bold tracking-tight sm:text-5xl">
                 About Zivvy
-              </TextAnimate>
-              <p className="mt-4 max-w-3xl text-lg text-muted-foreground">
-                Zivvy exists to help teams run sales, finance, and operations from one clean
-                workflow system that actually gets adopted.
-              </p>
+              </h1>
+              <TextGenerateEffect
+                words="Zivvy exists to help teams run sales, finance, and operations from one clean workflow system that actually gets adopted."
+                className="mt-5 max-w-3xl [&_div>div]:text-lg [&_div>div]:font-normal [&_span]:text-muted-foreground sm:[&_div>div]:text-xl"
+              />
             </BlurFade>
           </div>
         </section>
@@ -134,7 +201,7 @@ export function AboutPageContent() {
         </section>
 
         <section
-          className="mx-auto max-w-6xl px-6 py-8"
+          className="mx-auto max-w-6xl px-6 py-10"
           aria-labelledby="about-numbers"
         >
           <BlurFade>
@@ -148,59 +215,83 @@ export function AboutPageContent() {
               A few honest metrics — we&apos;ll update them as the product grows.
             </p>
           </BlurFade>
-          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <BentoGrid className="mt-6 max-w-none grid-cols-1 gap-4 md:auto-rows-[14rem] md:grid-cols-2 lg:grid-cols-4">
             {NUMBERS.map((stat, index) => (
-              <BlurFade key={stat.label} delay={0.04 + index * 0.04}>
-                <div className="relative h-full rounded-2xl border border-border/70 bg-card/60 p-5">
-                  <div className="font-display text-3xl font-bold tabular-nums tracking-tight">
-                    {stat.value}
+              <BentoGridItem
+                key={stat.label}
+                className="relative border-border/70 bg-card/60 dark:bg-card/40"
+                header={
+                  <div className="flex h-full flex-col justify-end">
+                    <div className="font-display text-5xl font-bold tabular-nums tracking-tight text-foreground sm:text-6xl">
+                      <NumberTicker
+                        value={stat.value}
+                        delay={0.1 + index * 0.05}
+                        className="text-foreground dark:text-foreground"
+                      />
+                      {stat.suffix ? (
+                        <span className="text-foreground">{stat.suffix}</span>
+                      ) : null}
+                    </div>
                   </div>
-                  <div className="mt-1 text-sm font-medium">{stat.label}</div>
-                  <div className="mt-1 text-xs text-muted-foreground">{stat.sub}</div>
-                </div>
-              </BlurFade>
+                }
+                title={
+                  <span className="text-base font-semibold text-foreground">
+                    {stat.label}
+                  </span>
+                }
+                description={
+                  <span className="text-xs text-muted-foreground">
+                    {stat.sub}
+                  </span>
+                }
+              />
             ))}
+          </BentoGrid>
+        </section>
+
+        <section
+          className="relative"
+          aria-labelledby="about-timeline"
+        >
+          <div className="mx-auto max-w-6xl px-6 pt-10">
+            <BlurFade>
+              <h2
+                id="about-timeline"
+                className="font-display text-3xl font-semibold tracking-tight"
+              >
+                Milestones
+              </h2>
+              <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
+                Where the product has been and where it&apos;s going next — kept
+                honest and dated.
+              </p>
+            </BlurFade>
+          </div>
+          {/*
+            <Timeline> renders its own container padding + heading and a
+            hard-coded background. We hide the built-in header and
+            re-transparent the background via child selectors so the
+            component reads as part of the page.
+          */}
+          <div className="[&>div]:!bg-transparent [&>div>div:first-child]:hidden">
+            <Timeline data={MILESTONES} />
           </div>
         </section>
 
-        <section className="mx-auto max-w-6xl px-6 py-8">
+        <section className="mx-auto max-w-6xl px-6 py-10">
           <BlurFade>
             <h2 className="font-display text-3xl font-semibold tracking-tight">Values</h2>
           </BlurFade>
           <div className="mt-6 grid gap-4 md:grid-cols-3">
             {VALUES.map((value, index) => (
               <BlurFade key={value.title} delay={0.04 + index * 0.04}>
-                <MagicCard
-                  className="relative h-full overflow-hidden rounded-2xl border border-border/70 bg-card/70 p-5"
-                  gradientFrom="#34d399"
-                  gradientTo="#0f766e"
-                  gradientColor="rgba(27, 152, 114, 0.1)"
-                >
-                  {index === 0 ? (
-                    <BorderBeam size={50} duration={7} colorFrom="#34d399" colorTo="#0f766e" />
-                  ) : null}
+                <div className="relative h-full overflow-hidden rounded-2xl border border-border/70 bg-card/70 p-5">
+                  <ShineBorder shineColor={["#34d399", "#0f766e"]} duration={16} />
                   <h3 className="font-display text-xl font-semibold">{value.title}</h3>
                   <p className="mt-2 text-sm text-muted-foreground">{value.body}</p>
-                </MagicCard>
+                </div>
               </BlurFade>
             ))}
-          </div>
-        </section>
-
-        <section className="mx-auto max-w-6xl px-6 py-6">
-          <div className="relative overflow-hidden rounded-xl border border-border/60 bg-card/40 py-2">
-            <Marquee pauseOnHover className="[--duration:28s]">
-              {PRINCIPLES.map((item) => (
-                <div
-                  key={item}
-                  className="mx-2 rounded-lg border border-border/70 bg-background/80 px-4 py-2 text-sm font-medium shadow-sm"
-                >
-                  {item}
-                </div>
-              ))}
-            </Marquee>
-            <div className="pointer-events-none absolute inset-y-0 left-0 w-14 bg-gradient-to-r from-background to-transparent" />
-            <div className="pointer-events-none absolute inset-y-0 right-0 w-14 bg-gradient-to-l from-background to-transparent" />
           </div>
         </section>
 

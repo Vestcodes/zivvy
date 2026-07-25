@@ -1,6 +1,8 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import Link from "next/link";
+import { useState } from "react";
 import {
   ArrowRight,
   Factory,
@@ -14,16 +16,26 @@ import { SiteHeader } from "@/components/site/header";
 import { SiteFooter } from "@/components/site/footer";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { AnimatedGridPattern } from "@/components/ui/animated-grid-pattern";
 import { AnimatedShinyText } from "@/components/ui/animated-shiny-text";
-import { BentoCard, BentoGrid } from "@/components/ui/bento-grid";
 import { BlurFade } from "@/components/ui/blur-fade";
-import { DotPattern } from "@/components/ui/dot-pattern";
 import { MagicCard } from "@/components/ui/magic-card";
 import { Marquee } from "@/components/ui/marquee";
 import { ShineBorder } from "@/components/ui/shine-border";
-import { TextAnimate } from "@/components/ui/text-animate";
 import { cn } from "@/lib/utils";
+
+const HeroHighlight = dynamic(
+  () =>
+    import("@/components/ui/aceternity/hero-highlight").then(
+      (m) => m.HeroHighlight
+    ),
+  { ssr: false }
+);
+
+const Highlight = dynamic(
+  () =>
+    import("@/components/ui/aceternity/hero-highlight").then((m) => m.Highlight),
+  { ssr: false }
+);
 
 type Tier = "Free" | "Pro" | "Business";
 
@@ -33,79 +45,64 @@ const TIER_BADGE: Record<Tier, string> = {
   Business: "bg-foreground text-background border-transparent"
 };
 
-const INDUSTRY_META: Record<
-  string,
-  {
-    Icon: React.ElementType;
-    className: string;
-    background: React.ReactNode;
-    constraint: string;
-    category: string;
-    tier: Tier;
-  }
-> = {
+type IndustryMeta = {
+  Icon: React.ElementType;
+  constraint: string;
+  category: string;
+  tier: Tier;
+  gradient: string;
+};
+
+const INDUSTRY_META: Record<string, IndustryMeta> = {
   healthcare: {
     Icon: HeartPulse,
-    className: "col-span-3 lg:col-span-2",
     constraint: "Row-level access + audit trails on every /records endpoint",
     category: "Regulated",
     tier: "Business",
-    background: (
-      <AnimatedGridPattern
-        numSquares={18}
-        maxOpacity={0.1}
-        className="absolute inset-0 fill-primary/10 stroke-primary/20 [mask-image:radial-gradient(320px_circle_at_10%_0%,white,transparent)]"
-      />
-    )
+    gradient:
+      "radial-gradient(320px circle at 20% 0%, color-mix(in oklab, #ef4444 22%, transparent), transparent 60%)"
   },
   education: {
     Icon: GraduationCap,
-    className: "col-span-3 lg:col-span-1",
     constraint: "Term cycles, cohorts, and staff webhooks",
     category: "Public",
     tier: "Pro",
-    background: <div className="absolute inset-0 bg-primary/5" />
+    gradient:
+      "radial-gradient(320px circle at 20% 0%, color-mix(in oklab, #f59e0b 22%, transparent), transparent 60%)"
   },
   manufacturing: {
     Icon: Factory,
-    className: "col-span-3 lg:col-span-1",
     constraint: "/boms, /work-orders, quality.hold events",
     category: "Ops",
     tier: "Business",
-    background: (
-      <div
-        aria-hidden
-        className="absolute inset-0 opacity-70"
-        style={{
-          background:
-            "radial-gradient(ellipse 70% 60% at 80% 10%, color-mix(in oklab, var(--primary) 16%, transparent), transparent 70%)"
-        }}
-      />
-    )
+    gradient:
+      "radial-gradient(320px circle at 20% 0%, color-mix(in oklab, var(--primary) 22%, transparent), transparent 60%)"
   },
   saas: {
     Icon: Laptop,
-    className: "col-span-3 lg:col-span-2",
     constraint: "Subscriptions, renewals, subscription.renewed webhook",
     category: "Digital",
     tier: "Pro",
-    background: (
-      <DotPattern
-        className={cn(
-          "absolute inset-0 text-primary/30",
-          "[mask-image:radial-gradient(280px_circle_at_80%_20%,white,transparent)]"
-        )}
-      />
-    )
+    gradient:
+      "radial-gradient(320px circle at 20% 0%, color-mix(in oklab, #6366f1 22%, transparent), transparent 60%)"
   },
   finance: {
     Icon: Landmark,
-    className: "col-span-3 lg:col-span-3",
     constraint: "Close cadence, /journals approvals, reconciliation.completed events",
     category: "Regulated",
     tier: "Pro",
-    background: <div className="absolute inset-0 bg-muted/40" />
+    gradient:
+      "radial-gradient(320px circle at 20% 0%, color-mix(in oklab, #0ea5e9 22%, transparent), transparent 60%)"
   }
+};
+
+const DEFAULT_META: IndustryMeta = {
+  Icon: Factory,
+  constraint: "Operator-first workflows",
+  category: "Ops",
+  tier: "Pro",
+  gradient:
+    "radial-gradient(320px circle at 20% 0%, color-mix(in oklab, var(--primary) 20%, transparent), transparent 60%)"
 };
 
 const INDUSTRY_MARQUEE = [
@@ -127,35 +124,110 @@ type Props = {
   items: HubCardItem[];
 };
 
+/**
+ * card-hover-effect adapted for icon + description content, with sibling desaturation
+ * (aceternity's HoverEffect only handles title/description strings, so this uses the
+ * same interaction contract with richer content).
+ */
+function IndustryHoverGrid({ items }: { items: HubCardItem[] }) {
+  const [hovered, setHovered] = useState<number | null>(null);
+
+  return (
+    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      {items.map((item, idx) => {
+        const meta = INDUSTRY_META[item.slug] ?? DEFAULT_META;
+        const Icon = meta.Icon;
+        const isHovered = hovered === idx;
+        const isDimmed = hovered !== null && !isHovered;
+        return (
+          <Link
+            key={item.slug}
+            href={`/industries/${item.slug}`}
+            onMouseEnter={() => setHovered(idx)}
+            onMouseLeave={() => setHovered(null)}
+            className={cn(
+              "group relative block h-full rounded-2xl border border-border/70 bg-card/70 p-5 transition-all duration-300 ease-out",
+              isHovered && "-translate-y-1 border-primary/40 shadow-xl shadow-primary/10",
+              isDimmed && "opacity-50 [filter:saturate(0.4)] scale-[0.98]"
+            )}
+          >
+            <div
+              aria-hidden
+              className={cn(
+                "pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-300",
+                isHovered && "opacity-100"
+              )}
+              style={{ background: meta.gradient }}
+            />
+            <div className="relative">
+              <div className="mb-3 flex items-start justify-between gap-2">
+                <div
+                  className={cn(
+                    "flex size-10 items-center justify-center rounded-lg border border-border/60 bg-background/70 transition-all",
+                    isHovered && "border-primary/40 bg-primary/10"
+                  )}
+                >
+                  <Icon className="size-5 text-primary" />
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <Badge variant="outline" className="text-[10px] font-medium">
+                    {meta.category}
+                  </Badge>
+                  <Badge className={cn("text-[10px]", TIER_BADGE[meta.tier])}>
+                    {meta.tier}
+                  </Badge>
+                </div>
+              </div>
+              <h3 className="mt-2 font-display text-lg font-semibold group-hover:text-primary">
+                {item.title}
+              </h3>
+              <p className="mt-2 text-sm text-muted-foreground">{item.description}</p>
+              <p className="mt-3 rounded-md border border-border/50 bg-background/40 px-2.5 py-1.5 font-mono text-[11px] text-muted-foreground">
+                {meta.constraint}
+              </p>
+              <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-primary">
+                Open industry
+                <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+              </span>
+            </div>
+          </Link>
+        );
+      })}
+    </div>
+  );
+}
+
 export function IndustriesHubPage({ items }: Props) {
   return (
     <>
       <SiteHeader />
       <main>
         <section className="relative overflow-hidden">
-          <div className="relative mx-auto max-w-5xl px-6 pb-4 pt-20 text-center sm:pt-24">
-            <BlurFade>
-              <div className="mb-5 inline-flex items-center justify-center rounded-full border border-border/60 bg-background/70 px-3 py-1 backdrop-blur">
-                <AnimatedShinyText className="text-xs font-medium text-muted-foreground">
-                  Industries · constraints · playbooks
-                </AnimatedShinyText>
-              </div>
-              <TextAnimate
-                as="h1"
-                by="word"
-                animation="blurInUp"
-                className="font-display text-4xl font-bold tracking-tight sm:text-5xl"
-              >
-                Same tenant. Different defaults.
-              </TextAnimate>
-              <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-                Every vertical shares the same REST surface and webhook stream — with sector defaults
-                for tax, access control, and the fields you actually capture.
-              </p>
-            </BlurFade>
-          </div>
+          <HeroHighlight
+            containerClassName="h-auto min-h-[26rem] py-16 sm:py-20 bg-transparent dark:bg-transparent"
+            className="w-full px-6"
+          >
+            <div className="mx-auto max-w-4xl text-center">
+              <BlurFade>
+                <div className="mb-5 inline-flex items-center justify-center rounded-full border border-border/60 bg-background/70 px-3 py-1 backdrop-blur">
+                  <AnimatedShinyText className="text-xs font-medium text-muted-foreground">
+                    Industries · constraints · playbooks
+                  </AnimatedShinyText>
+                </div>
+              </BlurFade>
+              <h1 className="font-display text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
+                Every industry runs on <Highlight>operations</Highlight>
+              </h1>
+              <BlurFade delay={0.2}>
+                <p className="mx-auto mt-5 max-w-2xl text-lg text-muted-foreground">
+                  Every vertical shares the same REST surface and webhook stream — with sector defaults
+                  for tax, access control, and the fields you actually capture.
+                </p>
+              </BlurFade>
+            </div>
+          </HeroHighlight>
 
-          <div className="relative mx-auto mt-10 max-w-6xl px-6">
+          <div className="relative mx-auto -mt-4 max-w-6xl px-6">
             <BlurFade delay={0.08}>
               <div className="relative overflow-hidden rounded-xl border border-border/60 bg-background/40 py-3">
                 <Marquee pauseOnHover className="[--duration:34s]">
@@ -186,44 +258,18 @@ export function IndustriesHubPage({ items }: Props) {
         </section>
 
         <section className="mx-auto max-w-6xl px-6 pb-4 pt-14">
-          <BlurFade delay={0.05}>
-            <BentoGrid className="auto-rows-[13.5rem] lg:auto-rows-[15rem]">
-              {items.map((item) => {
-                const meta = INDUSTRY_META[item.slug] ?? {
-                  Icon: Factory,
-                  className: "col-span-3 lg:col-span-1",
-                  constraint: "Operator-first workflows",
-                  category: "Ops",
-                  tier: "Pro" as Tier,
-                  background: <div className="absolute inset-0 bg-muted/30" />
-                };
-                return (
-                  <BentoCard
-                    key={item.slug}
-                    name={item.title}
-                    className={meta.className}
-                    Icon={meta.Icon}
-                    description={`${item.description} ${meta.constraint}.`}
-                    href={`/industries/${item.slug}`}
-                    cta="Open industry"
-                    background={
-                      <>
-                        {meta.background}
-                        <div className="absolute right-3 top-3 z-10 flex items-center gap-1.5">
-                          <Badge variant="outline" className="bg-background/70 text-[10px] backdrop-blur">
-                            {meta.category}
-                          </Badge>
-                          <Badge className={cn("text-[10px]", TIER_BADGE[meta.tier])}>
-                            {meta.tier}
-                          </Badge>
-                        </div>
-                      </>
-                    }
-                  />
-                );
-              })}
-            </BentoGrid>
+          <BlurFade>
+            <h2 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">
+              Sector defaults, same tenant model
+            </h2>
+            <p className="mt-2 max-w-2xl text-muted-foreground">
+              Hover a card — siblings step back so you can read one sector at a time. Every card
+              lists the constraint we already ship inside the product.
+            </p>
           </BlurFade>
+          <div className="mt-6">
+            <IndustryHoverGrid items={items} />
+          </div>
         </section>
 
         <section className="mx-auto grid max-w-6xl gap-4 px-6 py-10 md:grid-cols-2">

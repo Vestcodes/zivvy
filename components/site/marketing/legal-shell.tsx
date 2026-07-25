@@ -4,6 +4,8 @@ import { ChevronRight } from "lucide-react";
 import { SiteHeader } from "@/components/site/header";
 import { SiteFooter } from "@/components/site/footer";
 import { PrintButton } from "@/components/site/marketing/print-button";
+import { TracingBeam } from "@/components/ui/aceternity/tracing-beam";
+import { HoverBorderGradient } from "@/components/ui/aceternity/hover-border-gradient";
 
 /**
  * LegalShell — shared shell for /privacy, /terms, /dpa, /cookies,
@@ -11,9 +13,10 @@ import { PrintButton } from "@/components/site/marketing/print-button";
  *
  * Renders SiteHeader + SiteFooter, a breadcrumb, a sticky "On this
  * page" sidebar auto-generated from h2/h3 in the body, prose
- * typography (max-w-3xl, leading-relaxed), a last-updated banner, and
- * print-friendly CSS. Legal copy is preserved verbatim from the pages
- * — this component only supplies chrome and navigation.
+ * typography, a last-updated banner wrapped in a HoverBorderGradient,
+ * a TracingBeam scrolling with the reader, and print-friendly CSS.
+ * Legal copy is preserved verbatim from the pages — this component
+ * only supplies chrome and navigation.
  */
 
 const LEGAL_LINKS = [
@@ -77,9 +80,44 @@ function annotateHeadings(
   });
 }
 
+const SHELL_CSS = `
+.legal-toc-link {
+  position: relative;
+  display: block;
+  margin-left: -1px;
+  padding: 0.25rem 0.75rem;
+  color: var(--muted-foreground);
+  font-size: 13px;
+  line-height: 1.35;
+  border-left: 2px solid transparent;
+  transition: color 200ms ease, border-color 200ms ease, background 200ms ease;
+  background: transparent;
+  border-radius: 0.375rem;
+}
+.legal-toc-link--h2 { font-weight: 500; }
+.legal-toc-link--h3 {
+  padding-left: 1.5rem;
+  font-size: 12px;
+  color: color-mix(in oklab, var(--muted-foreground) 85%, transparent);
+}
+.legal-toc-link:hover {
+  color: var(--foreground);
+  border-left-color: var(--primary);
+  background:
+    linear-gradient(color-mix(in oklab, var(--primary) 8%, var(--background)),
+                    color-mix(in oklab, var(--primary) 4%, var(--background)));
+}
+.legal-toc-link:focus-visible {
+  outline: none;
+  color: var(--foreground);
+  border-left-color: var(--primary);
+  box-shadow: 0 0 0 2px color-mix(in oklab, var(--ring) 35%, transparent);
+}
+`;
+
 const PRINT_CSS = `
 @media print {
-  header[data-slot], footer[data-slot] { display: none !important; }
+  [data-slot="site-header"], [data-slot="site-footer"] { display: none !important; }
   .legal-print-hide { display: none !important; }
   .legal-print-full { max-width: 100% !important; padding: 0 !important; }
   body { color: #000 !important; background: #fff !important; }
@@ -91,6 +129,13 @@ const PRINT_CSS = `
   h1, h2, h3 { break-after: avoid; page-break-after: avoid; }
   article { max-width: 100% !important; }
   .legal-shell-root { padding: 0 !important; }
+  .legal-tracing-beam svg,
+  .legal-tracing-beam [data-tracing-marker] {
+    display: none !important;
+  }
+  .legal-hover-border { border: 1px solid #ddd !important; padding: 1.25rem !important; }
+  .legal-hover-border > div { background: transparent !important; color: #000 !important; }
+  .legal-hover-border > div[class*="absolute"] { display: none !important; }
 }
 `;
 
@@ -110,7 +155,7 @@ export function LegalShell({
 
   return (
     <>
-      <style dangerouslySetInnerHTML={{ __html: PRINT_CSS }} />
+      <style dangerouslySetInnerHTML={{ __html: SHELL_CSS + PRINT_CSS }} />
       <SiteHeader />
       <main>
         <div className="legal-shell-root mx-auto max-w-6xl px-6 pt-10 sm:pt-14">
@@ -142,8 +187,11 @@ export function LegalShell({
           </nav>
 
           <div className="grid gap-10 lg:grid-cols-[220px_minmax(0,1fr)]">
-            <aside className="legal-print-hide hidden lg:block" aria-label="On this page">
-              <div className="sticky top-24">
+            <aside
+              className="legal-print-hide hidden lg:block"
+              aria-label="On this page"
+            >
+              <div className="sticky top-28">
                 <p className="mb-3 text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
                   On this page
                 </p>
@@ -155,11 +203,11 @@ export function LegalShell({
                           href={`#${h.id}`}
                           className={
                             h.level === 2
-                              ? "-ml-px block border-l-2 border-transparent py-1 pl-3 text-[13px] font-medium text-muted-foreground transition-colors hover:border-primary hover:text-foreground"
-                              : "-ml-px block border-l-2 border-transparent py-1 pl-6 text-[12px] text-muted-foreground/80 transition-colors hover:border-primary/60 hover:text-foreground"
+                              ? "legal-toc-link legal-toc-link--h2"
+                              : "legal-toc-link legal-toc-link--h3"
                           }
                         >
-                          {h.text}
+                          <span className="relative z-10">{h.text}</span>
                         </a>
                       </li>
                     ))}
@@ -188,34 +236,49 @@ export function LegalShell({
               </div>
             </aside>
 
-            <article className="legal-print-full max-w-3xl pb-24">
-              <header className="mb-10 border-b border-border/60 pb-8">
-                <p className="mb-3 text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">
-                  Legal
-                </p>
-                <h1 className="font-display text-4xl font-bold tracking-tight sm:text-5xl">
-                  {title}
-                </h1>
-                {summary ? (
-                  <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground">
-                    {summary}
+            <article className="legal-print-full min-w-0 max-w-3xl pb-24">
+              <HoverBorderGradient
+                as="div"
+                containerClassName="legal-hover-border !w-full !rounded-2xl !bg-border/40 dark:!bg-border/40 hover:!bg-border/40 !p-px !gap-0 mb-10"
+                className="!w-full !bg-transparent !text-foreground !rounded-2xl !p-0"
+                innerBackdropClassName="!bg-background !rounded-[calc(1rem-1px)] !inset-[1px]"
+                duration={2.4}
+              >
+                <header className="w-full p-6 sm:p-8">
+                  <p className="mb-3 text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">
+                    Legal
                   </p>
-                ) : null}
-                <div className="mt-5 flex flex-wrap items-center gap-3">
-                  <span className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-muted/40 px-3 py-1 text-xs text-muted-foreground">
-                    <span
-                      className="size-1.5 rounded-full bg-primary/70"
-                      aria-hidden
-                    />
-                    Last updated:{" "}
-                    <span className="font-medium text-foreground">{updated}</span>
-                  </span>
-                  <PrintButton />
-                </div>
-              </header>
+                  <h1 className="font-display text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
+                    {title}
+                  </h1>
+                  {summary ? (
+                    <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground">
+                      {summary}
+                    </p>
+                  ) : null}
+                  <div className="mt-5 flex flex-wrap items-center gap-3">
+                    <span className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-muted/40 px-3 py-1 text-xs text-muted-foreground">
+                      <span
+                        className="size-1.5 rounded-full bg-primary/70"
+                        aria-hidden
+                      />
+                      Last updated:{" "}
+                      <span className="font-medium text-foreground">{updated}</span>
+                    </span>
+                    <PrintButton />
+                  </div>
+                </header>
+              </HoverBorderGradient>
 
-              <div className="prose prose-neutral max-w-none text-[15px] leading-relaxed [&_h2]:mt-10 [&_h2]:mb-3 [&_h2]:scroll-mt-28 [&_h2]:font-display [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:tracking-tight [&_h3]:mt-6 [&_h3]:mb-2 [&_h3]:scroll-mt-28 [&_h3]:font-display [&_h3]:text-base [&_h3]:font-semibold [&_p]:my-4 [&_p]:leading-relaxed [&_p]:text-muted-foreground [&_a]:text-primary [&_a]:underline-offset-2 hover:[&_a]:underline [&_ul]:my-4 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:text-muted-foreground [&_ol]:my-4 [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:text-muted-foreground [&_li]:my-1 [&_strong]:text-foreground [&_code]:rounded [&_code]:bg-muted [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:text-[13px]">
-                {withIds}
+              <div className="legal-tracing-beam relative">
+                <TracingBeam
+                  className="!max-w-none !mx-0"
+                  beamClassName="!-left-2 md:!-left-6 top-2"
+                >
+                  <div className="prose prose-neutral max-w-none pl-2 md:pl-4 text-[15px] leading-relaxed [&_h2]:mt-10 [&_h2]:mb-3 [&_h2]:scroll-mt-32 [&_h2]:font-display [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:tracking-tight [&_h3]:mt-6 [&_h3]:mb-2 [&_h3]:scroll-mt-32 [&_h3]:font-display [&_h3]:text-base [&_h3]:font-semibold [&_p]:my-4 [&_p]:leading-relaxed [&_p]:text-muted-foreground [&_a]:text-primary [&_a]:underline-offset-2 hover:[&_a]:underline [&_ul]:my-4 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:text-muted-foreground [&_ol]:my-4 [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:text-muted-foreground [&_li]:my-1 [&_strong]:text-foreground [&_code]:rounded [&_code]:bg-muted [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:text-[13px]">
+                    {withIds}
+                  </div>
+                </TracingBeam>
               </div>
 
               <aside className="legal-print-hide mt-14 rounded-xl border border-border/60 bg-muted/20 p-5 text-sm text-muted-foreground">
@@ -241,4 +304,3 @@ export function LegalShell({
     </>
   );
 }
-

@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
 import { SupportHubPage } from "@/components/site/marketing/support-hub";
+import { makeMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Support — Zivvy",
+export const metadata: Metadata = makeMetadata({
+  title: "Support",
   description:
-    "Access documentation, help center resources, changelog updates, and product roadmap notes."
-};
+    "Search Zivvy docs, the REST + webhook API reference at integrate.zivvy.xyz/docs, guides, changelog, and roadmap — same tenant model, no login required.",
+  canonicalPath: "/support",
+  ogImage: "/og/support.png"
+});
 
 export default function SupportPage() {
   return <SupportHubPage />;

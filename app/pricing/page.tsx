@@ -5,6 +5,7 @@ import { PricingPreview } from "@/components/site/pricing-preview";
 import { PricingFaq } from "@/components/site/pricing-faq";
 import { PricingCompare } from "@/components/site/pricing-compare";
 import { PricingAddons } from "@/components/site/pricing-addons";
+import { PricingBillingProvider } from "@/components/site/pricing-billing-provider";
 import { FaqJsonLd, ProductJsonLd } from "@/components/site/marketing/seo-scripts";
 import { makeMetadata } from "@/lib/seo";
 
@@ -64,10 +65,12 @@ export default function PricingPage() {
       <FaqJsonLd faqs={PRICING_FAQ_LD} />
       <SiteHeader />
       <main>
-        <PricingHero />
-        <PricingPreview showIntro={false} />
-        <PricingAddons />
+        <PricingBillingProvider>
+          <PricingHero />
+          <PricingPreview showIntro={false} />
+        </PricingBillingProvider>
         <PricingCompare />
+        <PricingAddons />
         <PricingFaq />
       </main>
       <SiteFooter />
