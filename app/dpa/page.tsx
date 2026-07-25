@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { LegalShell } from "@/components/site/legal-shell";
+import { LegalShell } from "@/components/site/marketing/legal-shell";
+import { makeMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Data Processing — Zivvy",
+export const metadata: Metadata = makeMetadata({
+  title: "Data Processing",
   description:
-    "Summary of how Zivvy processes Customer Data as a service provider, including regions and subprocessors."
-};
+    "Summary of how Zivvy processes Customer Data as a service provider, including regions and subprocessors.",
+  canonicalPath: "/dpa"
+});
 
 export default function DpaPage() {
   return (

@@ -19,7 +19,7 @@ export function PricingHero() {
         <BlurFade>
           <div className="mb-5 inline-flex items-center justify-center rounded-full border border-border/60 bg-background/70 px-3 py-1 backdrop-blur">
             <AnimatedShinyText className="text-xs font-medium text-muted-foreground">
-              Pricing · Free · Pro $18 · Business $30
+              Free · Pro $18 · Business $30 · Add-ons from $15
             </AnimatedShinyText>
           </div>
           <TextAnimate
@@ -31,7 +31,8 @@ export function PricingHero() {
             Pricing that matches your growth
           </TextAnimate>
           <p className="mt-4 text-lg text-muted-foreground">
-            Start on Free. Upgrade the moment a specific feature actually pays for itself.
+            Start on Free. Upgrade the moment a feature earns its keep. Add-ons layer on
+            when you need them — never before.
           </p>
         </BlurFade>
       </div>

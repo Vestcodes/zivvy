@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { LegalShell } from "@/components/site/legal-shell";
+import { LegalShell } from "@/components/site/marketing/legal-shell";
+import { makeMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Cookie Policy — Zivvy",
-  description: "How Zivvy uses cookies and similar technologies on the website and product."
-};
+export const metadata: Metadata = makeMetadata({
+  title: "Cookie Policy",
+  description:
+    "How Zivvy uses cookies and similar technologies on the website and product.",
+  canonicalPath: "/cookies"
+});
 
 export default function CookiesPage() {
   return (

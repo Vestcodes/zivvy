@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { PlanCard } from "@/components/billing/plan-card";
 import { ManagePlan } from "@/components/billing/manage-plan";
+import { ActiveAddons } from "@/components/billing/active-addons";
 import { Button } from "@/components/ui/button";
 import { fetchBootinfo } from "@/lib/boot-server";
 
@@ -48,6 +49,9 @@ export default async function BillingPage() {
       <PlanCard zivvy={boot.zivvy} />
       <div className="mt-8">
         <ManagePlan hasSubscription={hasSubscription} currentTier={boot.zivvy.tier} />
+      </div>
+      <div className="mt-8">
+        <ActiveAddons />
       </div>
       <p className="mt-8 text-xs text-muted-foreground">
         Checkout is processed by our payment provider. By upgrading you agree to the{" "}

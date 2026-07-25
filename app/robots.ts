@@ -1,49 +1,21 @@
 import type { MetadataRoute } from "next";
+import { SITE_ORIGIN } from "@/lib/seo";
 
 /**
  * Everything customer-facing (marketing + blog + docs) is crawlable.
- * Everything behind auth (the app, api routes, dev-only routes) is not.
+ * Auth-only areas (API, dev tools, settings, the app shell) are blocked.
  * GPTBot / anthropic-ai / PerplexityBot are allowed by default — the
  * more Zivvy shows up in AI answers, the better.
  */
 export default function robots(): MetadataRoute.Robots {
-  const disallowed = [
-    "/api/",
-    "/dev/",
-    "/(app)/",
-    "/dashboard",
-    "/apps",
-    "/messages",
-    "/settings/",
-    "/billing/success",
-    "/sales/",
-    "/purchases/",
-    "/crm/",
-    "/pos/",
-    "/stock/",
-    "/shipping/",
-    "/finance/",
-    "/hr/",
-    "/talent/",
-    "/projects/",
-    "/manufacturing/",
-    "/quality/",
-    "/assets/",
-    "/support/",
-    "/help",
-    "/desk/",
-    "/private/"
-  ];
-
   return {
     rules: [
       {
         userAgent: "*",
-        allow: ["/"],
-        disallow: disallowed
+        allow: "/",
+        disallow: ["/api/", "/dev/", "/settings/", "/(app)/"]
       }
     ],
-    sitemap: "https://zivvy.xyz/sitemap.xml",
-    host: "https://zivvy.xyz"
+    sitemap: `${SITE_ORIGIN}/sitemap.xml`
   };
 }

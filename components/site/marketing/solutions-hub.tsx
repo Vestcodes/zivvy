@@ -13,6 +13,7 @@ import {
 import type { HubCardItem } from "@/lib/marketing-content";
 import { SiteHeader } from "@/components/site/header";
 import { SiteFooter } from "@/components/site/footer";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { BlurFade } from "@/components/ui/blur-fade";
 import { BentoCard, BentoGrid } from "@/components/ui/bento-grid";
@@ -20,10 +21,18 @@ import { AnimatedGridPattern } from "@/components/ui/animated-grid-pattern";
 import { AnimatedShinyText } from "@/components/ui/animated-shiny-text";
 import { DotPattern } from "@/components/ui/dot-pattern";
 import { MagicCard } from "@/components/ui/magic-card";
-import { Marquee } from "@/components/ui/marquee";
+import { NumberTicker } from "@/components/ui/number-ticker";
 import { ShineBorder } from "@/components/ui/shine-border";
 import { TextAnimate } from "@/components/ui/text-animate";
 import { cn } from "@/lib/utils";
+
+type Tier = "Free" | "Pro" | "Business";
+
+const TIER_BADGE: Record<Tier, string> = {
+  Free: "bg-muted text-foreground border-transparent",
+  Pro: "bg-primary-gradient text-primary-foreground border-transparent",
+  Business: "bg-foreground text-background border-transparent"
+};
 
 const SOLUTION_META: Record<
   string,
@@ -31,11 +40,15 @@ const SOLUTION_META: Record<
     Icon: React.ElementType;
     className: string;
     background: React.ReactNode;
+    category: string;
+    tier: Tier;
   }
 > = {
   startups: {
     Icon: Rocket,
     className: "col-span-3 lg:col-span-2",
+    category: "Stage",
+    tier: "Free",
     background: (
       <AnimatedGridPattern
         numSquares={22}
@@ -47,11 +60,15 @@ const SOLUTION_META: Record<
   agencies: {
     Icon: Briefcase,
     className: "col-span-3 lg:col-span-1",
+    category: "Team",
+    tier: "Pro",
     background: <div className="absolute inset-0 bg-primary/5" />
   },
   enterprises: {
     Icon: Building2,
     className: "col-span-3 lg:col-span-1",
+    category: "Stage",
+    tier: "Business",
     background: (
       <div
         aria-hidden
@@ -66,6 +83,8 @@ const SOLUTION_META: Record<
   "marketing-teams": {
     Icon: Megaphone,
     className: "col-span-3 lg:col-span-2",
+    category: "Team",
+    tier: "Pro",
     background: (
       <AnimatedGridPattern
         numSquares={14}
@@ -77,11 +96,15 @@ const SOLUTION_META: Record<
   "hr-teams": {
     Icon: UsersRound,
     className: "col-span-3 lg:col-span-1",
+    category: "Team",
+    tier: "Pro",
     background: <div className="absolute inset-0 bg-muted/40" />
   },
   developers: {
     Icon: Code2,
     className: "col-span-3 lg:col-span-2",
+    category: "Team",
+    tier: "Pro",
     background: (
       <DotPattern
         className={cn(
@@ -93,15 +116,34 @@ const SOLUTION_META: Record<
   }
 };
 
-const CAPABILITY_CHIPS = [
-  "Lead-to-cash",
-  "Inventory",
-  "Accounting",
-  "HR & payroll",
-  "Approvals",
-  "Dashboards",
-  "API & webhooks",
-  "Multi-company"
+type Stat = {
+  value: number;
+  suffix?: string;
+  decimals?: number;
+  label: string;
+  sub: string;
+};
+
+const STATS: Stat[] = [
+  {
+    value: 12000,
+    suffix: "+",
+    label: "Tenants served",
+    sub: "One tenant model. Auth, RBAC, and data isolation by default."
+  },
+  {
+    value: 99.9,
+    suffix: "%",
+    decimals: 1,
+    label: "Multi-region uptime",
+    sub: "Regional deploys with automated failover. No hidden availability tiers."
+  },
+  {
+    value: 420,
+    suffix: "+",
+    label: "REST endpoints",
+    sub: "Every form is a REST resource. Every state change is a webhook event."
+  }
 ];
 
 type Props = {
@@ -117,10 +159,10 @@ export function SolutionsHubPage({ items }: Props) {
           <DotPattern
             className={cn(
               "pointer-events-none absolute inset-0 -z-10 text-primary/25",
-              "[mask-image:radial-gradient(520px_circle_at_50%_-10%,white,transparent)]"
+              "[mask-image:radial-gradient(560px_circle_at_50%_-10%,white,transparent)]"
             )}
           />
-          <div className="relative mx-auto max-w-5xl px-6 pb-10 pt-20 text-center sm:pt-24">
+          <div className="relative mx-auto max-w-5xl px-6 pb-4 pt-20 text-center sm:pt-24">
             <BlurFade>
               <div className="mb-5 inline-flex items-center justify-center rounded-full border border-border/60 bg-background/70 px-3 py-1 backdrop-blur">
                 <AnimatedShinyText className="text-xs font-medium text-muted-foreground">
@@ -133,23 +175,55 @@ export function SolutionsHubPage({ items }: Props) {
                 animation="blurInUp"
                 className="font-display text-4xl font-bold tracking-tight sm:text-5xl"
               >
-                Solutions for how you actually operate
+                One tenant. Every team.
               </TextAnimate>
               <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-                Pick the path that matches your team. Zivvy covers the workflows founders, agencies,
-                enterprises, and specialists run every day.
+                Every team shares one tenant, one auth boundary, and one webhook stream. Roles and
+                dashboards adapt to how each team operates.
               </p>
             </BlurFade>
           </div>
+
+          <div className="relative mx-auto mt-10 max-w-5xl px-6">
+            <div className="grid gap-3 sm:grid-cols-3">
+              {STATS.map((stat, idx) => (
+                <BlurFade key={stat.label} delay={0.06 + idx * 0.06}>
+                  <MagicCard
+                    className="relative h-full overflow-hidden rounded-2xl border border-border/70 bg-card/70 p-5 text-left"
+                    gradientFrom="#34d399"
+                    gradientTo="#0f766e"
+                    gradientColor="rgba(27, 152, 114, 0.1)"
+                  >
+                    <div className="flex items-baseline gap-1">
+                      <NumberTicker
+                        value={stat.value}
+                        decimalPlaces={stat.decimals ?? 0}
+                        className="font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl"
+                      />
+                      {stat.suffix ? (
+                        <span className="font-display text-2xl font-semibold text-primary sm:text-3xl">
+                          {stat.suffix}
+                        </span>
+                      ) : null}
+                    </div>
+                    <p className="mt-2 text-sm font-medium">{stat.label}</p>
+                    <p className="mt-1 text-xs text-muted-foreground">{stat.sub}</p>
+                  </MagicCard>
+                </BlurFade>
+              ))}
+            </div>
+          </div>
         </section>
 
-        <section className="mx-auto max-w-6xl px-6 pb-4">
+        <section className="mx-auto max-w-6xl px-6 pb-4 pt-14">
           <BlurFade delay={0.05}>
             <BentoGrid className="auto-rows-[13.5rem] lg:auto-rows-[15rem]">
               {items.map((item) => {
                 const meta = SOLUTION_META[item.slug] ?? {
                   Icon: Rocket,
                   className: "col-span-3 lg:col-span-1",
+                  category: "Team",
+                  tier: "Pro" as Tier,
                   background: <div className="absolute inset-0 bg-muted/30" />
                 };
                 return (
@@ -161,7 +235,19 @@ export function SolutionsHubPage({ items }: Props) {
                     description={item.description}
                     href={`/solutions/${item.slug}`}
                     cta="Open solution"
-                    background={meta.background}
+                    background={
+                      <>
+                        {meta.background}
+                        <div className="absolute right-3 top-3 flex items-center gap-1.5 z-10">
+                          <Badge variant="outline" className="bg-background/70 text-[10px] backdrop-blur">
+                            {meta.category}
+                          </Badge>
+                          <Badge className={cn("text-[10px]", TIER_BADGE[meta.tier])}>
+                            {meta.tier}
+                          </Badge>
+                        </div>
+                      </>
+                    }
                   />
                 );
               })}
@@ -169,29 +255,7 @@ export function SolutionsHubPage({ items }: Props) {
           </BlurFade>
         </section>
 
-        <section className="mx-auto max-w-6xl px-6 py-10">
-          <BlurFade>
-            <p className="mb-3 text-center text-xs font-medium uppercase tracking-wide text-muted-foreground">
-              Capabilities inside every path
-            </p>
-          </BlurFade>
-          <div className="relative overflow-hidden rounded-xl border border-border/60 bg-background/40 py-2">
-            <Marquee pauseOnHover className="[--duration:30s]">
-              {CAPABILITY_CHIPS.map((chip) => (
-                <div
-                  key={chip}
-                  className="mx-2 rounded-lg border border-border/70 bg-card/80 px-4 py-2 text-sm font-medium shadow-sm"
-                >
-                  {chip}
-                </div>
-              ))}
-            </Marquee>
-            <div className="pointer-events-none absolute inset-y-0 left-0 w-14 bg-gradient-to-r from-background to-transparent" />
-            <div className="pointer-events-none absolute inset-y-0 right-0 w-14 bg-gradient-to-l from-background to-transparent" />
-          </div>
-        </section>
-
-        <section className="mx-auto grid max-w-6xl gap-4 px-6 pb-10 md:grid-cols-2">
+        <section className="mx-auto grid max-w-6xl gap-4 px-6 pb-6 pt-10 md:grid-cols-2">
           <BlurFade>
             <MagicCard
               className="rounded-2xl border border-border/70 bg-card/70 p-6"
@@ -201,7 +265,8 @@ export function SolutionsHubPage({ items }: Props) {
             >
               <h2 className="font-display text-xl font-semibold">Browse by job-to-be-done</h2>
               <p className="mt-2 text-sm text-muted-foreground">
-                Prefer evaluating a concrete workflow first? Start with use cases.
+                Prefer evaluating a concrete workflow first? Each use case lists the REST resources
+                and webhook events it touches.
               </p>
               <Button asChild variant="outline" className="mt-5">
                 <Link href="/use-cases">
@@ -220,7 +285,8 @@ export function SolutionsHubPage({ items }: Props) {
             >
               <h2 className="font-display text-xl font-semibold">Browse by industry</h2>
               <p className="mt-2 text-sm text-muted-foreground">
-                Manufacturing, SaaS, finance, healthcare, education — vertical context included.
+                Same tenant model — different defaults for healthcare, SaaS, finance,
+                manufacturing, and education.
               </p>
               <Button asChild variant="outline" className="mt-5">
                 <Link href="/industries">
@@ -236,14 +302,15 @@ export function SolutionsHubPage({ items }: Props) {
           <div className="relative overflow-hidden rounded-2xl border border-border/70 bg-card/70 px-6 py-8 text-center">
             <ShineBorder shineColor={["#34d399", "#0f766e"]} duration={14} />
             <h2 className="font-display text-2xl font-semibold tracking-tight">
-              Not sure which path fits?
+              Want a role-shaped starter?
             </h2>
             <p className="mx-auto mt-3 max-w-md text-sm text-muted-foreground">
-              Tell us how you operate today — we&apos;ll map a practical starting point.
+              We&apos;ll seed a tenant with the right dashboards, roles, and webhook subscriptions
+              for how your team already operates.
             </p>
             <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <Button asChild variant="polished">
-                <Link href="/contact">Talk with us</Link>
+                <Link href="/contact">Get a seeded tenant</Link>
               </Button>
               <Button asChild variant="outline">
                 <Link href="/login#signup">Start free</Link>

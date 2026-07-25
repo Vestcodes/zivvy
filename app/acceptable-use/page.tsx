@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { LegalShell } from "@/components/site/legal-shell";
+import { LegalShell } from "@/components/site/marketing/legal-shell";
+import { makeMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Acceptable Use Policy — Zivvy",
-  description: "What is allowed — and not allowed — when using Zivvy."
-};
+export const metadata: Metadata = makeMetadata({
+  title: "Acceptable Use Policy",
+  description: "What is allowed — and not allowed — when using Zivvy.",
+  canonicalPath: "/acceptable-use"
+});
 
 export default function AcceptableUsePage() {
   return (

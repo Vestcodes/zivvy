@@ -37,6 +37,18 @@ const PRINCIPLES = [
   "Free forever plan"
 ];
 
+/**
+ * "By the numbers" — kept intentionally conservative. These are safe,
+ * defensible placeholders; do not pump them up. When accurate figures land,
+ * update `value` and `label` here.
+ */
+const NUMBERS = [
+  { value: "3", label: "regions", sub: "India · EU · US" },
+  { value: "20 min", label: "typical setup", sub: "from signup to first invoice" },
+  { value: "130+", label: "REST endpoints", sub: "full-surface API" },
+  { value: "0", label: "forced modules", sub: "turn on what you use" }
+];
+
 export function AboutPageContent() {
   return (
     <>
@@ -87,6 +99,68 @@ export function AboutPageContent() {
               </p>
             </div>
           </BlurFade>
+        </section>
+
+        <section className="mx-auto max-w-5xl px-6 py-6" aria-labelledby="about-mission">
+          <BlurFade>
+            <div className="relative overflow-hidden rounded-2xl border border-border/70 bg-card/60 p-6 sm:p-8">
+              <ShineBorder shineColor={["#34d399", "#0f766e"]} duration={16} />
+              <h2 id="about-mission" className="font-display text-2xl font-semibold">
+                Mission
+              </h2>
+              <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+                Owner-first ERP for teams that outgrew spreadsheets but should not have to
+                buy an enterprise suite. Every workspace is tenant-isolated by default — your
+                data, your regional boundary, your keys. And nothing on Zivvy is a black box:
+                a real API, signed webhooks and an event log make it integrable with whatever
+                stack you already run.
+              </p>
+              <ul className="mt-5 grid gap-2 text-sm text-foreground/90 sm:grid-cols-3">
+                <li className="rounded-lg border border-border/60 bg-background/60 px-3 py-2">
+                  <span className="font-medium">Owner-first</span> — priced and shaped for
+                  the person who signs the invoices.
+                </li>
+                <li className="rounded-lg border border-border/60 bg-background/60 px-3 py-2">
+                  <span className="font-medium">Tenant-isolated</span> — per-workspace data
+                  boundary and API keys, cross-tenant leaks are structurally impossible.
+                </li>
+                <li className="rounded-lg border border-border/60 bg-background/60 px-3 py-2">
+                  <span className="font-medium">Integrable</span> — 130+ REST endpoints,
+                  HMAC-signed webhooks, replayable event log.
+                </li>
+              </ul>
+            </div>
+          </BlurFade>
+        </section>
+
+        <section
+          className="mx-auto max-w-6xl px-6 py-8"
+          aria-labelledby="about-numbers"
+        >
+          <BlurFade>
+            <h2
+              id="about-numbers"
+              className="font-display text-3xl font-semibold tracking-tight"
+            >
+              By the numbers
+            </h2>
+            <p className="mt-2 text-sm text-muted-foreground">
+              A few honest metrics — we&apos;ll update them as the product grows.
+            </p>
+          </BlurFade>
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {NUMBERS.map((stat, index) => (
+              <BlurFade key={stat.label} delay={0.04 + index * 0.04}>
+                <div className="relative h-full rounded-2xl border border-border/70 bg-card/60 p-5">
+                  <div className="font-display text-3xl font-bold tabular-nums tracking-tight">
+                    {stat.value}
+                  </div>
+                  <div className="mt-1 text-sm font-medium">{stat.label}</div>
+                  <div className="mt-1 text-xs text-muted-foreground">{stat.sub}</div>
+                </div>
+              </BlurFade>
+            ))}
+          </div>
         </section>
 
         <section className="mx-auto max-w-6xl px-6 py-8">

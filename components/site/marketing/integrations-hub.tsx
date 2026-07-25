@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo, useState } from "react";
 import Link from "next/link";
 import { ArrowRight, Cloud, Link2, Webhook, Zap } from "lucide-react";
 import type { HubCardItem } from "@/lib/marketing-content";
@@ -7,13 +8,16 @@ import { SiteHeader } from "@/components/site/header";
 import { SiteFooter } from "@/components/site/footer";
 import { Button } from "@/components/ui/button";
 import { AnimatedShinyText } from "@/components/ui/animated-shiny-text";
+import { Badge } from "@/components/ui/badge";
 import { BlurFade } from "@/components/ui/blur-fade";
 import { BorderBeam } from "@/components/ui/border-beam";
 import { MagicCard } from "@/components/ui/magic-card";
 import { Marquee } from "@/components/ui/marquee";
+import { NumberTicker } from "@/components/ui/number-ticker";
 import { OrbitingCircles } from "@/components/ui/orbiting-circles";
 import { ShineBorder } from "@/components/ui/shine-border";
 import { TextAnimate } from "@/components/ui/text-animate";
+import { cn } from "@/lib/utils";
 
 const ORBIT_LABELS = ["Slack", "HubSpot", "Drive", "Zapier", "SFDC", "API"];
 
@@ -26,11 +30,43 @@ const PATTERN_CHIPS = [
   "Audit-friendly"
 ];
 
+const CATEGORIES = [
+  "All",
+  "Payments",
+  "Ecommerce",
+  "Communication",
+  "Analytics",
+  "Compliance",
+  "Developer"
+] as const;
+
+type Category = (typeof CATEGORIES)[number];
+
+const DOCS_URL = "https://integrate.zivvy.xyz/docs";
+
 type Props = {
   items: HubCardItem[];
 };
 
 export function IntegrationsHubPage({ items }: Props) {
+  const [activeCategory, setActiveCategory] = useState<Category>("All");
+
+  const availableCategories = useMemo<Category[]>(() => {
+    const present = new Set<string>();
+    for (const item of items) {
+      if (item.category) present.add(item.category);
+    }
+    return CATEGORIES.filter((cat) => cat === "All" || present.has(cat));
+  }, [items]);
+
+  const filtered = useMemo(
+    () =>
+      activeCategory === "All"
+        ? items
+        : items.filter((item) => item.category === activeCategory),
+    [items, activeCategory]
+  );
+
   return (
     <>
       <SiteHeader />
@@ -57,13 +93,15 @@ export function IntegrationsHubPage({ items }: Props) {
               </p>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <Button asChild variant="polished">
-                  <Link href="/contact">
-                    Plan integration
+                  <a href={DOCS_URL} target="_blank" rel="noreferrer">
+                    Read API docs
                     <ArrowRight className="size-4" />
-                  </Link>
+                  </a>
                 </Button>
                 <Button asChild variant="outline">
-                  <Link href="/features/api">Explore API</Link>
+                  <a href={DOCS_URL} target="_blank" rel="noreferrer">
+                    Explore API
+                  </a>
                 </Button>
               </div>
             </BlurFade>
@@ -98,44 +136,116 @@ export function IntegrationsHubPage({ items }: Props) {
           </div>
         </section>
 
-        <section className="mx-auto max-w-6xl px-6 pb-4">
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {items.map((item, index) => (
-              <BlurFade key={item.slug} delay={0.04 + index * 0.04}>
-                <Link href={`/integrations/${item.slug}`} className="group block h-full">
-                  <MagicCard
-                    className="relative h-full overflow-hidden rounded-2xl border border-border/70 bg-card/70 p-5"
-                    gradientFrom="#34d399"
-                    gradientTo="#0f766e"
-                    gradientColor="rgba(27, 152, 114, 0.1)"
+        <section className="mx-auto max-w-6xl px-6 pb-2">
+          <BlurFade>
+            <div className="grid gap-3 rounded-2xl border border-border/70 bg-card/50 p-5 sm:grid-cols-3 sm:p-6">
+              <div className="rounded-xl border border-border/50 bg-background/50 px-4 py-5 text-center">
+                <p className="font-display text-3xl font-semibold tracking-tight">
+                  <NumberTicker value={130} />
+                  <span className="text-primary">+</span>
+                </p>
+                <p className="mt-1 text-xs uppercase tracking-wide text-muted-foreground">
+                  REST endpoints
+                </p>
+              </div>
+              <div className="rounded-xl border border-border/50 bg-background/50 px-4 py-5 text-center">
+                <p className="font-display text-3xl font-semibold tracking-tight">
+                  HMAC-signed
+                </p>
+                <p className="mt-1 text-xs uppercase tracking-wide text-muted-foreground">
+                  Webhooks
+                </p>
+              </div>
+              <div className="rounded-xl border border-border/50 bg-background/50 px-4 py-5 text-center">
+                <p className="font-display text-3xl font-semibold tracking-tight">
+                  <NumberTicker value={100} />
+                  <span className="text-primary">+</span>
+                </p>
+                <p className="mt-1 text-xs uppercase tracking-wide text-muted-foreground">
+                  Event types
+                </p>
+              </div>
+            </div>
+          </BlurFade>
+        </section>
+
+        <section className="mx-auto max-w-6xl px-6 pb-3 pt-6">
+          <BlurFade>
+            <div className="flex flex-wrap items-center gap-2">
+              {availableCategories.map((cat) => {
+                const active = activeCategory === cat;
+                return (
+                  <button
+                    key={cat}
+                    type="button"
+                    onClick={() => setActiveCategory(cat)}
+                    aria-pressed={active}
+                    className={cn(
+                      "inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium transition-colors",
+                      active
+                        ? "border-primary/60 bg-primary/10 text-primary"
+                        : "border-border/60 bg-background/60 text-muted-foreground hover:text-foreground"
+                    )}
                   >
-                    {index % 3 === 0 ? (
-                      <BorderBeam size={55} duration={8} colorFrom="#34d399" colorTo="#0f766e" />
-                    ) : null}
-                    <div className="mb-3 flex size-9 items-center justify-center rounded-lg border border-border/70 bg-background/70">
-                      {index % 4 === 0 ? (
-                        <Zap className="size-4 text-primary" />
-                      ) : index % 4 === 1 ? (
-                        <Cloud className="size-4 text-primary" />
-                      ) : index % 4 === 2 ? (
-                        <Webhook className="size-4 text-primary" />
-                      ) : (
-                        <Link2 className="size-4 text-primary" />
-                      )}
-                    </div>
-                    <h2 className="font-display text-lg font-semibold group-hover:text-primary">
-                      {item.title}
-                    </h2>
-                    <p className="mt-2 text-sm text-muted-foreground">{item.description}</p>
-                    <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-primary">
-                      Integration pattern
-                      <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
-                    </span>
-                  </MagicCard>
-                </Link>
-              </BlurFade>
-            ))}
-          </div>
+                    {cat}
+                  </button>
+                );
+              })}
+            </div>
+          </BlurFade>
+        </section>
+
+        <section className="mx-auto max-w-6xl px-6 pb-4">
+          {filtered.length === 0 ? (
+            <div className="rounded-2xl border border-dashed border-border/70 bg-card/40 px-6 py-12 text-center text-sm text-muted-foreground">
+              No integrations in this category yet.
+            </div>
+          ) : (
+            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+              {filtered.map((item, index) => (
+                <BlurFade key={item.slug} delay={0.04 + index * 0.04}>
+                  <Link href={`/integrations/${item.slug}`} className="group block h-full">
+                    <MagicCard
+                      className="relative h-full overflow-hidden rounded-2xl border border-border/70 bg-card/70 p-5"
+                      gradientFrom="#34d399"
+                      gradientTo="#0f766e"
+                      gradientColor="rgba(27, 152, 114, 0.1)"
+                    >
+                      {index % 3 === 0 ? (
+                        <BorderBeam size={55} duration={8} colorFrom="#34d399" colorTo="#0f766e" />
+                      ) : null}
+                      <div className="mb-3 flex items-center justify-between">
+                        <div className="flex size-9 items-center justify-center rounded-lg border border-border/70 bg-background/70">
+                          {index % 4 === 0 ? (
+                            <Zap className="size-4 text-primary" />
+                          ) : index % 4 === 1 ? (
+                            <Cloud className="size-4 text-primary" />
+                          ) : index % 4 === 2 ? (
+                            <Webhook className="size-4 text-primary" />
+                          ) : (
+                            <Link2 className="size-4 text-primary" />
+                          )}
+                        </div>
+                        {item.category ? (
+                          <Badge variant="outline" className="text-[10px] font-medium">
+                            {item.category}
+                          </Badge>
+                        ) : null}
+                      </div>
+                      <h2 className="font-display text-lg font-semibold group-hover:text-primary">
+                        {item.title}
+                      </h2>
+                      <p className="mt-2 text-sm text-muted-foreground">{item.description}</p>
+                      <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-primary">
+                        View integration
+                        <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+                      </span>
+                    </MagicCard>
+                  </Link>
+                </BlurFade>
+              ))}
+            </div>
+          )}
         </section>
 
         <section className="mx-auto max-w-6xl px-6 py-10">
@@ -174,7 +284,9 @@ export function IntegrationsHubPage({ items }: Props) {
                 <Link href="/contact">Plan integration</Link>
               </Button>
               <Button asChild variant="outline">
-                <Link href="/support/docs">Read docs</Link>
+                <a href={DOCS_URL} target="_blank" rel="noreferrer">
+                  Read docs
+                </a>
               </Button>
             </div>
           </div>

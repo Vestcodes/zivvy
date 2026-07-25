@@ -3,6 +3,12 @@ export type FaqItem = {
   a: string;
 };
 
+export type CodeExample = {
+  language: "curl" | "javascript" | "python" | "typescript" | "php";
+  label: string;
+  code: string;
+};
+
 export type MarketingDetail = {
   slug: string;
   title: string;
@@ -15,6 +21,19 @@ export type MarketingDetail = {
   faqs: FaqItem[];
   ctaLabel: string;
   ctaHref: string;
+  codeExamples?: CodeExample[];
+  apiEndpoints?: string[];
+  webhookEvents?: string[];
+  docsUrl?: string;
+  addonRequired?: string;
+  addonPrice?: string;
+  category?:
+    | "Payments"
+    | "Ecommerce"
+    | "Communication"
+    | "Analytics"
+    | "Compliance"
+    | "Developer";
 };
 
 export type CompareRow = {
@@ -53,6 +72,7 @@ export type HubCardItem = {
   slug: string;
   title: string;
   description: string;
+  category?: MarketingDetail["category"];
 };
 
 function bySlug<T extends { slug: string }>(items: T[]): Record<string, T> {
@@ -789,168 +809,2121 @@ export const industryDetails: MarketingDetail[] = [
 export const integrationDetails: MarketingDetail[] = [
   {
     slug: "slack",
-    title: "Slack Integration",
+    title: "Slack",
     description:
-      "Send Zivvy workflow events into Slack for faster updates, alerts, and team coordination.",
+      "Subscribe Slack channels to Zivvy webhooks and post workflow updates as rich messages.",
     keyword: "slack erp integration",
+    category: "Communication",
     problem:
-      "Teams miss critical workflow updates when business systems are not connected to daily communication channels.",
+      "Teams miss workflow updates when Zivvy events (invoices submitted, orders shipped, tasks overdue) never reach the channel where daily work happens.",
     solution:
-      "Zivvy can route key workflow signals to Slack so teams respond quickly without losing system-of-record discipline.",
+      "Register a Slack incoming webhook as a webhook subscription in Zivvy and route sales-invoices.submitted, sales-orders.submitted, and tasks.overdue events into any channel.",
     benefits: [
-      "Get real-time alerts for high-priority events",
-      "Speed up response on blockers and approvals",
-      "Keep execution linked to source records"
+      "Route zivvy-web webhook events into #sales, #finance, and #ops in real time",
+      "Verify every payload with HMAC-SHA256 to keep channels tamper-proof",
+      "Deep-link back to the source record in Zivvy from every Slack message"
     ],
     useCases: [
-      "Deal-stage and invoice-status alerts",
-      "Approval reminders for managers",
-      "Escalation alerts for overdue tasks"
+      "Post to #finance whenever sales-invoices.submitted fires",
+      "Ping the account owner in Slack when payment-entries.paid clears",
+      "Alert #ops when tasks.overdue crosses the SLA threshold"
     ],
     faqs: [
       {
-        q: "Can alerts be filtered by team?",
-        a: "Yes. Routing can be scoped by workflow and ownership."
+        q: "How do I connect a Slack channel?",
+        a: "Create an incoming webhook in Slack, then POST it to /v1/webhook-subscriptions with the events you want."
       },
       {
-        q: "Will this replace in-app history?",
-        a: "No. Slack notifications complement in-app activity timelines."
+        q: "Are payloads signed?",
+        a: "Every delivery ships with an X-Zivvy-Signature HMAC-SHA256 header you can verify inside your Slack app."
       }
     ],
-    ctaLabel: "Set up Slack flow",
-    ctaHref: "/contact"
+    ctaLabel: "Configure webhook",
+    ctaHref: "/settings/developer",
+    apiEndpoints: [
+      "POST /v1/webhook-subscriptions",
+      "GET /v1/webhook-subscriptions",
+      "DELETE /v1/webhook-subscriptions/{id}"
+    ],
+    webhookEvents: [
+      "sales-invoices.submitted",
+      "sales-orders.submitted",
+      "payment-entries.paid",
+      "tasks.overdue"
+    ],
+    docsUrl: "https://integrate.zivvy.xyz/docs#tag/Webhooks",
+    codeExamples: [
+      {
+        language: "curl",
+        label: "Register subscription",
+        code: `curl -X POST https://integrate.zivvy.xyz/v1/webhook-subscriptions \\
+  -H "Authorization: Bearer $ZIVVY_API_KEY" \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "target_url": "https://hooks.slack.com/services/T00/B00/XXX",
+    "events": ["sales-invoices.submitted", "payment-entries.paid"],
+    "secret": "whsec_slack_prod"
+  }'`
+      },
+      {
+        language: "javascript",
+        label: "Verify signature in your Slack app",
+        code: `import crypto from "crypto";
+
+export function verifyZivvy(rawBody, signature, secret) {
+  const digest = crypto
+    .createHmac("sha256", secret)
+    .update(rawBody)
+    .digest("hex");
+  return crypto.timingSafeEqual(
+    Buffer.from(digest),
+    Buffer.from(signature)
+  );
+}`
+      }
+    ]
   },
   {
     slug: "salesforce",
-    title: "Salesforce Integration",
+    title: "Salesforce",
     description:
-      "Sync pipeline and customer context between Salesforce and Zivvy for cleaner handoffs.",
+      "Bidirectional customer and opportunity sync between Salesforce and Zivvy via /v1/customers.",
     keyword: "salesforce integration with operations",
+    category: "Communication",
     problem:
-      "Handoffs break when sales and operations run on disconnected records.",
+      "Sales-to-ops handoffs break when Salesforce accounts and Zivvy customers drift out of sync and no one owns the mapping.",
     solution:
-      "Zivvy integration patterns keep key account and deal context aligned with execution workflows.",
+      "Zivvy exposes /v1/customers and /v1/opportunities with idempotency keys and a customers.updated webhook, so a bidirectional sync stays consistent both ways.",
     benefits: [
-      "Improve sales-to-ops handoff quality",
-      "Reduce duplicate data entry",
-      "Align revenue and delivery readiness"
+      "Two-way sync of Salesforce Account / Contact into /v1/customers",
+      "Convert closed-won Opportunities into /v1/opportunities and /v1/sales-orders",
+      "Idempotency keys prevent duplicate customer creation on retry"
     ],
     useCases: [
-      "Account and contact synchronization",
-      "Opportunity stage to workflow triggers",
-      "Post-close provisioning workflows"
+      "Push new Salesforce Accounts into Zivvy as /v1/customers records",
+      "Fire customers.updated webhook back into Salesforce on billing changes",
+      "Convert Closed-Won Opportunity to /v1/sales-orders atomically"
     ],
     faqs: [
       {
-        q: "Is this bi-directional?",
-        a: "Integration patterns can support one-way or two-way sync as needed."
+        q: "How is conflict resolution handled?",
+        a: "Every write accepts an Idempotency-Key header; last-writer-wins by updated_at, and both sides expose customers.updated events."
       },
       {
         q: "Can we map custom fields?",
-        a: "Yes. Field mapping strategy is part of integration setup."
+        a: "Yes. Zivvy custom fields on Customer/Opportunity flow through the same REST endpoints as standard fields."
       }
     ],
-    ctaLabel: "Discuss Salesforce setup",
-    ctaHref: "/contact"
+    ctaLabel: "Talk Salesforce setup",
+    ctaHref: "/contact",
+    apiEndpoints: [
+      "GET /v1/customers",
+      "POST /v1/customers",
+      "PATCH /v1/customers/{id}",
+      "POST /v1/opportunities",
+      "POST /v1/sales-orders"
+    ],
+    webhookEvents: [
+      "customers.created",
+      "customers.updated",
+      "opportunities.won",
+      "sales-orders.submitted"
+    ],
+    docsUrl: "https://integrate.zivvy.xyz/docs#tag/Customers",
+    codeExamples: [
+      {
+        language: "curl",
+        label: "Upsert customer from Salesforce",
+        code: `curl -X POST https://integrate.zivvy.xyz/v1/customers \\
+  -H "Authorization: Bearer $ZIVVY_API_KEY" \\
+  -H "Idempotency-Key: sfdc-acct-001-XYZ" \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "customer_name": "Acme Corp",
+    "customer_type": "Company",
+    "email": "billing@acme.com",
+    "external_id": "0016g00000ABCDE"
+  }'`
+      },
+      {
+        language: "javascript",
+        label: "Sync closed-won opportunity",
+        code: `import Zivvy from "@zivvy/node";
+
+const zivvy = new Zivvy({ apiKey: process.env.ZIVVY_API_KEY });
+
+export async function onOpportunityClosedWon(sfOpp) {
+  await zivvy.customers.upsert({
+    external_id: sfOpp.AccountId,
+    customer_name: sfOpp.Account.Name
+  });
+  await zivvy.opportunities.create({
+    external_id: sfOpp.Id,
+    customer: sfOpp.AccountId,
+    amount: sfOpp.Amount,
+    status: "Converted"
+  });
+}`
+      }
+    ]
   },
   {
     slug: "hubspot",
-    title: "HubSpot Integration",
+    title: "HubSpot",
     description:
-      "Connect HubSpot lifecycle data to Zivvy workflows for tighter marketing, sales, and operations alignment.",
+      "Sync HubSpot contacts and deals with Zivvy /v1/contacts and /v1/opportunities.",
     keyword: "hubspot operations integration",
+    category: "Communication",
     problem:
-      "Lifecycle context is lost when GTM systems are disconnected from execution systems.",
+      "HubSpot lifecycle stages never make it into Zivvy, so ops teams can't see which deals are actually ready to invoice.",
     solution:
-      "Zivvy integrates lifecycle updates with operations workflows to keep teams aligned from lead to cash.",
+      "Mirror HubSpot Contacts and Deals into Zivvy /v1/contacts and /v1/opportunities, then let opportunities.won trigger a /v1/sales-orders draft automatically.",
     benefits: [
-      "Preserve lifecycle context across teams",
-      "Trigger operational tasks from GTM events",
-      "Improve conversion and handoff speed"
+      "Contact and Deal sync via /v1/contacts and /v1/opportunities",
+      "Trigger onboarding on opportunities.won without leaving HubSpot",
+      "Roll HubSpot deal amount into Zivvy revenue dashboards"
     ],
     useCases: [
-      "MQL-to-SQL workflow triggers",
-      "Deal won to onboarding kickoff",
-      "Campaign attribution in revenue dashboards"
+      "New HubSpot Contact creates /v1/contacts with lifecycle_stage",
+      "Deal-stage change updates /v1/opportunities.status",
+      "Closed-Won deal spawns a /v1/sales-orders draft"
     ],
     faqs: [
       {
-        q: "Can we sync contacts and companies?",
-        a: "Yes. Standard integration patterns support core CRM objects."
+        q: "Do we need HubSpot Marketing Hub?",
+        a: "No. The integration only needs a private-app token with contacts and deals scopes."
       },
       {
-        q: "Can we keep historical records?",
-        a: "Yes. Sync plans include safe handling for historical context."
+        q: "What triggers a Zivvy sales order?",
+        a: "The opportunities.won webhook, which fires whenever HubSpot pushes dealstage=closedwon back into Zivvy."
       }
     ],
     ctaLabel: "Plan HubSpot sync",
-    ctaHref: "/contact"
+    ctaHref: "/contact",
+    apiEndpoints: [
+      "GET /v1/contacts",
+      "POST /v1/contacts",
+      "GET /v1/opportunities",
+      "POST /v1/opportunities",
+      "POST /v1/sales-orders"
+    ],
+    webhookEvents: [
+      "contacts.created",
+      "contacts.updated",
+      "opportunities.won",
+      "opportunities.lost"
+    ],
+    docsUrl: "https://integrate.zivvy.xyz/docs#tag/Contacts",
+    codeExamples: [
+      {
+        language: "curl",
+        label: "Create contact from HubSpot",
+        code: `curl -X POST https://integrate.zivvy.xyz/v1/contacts \\
+  -H "Authorization: Bearer $ZIVVY_API_KEY" \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "first_name": "Jane",
+    "last_name": "Doe",
+    "email_id": "jane@acme.com",
+    "lifecycle_stage": "opportunity",
+    "external_id": "hs-contact-42"
+  }'`
+      },
+      {
+        language: "typescript",
+        label: "Bridge HubSpot deal to Zivvy",
+        code: `import type { HubspotDeal } from "@hubspot/api-client";
+import { zivvy } from "./zivvy-client";
+
+export async function pushDeal(deal: HubspotDeal) {
+  return zivvy.opportunities.upsert({
+    external_id: deal.id,
+    opportunity_amount: Number(deal.properties.amount),
+    status: deal.properties.dealstage === "closedwon" ? "Converted" : "Open"
+  });
+}`
+      }
+    ]
   },
   {
     slug: "zapier",
-    title: "Zapier Integration",
+    title: "Zapier",
     description:
-      "Automate cross-tool workflows quickly by connecting Zivvy events with Zapier actions.",
+      "Trigger Zaps from Zivvy webhook events, or run Zap actions against the Zivvy REST API.",
     keyword: "zapier workflow integration",
+    category: "Developer",
     problem:
-      "Teams want automation across tools, but custom integrations can delay time-to-value.",
+      "Ops teams want to wire Zivvy to 5,000+ tools without maintaining custom glue code for each one.",
     solution:
-      "Zapier-compatible flows help teams ship practical automations without full custom development.",
+      "Every zivvy-web webhook event doubles as a Zap trigger, and every /v1/... endpoint is available as a Zap action via authenticated REST.",
     benefits: [
-      "Launch automations in hours, not weeks",
-      "Connect Zivvy with hundreds of apps",
-      "Reduce manual transfer work across systems"
+      "Zap trigger for any webhook event (sales-orders.submitted, tasks.completed, ...)",
+      "Zap action against any /v1/... endpoint",
+      "OAuth-scoped API keys keep Zap permissions minimal"
     ],
     useCases: [
-      "Create tasks from external form submissions",
-      "Push billing updates to internal channels",
-      "Sync records with spreadsheet workflows"
+      "New sales-orders.submitted event triggers a Google Sheets row",
+      "Slack message action creates /v1/tasks in Zivvy",
+      "Airtable form response POSTs to /v1/customers"
     ],
     faqs: [
       {
-        q: "Can we start with no-code automation?",
-        a: "Yes. Zapier is ideal for fast no-code process improvements."
+        q: "Do I need a Zapier Pro plan?",
+        a: "Any Zapier plan works. The Zivvy trigger is a plain webhook, and the actions use REST + API key."
       },
       {
-        q: "Can we later move to API-based automation?",
-        a: "Yes. Teams often graduate to API-driven flows over time."
+        q: "Can we later move to native API calls?",
+        a: "Yes. Zaps and the SDK share the same /v1/... endpoints, so migration is drop-in."
       }
     ],
     ctaLabel: "Automate with Zapier",
-    ctaHref: "/features/ai-automation"
+    ctaHref: "/settings/developer",
+    apiEndpoints: [
+      "POST /v1/webhook-subscriptions",
+      "POST /v1/tasks",
+      "POST /v1/customers",
+      "GET /v1/sales-orders"
+    ],
+    webhookEvents: [
+      "sales-orders.submitted",
+      "sales-invoices.submitted",
+      "tasks.completed",
+      "customers.created"
+    ],
+    docsUrl: "https://integrate.zivvy.xyz/docs#tag/Webhooks",
+    codeExamples: [
+      {
+        language: "curl",
+        label: "Subscribe Zap catch-hook",
+        code: `curl -X POST https://integrate.zivvy.xyz/v1/webhook-subscriptions \\
+  -H "Authorization: Bearer $ZIVVY_API_KEY" \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "target_url": "https://hooks.zapier.com/hooks/catch/1234/abc/",
+    "events": ["sales-orders.submitted"]
+  }'`
+      },
+      {
+        language: "javascript",
+        label: "Zap action: create task",
+        code: `// Runs inside a Zap "Code by Zapier" step
+const res = await fetch("https://integrate.zivvy.xyz/v1/tasks", {
+  method: "POST",
+  headers: {
+    Authorization: \`Bearer \${inputData.zivvyKey}\`,
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    subject: inputData.subject,
+    assigned_to: inputData.owner,
+    due_date: inputData.due
+  })
+});
+return await res.json();`
+      }
+    ]
   },
   {
     slug: "google-drive",
-    title: "Google Drive Integration",
+    title: "Google Drive",
     description:
-      "Link operational records with shared documents in Google Drive for cleaner collaboration.",
+      "Attach Google Drive documents to any Zivvy record via /v1/file-links and /v1/attachments.",
     keyword: "google drive business integration",
+    category: "Communication",
     problem:
-      "Supporting documents often live in separate folders without clear linkage to business records.",
+      "Contracts, POs, and invoices live in scattered Drive folders with no traceable link to the Zivvy record they belong to.",
     solution:
-      "Zivvy can pair workflow records with Drive content so teams keep context and compliance together.",
+      "Register Drive file IDs against /v1/attachments so every quotation, sales order, and expense in Zivvy carries a signed Drive link.",
     benefits: [
-      "Attach documents to workflows without confusion",
-      "Reduce version mismatch across teams",
-      "Speed up audits and reviews with linked evidence"
+      "Link Drive files to any DocType via /v1/attachments",
+      "Signed short-lived URLs keep sensitive files access-controlled",
+      "Audit trail on documents.attached lets you prove evidence at audit time"
     ],
     useCases: [
-      "Contract and quote support files",
-      "Invoice and approval attachments",
-      "Project documentation handoff"
+      "Attach signed PDF quote to a /v1/quotations record",
+      "Link expense receipt from Drive to /v1/expense-claims",
+      "Ship BOM specs from Drive alongside /v1/work-orders"
     ],
     faqs: [
       {
-        q: "Can we control document visibility?",
-        a: "Yes. Access can follow role and process requirements."
+        q: "Do you store the file inside Zivvy?",
+        a: "No. Only the Drive file ID and metadata are stored; the binary stays in Drive under your permissions."
       },
       {
-        q: "Can this support compliance evidence trails?",
-        a: "Yes. Linked records and history improve audit readiness."
+        q: "Can we revoke access?",
+        a: "Yes. Deleting the /v1/attachments row instantly invalidates the signed short-lived Drive URL."
       }
     ],
     ctaLabel: "Set up Drive flow",
-    ctaHref: "/contact"
+    ctaHref: "/contact",
+    apiEndpoints: [
+      "POST /v1/attachments",
+      "GET /v1/attachments",
+      "DELETE /v1/attachments/{id}"
+    ],
+    webhookEvents: ["documents.attached", "documents.removed"],
+    docsUrl: "https://integrate.zivvy.xyz/docs#tag/Attachments",
+    codeExamples: [
+      {
+        language: "curl",
+        label: "Attach a Drive file to a quotation",
+        code: `curl -X POST https://integrate.zivvy.xyz/v1/attachments \\
+  -H "Authorization: Bearer $ZIVVY_API_KEY" \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "attached_to_doctype": "Quotation",
+    "attached_to_name": "SAL-QTN-2026-0001",
+    "provider": "google-drive",
+    "external_id": "1AbCDe_gDriveFileId",
+    "file_name": "acme-quote.pdf"
+  }'`
+      },
+      {
+        language: "python",
+        label: "Attach in Python",
+        code: `import os, requests
+
+requests.post(
+    "https://integrate.zivvy.xyz/v1/attachments",
+    headers={"Authorization": f"Bearer {os.environ['ZIVVY_API_KEY']}"},
+    json={
+        "attached_to_doctype": "Quotation",
+        "attached_to_name": "SAL-QTN-2026-0001",
+        "provider": "google-drive",
+        "external_id": file_id,
+        "file_name": "acme-quote.pdf",
+    },
+).raise_for_status()`
+      }
+    ]
+  },
+  {
+    slug: "stripe",
+    title: "Stripe",
+    description:
+      "Reconcile Stripe charges, subscriptions, and refunds into Zivvy /v1/payment-entries.",
+    keyword: "stripe payment integration",
+    category: "Payments",
+    problem:
+      "Finance teams manually match Stripe payouts against sales invoices, and refunds go unrecorded until month-end.",
+    solution:
+      "Forward the charge.succeeded, charge.refunded, and payout.paid Stripe webhooks into /v1/payment-entries; Zivvy auto-links to the referenced /v1/sales-invoices.",
+    benefits: [
+      "Auto-create /v1/payment-entries from charge.succeeded",
+      "Match Stripe fee + net payout to your bank account ledger",
+      "Refund events reverse the payment entry with full audit trail"
+    ],
+    useCases: [
+      "Stripe charge.succeeded → /v1/payment-entries against a Sales Invoice",
+      "Stripe payout.paid → bank reconciliation line in Zivvy",
+      "Stripe charge.refunded → reverse the payment entry automatically"
+    ],
+    faqs: [
+      {
+        q: "How is matching done?",
+        a: "The Stripe payment_intent metadata carries the Zivvy sales-invoice name; Zivvy resolves it on the fly."
+      },
+      {
+        q: "Does Zivvy call Stripe directly?",
+        a: "It can. Zivvy accepts inbound Stripe webhooks today; outbound charge creation is on the developer roadmap."
+      }
+    ],
+    ctaLabel: "Wire Stripe webhooks",
+    ctaHref: "/settings/developer",
+    apiEndpoints: [
+      "POST /v1/payment-entries",
+      "GET /v1/payment-entries",
+      "POST /v1/webhook-subscriptions"
+    ],
+    webhookEvents: [
+      "payment-entries.created",
+      "payment-entries.paid",
+      "payment-entries.reversed"
+    ],
+    docsUrl: "https://integrate.zivvy.xyz/docs#tag/Payments",
+    codeExamples: [
+      {
+        language: "curl",
+        label: "Record Stripe charge",
+        code: `curl -X POST https://integrate.zivvy.xyz/v1/payment-entries \\
+  -H "Authorization: Bearer $ZIVVY_API_KEY" \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "payment_type": "Receive",
+    "party_type": "Customer",
+    "party": "Acme Corp",
+    "paid_amount": 1200.00,
+    "reference_no": "ch_3PabcDeXYZ",
+    "reference_date": "2026-07-25",
+    "references": [
+      { "reference_doctype": "Sales Invoice",
+        "reference_name": "SAL-INV-2026-0042",
+        "allocated_amount": 1200.00 }
+    ]
+  }'`
+      },
+      {
+        language: "javascript",
+        label: "Stripe webhook handler",
+        code: `import Stripe from "stripe";
+import { zivvy } from "./zivvy-client";
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
+export async function POST(req) {
+  const raw = await req.text();
+  const event = stripe.webhooks.constructEvent(
+    raw,
+    req.headers.get("stripe-signature"),
+    process.env.STRIPE_WEBHOOK_SECRET
+  );
+  if (event.type === "charge.succeeded") {
+    const c = event.data.object;
+    await zivvy.paymentEntries.create({
+      payment_type: "Receive",
+      party_type: "Customer",
+      party: c.metadata.zivvy_customer,
+      paid_amount: c.amount / 100,
+      reference_no: c.id,
+      references: [{
+        reference_doctype: "Sales Invoice",
+        reference_name: c.metadata.zivvy_invoice,
+        allocated_amount: c.amount / 100
+      }]
+    });
+  }
+  return new Response("ok");
+}`
+      }
+    ]
+  },
+  {
+    slug: "polar",
+    title: "Polar",
+    description:
+      "Turn Polar subscription events into /v1/subscriptions and /v1/sales-invoices in Zivvy.",
+    keyword: "polar subscription integration",
+    category: "Payments",
+    problem:
+      "SaaS teams using Polar for open-source and creator subscriptions lose finance visibility because MRR never lands in their ERP.",
+    solution:
+      "Forward subscription.created and subscription.updated Polar events into /v1/subscriptions; Zivvy generates recurring /v1/sales-invoices automatically.",
+    benefits: [
+      "Subscription lifecycle mirrored via /v1/subscriptions",
+      "MRR and churn rolled into Zivvy revenue reporting",
+      "Failed-payment events open a task on the AR owner"
+    ],
+    useCases: [
+      "Polar subscription.created → /v1/subscriptions with billing plan",
+      "Polar subscription.updated → plan/status change in Zivvy",
+      "Polar subscription.canceled → close subscription + AR task"
+    ],
+    faqs: [
+      {
+        q: "Do we need Polar Enterprise?",
+        a: "No. Polar's free tier supports outgoing webhooks and OAuth."
+      },
+      {
+        q: "How are recurring invoices generated?",
+        a: "Zivvy's subscription generator runs nightly and posts each cycle to /v1/sales-invoices."
+      }
+    ],
+    ctaLabel: "Talk Polar setup",
+    ctaHref: "/contact",
+    apiEndpoints: [
+      "POST /v1/subscriptions",
+      "PATCH /v1/subscriptions/{id}",
+      "GET /v1/sales-invoices"
+    ],
+    webhookEvents: [
+      "subscriptions.created",
+      "subscriptions.updated",
+      "subscriptions.canceled",
+      "sales-invoices.submitted"
+    ],
+    docsUrl: "https://integrate.zivvy.xyz/docs#tag/Subscriptions",
+    codeExamples: [
+      {
+        language: "curl",
+        label: "Create a subscription",
+        code: `curl -X POST https://integrate.zivvy.xyz/v1/subscriptions \\
+  -H "Authorization: Bearer $ZIVVY_API_KEY" \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "party_type": "Customer",
+    "party": "Acme Corp",
+    "start_date": "2026-07-01",
+    "plans": [{ "plan": "Pro Monthly", "qty": 1 }],
+    "external_id": "polar_sub_01H..."
+  }'`
+      },
+      {
+        language: "javascript",
+        label: "Polar webhook -> Zivvy",
+        code: `import { zivvy } from "./zivvy-client";
+
+export async function handlePolar(event) {
+  if (event.type === "subscription.created") {
+    const s = event.data;
+    await zivvy.subscriptions.create({
+      external_id: s.id,
+      party_type: "Customer",
+      party: s.customer.email,
+      start_date: s.current_period_start,
+      plans: [{ plan: s.product.name, qty: 1 }]
+    });
+  }
+}`
+      }
+    ]
+  },
+  {
+    slug: "plaid",
+    title: "Plaid",
+    description:
+      "Connect bank accounts with Plaid Link and stream transactions into /v1/bank-transactions.",
+    keyword: "plaid bank feed integration",
+    category: "Payments",
+    problem:
+      "Manual bank statement uploads delay reconciliation and hide the current cash position from finance.",
+    solution:
+      "Use Plaid Link on the client, exchange the public token, and let Zivvy pull daily via /v1/bank-transactions into the bank reconciliation queue.",
+    benefits: [
+      "Plaid Link on the client, exchange handled by Zivvy",
+      "Nightly pull into /v1/bank-transactions",
+      "Auto-match against /v1/payment-entries on amount + date"
+    ],
+    useCases: [
+      "Plaid Link → /v1/bank-accounts linked and verified",
+      "Daily sync of transactions into /v1/bank-transactions",
+      "Auto-suggest matches to /v1/payment-entries"
+    ],
+    faqs: [
+      {
+        q: "Which Plaid products do I need?",
+        a: "Transactions + Auth. Assets is optional if you also want balance snapshots."
+      },
+      {
+        q: "How often does Zivvy poll?",
+        a: "Every 6 hours, plus on-demand refresh from the Bank Reconciliation screen."
+      }
+    ],
+    ctaLabel: "Enable Plaid Link",
+    ctaHref: "/settings/developer",
+    apiEndpoints: [
+      "POST /v1/bank-accounts",
+      "GET /v1/bank-transactions",
+      "POST /v1/payment-entries"
+    ],
+    webhookEvents: [
+      "bank-transactions.created",
+      "bank-accounts.linked",
+      "bank-accounts.error"
+    ],
+    docsUrl: "https://integrate.zivvy.xyz/docs#tag/Banking",
+    codeExamples: [
+      {
+        language: "curl",
+        label: "Create a Plaid link token",
+        code: `curl -X POST https://integrate.zivvy.xyz/v1/bank-accounts/link-token \\
+  -H "Authorization: Bearer $ZIVVY_API_KEY" \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "user_ref": "user_42",
+    "products": ["transactions", "auth"],
+    "country_codes": ["US"]
+  }'`
+      },
+      {
+        language: "javascript",
+        label: "Complete the link",
+        code: `const { link_token } = await fetch("/api/plaid/link-token", { method: "POST" })
+  .then(r => r.json());
+
+Plaid.create({
+  token: link_token,
+  onSuccess: async (public_token) => {
+    await fetch("/api/plaid/exchange", {
+      method: "POST",
+      body: JSON.stringify({ public_token })
+    });
+  }
+}).open();`
+      }
+    ]
+  },
+  {
+    slug: "gocardless",
+    title: "GoCardless",
+    description:
+      "Direct-debit collection via GoCardless landing straight in /v1/payment-entries.",
+    keyword: "gocardless direct debit",
+    category: "Payments",
+    problem:
+      "Recurring EU/UK direct debits are collected in GoCardless but never make it into finance until the payout report is emailed at month-end.",
+    solution:
+      "A GoCardless webhook per mandate will post the collection into /v1/payment-entries once the connector ships.",
+    benefits: [
+      "Direct-debit mandate lifecycle mirrored inside Zivvy",
+      "SEPA + BACS + ACH collections land in /v1/payment-entries",
+      "Auto-match against submitted sales invoices"
+    ],
+    useCases: [
+      "GoCardless mandate.created → /v1/customers.mandate_ref",
+      "GoCardless payment.confirmed → /v1/payment-entries",
+      "GoCardless payment.failed → dunning task in Zivvy"
+    ],
+    faqs: [
+      {
+        q: "Is GoCardless available today?",
+        a: "Coming soon. Zivvy is a launch partner; join /contact to be added to the beta."
+      },
+      {
+        q: "Will existing mandates carry over?",
+        a: "Yes. Existing GoCardless mandates will backfill via the /v1/customers upsert path."
+      }
+    ],
+    ctaLabel: "Join the beta",
+    ctaHref: "/contact",
+    docsUrl: "https://integrate.zivvy.xyz/docs#tag/Payments"
+  },
+  {
+    slug: "shopify",
+    title: "Shopify",
+    description:
+      "Sync Shopify orders, refunds, and inventory with Zivvy /v1/sales-orders and /v1/stock-entries.",
+    keyword: "shopify erp integration",
+    category: "Ecommerce",
+    problem:
+      "Shopify orders live outside the finance system, so inventory decrements and revenue recognition happen twice.",
+    solution:
+      "The ecommerce-integrations add-on maps every Shopify orders/create into /v1/sales-orders and mirrors inventory back to Shopify from /v1/items.",
+    benefits: [
+      "Shopify order → /v1/sales-orders with tax + shipping breakout",
+      "Inventory two-way sync between /v1/items and Shopify variants",
+      "Refunds create /v1/sales-invoices credit notes"
+    ],
+    useCases: [
+      "Shopify orders/create → /v1/sales-orders draft",
+      "Shopify refunds/create → /v1/sales-invoices credit note",
+      "Zivvy stock-entries.submitted → Shopify inventory_level update"
+    ],
+    faqs: [
+      {
+        q: "Which Shopify plans are supported?",
+        a: "Basic, Shopify, Advanced, and Plus. Shopify Starter cannot install private apps."
+      },
+      {
+        q: "Do returns flow back?",
+        a: "Yes. Refunds create credit notes in /v1/sales-invoices and restock via /v1/stock-entries."
+      }
+    ],
+    ctaLabel: "Install add-on",
+    ctaHref: "/contact",
+    addonRequired: "ecommerce-integrations",
+    addonPrice: "$29/mo",
+    apiEndpoints: [
+      "POST /v1/sales-orders",
+      "POST /v1/sales-invoices",
+      "PATCH /v1/items/{id}",
+      "POST /v1/stock-entries"
+    ],
+    webhookEvents: [
+      "sales-orders.submitted",
+      "sales-invoices.submitted",
+      "items.updated",
+      "stock-entries.submitted"
+    ],
+    docsUrl: "https://integrate.zivvy.xyz/docs#tag/Sales-Orders",
+    codeExamples: [
+      {
+        language: "curl",
+        label: "Create sales order from Shopify",
+        code: `curl -X POST https://integrate.zivvy.xyz/v1/sales-orders \\
+  -H "Authorization: Bearer $ZIVVY_API_KEY" \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "customer": "Shopify Guest",
+    "external_id": "shopify-order-#1042",
+    "items": [
+      { "item_code": "SKU-001", "qty": 2, "rate": 39.00 }
+    ],
+    "taxes": [{ "rate": 8.875, "account_head": "Sales Tax - US" }]
+  }'`
+      },
+      {
+        language: "javascript",
+        label: "Shopify webhook handler",
+        code: `import { zivvy } from "./zivvy-client";
+
+export async function onShopifyOrder(order) {
+  await zivvy.salesOrders.create({
+    external_id: \`shopify-\${order.id}\`,
+    customer: order.email,
+    items: order.line_items.map(li => ({
+      item_code: li.sku,
+      qty: li.quantity,
+      rate: Number(li.price)
+    }))
+  });
+}`
+      }
+    ]
+  },
+  {
+    slug: "amazon",
+    title: "Amazon",
+    description:
+      "Pull Amazon MWS / SP-API orders and settlement reports into /v1/sales-orders.",
+    keyword: "amazon mws integration",
+    category: "Ecommerce",
+    problem:
+      "Amazon sellers reconcile settlement reports by hand every 14 days and only discover pricing or fee variances weeks later.",
+    solution:
+      "The ecommerce-integrations add-on polls Amazon SP-API for orders and settlement reports and posts them into /v1/sales-orders and /v1/payment-entries.",
+    benefits: [
+      "Orders + FBA shipments mirrored into /v1/sales-orders",
+      "Settlement reports posted as bulk /v1/payment-entries",
+      "SKU-level fees split into per-item /v1/expense-claims"
+    ],
+    useCases: [
+      "Amazon Order → /v1/sales-orders with marketplace_id",
+      "Settlement Report → /v1/payment-entries with fees breakdown",
+      "FBA shipment → /v1/stock-entries.material-transfer"
+    ],
+    faqs: [
+      {
+        q: "SP-API or MWS?",
+        a: "SP-API. MWS is deprecated; Zivvy uses the newer Selling Partner API only."
+      },
+      {
+        q: "Which marketplaces?",
+        a: "All 20+ SP-API regions, including US, EU, UK, IN, JP, AU."
+      }
+    ],
+    ctaLabel: "Install add-on",
+    ctaHref: "/contact",
+    addonRequired: "ecommerce-integrations",
+    apiEndpoints: [
+      "POST /v1/sales-orders",
+      "POST /v1/payment-entries",
+      "POST /v1/stock-entries"
+    ],
+    webhookEvents: [
+      "sales-orders.submitted",
+      "payment-entries.created",
+      "stock-entries.submitted"
+    ],
+    docsUrl: "https://integrate.zivvy.xyz/docs#tag/Sales-Orders",
+    codeExamples: [
+      {
+        language: "curl",
+        label: "Post an Amazon order",
+        code: `curl -X POST https://integrate.zivvy.xyz/v1/sales-orders \\
+  -H "Authorization: Bearer $ZIVVY_API_KEY" \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "customer": "Amazon Marketplace",
+    "external_id": "amzn-113-1234567",
+    "source": "amazon",
+    "items": [{ "item_code": "SKU-001", "qty": 1, "rate": 49.00 }]
+  }'`
+      },
+      {
+        language: "python",
+        label: "Sync from SP-API",
+        code: `from sp_api.api import Orders
+from zivvy import Zivvy
+
+zv = Zivvy(api_key=os.environ["ZIVVY_API_KEY"])
+
+for order in Orders().get_orders(CreatedAfter="2026-07-01").payload["Orders"]:
+    zv.sales_orders.create({
+        "external_id": order["AmazonOrderId"],
+        "customer": "Amazon Marketplace",
+        "source": "amazon",
+    })`
+      }
+    ]
+  },
+  {
+    slug: "unicommerce",
+    title: "Unicommerce",
+    description:
+      "Bridge Unicommerce order + inventory data with Zivvy /v1/sales-orders and /v1/items.",
+    keyword: "unicommerce erp integration",
+    category: "Ecommerce",
+    problem:
+      "Multi-channel sellers use Unicommerce as an OMS but their ERP never sees channel-level order or inventory data.",
+    solution:
+      "The ecommerce-integrations add-on syncs Unicommerce SaleOrder and Item entities into /v1/sales-orders and /v1/items with channel breakouts.",
+    benefits: [
+      "Multi-channel orders normalized into /v1/sales-orders",
+      "SKU-level inventory reconciled against /v1/items",
+      "Channel-wise revenue splits in Zivvy dashboards"
+    ],
+    useCases: [
+      "Unicommerce sale order → /v1/sales-orders with channel tag",
+      "Inventory snapshot → /v1/items.stock_qty per warehouse",
+      "Return authorization → /v1/sales-invoices credit note"
+    ],
+    faqs: [
+      {
+        q: "Which Unicommerce environments?",
+        a: "Both India and SEA tenants. OAuth handshake handled by Zivvy."
+      },
+      {
+        q: "Do we need warehouse mapping?",
+        a: "Yes. A one-time map from Unicommerce facility → Zivvy warehouse is done in-app."
+      }
+    ],
+    ctaLabel: "Install add-on",
+    ctaHref: "/contact",
+    addonRequired: "ecommerce-integrations",
+    apiEndpoints: [
+      "POST /v1/sales-orders",
+      "PATCH /v1/items/{id}",
+      "POST /v1/sales-invoices"
+    ],
+    webhookEvents: [
+      "sales-orders.submitted",
+      "items.updated",
+      "sales-invoices.submitted"
+    ],
+    docsUrl: "https://integrate.zivvy.xyz/docs#tag/Sales-Orders",
+    codeExamples: [
+      {
+        language: "curl",
+        label: "Push a Unicommerce order",
+        code: `curl -X POST https://integrate.zivvy.xyz/v1/sales-orders \\
+  -H "Authorization: Bearer $ZIVVY_API_KEY" \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "customer": "Flipkart",
+    "external_id": "uc-so-9981",
+    "source": "unicommerce",
+    "items": [{ "item_code": "SKU-001", "qty": 3, "rate": 249.00 }]
+  }'`
+      },
+      {
+        language: "python",
+        label: "Bulk sync",
+        code: `for so in unicommerce.list_sale_orders(status="COMPLETE"):
+    zv.sales_orders.upsert({
+        "external_id": so["saleOrderCode"],
+        "customer": so["channelName"],
+        "source": "unicommerce",
+        "items": [
+            {"item_code": li["itemSku"], "qty": li["quantity"], "rate": li["sellingPrice"]}
+            for li in so["saleOrderItems"]
+        ],
+    })`
+      }
+    ]
+  },
+  {
+    slug: "quickbooks",
+    title: "QuickBooks",
+    description:
+      "Pull QuickBooks invoices and payments into /v1/sales-invoices and /v1/payment-entries.",
+    keyword: "quickbooks integration",
+    category: "Compliance",
+    problem:
+      "Finance teams double-key invoices between QuickBooks and their operating system, and cash reporting is always a week behind.",
+    solution:
+      "OAuth into QuickBooks Online, poll the Invoice and Payment endpoints, and upsert into /v1/sales-invoices and /v1/payment-entries.",
+    benefits: [
+      "Pull QuickBooks invoices → /v1/sales-invoices",
+      "Payments landing in QuickBooks mirror to /v1/payment-entries",
+      "COA + tax codes mapped one-time during setup"
+    ],
+    useCases: [
+      "QuickBooks Invoice → /v1/sales-invoices with tax breakout",
+      "QuickBooks Payment → /v1/payment-entries reconciled",
+      "Journal entries synced to /v1/journal-entries"
+    ],
+    faqs: [
+      {
+        q: "QuickBooks Online or Desktop?",
+        a: "Online. Desktop (QBD) can export IIF, which Zivvy can import via /v1/sales-invoices bulk endpoint."
+      },
+      {
+        q: "Is the sync bidirectional?",
+        a: "Yes. New Zivvy invoices push back to QuickBooks after configurable approval gates."
+      }
+    ],
+    ctaLabel: "Connect QuickBooks",
+    ctaHref: "/contact",
+    apiEndpoints: [
+      "POST /v1/sales-invoices",
+      "GET /v1/sales-invoices",
+      "POST /v1/payment-entries",
+      "POST /v1/journal-entries"
+    ],
+    webhookEvents: [
+      "sales-invoices.submitted",
+      "payment-entries.paid",
+      "journal-entries.submitted"
+    ],
+    docsUrl: "https://integrate.zivvy.xyz/docs#tag/Sales-Invoices",
+    codeExamples: [
+      {
+        language: "curl",
+        label: "Import a QuickBooks invoice",
+        code: `curl -X POST https://integrate.zivvy.xyz/v1/sales-invoices \\
+  -H "Authorization: Bearer $ZIVVY_API_KEY" \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "customer": "Acme Corp",
+    "external_id": "qbo-inv-101",
+    "posting_date": "2026-07-24",
+    "items": [{ "item_code": "SVC-CONS", "qty": 4, "rate": 250 }]
+  }'`
+      },
+      {
+        language: "javascript",
+        label: "Poll QBO and upsert",
+        code: `import { getQBO, getZivvy } from "./clients";
+
+export async function syncInvoices(sinceISO) {
+  const qbo = await getQBO();
+  const zv = getZivvy();
+  const invoices = await qbo.query(
+    \`select * from Invoice where MetaData.LastUpdatedTime > '\${sinceISO}'\`
+  );
+  for (const inv of invoices.QueryResponse.Invoice) {
+    await zv.salesInvoices.upsert({
+      external_id: \`qbo-\${inv.Id}\`,
+      customer: inv.CustomerRef.name,
+      posting_date: inv.TxnDate,
+      items: inv.Line
+        .filter(l => l.DetailType === "SalesItemLineDetail")
+        .map(l => ({
+          item_code: l.SalesItemLineDetail.ItemRef.name,
+          qty: l.SalesItemLineDetail.Qty,
+          rate: l.SalesItemLineDetail.UnitPrice
+        }))
+    });
+  }
+}`
+      }
+    ]
+  },
+  {
+    slug: "xero",
+    title: "Xero",
+    description:
+      "Reconcile Xero AP and AR against Zivvy /v1/purchase-invoices and /v1/sales-invoices.",
+    keyword: "xero integration",
+    category: "Compliance",
+    problem:
+      "Bookkeepers post AP and AR in Xero while operations run in another system, so reconciliation is always a manual join.",
+    solution:
+      "Zivvy syncs both directions of Xero AP (Bills) and AR (Invoices) into /v1/purchase-invoices and /v1/sales-invoices, keyed by Xero's InvoiceID.",
+    benefits: [
+      "Two-way AR sync via /v1/sales-invoices",
+      "Two-way AP sync via /v1/purchase-invoices",
+      "Xero bank feed reconciled against /v1/payment-entries"
+    ],
+    useCases: [
+      "Xero Bill → /v1/purchase-invoices",
+      "Xero Invoice → /v1/sales-invoices",
+      "Xero payment reconciles to /v1/payment-entries"
+    ],
+    faqs: [
+      {
+        q: "Which Xero region?",
+        a: "All regions. Zivvy handles per-tenant tax registration and multi-currency invoicing."
+      },
+      {
+        q: "Do we need Xero Premium?",
+        a: "No. Any Xero plan that exposes the API (Starter and above) works."
+      }
+    ],
+    ctaLabel: "Connect Xero",
+    ctaHref: "/contact",
+    apiEndpoints: [
+      "POST /v1/sales-invoices",
+      "POST /v1/purchase-invoices",
+      "POST /v1/payment-entries"
+    ],
+    webhookEvents: [
+      "sales-invoices.submitted",
+      "purchase-invoices.submitted",
+      "payment-entries.paid"
+    ],
+    docsUrl: "https://integrate.zivvy.xyz/docs#tag/Purchase-Invoices",
+    codeExamples: [
+      {
+        language: "curl",
+        label: "Post a Xero bill",
+        code: `curl -X POST https://integrate.zivvy.xyz/v1/purchase-invoices \\
+  -H "Authorization: Bearer $ZIVVY_API_KEY" \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "supplier": "AWS",
+    "external_id": "xero-bill-1234",
+    "bill_no": "AWS-INV-2026-07",
+    "items": [{ "item_code": "CLOUD-USAGE", "qty": 1, "rate": 4210.55 }]
+  }'`
+      },
+      {
+        language: "typescript",
+        label: "Bridge Xero webhook",
+        code: `import { XeroClient } from "xero-node";
+import { zivvy } from "./zivvy-client";
+
+export async function onXeroInvoiceUpdated(evt) {
+  const inv = await xero.accountingApi.getInvoice(
+    evt.tenantId, evt.resourceId
+  );
+  await zivvy.salesInvoices.upsert({
+    external_id: \`xero-\${inv.body.invoices[0].invoiceID}\`,
+    customer: inv.body.invoices[0].contact.name,
+    posting_date: inv.body.invoices[0].date
+  });
+}`
+      }
+    ]
+  },
+  {
+    slug: "datev",
+    title: "DATEV",
+    description:
+      "Export Zivvy journal entries to DATEV-ready CSV for German tax accountants.",
+    keyword: "datev export erp",
+    category: "Compliance",
+    problem:
+      "German finance teams still hand-off month-end books to their Steuerberater via emailed CSV that never matches DATEV Rechnungswesen.",
+    solution:
+      "The erpnext-datev add-on ships DATEV-compliant CSV exports of /v1/journal-entries, /v1/sales-invoices, and /v1/purchase-invoices.",
+    benefits: [
+      "DATEV Buchungsstapel export for every posting period",
+      "Skonto, USt-ID, and Kostenstelle columns respected",
+      "Debitoren + Kreditoren master export in a single click"
+    ],
+    useCases: [
+      "Month-end DATEV Buchungsstapel export",
+      "Debitoren/Kreditoren master export for Steuerberater",
+      "USt-Voranmeldung reporting pack"
+    ],
+    faqs: [
+      {
+        q: "SKR03 or SKR04?",
+        a: "Both. The add-on ships mapping presets for SKR03, SKR04, and IKR."
+      },
+      {
+        q: "Is this GoBD compliant?",
+        a: "The exports match DATEV's specification, but final GoBD sign-off remains with your Steuerberater."
+      }
+    ],
+    ctaLabel: "Install add-on",
+    ctaHref: "/contact",
+    addonRequired: "erpnext-datev",
+    addonPrice: "$19/mo",
+    apiEndpoints: [
+      "GET /v1/journal-entries",
+      "GET /v1/sales-invoices",
+      "GET /v1/purchase-invoices",
+      "GET /v1/exports/datev"
+    ],
+    webhookEvents: ["exports.datev.ready"],
+    docsUrl: "https://integrate.zivvy.xyz/docs#tag/Exports",
+    codeExamples: [
+      {
+        language: "curl",
+        label: "Trigger DATEV export",
+        code: `curl -X POST https://integrate.zivvy.xyz/v1/exports/datev \\
+  -H "Authorization: Bearer $ZIVVY_API_KEY" \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "from_date": "2026-07-01",
+    "to_date": "2026-07-31",
+    "kontenrahmen": "SKR04"
+  }'`
+      },
+      {
+        language: "python",
+        label: "Download the CSV",
+        code: `import requests
+
+exp = requests.post(
+    "https://integrate.zivvy.xyz/v1/exports/datev",
+    headers={"Authorization": f"Bearer {ZIVVY_API_KEY}"},
+    json={"from_date": "2026-07-01", "to_date": "2026-07-31", "kontenrahmen": "SKR04"},
+).json()
+
+csv = requests.get(exp["download_url"]).text
+open("datev-buchungsstapel.csv", "w").write(csv)`
+      }
+    ]
+  },
+  {
+    slug: "digital-signer",
+    title: "Digital Signer",
+    description:
+      "Sign quotations, sales orders, and invoices as PDF/A with a legally binding hash chain.",
+    keyword: "erp document signing",
+    category: "Compliance",
+    problem:
+      "Sending PDFs to DocuSign for each quote adds friction and cost, and the signed doc rarely finds its way back to the ERP record.",
+    solution:
+      "The digital-signer add-on signs the PDF inline against /v1/quotations, /v1/sales-orders, and /v1/sales-invoices, and stores the signed PDF/A + hash back on the record.",
+    benefits: [
+      "Sign inline from Quotation, Sales Order, and Sales Invoice",
+      "PDF/A output with embedded hash chain",
+      "signatures.completed webhook fires the follow-up workflow"
+    ],
+    useCases: [
+      "Sign a /v1/quotations PDF and email to the customer",
+      "Bulk-sign month-end /v1/sales-invoices",
+      "Countersign supplier /v1/purchase-orders"
+    ],
+    faqs: [
+      {
+        q: "Which signature standard?",
+        a: "PAdES B-LT, valid under eIDAS. Certificates can be Zivvy-provided or your own PKI."
+      },
+      {
+        q: "Do recipients need an account?",
+        a: "No. The signed PDF is emailed and verifiable on any PDF/A viewer."
+      }
+    ],
+    ctaLabel: "Install add-on",
+    ctaHref: "/contact",
+    addonRequired: "digital-signer",
+    addonPrice: "$15/mo",
+    apiEndpoints: [
+      "POST /v1/signatures",
+      "GET /v1/signatures/{id}",
+      "POST /v1/quotations/{id}/sign",
+      "POST /v1/sales-invoices/{id}/sign"
+    ],
+    webhookEvents: [
+      "signatures.completed",
+      "signatures.declined",
+      "signatures.expired"
+    ],
+    docsUrl: "https://integrate.zivvy.xyz/docs#tag/Signatures",
+    codeExamples: [
+      {
+        language: "curl",
+        label: "Sign a quotation",
+        code: `curl -X POST https://integrate.zivvy.xyz/v1/quotations/SAL-QTN-2026-0001/sign \\
+  -H "Authorization: Bearer $ZIVVY_API_KEY" \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "signer_email": "cfo@acme.com",
+    "signer_name": "Alex Chen",
+    "notify": true
+  }'`
+      },
+      {
+        language: "javascript",
+        label: "Wait for completion",
+        code: `import { zivvy } from "./zivvy-client";
+
+const sig = await zivvy.signatures.create({
+  doctype: "Sales Invoice",
+  name: "SAL-INV-2026-0042",
+  signer_email: "cfo@acme.com"
+});
+
+zivvy.webhooks.on("signatures.completed", async ({ signature_id }) => {
+  if (signature_id === sig.id) {
+    // signed PDF is stored under /v1/attachments
+  }
+});`
+      }
+    ]
+  },
+  {
+    slug: "payments-processor",
+    title: "Payments Processor",
+    description:
+      "Run bulk supplier payment files (SEPA, ACH, NACHA) directly from /v1/payment-entries.",
+    keyword: "bulk payment run erp",
+    category: "Payments",
+    problem:
+      "AP teams manually export bank files from spreadsheets each week, and there is no audit link from the file back to individual invoices.",
+    solution:
+      "The payments-processor add-on groups approved /v1/payment-entries into a payment run and emits SEPA XML, NACHA, or ACH files with per-invoice traceability.",
+    benefits: [
+      "Batch approved /v1/payment-entries into a single payment run",
+      "SEPA pain.001, NACHA, and ACH file generation",
+      "Two-eyes approval + full audit trail per run"
+    ],
+    useCases: [
+      "Weekly supplier payment run to bank",
+      "Batch payroll disbursement",
+      "Refund runs to customers via ACH"
+    ],
+    faqs: [
+      {
+        q: "Which file formats?",
+        a: "SEPA pain.001.001.09, US NACHA PPD/CCD, and generic ACH CSV."
+      },
+      {
+        q: "Is dual approval required?",
+        a: "Yes. The add-on enforces maker-checker with configurable thresholds."
+      }
+    ],
+    ctaLabel: "Install add-on",
+    ctaHref: "/contact",
+    addonRequired: "payments-processor",
+    addonPrice: "$25/mo",
+    apiEndpoints: [
+      "POST /v1/payment-runs",
+      "POST /v1/payment-runs/{id}/approve",
+      "POST /v1/payment-runs/{id}/export",
+      "GET /v1/payment-entries"
+    ],
+    webhookEvents: [
+      "payment-runs.created",
+      "payment-runs.approved",
+      "payment-runs.exported"
+    ],
+    docsUrl: "https://integrate.zivvy.xyz/docs#tag/Payments",
+    codeExamples: [
+      {
+        language: "curl",
+        label: "Create a payment run",
+        code: `curl -X POST https://integrate.zivvy.xyz/v1/payment-runs \\
+  -H "Authorization: Bearer $ZIVVY_API_KEY" \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "bank_account": "Deutsche Bank - EUR",
+    "payment_entries": ["PAY-2026-0101", "PAY-2026-0102"],
+    "value_date": "2026-07-30"
+  }'`
+      },
+      {
+        language: "python",
+        label: "Export SEPA pain.001",
+        code: `import requests
+
+run = requests.post(
+    "https://integrate.zivvy.xyz/v1/payment-runs/RUN-2026-0007/export",
+    headers={"Authorization": f"Bearer {ZIVVY_API_KEY}"},
+    json={"format": "sepa_pain_001_09"},
+).json()
+
+pain = requests.get(run["download_url"]).content
+open("sepa-2026-07-30.xml", "wb").write(pain)`
+      }
+    ]
+  },
+  {
+    slug: "twilio",
+    title: "Twilio",
+    description:
+      "Send SMS on invoice.submitted, order shipments, and delivery reminders using Twilio.",
+    keyword: "twilio sms erp",
+    category: "Communication",
+    problem:
+      "Customers pay faster when they get an SMS with the invoice link, but wiring one up per template is tedious.",
+    solution:
+      "Subscribe to sales-invoices.submitted (and other events) and let a Twilio-backed webhook consumer send the SMS.",
+    benefits: [
+      "Send SMS on sales-invoices.submitted with pay link",
+      "Delivery updates on delivery-notes.submitted",
+      "OTP for high-value payment reconciliation"
+    ],
+    useCases: [
+      "SMS pay-link when sales-invoices.submitted fires",
+      "SMS shipment ETA on delivery-notes.submitted",
+      "Two-factor OTP for /v1/payment-entries above threshold"
+    ],
+    faqs: [
+      {
+        q: "Is a Zivvy Twilio account required?",
+        a: "No. You bring your Twilio account SID + auth token to your webhook consumer."
+      },
+      {
+        q: "Where does the pay link come from?",
+        a: "The sales-invoices.submitted payload carries a portal_url field with a signed short-lived pay page."
+      }
+    ],
+    ctaLabel: "Configure webhook",
+    ctaHref: "/settings/developer",
+    apiEndpoints: [
+      "POST /v1/webhook-subscriptions",
+      "GET /v1/sales-invoices/{name}",
+      "GET /v1/delivery-notes/{name}"
+    ],
+    webhookEvents: [
+      "sales-invoices.submitted",
+      "delivery-notes.submitted",
+      "payment-entries.paid"
+    ],
+    docsUrl: "https://integrate.zivvy.xyz/docs#tag/Webhooks",
+    codeExamples: [
+      {
+        language: "curl",
+        label: "Register Twilio webhook",
+        code: `curl -X POST https://integrate.zivvy.xyz/v1/webhook-subscriptions \\
+  -H "Authorization: Bearer $ZIVVY_API_KEY" \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "target_url": "https://api.your-app.com/hooks/zivvy-twilio",
+    "events": ["sales-invoices.submitted"]
+  }'`
+      },
+      {
+        language: "javascript",
+        label: "Twilio consumer",
+        code: `import twilio from "twilio";
+
+const sms = twilio(process.env.TWILIO_SID, process.env.TWILIO_TOKEN);
+
+export async function POST(req) {
+  const evt = await req.json();
+  if (evt.event !== "sales-invoices.submitted") return new Response("skip");
+  await sms.messages.create({
+    from: process.env.TWILIO_FROM,
+    to: evt.data.contact_phone,
+    body: \`Invoice \${evt.data.name} is ready: \${evt.data.portal_url}\`
+  });
+  return new Response("ok");
+}`
+      }
+    ]
+  },
+  {
+    slug: "postmark",
+    title: "Postmark",
+    description:
+      "Deliver transactional emails on quotations.sent and sales-invoices.paid via Postmark.",
+    keyword: "postmark transactional email",
+    category: "Communication",
+    problem:
+      "Zivvy's built-in SMTP is fine for daily notifications, but transactional deliverability (quotes, receipts) belongs on a proper ESP.",
+    solution:
+      "Forward quotations.sent and sales-invoices.paid events to a Postmark server; templates render with the event payload verbatim.",
+    benefits: [
+      "Postmark templates for quote, invoice, and receipt emails",
+      "Automatic reply-tracking piped back into /v1/contacts",
+      "Bounce + spam events open a task on the account owner"
+    ],
+    useCases: [
+      "Send quote via Postmark on quotations.sent",
+      "Send receipt via Postmark on sales-invoices.paid",
+      "Send dunning reminder on sales-invoices.overdue"
+    ],
+    faqs: [
+      {
+        q: "Do we lose in-Zivvy email history?",
+        a: "No. Zivvy still records the outbound send on the /v1/communications timeline."
+      },
+      {
+        q: "Can we mix Postmark with built-in email?",
+        a: "Yes. Route by event slug in your webhook consumer."
+      }
+    ],
+    ctaLabel: "Configure webhook",
+    ctaHref: "/settings/developer",
+    apiEndpoints: [
+      "POST /v1/webhook-subscriptions",
+      "GET /v1/quotations/{name}",
+      "GET /v1/sales-invoices/{name}"
+    ],
+    webhookEvents: [
+      "quotations.sent",
+      "sales-invoices.paid",
+      "sales-invoices.overdue"
+    ],
+    docsUrl: "https://integrate.zivvy.xyz/docs#tag/Webhooks",
+    codeExamples: [
+      {
+        language: "curl",
+        label: "Subscribe Postmark consumer",
+        code: `curl -X POST https://integrate.zivvy.xyz/v1/webhook-subscriptions \\
+  -H "Authorization: Bearer $ZIVVY_API_KEY" \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "target_url": "https://api.your-app.com/hooks/postmark",
+    "events": ["quotations.sent", "sales-invoices.paid"]
+  }'`
+      },
+      {
+        language: "javascript",
+        label: "Send with Postmark template",
+        code: `import { ServerClient } from "postmark";
+
+const pm = new ServerClient(process.env.POSTMARK_TOKEN);
+
+export async function POST(req) {
+  const evt = await req.json();
+  if (evt.event === "sales-invoices.paid") {
+    await pm.sendEmailWithTemplate({
+      From: "billing@zivvy.xyz",
+      To: evt.data.customer_email,
+      TemplateAlias: "receipt",
+      TemplateModel: { invoice: evt.data }
+    });
+  }
+  return new Response("ok");
+}`
+      }
+    ]
+  },
+  {
+    slug: "github",
+    title: "GitHub",
+    description:
+      "Turn GitHub issues and workflow failures into Zivvy /v1/support-tickets automatically.",
+    keyword: "github erp integration",
+    category: "Developer",
+    problem:
+      "Customer bug reports open in GitHub Issues, but support and CS teams never see them until an engineer replies.",
+    solution:
+      "A GitHub webhook (issues, workflow_run) hits your consumer and creates /v1/support-tickets in Zivvy with the right customer and severity.",
+    benefits: [
+      "GitHub Issue → /v1/support-tickets with severity + owner",
+      "workflow_run failure → /v1/support-tickets for on-call",
+      "Issue closed → ticket closed with resolution note"
+    ],
+    useCases: [
+      "External bug report on GitHub → /v1/support-tickets",
+      "CI failure → /v1/support-tickets triaged to platform team",
+      "Release deploy → note attached to a /v1/projects milestone"
+    ],
+    faqs: [
+      {
+        q: "Public or private repos?",
+        a: "Both. GitHub Apps and PATs both work with the outbound webhook consumer."
+      },
+      {
+        q: "Do we get bidirectional comments?",
+        a: "Yes. Adding a comment to the ticket in Zivvy posts back to the GitHub Issue thread."
+      }
+    ],
+    ctaLabel: "Configure webhook",
+    ctaHref: "/settings/developer",
+    apiEndpoints: [
+      "POST /v1/support-tickets",
+      "PATCH /v1/support-tickets/{name}",
+      "POST /v1/communications"
+    ],
+    webhookEvents: [
+      "support-tickets.created",
+      "support-tickets.replied",
+      "support-tickets.resolved"
+    ],
+    docsUrl: "https://integrate.zivvy.xyz/docs#tag/Support-Tickets",
+    codeExamples: [
+      {
+        language: "curl",
+        label: "Create ticket from GitHub Issue",
+        code: `curl -X POST https://integrate.zivvy.xyz/v1/support-tickets \\
+  -H "Authorization: Bearer $ZIVVY_API_KEY" \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "subject": "[bug] checkout returns 500",
+    "raised_by": "user@acme.com",
+    "external_id": "gh-issue-12345",
+    "priority": "High"
+  }'`
+      },
+      {
+        language: "javascript",
+        label: "GitHub webhook consumer",
+        code: `import { zivvy } from "./zivvy-client";
+
+export async function POST(req) {
+  const evt = await req.json();
+  if (evt.action === "opened" && evt.issue) {
+    await zivvy.supportTickets.create({
+      external_id: \`gh-\${evt.issue.number}\`,
+      subject: evt.issue.title,
+      raised_by: evt.issue.user.login,
+      priority: evt.issue.labels.some(l => l.name === "P0") ? "Urgent" : "Medium"
+    });
+  }
+  return new Response("ok");
+}`
+      }
+    ]
+  },
+  {
+    slug: "notion",
+    title: "Notion",
+    description:
+      "Mirror Zivvy Projects and Tasks into a Notion database for cross-team visibility.",
+    keyword: "notion erp integration",
+    category: "Communication",
+    problem:
+      "Product and design read Notion, but operations run in Zivvy — nobody has a single source of truth on delivery.",
+    solution:
+      "Sync /v1/projects and /v1/tasks into a Notion database with two-way updates and status roll-ups.",
+    benefits: [
+      "/v1/projects + /v1/tasks mirrored into Notion DB",
+      "Two-way updates on assignee, status, due date",
+      "Rollups back to Zivvy for weekly reporting"
+    ],
+    useCases: [
+      "New /v1/projects → Notion row created",
+      "Notion status change → PATCH /v1/tasks",
+      "Zivvy tasks.overdue → Notion callout on the parent page"
+    ],
+    faqs: [
+      {
+        q: "Which Notion plan?",
+        a: "Any paid plan with the Public API enabled works. Free workspaces are read-only in Notion's API."
+      },
+      {
+        q: "Do subtasks sync?",
+        a: "Yes. Sub-tasks map to child rows in the same Notion database."
+      }
+    ],
+    ctaLabel: "Configure integration",
+    ctaHref: "/contact",
+    apiEndpoints: [
+      "GET /v1/projects",
+      "POST /v1/projects",
+      "PATCH /v1/tasks/{name}",
+      "POST /v1/webhook-subscriptions"
+    ],
+    webhookEvents: [
+      "projects.created",
+      "tasks.created",
+      "tasks.updated",
+      "tasks.completed"
+    ],
+    docsUrl: "https://integrate.zivvy.xyz/docs#tag/Projects",
+    codeExamples: [
+      {
+        language: "curl",
+        label: "Fetch tasks for Notion sync",
+        code: `curl "https://integrate.zivvy.xyz/v1/tasks?project=PROJ-2026-0007" \\
+  -H "Authorization: Bearer $ZIVVY_API_KEY"`
+      },
+      {
+        language: "javascript",
+        label: "Upsert into Notion",
+        code: `import { Client } from "@notionhq/client";
+import { zivvy } from "./zivvy-client";
+
+const notion = new Client({ auth: process.env.NOTION_TOKEN });
+
+export async function sync(projectName) {
+  const tasks = await zivvy.tasks.list({ project: projectName });
+  for (const t of tasks) {
+    await notion.pages.create({
+      parent: { database_id: process.env.NOTION_DB },
+      properties: {
+        Name: { title: [{ text: { content: t.subject } }] },
+        Status: { select: { name: t.status } },
+        Owner: { people: [] },
+        Due: t.due_date ? { date: { start: t.due_date } } : undefined
+      }
+    });
+  }
+}`
+      }
+    ]
+  },
+  {
+    slug: "airtable",
+    title: "Airtable",
+    description:
+      "Bidirectional item catalog sync between Airtable bases and Zivvy /v1/items.",
+    keyword: "airtable erp integration",
+    category: "Communication",
+    problem:
+      "Merchandising teams manage the item catalog in Airtable, but every launch requires re-keying every SKU into the ERP.",
+    solution:
+      "Two-way sync of Airtable records into /v1/items via the Airtable REST API and Zivvy webhook events on items.updated.",
+    benefits: [
+      "Airtable base → /v1/items with UOM, tax, and price list",
+      "Zivvy items.updated → Airtable row updates",
+      "Bulk upload via CSV attachment on a base view"
+    ],
+    useCases: [
+      "New Airtable row → /v1/items with unit, tax, and price list",
+      "Zivvy items.updated → Airtable field update",
+      "Airtable form → new /v1/items request"
+    ],
+    faqs: [
+      {
+        q: "Which Airtable plan?",
+        a: "Any plan with API access. Sync respects Airtable's per-plan rate limits."
+      },
+      {
+        q: "Which side wins on conflict?",
+        a: "The side with the later updated_at, and every write logs to the /v1/version-history for audit."
+      }
+    ],
+    ctaLabel: "Configure integration",
+    ctaHref: "/contact",
+    apiEndpoints: [
+      "GET /v1/items",
+      "POST /v1/items",
+      "PATCH /v1/items/{name}",
+      "POST /v1/webhook-subscriptions"
+    ],
+    webhookEvents: ["items.created", "items.updated", "items.deleted"],
+    docsUrl: "https://integrate.zivvy.xyz/docs#tag/Items",
+    codeExamples: [
+      {
+        language: "curl",
+        label: "Upsert item from Airtable",
+        code: `curl -X POST https://integrate.zivvy.xyz/v1/items \\
+  -H "Authorization: Bearer $ZIVVY_API_KEY" \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "item_code": "SKU-042",
+    "item_name": "Ceramic Mug",
+    "stock_uom": "Nos",
+    "standard_rate": 12.5,
+    "external_id": "airtable-recABC"
+  }'`
+      },
+      {
+        language: "python",
+        label: "Bidirectional sync",
+        code: `import os, requests
+from pyairtable import Api
+
+air = Api(os.environ["AIRTABLE_TOKEN"])
+table = air.table("appXXXX", "Items")
+
+for rec in table.all():
+    requests.post(
+        "https://integrate.zivvy.xyz/v1/items",
+        headers={"Authorization": f"Bearer {os.environ['ZIVVY_API_KEY']}"},
+        json={
+            "item_code": rec["fields"]["SKU"],
+            "item_name": rec["fields"]["Name"],
+            "standard_rate": rec["fields"].get("Price", 0),
+            "external_id": rec["id"],
+        },
+    ).raise_for_status()`
+      }
+    ]
+  },
+  {
+    slug: "google-sheets",
+    title: "Google Sheets",
+    description:
+      "Two-way sync between Google Sheets and /v1/... resources via a Zap or Apps Script.",
+    keyword: "google sheets erp",
+    category: "Communication",
+    problem:
+      "Finance and ops keep dropping spreadsheets on top of the ERP; there is no clean way to keep a live sheet in sync with the operating record.",
+    solution:
+      "Use a Zap or a small Apps Script to push spreadsheet rows into Zivvy /v1/... endpoints, and let webhook events flow back into new sheet rows.",
+    benefits: [
+      "Any /v1/... resource as a Sheets tab",
+      "New Zivvy record → new row via webhook subscription",
+      "Sheet edits → PATCH /v1/... via Apps Script"
+    ],
+    useCases: [
+      "Weekly AR aging exported to Google Sheets",
+      "Sheet-driven bulk PATCH on /v1/items",
+      "New /v1/sales-orders → row on the sales dashboard tab"
+    ],
+    faqs: [
+      {
+        q: "Do we need a paid Workspace?",
+        a: "No. Personal Gmail works, but Apps Script quotas are lower."
+      },
+      {
+        q: "Zap or Apps Script?",
+        a: "Zap is fastest to set up; Apps Script gives more control for high-frequency sync."
+      }
+    ],
+    ctaLabel: "Configure integration",
+    ctaHref: "/settings/developer",
+    apiEndpoints: [
+      "GET /v1/sales-orders",
+      "POST /v1/sales-orders",
+      "PATCH /v1/items/{name}",
+      "POST /v1/webhook-subscriptions"
+    ],
+    webhookEvents: [
+      "sales-orders.submitted",
+      "items.updated",
+      "sales-invoices.paid"
+    ],
+    docsUrl: "https://integrate.zivvy.xyz/docs#tag/Webhooks",
+    codeExamples: [
+      {
+        language: "curl",
+        label: "Register the sheet's webhook",
+        code: `curl -X POST https://integrate.zivvy.xyz/v1/webhook-subscriptions \\
+  -H "Authorization: Bearer $ZIVVY_API_KEY" \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "target_url": "https://script.google.com/macros/s/AKfycb.../exec",
+    "events": ["sales-orders.submitted"]
+  }'`
+      },
+      {
+        language: "javascript",
+        label: "Apps Script consumer",
+        code: `function doPost(e) {
+  const evt = JSON.parse(e.postData.contents);
+  if (evt.event === "sales-orders.submitted") {
+    const sheet = SpreadsheetApp
+      .getActive()
+      .getSheetByName("Sales Orders");
+    sheet.appendRow([
+      evt.data.name,
+      evt.data.customer,
+      evt.data.grand_total,
+      evt.data.transaction_date
+    ]);
+  }
+  return ContentService.createTextOutput("ok");
+}`
+      }
+    ]
+  },
+  {
+    slug: "segment",
+    title: "Segment",
+    description:
+      "Emit Zivvy events into Segment as canonical track() calls (invoice.paid, order.submitted).",
+    keyword: "segment cdp integration",
+    category: "Analytics",
+    problem:
+      "Product analytics teams have to hand-wire every finance event into Segment, and the naming drifts within a quarter.",
+    solution:
+      "A webhook consumer forwards Zivvy events into Segment's track() with the canonical name (Invoice Paid, Sales Order Submitted, …).",
+    benefits: [
+      "One canonical event catalog for CDP + ERP",
+      "Track properties carry the /v1/... external_id",
+      "Segment destinations propagate to every downstream analytics tool"
+    ],
+    useCases: [
+      "sales-invoices.paid → track('Invoice Paid') in Segment",
+      "sales-orders.submitted → track('Sales Order Submitted')",
+      "customers.created → identify() with Zivvy customer id"
+    ],
+    faqs: [
+      {
+        q: "Do we need Segment Business tier?",
+        a: "No. Any tier with a valid write key works. Reverse-ETL from Segment back to Zivvy is on the roadmap."
+      },
+      {
+        q: "How do we avoid double-count?",
+        a: "Use the event's zivvy_event_id as the messageId in track() — Segment deduplicates on that."
+      }
+    ],
+    ctaLabel: "Configure webhook",
+    ctaHref: "/settings/developer",
+    apiEndpoints: [
+      "POST /v1/webhook-subscriptions",
+      "GET /v1/sales-invoices",
+      "GET /v1/customers"
+    ],
+    webhookEvents: [
+      "sales-invoices.paid",
+      "sales-orders.submitted",
+      "customers.created"
+    ],
+    docsUrl: "https://integrate.zivvy.xyz/docs#tag/Webhooks",
+    codeExamples: [
+      {
+        language: "curl",
+        label: "Subscribe Segment consumer",
+        code: `curl -X POST https://integrate.zivvy.xyz/v1/webhook-subscriptions \\
+  -H "Authorization: Bearer $ZIVVY_API_KEY" \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "target_url": "https://api.your-app.com/hooks/segment",
+    "events": ["sales-invoices.paid", "sales-orders.submitted"]
+  }'`
+      },
+      {
+        language: "javascript",
+        label: "Consumer -> Segment",
+        code: `import { Analytics } from "@segment/analytics-node";
+
+const seg = new Analytics({ writeKey: process.env.SEGMENT_WRITE_KEY });
+
+export async function POST(req) {
+  const evt = await req.json();
+  if (evt.event === "sales-invoices.paid") {
+    seg.track({
+      messageId: evt.id,
+      userId: evt.data.customer,
+      event: "Invoice Paid",
+      properties: {
+        invoice: evt.data.name,
+        amount: evt.data.grand_total
+      }
+    });
+  }
+  return new Response("ok");
+}`
+      }
+    ]
+  },
+  {
+    slug: "posthog",
+    title: "PostHog",
+    description:
+      "Capture Zivvy webhook events into PostHog for funnels, cohorts, and retention analysis.",
+    keyword: "posthog integration",
+    category: "Analytics",
+    problem:
+      "Growth teams can see product events in PostHog and revenue in the ERP, but never both together — so activation-to-revenue funnels are guesses.",
+    solution:
+      "Forward sales-invoices.paid, sales-orders.submitted, and quotations.sent to PostHog capture() so funnels see finance events alongside product events.",
+    benefits: [
+      "PostHog capture() for finance + ops events",
+      "Funnels from product signup → sales-orders.submitted → sales-invoices.paid",
+      "Cohorts by customer_group from /v1/customers"
+    ],
+    useCases: [
+      "Funnel: signup → first order → first payment",
+      "Cohort of high-value /v1/customers on retention curve",
+      "Alert on drop in sales-orders.submitted week-over-week"
+    ],
+    faqs: [
+      {
+        q: "Cloud or self-hosted?",
+        a: "Both. The consumer only needs the POSTHOG_HOST + POSTHOG_KEY."
+      },
+      {
+        q: "Do we lose PII protection?",
+        a: "No. The consumer strips PII fields before capture() using an allow-list."
+      }
+    ],
+    ctaLabel: "Configure webhook",
+    ctaHref: "/settings/developer",
+    apiEndpoints: [
+      "POST /v1/webhook-subscriptions",
+      "GET /v1/customers",
+      "GET /v1/sales-invoices"
+    ],
+    webhookEvents: [
+      "sales-invoices.paid",
+      "sales-orders.submitted",
+      "quotations.sent"
+    ],
+    docsUrl: "https://integrate.zivvy.xyz/docs#tag/Webhooks",
+    codeExamples: [
+      {
+        language: "curl",
+        label: "Subscribe PostHog consumer",
+        code: `curl -X POST https://integrate.zivvy.xyz/v1/webhook-subscriptions \\
+  -H "Authorization: Bearer $ZIVVY_API_KEY" \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "target_url": "https://api.your-app.com/hooks/posthog",
+    "events": ["sales-invoices.paid", "sales-orders.submitted"]
+  }'`
+      },
+      {
+        language: "javascript",
+        label: "PostHog capture()",
+        code: `import { PostHog } from "posthog-node";
+
+const ph = new PostHog(process.env.POSTHOG_KEY, {
+  host: process.env.POSTHOG_HOST
+});
+
+export async function POST(req) {
+  const evt = await req.json();
+  ph.capture({
+    distinctId: evt.data.customer,
+    event: evt.event,
+    properties: {
+      amount: evt.data.grand_total,
+      currency: evt.data.currency
+    }
+  });
+  return new Response("ok");
+}`
+      }
+    ]
+  },
+  {
+    slug: "rest-api",
+    title: "REST API",
+    description:
+      "Custom REST integration against 130+ endpoints at integrate.zivvy.xyz/docs.",
+    keyword: "zivvy rest api",
+    category: "Developer",
+    problem:
+      "Every business is a little different, and no pre-built integration will cover the fifth-nine edge case you actually care about.",
+    solution:
+      "The Zivvy REST API exposes 130+ resource endpoints under integrate.zivvy.xyz/v1/... with OpenAPI 3.1, cursor pagination, and per-request idempotency.",
+    benefits: [
+      "130+ REST endpoints under /v1/...",
+      "OpenAPI 3.1 schema + auto-generated SDK stubs",
+      "Idempotency-Key support on every mutating call"
+    ],
+    useCases: [
+      "Internal tool integrating with /v1/customers + /v1/sales-orders",
+      "Backfill job hitting bulk /v1/items",
+      "One-off script that reconciles /v1/payment-entries"
+    ],
+    faqs: [
+      {
+        q: "Where do I generate an API key?",
+        a: "Settings → Developer → API Keys. Scopes are per-resource and per-verb."
+      },
+      {
+        q: "Is there a Postman collection?",
+        a: "Yes. Download it from integrate.zivvy.xyz/docs (top-right menu)."
+      }
+    ],
+    ctaLabel: "Read API docs",
+    ctaHref: "/settings/developer",
+    apiEndpoints: [
+      "GET /v1/customers",
+      "POST /v1/sales-orders",
+      "POST /v1/sales-invoices",
+      "GET /v1/reports/{report}"
+    ],
+    webhookEvents: [
+      "customers.created",
+      "sales-orders.submitted",
+      "sales-invoices.paid"
+    ],
+    docsUrl: "https://integrate.zivvy.xyz/docs",
+    codeExamples: [
+      {
+        language: "curl",
+        label: "List sales orders",
+        code: `curl "https://integrate.zivvy.xyz/v1/sales-orders?limit=25&status=Submitted" \\
+  -H "Authorization: Bearer $ZIVVY_API_KEY"`
+      },
+      {
+        language: "typescript",
+        label: "Typed SDK usage",
+        code: `import Zivvy from "@zivvy/node";
+
+const zivvy = new Zivvy({ apiKey: process.env.ZIVVY_API_KEY });
+
+const orders = await zivvy.salesOrders.list({
+  status: "Submitted",
+  limit: 25
+});
+
+for (const so of orders.data) {
+  console.log(so.name, so.grand_total);
+}`
+      },
+      {
+        language: "python",
+        label: "Requests + pagination",
+        code: `import os, requests
+
+url = "https://integrate.zivvy.xyz/v1/sales-orders"
+headers = {"Authorization": f"Bearer {os.environ['ZIVVY_API_KEY']}"}
+cursor = None
+
+while True:
+    params = {"limit": 100}
+    if cursor: params["cursor"] = cursor
+    r = requests.get(url, headers=headers, params=params).json()
+    for so in r["data"]:
+        print(so["name"], so["grand_total"])
+    cursor = r.get("next_cursor")
+    if not cursor: break`
+      }
+    ]
+  },
+  {
+    slug: "webhooks",
+    title: "Webhooks",
+    description:
+      "Subscribe to 100+ Zivvy events with HMAC-SHA256 signed, retry-safe deliveries.",
+    keyword: "zivvy webhooks",
+    category: "Developer",
+    problem:
+      "Polling for record changes is slow, expensive, and always missing the edge case you care about.",
+    solution:
+      "Register a webhook subscription against 100+ events; every delivery is HMAC-SHA256 signed with your secret and retries with exponential backoff for 24 hours.",
+    benefits: [
+      "100+ typed event slugs (sales-orders.submitted, payment-entries.paid, ...)",
+      "HMAC-SHA256 signature via X-Zivvy-Signature header",
+      "Exponential retries for 24h + per-event delivery log"
+    ],
+    useCases: [
+      "Ship a payload only when sales-invoices.submitted actually fires",
+      "Chain Zivvy → Slack → PagerDuty for on-call alerts",
+      "Warehouse ingest that mirrors every /v1/... row change"
+    ],
+    faqs: [
+      {
+        q: "How do I verify a payload?",
+        a: "Recompute HMAC-SHA256 over the raw body using your subscription secret; compare with the X-Zivvy-Signature header in constant time."
+      },
+      {
+        q: "What is the retry policy?",
+        a: "Immediate, then 1m, 5m, 30m, 1h, 6h, 24h. After that the delivery is marked failed and surfaced in the delivery log."
+      }
+    ],
+    ctaLabel: "Read webhook docs",
+    ctaHref: "/settings/developer",
+    apiEndpoints: [
+      "POST /v1/webhook-subscriptions",
+      "GET /v1/webhook-subscriptions",
+      "DELETE /v1/webhook-subscriptions/{id}",
+      "GET /v1/webhook-deliveries"
+    ],
+    webhookEvents: [
+      "customers.created",
+      "sales-orders.submitted",
+      "sales-invoices.paid",
+      "payment-entries.paid",
+      "stock-entries.submitted"
+    ],
+    docsUrl: "https://integrate.zivvy.xyz/docs#tag/Webhooks",
+    codeExamples: [
+      {
+        language: "curl",
+        label: "Register a subscription",
+        code: `curl -X POST https://integrate.zivvy.xyz/v1/webhook-subscriptions \\
+  -H "Authorization: Bearer $ZIVVY_API_KEY" \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "target_url": "https://api.your-app.com/hooks/zivvy",
+    "events": ["sales-invoices.paid", "sales-orders.submitted"],
+    "secret": "whsec_..."
+  }'`
+      },
+      {
+        language: "javascript",
+        label: "Verify + handle",
+        code: `import crypto from "crypto";
+
+function verify(rawBody, signature, secret) {
+  const digest = crypto
+    .createHmac("sha256", secret)
+    .update(rawBody)
+    .digest("hex");
+  return crypto.timingSafeEqual(
+    Buffer.from(digest),
+    Buffer.from(signature)
+  );
+}
+
+export async function POST(req) {
+  const raw = await req.text();
+  const ok = verify(raw, req.headers.get("x-zivvy-signature"), process.env.WHSEC);
+  if (!ok) return new Response("bad signature", { status: 401 });
+  const evt = JSON.parse(raw);
+  // ...handle evt.event
+  return new Response("ok");
+}`
+      },
+      {
+        language: "python",
+        label: "Verify in Python",
+        code: `import hmac, hashlib
+
+def verify(raw: bytes, signature: str, secret: str) -> bool:
+    digest = hmac.new(secret.encode(), raw, hashlib.sha256).hexdigest()
+    return hmac.compare_digest(digest, signature)`
+      }
+    ]
   }
 ];
 
@@ -1224,11 +3197,14 @@ export const industryCards: HubCardItem[] = industryDetails.map(({ slug, title, 
   description
 }));
 
-export const integrationCards: HubCardItem[] = integrationDetails.map(({ slug, title, description }) => ({
-  slug,
-  title,
-  description
-}));
+export const integrationCards: HubCardItem[] = integrationDetails.map(
+  ({ slug, title, description, category }) => ({
+    slug,
+    title,
+    description,
+    category
+  })
+);
 
 export const compareCards: HubCardItem[] = compareDetails.map(({ slug, title, description }) => ({
   slug,

@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { LegalShell } from "@/components/site/legal-shell";
+import { LegalShell } from "@/components/site/marketing/legal-shell";
+import { makeMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Terms of Service — Zivvy",
+export const metadata: Metadata = makeMetadata({
+  title: "Terms of Service",
   description:
-    "Terms governing your use of Zivvy, including accounts, billing, data regions, and acceptable use."
-};
+    "Terms governing your use of Zivvy, including accounts, billing, data regions, and acceptable use.",
+  canonicalPath: "/terms"
+});
 
 export default function TermsPage() {
   return (

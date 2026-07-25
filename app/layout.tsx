@@ -5,7 +5,11 @@ import { BootProvider } from "@/components/boot-provider";
 import { QueryProvider } from "@/components/query-provider";
 import { ThemeProvider } from "@/components/theme-provider";
 import { fetchBootinfo } from "@/lib/boot-server";
-import { OrganizationJsonLd, SoftwareApplicationJsonLd } from "@/components/seo/json-ld";
+import {
+  OrganizationJsonLd,
+  SoftwareApplicationJsonLd
+} from "@/components/site/marketing/seo-scripts";
+import { SITE_ORIGIN } from "@/lib/seo";
 import "./globals.css";
 
 // Inter drives both --font-sans and --font-serif (Inter's Display cut covers
@@ -38,7 +42,7 @@ export const metadata: Metadata = {
     template: "%s · Zivvy"
   },
   description: DESCRIPTION,
-  metadataBase: new URL("https://zivvy.xyz"),
+  metadataBase: new URL(SITE_ORIGIN),
   applicationName: "Zivvy",
   keywords: [
     "ERP software",
@@ -70,7 +74,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: TITLE,
     description: DESCRIPTION,
-    url: "https://zivvy.xyz",
+    url: SITE_ORIGIN,
     siteName: "Zivvy",
     type: "website",
     locale: "en_US",

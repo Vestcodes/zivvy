@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { LegalShell } from "@/components/site/legal-shell";
+import { LegalShell } from "@/components/site/marketing/legal-shell";
+import { makeMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Privacy Policy — Zivvy",
+export const metadata: Metadata = makeMetadata({
+  title: "Privacy Policy",
   description:
-    "How Zivvy collects, uses, stores, and shares personal data — including region-pinned hosting and Polar billing."
-};
+    "How Zivvy collects, uses, stores, and shares personal data — including region-pinned hosting and Polar billing.",
+  canonicalPath: "/privacy"
+});
 
 export default function PrivacyPage() {
   return (

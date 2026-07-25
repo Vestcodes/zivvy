@@ -12,6 +12,7 @@ import {
 import type { HubCardItem } from "@/lib/marketing-content";
 import { SiteHeader } from "@/components/site/header";
 import { SiteFooter } from "@/components/site/footer";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { AnimatedGridPattern } from "@/components/ui/animated-grid-pattern";
 import { AnimatedShinyText } from "@/components/ui/animated-shiny-text";
@@ -19,9 +20,18 @@ import { BentoCard, BentoGrid } from "@/components/ui/bento-grid";
 import { BlurFade } from "@/components/ui/blur-fade";
 import { DotPattern } from "@/components/ui/dot-pattern";
 import { MagicCard } from "@/components/ui/magic-card";
+import { Marquee } from "@/components/ui/marquee";
 import { ShineBorder } from "@/components/ui/shine-border";
 import { TextAnimate } from "@/components/ui/text-animate";
 import { cn } from "@/lib/utils";
+
+type Tier = "Free" | "Pro" | "Business";
+
+const TIER_BADGE: Record<Tier, string> = {
+  Free: "bg-muted text-foreground border-transparent",
+  Pro: "bg-primary-gradient text-primary-foreground border-transparent",
+  Business: "bg-foreground text-background border-transparent"
+};
 
 const INDUSTRY_META: Record<
   string,
@@ -30,12 +40,16 @@ const INDUSTRY_META: Record<
     className: string;
     background: React.ReactNode;
     constraint: string;
+    category: string;
+    tier: Tier;
   }
 > = {
   healthcare: {
     Icon: HeartPulse,
     className: "col-span-3 lg:col-span-2",
-    constraint: "Access control + audit trails on sensitive records",
+    constraint: "Row-level access + audit trails on every /records endpoint",
+    category: "Regulated",
+    tier: "Business",
     background: (
       <AnimatedGridPattern
         numSquares={18}
@@ -47,13 +61,17 @@ const INDUSTRY_META: Record<
   education: {
     Icon: GraduationCap,
     className: "col-span-3 lg:col-span-1",
-    constraint: "Term cycles, cohorts, and staff workflows",
+    constraint: "Term cycles, cohorts, and staff webhooks",
+    category: "Public",
+    tier: "Pro",
     background: <div className="absolute inset-0 bg-primary/5" />
   },
   manufacturing: {
     Icon: Factory,
     className: "col-span-3 lg:col-span-1",
-    constraint: "BOMs, work orders, quality holds",
+    constraint: "/boms, /work-orders, quality.hold events",
+    category: "Ops",
+    tier: "Business",
     background: (
       <div
         aria-hidden
@@ -68,7 +86,9 @@ const INDUSTRY_META: Record<
   saas: {
     Icon: Laptop,
     className: "col-span-3 lg:col-span-2",
-    constraint: "Subscriptions, renewals, and usage-linked billing",
+    constraint: "Subscriptions, renewals, subscription.renewed webhook",
+    category: "Digital",
+    tier: "Pro",
     background: (
       <DotPattern
         className={cn(
@@ -81,10 +101,27 @@ const INDUSTRY_META: Record<
   finance: {
     Icon: Landmark,
     className: "col-span-3 lg:col-span-3",
-    constraint: "Close cadence, approvals, and reconciliation discipline",
+    constraint: "Close cadence, /journals approvals, reconciliation.completed events",
+    category: "Regulated",
+    tier: "Pro",
     background: <div className="absolute inset-0 bg-muted/40" />
   }
 };
+
+const INDUSTRY_MARQUEE = [
+  "Healthcare",
+  "Med devices",
+  "Higher education",
+  "K-12",
+  "Discrete manufacturing",
+  "Process manufacturing",
+  "SaaS",
+  "Fintech",
+  "Public sector",
+  "3PL & logistics",
+  "Retail chains",
+  "Professional services"
+];
 
 type Props = {
   items: HubCardItem[];
@@ -96,13 +133,7 @@ export function IndustriesHubPage({ items }: Props) {
       <SiteHeader />
       <main>
         <section className="relative overflow-hidden">
-          <DotPattern
-            className={cn(
-              "pointer-events-none absolute inset-0 -z-10 text-primary/25",
-              "[mask-image:radial-gradient(520px_circle_at_50%_-10%,white,transparent)]"
-            )}
-          />
-          <div className="relative mx-auto max-w-5xl px-6 pb-10 pt-20 text-center sm:pt-24">
+          <div className="relative mx-auto max-w-5xl px-6 pb-4 pt-20 text-center sm:pt-24">
             <BlurFade>
               <div className="mb-5 inline-flex items-center justify-center rounded-full border border-border/60 bg-background/70 px-3 py-1 backdrop-blur">
                 <AnimatedShinyText className="text-xs font-medium text-muted-foreground">
@@ -115,17 +146,46 @@ export function IndustriesHubPage({ items }: Props) {
                 animation="blurInUp"
                 className="font-display text-4xl font-bold tracking-tight sm:text-5xl"
               >
-                Industry-focused operating playbooks
+                Same tenant. Different defaults.
               </TextAnimate>
               <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-                Every vertical has different constraints. Explore the workflows that match yours —
-                without a generic template dump.
+                Every vertical shares the same REST surface and webhook stream — with sector defaults
+                for tax, access control, and the fields you actually capture.
               </p>
+            </BlurFade>
+          </div>
+
+          <div className="relative mx-auto mt-10 max-w-6xl px-6">
+            <BlurFade delay={0.08}>
+              <div className="relative overflow-hidden rounded-xl border border-border/60 bg-background/40 py-3">
+                <Marquee pauseOnHover className="[--duration:34s]">
+                  {INDUSTRY_MARQUEE.map((label) => (
+                    <div
+                      key={label}
+                      className="mx-2 rounded-full border border-border/70 bg-card/80 px-4 py-2 text-sm font-medium shadow-sm"
+                    >
+                      {label}
+                    </div>
+                  ))}
+                </Marquee>
+                <Marquee pauseOnHover reverse className="mt-2 [--duration:38s]">
+                  {[...INDUSTRY_MARQUEE].reverse().map((label) => (
+                    <div
+                      key={`${label}-r`}
+                      className="mx-2 rounded-full border border-primary/25 bg-primary/5 px-4 py-2 text-sm font-medium text-primary shadow-sm"
+                    >
+                      {label}
+                    </div>
+                  ))}
+                </Marquee>
+                <div className="pointer-events-none absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-background to-transparent" />
+                <div className="pointer-events-none absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-background to-transparent" />
+              </div>
             </BlurFade>
           </div>
         </section>
 
-        <section className="mx-auto max-w-6xl px-6 pb-4">
+        <section className="mx-auto max-w-6xl px-6 pb-4 pt-14">
           <BlurFade delay={0.05}>
             <BentoGrid className="auto-rows-[13.5rem] lg:auto-rows-[15rem]">
               {items.map((item) => {
@@ -133,6 +193,8 @@ export function IndustriesHubPage({ items }: Props) {
                   Icon: Factory,
                   className: "col-span-3 lg:col-span-1",
                   constraint: "Operator-first workflows",
+                  category: "Ops",
+                  tier: "Pro" as Tier,
                   background: <div className="absolute inset-0 bg-muted/30" />
                 };
                 return (
@@ -144,7 +206,19 @@ export function IndustriesHubPage({ items }: Props) {
                     description={`${item.description} ${meta.constraint}.`}
                     href={`/industries/${item.slug}`}
                     cta="Open industry"
-                    background={meta.background}
+                    background={
+                      <>
+                        {meta.background}
+                        <div className="absolute right-3 top-3 z-10 flex items-center gap-1.5">
+                          <Badge variant="outline" className="bg-background/70 text-[10px] backdrop-blur">
+                            {meta.category}
+                          </Badge>
+                          <Badge className={cn("text-[10px]", TIER_BADGE[meta.tier])}>
+                            {meta.tier}
+                          </Badge>
+                        </div>
+                      </>
+                    }
                   />
                 );
               })}
@@ -163,7 +237,7 @@ export function IndustriesHubPage({ items }: Props) {
               <h2 className="font-display text-xl font-semibold">Same product, different defaults</h2>
               <p className="mt-2 text-sm text-muted-foreground">
                 Region tax, inventory depth, and manufacturing modules turn on by plan — not by
-                buying another SKU.
+                buying another SKU or spinning up another tenant.
               </p>
               <Button asChild variant="outline" className="mt-5">
                 <Link href="/features">
@@ -182,7 +256,8 @@ export function IndustriesHubPage({ items }: Props) {
             >
               <h2 className="font-display text-xl font-semibold">Need a job-to-be-done view?</h2>
               <p className="mt-2 text-sm text-muted-foreground">
-                Start from a concrete workflow like month-close or CRM automation instead.
+                Each play maps to the REST resources and webhook events it touches — start from a
+                concrete workflow instead.
               </p>
               <Button asChild variant="outline" className="mt-5">
                 <Link href="/use-cases">
@@ -198,18 +273,18 @@ export function IndustriesHubPage({ items }: Props) {
           <div className="relative overflow-hidden rounded-2xl border border-border/70 bg-card/70 px-6 py-8 text-center">
             <ShineBorder shineColor={["#34d399", "#0f766e"]} duration={14} />
             <h2 className="font-display text-2xl font-semibold tracking-tight">
-              Talk industry fit
+              Vertical compliance questions?
             </h2>
             <p className="mx-auto mt-3 max-w-md text-sm text-muted-foreground">
-              Share your constraints — compliance, floor ops, or subscription billing — and we&apos;ll
-              map a practical start.
+              Ask about HIPAA, GDPR data residency, batch traceability, or subscription-tax
+              behavior. We answer in detail — not with sales theatre.
             </p>
             <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <Button asChild variant="polished">
-                <Link href="/contact">Talk industry fit</Link>
+                <Link href="/contact">Ask compliance</Link>
               </Button>
               <Button asChild variant="outline">
-                <Link href="/login#signup">Start free</Link>
+                <Link href="/security">Security overview</Link>
               </Button>
             </div>
           </div>

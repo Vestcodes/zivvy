@@ -5,16 +5,23 @@ import { HowItWorks } from "@/components/site/how-it-works";
 import { IntegrationsStrip } from "@/components/site/integrations-strip";
 import { SocialProof } from "@/components/site/social-proof";
 import { PricingPreview } from "@/components/site/pricing-preview";
+import { DeveloperBlock } from "@/components/site/developer-block";
 import { HomeFaq } from "@/components/site/home-faq";
 import { ClosingCta } from "@/components/site/closing-cta";
 import { SiteFooter } from "@/components/site/footer";
-import { FaqPageJsonLd } from "@/components/seo/json-ld";
+import { FaqJsonLd } from "@/components/site/marketing/seo-scripts";
 
+/**
+ * Home page FAQ payload — shipped as both visible content (HomeFaq) and
+ * FAQPage schema (FaqJsonLd, below) so answer engines can quote us.
+ * Organization + SoftwareApplication JSON-LD are rendered globally in
+ * app/layout.tsx via the same seo-scripts helper.
+ */
 const HOME_FAQ_LD = [
   {
     question: "How is Zivvy different from Odoo or Zoho?",
     answer:
-      "Zivvy is seat-based with no forced modules. Sales, stock, HR, accounting, and manufacturing live in one clean product. Pricing does not punish growth."
+      "Zivvy is seat-based with no forced modules. Sales, stock, HR, accounting and manufacturing live in one clean product. Pricing does not punish growth."
   },
   {
     question: "Can I bring my own hosting?",
@@ -24,12 +31,12 @@ const HOME_FAQ_LD = [
   {
     question: "Can we import from another ERP?",
     answer:
-      "Yes. CSV import for masters, transactions, and stock. Larger migrations from Odoo, SAP B1, Zoho, or Tally get mapping help on Pro and Business."
+      "Yes. CSV import for masters, transactions and stock. Larger migrations from Odoo, SAP B1, Zoho or Tally get mapping help on Pro and Business."
   },
   {
     question: "What data goes where?",
     answer:
-      "Pick India, EU, or US at signup. Your data stays in that region. Zivvy signs a DPA on request."
+      "Pick India, EU or US at signup. Your data stays in that region. Zivvy signs a DPA on request."
   },
   {
     question: "How do refunds work?",
@@ -41,7 +48,7 @@ const HOME_FAQ_LD = [
 export default function HomePage() {
   return (
     <>
-      <FaqPageJsonLd faqs={HOME_FAQ_LD} />
+      <FaqJsonLd faqs={HOME_FAQ_LD} />
       <SiteHeader />
       <main>
         <Hero />
@@ -49,6 +56,7 @@ export default function HomePage() {
         <HowItWorks />
         <IntegrationsStrip />
         <SocialProof />
+        <DeveloperBlock />
         <PricingPreview />
         <HomeFaq />
         <ClosingCta />

@@ -1,11 +1,12 @@
-import type { Metadata } from "next";
 import { SecurityPageContent } from "@/components/site/marketing/security-page";
+import { makeMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Security — Zivvy",
+export const metadata = makeMetadata({
+  title: "Security",
   description:
-    "Learn how Zivvy handles encryption, data access, privacy, infrastructure security, and operational controls."
-};
+    "How Zivvy handles encryption, tenant isolation, HMAC-signed webhooks, per-tenant API keys, session cookies, CSRF and GDPR posture. Honest about what we have — and don't yet.",
+  canonicalPath: "/security"
+});
 
 export default function SecurityPage() {
   return <SecurityPageContent />;

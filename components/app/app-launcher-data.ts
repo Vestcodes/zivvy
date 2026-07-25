@@ -60,7 +60,11 @@ import {
   Ship,
   Package2,
   Route as RouteIcon,
-  MapPinned
+  MapPinned,
+  ArrowLeftRight,
+  Upload,
+  SendHorizontal,
+  Scale
 } from "lucide-react";
 import type { ZivvyTier } from "@/lib/boot-types";
 
@@ -156,6 +160,13 @@ export const APPS: AppTile[] = [
   { label: "Carriers",          href: "/shipping/carriers",      icon: MapPinned,        gradient: "from-[#0891b2] to-[#164e63]", category: "shipping", module: "Stock" },
 
   // ACCOUNTING
+  { label: "Banking",              href: "/finance/banking",                   icon: Landmark,         gradient: "from-[#0ea5e9] to-[#0369a1]", category: "accounting", module: "Accounts" },
+  { label: "Reconciliation",       href: "/finance/banking/reconciliation",    icon: ClipboardCheck,   gradient: "from-[#06b6d4] to-[#0e7490]", category: "accounting", module: "Accounts" },
+  { label: "Bank accounts",        href: "/finance/banking/accounts",          icon: Building2,        gradient: "from-[#0891b2] to-[#155e75]", category: "accounting", module: "Accounts" },
+  { label: "Transactions",         href: "/finance/banking/transactions",      icon: ArrowLeftRight,   gradient: "from-[#0d9488] to-[#115e59]", category: "accounting", module: "Accounts" },
+  { label: "Statement imports",    href: "/finance/banking/statements/import", icon: Upload,           gradient: "from-[#14b8a6] to-[#0d9488]", category: "accounting", module: "Accounts" },
+  { label: "Payment requests",     href: "/finance/payment-requests",          icon: SendHorizontal,   gradient: "from-[#22c55e] to-[#15803d]", category: "accounting", module: "Accounts" },
+  { label: "Payment reconciliation", href: "/finance/payment-reconciliation",  icon: Scale,            gradient: "from-[#10b981] to-[#065f46]", category: "accounting", module: "Accounts" },
   { label: "Accounting",        href: "/finance/accounts",       icon: Landmark,         gradient: "from-[#10b981] to-[#047857]", category: "accounting", module: "Accounts", minTier: "pro" },
   { label: "Payments",          href: "/finance/payments",       icon: BadgeDollarSign,  gradient: "from-[#22c55e] to-[#15803d]", category: "accounting", module: "Accounts", minTier: "pro" },
   { label: "Journal entries",   href: "/finance/journal",        icon: ScrollText,       gradient: "from-[#059669] to-[#065f46]", category: "accounting", module: "Accounts", minTier: "pro" },

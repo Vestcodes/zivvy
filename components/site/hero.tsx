@@ -49,8 +49,9 @@ export function Hero() {
         </BlurFade>
         <BlurFade delay={0.2}>
           <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground sm:text-xl">
-            A clean way to run your whole business — sales, stock, accounting, HR and
-            manufacturing in one product that finally feels made for you.
+            Sales, stock, accounting, HR and manufacturing in one product built for
+            founder-led teams. Seat-based pricing. No forced modules. Your data in the
+            region you pick.
           </p>
         </BlurFade>
         <BlurFade delay={0.28} className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
@@ -68,7 +69,7 @@ export function Hero() {
             </ShimmerButton>
           </Link>
           <Button asChild variant="outline" size="lg" className="h-12 px-6 text-base">
-            <Link href="/pricing">See pricing</Link>
+            <Link href="/product-tour">Watch the tour</Link>
           </Button>
         </BlurFade>
         <BlurFade delay={0.34}>

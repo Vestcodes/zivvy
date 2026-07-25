@@ -1,8 +1,10 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
-import { ArrowRight, Check } from "lucide-react";
-import type { MarketingDetail } from "@/lib/marketing-content";
+import { ArrowRight, Check, Copy, ExternalLink, Radio, Sparkles } from "lucide-react";
+import { toast } from "sonner";
+import type { CodeExample, MarketingDetail } from "@/lib/marketing-content";
 import { SiteHeader } from "@/components/site/header";
 import { SiteFooter } from "@/components/site/footer";
 import { Button } from "@/components/ui/button";
@@ -13,12 +15,14 @@ import {
   AccordionTrigger
 } from "@/components/ui/accordion";
 import { AnimatedList } from "@/components/ui/animated-list";
+import { Badge } from "@/components/ui/badge";
 import { BlurFade } from "@/components/ui/blur-fade";
 import { BorderBeam } from "@/components/ui/border-beam";
 import { DotPattern } from "@/components/ui/dot-pattern";
 import { MagicCard } from "@/components/ui/magic-card";
 import { NumberTicker } from "@/components/ui/number-ticker";
 import { ShineBorder } from "@/components/ui/shine-border";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TextAnimate } from "@/components/ui/text-animate";
 import { cn } from "@/lib/utils";
 
@@ -27,6 +31,36 @@ type Props = {
   sectionHref: string;
   entry: MarketingDetail;
 };
+
+function CodeBlock({ example }: { example: CodeExample }) {
+  const [copied, setCopied] = useState(false);
+  const onCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(example.code);
+      setCopied(true);
+      toast.success("Copied to clipboard");
+      setTimeout(() => setCopied(false), 1500);
+    } catch {
+      toast.error("Copy failed");
+    }
+  };
+  return (
+    <div className="relative">
+      <button
+        type="button"
+        onClick={onCopy}
+        className="absolute right-3 top-3 z-10 inline-flex items-center gap-1.5 rounded-md border border-border/70 bg-background/80 px-2 py-1 text-xs font-medium text-muted-foreground backdrop-blur hover:text-foreground"
+        aria-label="Copy code"
+      >
+        <Copy className="size-3.5" />
+        {copied ? "Copied" : "Copy"}
+      </button>
+      <pre className="max-h-[420px] overflow-auto rounded-xl border border-border/70 bg-muted/60 p-4 pr-16 font-mono text-[12.5px] leading-relaxed">
+        <code>{example.code}</code>
+      </pre>
+    </div>
+  );
+}
 
 export function MarketingDetailPage({ sectionLabel, sectionHref, entry }: Props) {
   const canonicalPath = `${sectionHref}/${entry.slug}`.replace(/\/{2,}/g, "/");
@@ -54,6 +88,12 @@ export function MarketingDetailPage({ sectionLabel, sectionHref, entry }: Props)
     ]
   };
 
+  const hasCode = (entry.codeExamples?.length ?? 0) > 0;
+  const hasEndpoints = (entry.apiEndpoints?.length ?? 0) > 0;
+  const hasEvents = (entry.webhookEvents?.length ?? 0) > 0;
+  const showIntegrationSection = hasCode || hasEndpoints;
+  const defaultTab = entry.codeExamples?.[0]?.language ?? "curl";
+
   return (
     <>
       <SiteHeader />
@@ -68,6 +108,33 @@ export function MarketingDetailPage({ sectionLabel, sectionHref, entry }: Props)
           // eslint-disable-next-line react/no-danger
           dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
         />
+
+        {entry.addonRequired ? (
+          <div className="border-b border-primary/20 bg-primary/5">
+            <div className="mx-auto flex max-w-5xl flex-col items-start gap-2 px-6 py-3 text-sm sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex items-center gap-2 text-foreground">
+                <Sparkles className="size-4 shrink-0 text-primary" />
+                <span>
+                  Requires the{" "}
+                  <span className="font-mono font-semibold">{entry.addonRequired}</span> add-on
+                  {entry.addonPrice ? (
+                    <>
+                      {" · "}
+                      <span className="font-medium">{entry.addonPrice}</span>
+                    </>
+                  ) : null}
+                </span>
+              </div>
+              <Link
+                href="/settings/addons"
+                className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"
+              >
+                Manage add-ons
+                <ArrowRight className="size-3.5" />
+              </Link>
+            </div>
+          </div>
+        ) : null}
 
         <section className="relative overflow-hidden">
           <DotPattern
@@ -103,6 +170,14 @@ export function MarketingDetailPage({ sectionLabel, sectionHref, entry }: Props)
                 <Button asChild variant="outline" size="lg">
                   <Link href="/product-tour">See product tour</Link>
                 </Button>
+                {entry.docsUrl ? (
+                  <Button asChild variant="ghost" size="lg">
+                    <a href={entry.docsUrl} target="_blank" rel="noreferrer">
+                      Read API docs
+                      <ExternalLink className="size-4" />
+                    </a>
+                  </Button>
+                ) : null}
               </div>
             </BlurFade>
           </div>
@@ -190,6 +265,101 @@ export function MarketingDetailPage({ sectionLabel, sectionHref, entry }: Props)
             ))}
           </ol>
         </section>
+
+        {showIntegrationSection ? (
+          <section className="mx-auto max-w-5xl px-6 py-8">
+            <BlurFade>
+              <div className="flex items-baseline justify-between gap-4">
+                <h2 className="font-display text-2xl font-semibold tracking-tight">
+                  Integration code
+                </h2>
+                {entry.docsUrl ? (
+                  <a
+                    href={entry.docsUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"
+                  >
+                    Open API reference
+                    <ExternalLink className="size-3.5" />
+                  </a>
+                ) : null}
+              </div>
+              {hasCode ? (
+                <div className="mt-5 rounded-2xl border border-border/70 bg-card/50 p-4 sm:p-5">
+                  <Tabs defaultValue={defaultTab} className="gap-4">
+                    <TabsList className="flex-wrap">
+                      {entry.codeExamples!.map((ex) => (
+                        <TabsTrigger key={ex.language} value={ex.language}>
+                          <span className="font-mono text-[11px] uppercase tracking-wide">
+                            {ex.language}
+                          </span>
+                          <span className="hidden text-xs text-muted-foreground sm:inline">
+                            · {ex.label}
+                          </span>
+                        </TabsTrigger>
+                      ))}
+                    </TabsList>
+                    {entry.codeExamples!.map((ex) => (
+                      <TabsContent key={ex.language} value={ex.language} className="mt-0">
+                        <p className="mb-2 text-xs text-muted-foreground">{ex.label}</p>
+                        <CodeBlock example={ex} />
+                      </TabsContent>
+                    ))}
+                  </Tabs>
+                </div>
+              ) : null}
+              {hasEndpoints ? (
+                <div className="mt-5">
+                  <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                    API endpoints
+                  </p>
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    {entry.apiEndpoints!.map((endpoint) => (
+                      <Badge
+                        key={endpoint}
+                        variant="outline"
+                        className="font-mono text-[11px] font-medium"
+                      >
+                        {endpoint}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
+            </BlurFade>
+          </section>
+        ) : null}
+
+        {hasEvents ? (
+          <section className="mx-auto max-w-5xl px-6 py-6">
+            <BlurFade>
+              <div className="rounded-2xl border border-border/70 bg-card/50 p-5">
+                <div className="flex items-center gap-2">
+                  <Radio className="size-4 text-primary" />
+                  <h2 className="font-display text-lg font-semibold tracking-tight">
+                    Events emitted
+                  </h2>
+                </div>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  HMAC-SHA256 signed webhooks, retried for 24 hours.
+                </p>
+                <ul className="mt-4 flex flex-wrap gap-2">
+                  {entry.webhookEvents!.map((event) => (
+                    <li key={event}>
+                      <Badge
+                        variant="secondary"
+                        className="font-mono text-[11px] font-medium"
+                      >
+                        {event}
+                      </Badge>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </BlurFade>
+          </section>
+        ) : null}
 
         <section className="mx-auto max-w-5xl px-6 py-8">
           <BlurFade>

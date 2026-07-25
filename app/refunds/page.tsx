@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { LegalShell } from "@/components/site/legal-shell";
+import { LegalShell } from "@/components/site/marketing/legal-shell";
+import { makeMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Billing & Refunds — Zivvy",
+export const metadata: Metadata = makeMetadata({
+  title: "Billing & Refunds",
   description:
-    "How Zivvy subscriptions, seats, cancellations, and refunds work — including Polar checkout."
-};
+    "How Zivvy subscriptions, seats, cancellations, and refunds work — including Polar checkout.",
+  canonicalPath: "/refunds"
+});
 
 export default function RefundsPage() {
   return (
