@@ -62,7 +62,7 @@ const PLANS: Plan[] = [
       "Subcontracting",
       "Multi-company controls"
     ],
-    cta: "Talk to sales"
+    cta: "Start Business"
   }
 ];
 
@@ -107,10 +107,7 @@ export function PricingPreview({ showIntro = true, className }: Props = {}) {
           const price = billing === "annual" ? plan.annual : plan.monthly;
           const isFree = plan.slug === "free";
           const isFeatured = plan.highlighted;
-          const isBusiness = plan.slug === "business";
-          const href = isBusiness
-            ? "/contact"
-            : `/login?plan=${plan.slug}&billing=${billing}#signup`;
+          const href = `/login?plan=${plan.slug}&billing=${billing}#signup`;
 
           const container = isFeatured
             ? "relative lg:scale-[1.02] lg:z-10 bg-card/95 dark:bg-card/70 ring-2 ring-primary/40 shadow-elevation-md"

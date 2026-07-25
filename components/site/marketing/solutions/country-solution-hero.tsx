@@ -62,7 +62,7 @@ export function CountrySolutionHero({ profile }: Props) {
                   </Link>
                 </Button>
                 <Button asChild variant="outline" size="lg">
-                  <Link href="/contact">Talk to sales</Link>
+                  <Link href="/product-tour">Watch product tour</Link>
                 </Button>
               </div>
             </BlurFade>
