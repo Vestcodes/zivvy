@@ -37,13 +37,13 @@ export function DashboardHero() {
       </div>
       <div className="flex gap-2">
         <Button asChild variant="outline" size="sm">
-          <Link href="/sales/customers/new">
+          <Link href="/sales/customers?new=1">
             <Plus />
             New customer
           </Link>
         </Button>
         <Button asChild variant="polished" size="sm">
-          <Link href="/sales/invoices/new">
+          <Link href="/sales/invoices?new=1">
             <Plus />
             New invoice
             <ArrowRight />

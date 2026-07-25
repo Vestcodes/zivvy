@@ -32,7 +32,7 @@ interface BankAccount extends ListRow {
 }
 
 interface Props {
-  searchParams?: Promise<{ sort?: string; order?: "asc" | "desc" }>;
+  searchParams?: Promise<{ sort?: string; order?: "asc" | "desc"; new?: string }>;
 }
 
 function maskAccountNumber(no?: string): string {
@@ -101,6 +101,7 @@ export default async function BankAccountsPage({ searchParams }: Props) {
             groups={newGroups}
             basePath="/finance/banking/accounts"
             title="Bank accounts"
+            defaultOpen={params.new === "1"}
           />
         ) : null}
       </header>
@@ -121,20 +122,9 @@ export default async function BankAccountsPage({ searchParams }: Props) {
             <p className="mt-1 max-w-sm text-sm text-muted-foreground">
               Add your first bank account to start tracking transactions and running reconciliations.
             </p>
-            {meta ? (
-              <div className="mt-4">
-                <AutoListNewButton
-                  meta={meta}
-                  groups={newGroups}
-                  basePath="/finance/banking/accounts"
-                  title="Bank accounts"
-                />
-              </div>
-            ) : (
-              <Button asChild variant="polished" className="mt-4">
-                <Link href="/finance/banking/accounts/new">Add bank account</Link>
-              </Button>
-            )}
+            <Button asChild variant="polished" className="mt-4">
+              <Link href="/finance/banking/accounts?new=1">Add bank account</Link>
+            </Button>
           </div>
         ) : (
           <Table>

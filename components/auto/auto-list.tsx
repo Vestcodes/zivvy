@@ -36,7 +36,15 @@ interface Props {
   title: string;
   filters?: Array<[string, string, string, string | number | boolean]>;
   pageLength?: number;
-  searchParams?: { q?: string; page?: string; size?: string; filters?: string; sort?: string; order?: string };
+  searchParams?: {
+    q?: string;
+    page?: string;
+    size?: string;
+    filters?: string;
+    sort?: string;
+    order?: string;
+    new?: string;
+  };
 }
 
 export async function AutoList({
@@ -142,6 +150,7 @@ export async function AutoList({
             groups={newGroups}
             basePath={basePath}
             title={title}
+            defaultOpen={searchParams.new === "1"}
           />
         </div>
       </header>
@@ -163,7 +172,7 @@ export async function AutoList({
           reason={list ? "empty" : "unavailable"}
         />
       ) : (
-        <AutoListKeyboard rowHrefs={rowHrefs} newHref={`${basePath}/new`}>
+        <AutoListKeyboard rowHrefs={rowHrefs}>
           <Card className="border-border/70 bg-card p-0 shadow-sm">
             <Table>
               <TableHeader>

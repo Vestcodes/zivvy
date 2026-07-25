@@ -338,7 +338,9 @@ export function AutoFormWizard({
   return (
     <>
       <Dialog open={open} onOpenChange={handleOpenChange}>
-        {!isControlled && (
+        {/* Always render an explicit trigger when provided, even in controlled
+            mode — list headers / empty states need the New button visible. */}
+        {(trigger || !isControlled) && (
           <DialogTrigger asChild>{trigger ?? defaultTrigger}</DialogTrigger>
         )}
         <DialogContent
@@ -498,7 +500,9 @@ export function NewRecordWizard({
   basePath,
   title,
   trigger,
-  onCreated
+  onCreated,
+  open,
+  onOpenChange
 }: {
   meta: DoctypeMeta;
   groups: FormGroup[];
@@ -506,6 +510,8 @@ export function NewRecordWizard({
   title: string;
   trigger?: ReactNode;
   onCreated?: (name: string) => void;
+  open?: boolean;
+  onOpenChange?: (v: boolean) => void;
 }) {
   return (
     <AutoFormWizard
@@ -516,6 +522,8 @@ export function NewRecordWizard({
       title={title}
       trigger={trigger}
       onCreated={onCreated}
+      open={open}
+      onOpenChange={onOpenChange}
     />
   );
 }

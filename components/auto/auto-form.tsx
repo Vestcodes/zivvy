@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { AlertTriangle, LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -89,20 +90,25 @@ export async function AutoForm({ doctype, name, basePath, title }: Props) {
   }
 
   const isNew = name === "new";
-  const groups = groupFieldsForForm(meta, { isNew });
-  const doc = isNew
-    ? ({ __islocal: 1, doctype } as Record<string, unknown>)
-    : await getDoc(doctype, name);
+  // Creates always go through the stepped list wizard (`?new=1`), not the
+  // flat full-page AutoForm. Keeps every entry point (deep link, awesomebar,
+  // dashboard) on the same multi-step modal.
+  if (isNew) {
+    redirect(`${basePath}?new=1`);
+  }
 
-  if (!doc && !isNew) {
+  const groups = groupFieldsForForm(meta, { isNew });
+  const doc = await getDoc(doctype, name);
+
+  if (!doc) {
     return <EmptyState title={title} basePath={basePath} reason="not-found" />;
   }
 
-  const initialDoc = (doc ?? { doctype }) as Record<string, unknown>;
+  const initialDoc = doc as Record<string, unknown>;
   const nextAction = computeNextAction({
     meta,
     doc: initialDoc,
-    isNew,
+    isNew: false,
     basePath
   });
 

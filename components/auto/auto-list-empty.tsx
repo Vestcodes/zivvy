@@ -1,7 +1,10 @@
+"use client";
+
 import Link from "next/link";
 import { Inbox, LogIn, Plus, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { requestOpenNew } from "@/components/auto/auto-list-new-button";
 
 export function AutoListEmpty({
   title,
@@ -72,11 +75,14 @@ export function AutoListEmpty({
         <p className="mt-1 max-w-sm text-sm text-muted-foreground">
           Get started by creating your first record. It'll appear here.
         </p>
-        <Button asChild variant="polished" className="mt-4">
-          <Link href={`${basePath}/new`}>
-            <Plus />
-            New {title.replace(/s$/, "").toLowerCase()}
-          </Link>
+        <Button
+          type="button"
+          variant="polished"
+          className="mt-4"
+          onClick={() => requestOpenNew()}
+        >
+          <Plus />
+          New {title.replace(/s$/, "").toLowerCase()}
         </Button>
       </CardContent>
     </Card>

@@ -2,11 +2,11 @@
 
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
-import { cn } from "@/lib/utils";
+
+import { requestOpenNew } from "@/components/auto/auto-list-new-button";
 
 interface Props {
   rowHrefs: string[];
-  newHref: string;
   children: ReactNode;
 }
 
@@ -19,7 +19,7 @@ function isInputFocused(): boolean {
   return false;
 }
 
-export function AutoListKeyboard({ rowHrefs, newHref, children }: Props) {
+export function AutoListKeyboard({ rowHrefs, children }: Props) {
   const router = useRouter();
   const [selectedIdx, setSelectedIdx] = useState(-1);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -63,7 +63,7 @@ export function AutoListKeyboard({ rowHrefs, newHref, children }: Props) {
         }
         case "n": {
           e.preventDefault();
-          router.push(newHref);
+          requestOpenNew();
           break;
         }
       }
@@ -71,7 +71,7 @@ export function AutoListKeyboard({ rowHrefs, newHref, children }: Props) {
 
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [rowHrefs, newHref, selectedIdx, router, scrollRowIntoView]);
+  }, [rowHrefs, selectedIdx, router, scrollRowIntoView]);
 
   // Apply highlight styling to the selected row via data attribute
   useEffect(() => {

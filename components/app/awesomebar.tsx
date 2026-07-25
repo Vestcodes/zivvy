@@ -17,10 +17,10 @@ import { MODULE_NAVS } from "@/components/app/sidebar-nav";
 import { Button } from "@/components/ui/button";
 
 const QUICK_ACTIONS = [
-  { label: "New sales invoice", href: "/sales/invoices/new", icon: PlusCircle },
-  { label: "New customer", href: "/sales/customers/new", icon: PlusCircle },
-  { label: "New purchase order", href: "/purchases/orders/new", icon: PlusCircle },
-  { label: "New item", href: "/stock/items/new", icon: PlusCircle }
+  { label: "New sales invoice", href: "/sales/invoices?new=1", icon: PlusCircle },
+  { label: "New customer", href: "/sales/customers?new=1", icon: PlusCircle },
+  { label: "New purchase order", href: "/purchases/orders?new=1", icon: PlusCircle },
+  { label: "New item", href: "/stock/items?new=1", icon: PlusCircle }
 ];
 
 const JUMP = [

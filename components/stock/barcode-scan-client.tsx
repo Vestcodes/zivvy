@@ -108,7 +108,7 @@ export function BarcodeScanClient() {
               </Link>
             </Button>
             <Button asChild variant="outline" size="sm">
-              <Link href="/stock/entries/new">New stock entry</Link>
+              <Link href="/stock/entries?new=1">New stock entry</Link>
             </Button>
           </CardContent>
         </Card>

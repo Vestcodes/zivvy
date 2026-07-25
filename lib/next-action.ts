@@ -371,7 +371,7 @@ export function computeListAction(ctx: ListActionCtx): NextAction | null {
       hint: `${title} appear here as you add them. Start with one.`,
       tone: "primary",
       kind: "link",
-      href: `${basePath}/new`
+      href: `${basePath}?new=1`
     };
   }
 
@@ -383,7 +383,7 @@ export function computeListAction(ctx: ListActionCtx): NextAction | null {
       hint: `${total} ${plural(title, total).toLowerCase()} in this workspace so far.`,
       tone: "neutral",
       kind: "link",
-      href: `${basePath}/new`
+      href: `${basePath}?new=1`
     };
   }
 
