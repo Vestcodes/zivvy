@@ -269,14 +269,16 @@ export function AutoFormClient({
       if (isSave) {
         e.preventDefault();
         if (dirty && !saving) void onSave();
-      } else if (e.key === "Escape") {
+      } else if (e.key === "Escape" && !isNewInitial) {
+        // Escape on a new record would hide every field behind FieldView placeholders.
+        // Only allow Escape-to-discard on existing records the user chose to edit.
         e.preventDefault();
         handleDiscardClick();
       }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [editing, dirty, saving, onSave, handleDiscardClick]);
+  }, [editing, dirty, saving, onSave, handleDiscardClick, isNewInitial]);
 
   useEffect(() => {
     if (!dirty) return;

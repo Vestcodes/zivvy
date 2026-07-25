@@ -72,6 +72,21 @@ function EnumSelect({
   const loading = options === null;
   const items = options ?? [];
 
+  // Radix Select with zero SelectItem children positions its popover offscreen
+  // in item-aligned mode AND applies body { pointer-events: none } via scroll-lock,
+  // freezing the entire form. Render a plain disabled Input for the empty case.
+  if (!loading && items.length === 0) {
+    return (
+      <Input
+        id={id}
+        value=""
+        disabled
+        placeholder={`No ${doctype.toLowerCase()} configured`}
+        className="w-full"
+      />
+    );
+  }
+
   return (
     <Select
       value={value || undefined}
@@ -92,11 +107,6 @@ function EnumSelect({
             {opt}
           </SelectItem>
         ))}
-        {items.length === 0 && !loading && (
-          <div className="px-3 py-4 text-center text-sm text-muted-foreground">
-            No {doctype.toLowerCase()} configured
-          </div>
-        )}
       </SelectContent>
     </Select>
   );
