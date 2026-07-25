@@ -1,0 +1,504 @@
+{
+  "name": "Zivvy HR — Leave / Expense Updates",
+  "meta": {
+    "templateCredsSetupCompleted": false,
+    "description": "Uses real actions (created/updated/submitted). Filters leave/expense when status contains Approved."
+  },
+  "tags": [
+    {
+      "name": "zivvy"
+    },
+    {
+      "name": "hr"
+    },
+    {
+      "name": "people"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "fc7ae468-55e9-4159-a0d5-bd4113fdbed3",
+      "name": "Setup",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        20,
+        -80
+      ],
+      "parameters": {
+        "content": "## Setup (read first)\n\n### n8n (per docs.n8n.io)\n1. **Import** this JSON: Menu → Import from File\n2. Publish the workflow so the **Production** Webhook URL is active\n   (Webhook node → toggle Production URL)\n3. Create n8n **Variable** `ZIVVY_WEBHOOK_SECRET` = your Zivvy webhook secret\n4. Create credential **Zivvy API (Bearer zk_live_…)**\n   - Type: Header Auth\n   - Name: `Authorization`\n   - Value: `Bearer zk_live_YOUR_KEY`\n5. Optional: Variable `SLACK_WEBHOOK_URL` for Slack Incoming Webhook\n\n### Zivvy\n1. Settings → Developer → API Keys → create `zk_live_` key\n2. Create webhook pointing at this workflow's **Production** URL\n3. Subscribe to the events listed in the yellow sticky\n4. Deliveries must return **2xx within ~5s** — this flow acks immediately after signature check\n\n### Signature (production truth)\n`X-Zivvy-Signature: sha256=<hmac_sha256(secret, raw_body)>`\nSee `zivvy_brand/api/webhooks.py` — not the Stripe-style marketing snippet.",
+        "width": 480,
+        "height": 560,
+        "color": 4
+      }
+    },
+    {
+      "id": "76f8247b-3341-41fe-9dcb-4f910b25ef28",
+      "name": "Events",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        560,
+        -80
+      ],
+      "parameters": {
+        "content": "## HR & People\n\nUses real actions (created/updated/submitted). Filters leave/expense when status contains Approved.\n\n### Subscribe in Zivvy webhook\n- `leave-applications.created`\n- `leave-applications.updated`\n- `leave-applications.submitted`\n- `expense-claims.created`\n- `expense-claims.updated`\n- `expense-claims.submitted`\n- `employees.created`\n\nWildcard also works: `leave-applications.*`",
+        "width": 400,
+        "height": 340,
+        "color": 5
+      }
+    },
+    {
+      "id": "fb77713c-d72f-4db6-859a-2483d27b26c8",
+      "name": "Zivvy Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        240,
+        360
+      ],
+      "webhookId": "53dda002-7adb-43a5-aeb3-629e55fc358b",
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "zivvy/hr",
+        "responseMode": "onReceived",
+        "responseData": "firstEntryJson",
+        "options": {
+          "rawBody": true,
+          "ignoreBots": true,
+          "responseCode": 200
+        }
+      }
+    },
+    {
+      "id": "26dfa4d9-a434-4744-b850-493e923f11dd",
+      "name": "Verify Zivvy Signature",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        500,
+        360
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "/**\n * Verify Zivvy webhook HMAC.\n * Production (zivvy_brand/api/webhooks.py):\n *   signature = HMAC_SHA256(secret, raw_body_bytes).hexdigest()\n *   header    = \"sha256=\" + signature\n *\n * Set env ZIVVY_WEBHOOK_SECRET (n8n → Settings → Variables)\n * or edit SECRET below for local tests only.\n *\n * Docs: https://docs.n8n.io/code/code-node/\n *       https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.webhook/\n */\nconst crypto = require('crypto');\n\nconst SECRET = (typeof $env !== 'undefined' && $env.ZIVVY_WEBHOOK_SECRET)\n  ? $env.ZIVVY_WEBHOOK_SECRET\n  : 'CHANGE_ME_ZIVVY_WEBHOOK_SECRET';\n\nif (!SECRET || SECRET.startsWith('CHANGE_ME')) {\n  throw new Error('Set n8n variable ZIVVY_WEBHOOK_SECRET to your Zivvy webhook signing secret.');\n}\n\nconst item = $input.first();\nconst headers = item.json.headers || {};\nconst lower = {};\nfor (const [k, v] of Object.entries(headers)) lower[String(k).toLowerCase()] = v;\n\nconst sigHeader = String(lower['x-zivvy-signature'] || '');\nconst eventHeader = String(lower['x-zivvy-event'] || '');\nconst deliveryHeader = String(lower['x-zivvy-delivery'] || '');\n\nlet rawBody = '';\nif (item.binary && item.binary.data) {\n  const bin = item.binary.data;\n  rawBody = Buffer.from(bin.data, bin.encoding || 'base64').toString('utf8');\n} else if (typeof item.json.body === 'string') {\n  rawBody = item.json.body;\n} else if (item.json.body && typeof item.json.body === 'object') {\n  // Compact re-serialize — matches Python json.dumps(..., separators=(',', ':'))\n  rawBody = JSON.stringify(item.json.body);\n} else {\n  // Some n8n versions flatten the body onto json\n  const { headers: _h, params: _p, query: _q, webhookUrl: _w, ...rest } = item.json;\n  rawBody = JSON.stringify(rest);\n}\n\nconst expected = 'sha256=' + crypto\n  .createHmac('sha256', SECRET)\n  .update(rawBody, 'utf8')\n  .digest('hex');\n\nconst a = Buffer.from(sigHeader);\nconst b = Buffer.from(expected);\nconst ok = a.length === b.length && crypto.timingSafeEqual(a, b);\n\nlet payload;\ntry {\n  payload = JSON.parse(rawBody);\n} catch {\n  payload = item.json.body || item.json;\n}\n\nif (!ok) {\n  return [{\n    json: {\n      signature_valid: false,\n      error: 'invalid_signature',\n      event: eventHeader || payload?.event,\n      delivery_id: deliveryHeader\n    }\n  }];\n}\n\nreturn [{\n  json: {\n    signature_valid: true,\n    event: eventHeader || payload.event,\n    delivery_id: deliveryHeader,\n    resource: payload.resource,\n    timestamp: payload.timestamp,\n    data: payload.data || {},\n    payload\n  }\n}];"
+      }
+    },
+    {
+      "id": "99d039d3-5db5-4afc-8823-bca93d543e01",
+      "name": "Signature OK?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        760,
+        360
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "1561db2e-0bf7-4997-9d3f-7dcbbc3eab36",
+              "leftValue": "={{ $json.signature_valid }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "c6500f7e-d31f-4019-9a68-c01c86345aee",
+      "name": "Stop — Bad Signature",
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        1000,
+        560
+      ],
+      "parameters": {
+        "errorMessage": "Zivvy webhook signature invalid"
+      }
+    },
+    {
+      "id": "389ab32f-5933-4fb9-afe3-8d0363ab7595",
+      "name": "Event Match?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1000,
+        360
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "04ce08c2-b7b6-4740-b736-8094a57b7030",
+              "leftValue": "={{ $json.event }}",
+              "rightValue": "leave-applications.created",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "2dca26e7-9363-49b6-81b7-5f7ebc01ce2b",
+              "leftValue": "={{ $json.event }}",
+              "rightValue": "leave-applications.updated",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "7379f11e-cc62-48ed-bb96-988122ffc9e6",
+              "leftValue": "={{ $json.event }}",
+              "rightValue": "leave-applications.submitted",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "79d4f28f-4a1c-4958-adb3-83604decf66e",
+              "leftValue": "={{ $json.event }}",
+              "rightValue": "expense-claims.created",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "d6bc4bc5-1867-4f42-83da-26f6bc1076c6",
+              "leftValue": "={{ $json.event }}",
+              "rightValue": "expense-claims.updated",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "502b7cb0-4da2-46ad-a6ce-e01f82130e7f",
+              "leftValue": "={{ $json.event }}",
+              "rightValue": "expense-claims.submitted",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "fb96a8ec-1b8d-48e0-83b8-ed55599b318a",
+              "leftValue": "={{ $json.event }}",
+              "rightValue": "employees.created",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "82cacf58-cd92-4623-9f04-bce1d40d05b6",
+      "name": "Skip Unmatched Event",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1240,
+        560
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "9d61afbf-1f74-4eff-9e42-acd3e0ee0943",
+      "name": "Interesting HR Status?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1240,
+        280
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "f7551a3f-03b2-4b1a-a342-d4a8b21346f8",
+              "leftValue": "={{ $json.event }}",
+              "rightValue": "employees.created",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "aa516533-68be-406f-9065-42037bef318d",
+              "leftValue": "={{ String($json.data.status || '') }}",
+              "rightValue": "Approved",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "31fb2402-e5ae-45b8-8f84-5ea3a3c4fc58",
+              "leftValue": "={{ String($json.data.status || '') }}",
+              "rightValue": "Open",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "6363a479-e4bb-412b-be0b-51fe7d3d55d8",
+              "leftValue": "={{ $json.event }}",
+              "rightValue": ".submitted",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "4b949cf7-5df5-45b3-b4d0-220940e0bc86",
+      "name": "Skip Quiet HR Update",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1480,
+        480
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "9f95c26b-920b-40dd-9dcb-9c970b0a97fc",
+      "name": "Build Notification",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1480,
+        360
+      ],
+      "parameters": {
+        "mode": "manual",
+        "duplicateItem": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "82b3041a-c44d-4f5f-a1c6-2ea68d875969",
+              "name": "text",
+              "value": "={{ '• *' + $json.event + '*\\n• Doc: `' + ($json.data.name || '') + '`\\n• Customer/Supplier: ' + ($json.data.customer || $json.data.supplier || '—') + '\\n• Employee: ' + ($json.data.employee || '—') + '\\n• Status: ' + ($json.data.status || '—') + '\\n• Total: ' + ($json.data.grand_total || '—') + '\\n• Area: HR & People' }}",
+              "type": "string"
+            },
+            {
+              "id": "af11b5a2-0ddd-48a4-b590-25a4ad028d18",
+              "name": "area",
+              "value": "HR & People",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "d641e48c-f3d8-4454-8b93-1fa0474372d9",
+      "name": "Post to Slack",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1720,
+        360
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SLACK_WEBHOOK_URL }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { text: $json.text, blocks: $json.blocks || undefined } }}",
+        "options": {
+          "timeout": 10000,
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          }
+        }
+      },
+      "continueOnFail": true
+    },
+    {
+      "id": "ced95329-ce59-4aa6-8175-c2ca9779416d",
+      "name": "Enrich from Zivvy API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1480,
+        200
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "={{ 'https://api.zivvy.xyz/v1/' + ($json.resource) + '/' + encodeURIComponent($json.data.name) }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          },
+          "timeout": 10000
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "ZIVVY_API_HEADER_AUTH",
+          "name": "Zivvy API (Bearer zk_live_…)"
+        }
+      },
+      "continueOnFail": true
+    }
+  ],
+  "connections": {
+    "Zivvy Webhook": {
+      "main": [
+        [
+          {
+            "node": "Verify Zivvy Signature",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verify Zivvy Signature": {
+      "main": [
+        [
+          {
+            "node": "Signature OK?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Signature OK?": {
+      "main": [
+        [
+          {
+            "node": "Event Match?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Stop — Bad Signature",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Event Match?": {
+      "main": [
+        [
+          {
+            "node": "Interesting HR Status?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Skip Unmatched Event",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Interesting HR Status?": {
+      "main": [
+        [
+          {
+            "node": "Build Notification",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Enrich from Zivvy API",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Skip Quiet HR Update",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Notification": {
+      "main": [
+        [
+          {
+            "node": "Post to Slack",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": ""
+  },
+  "pinData": {},
+  "versionId": "374041f4-0e49-4e99-874d-c904dbe4febc"
+}

@@ -1,0 +1,130 @@
+{
+  "generated_at": "2026-07-25T21:26:08.128Z",
+  "api_base": "https://api.zivvy.xyz",
+  "signature": "sha256=<hmac_sha256(secret, raw_body)>",
+  "n8n_docs": [
+    "https://docs.n8n.io/build/manage-workflows/export-and-import/",
+    "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.webhook/",
+    "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.httprequest/",
+    "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.if/",
+    "https://docs.n8n.io/code/code-node/"
+  ],
+  "zivvy_docs": [
+    "https://zivvy.xyz/developers",
+    "https://integrate.zivvy.xyz/docs",
+    "https://api.zivvy.xyz/v1/webhooks"
+  ],
+  "workflows": [
+    {
+      "file": "workflows/01-crm-lead-created.json",
+      "name": "Zivvy CRM — New Lead → Slack",
+      "area": "CRM",
+      "events": [
+        "leads.created"
+      ],
+      "path": "zivvy/crm-leads"
+    },
+    {
+      "file": "workflows/02-sales-order-submitted.json",
+      "name": "Zivvy Sales — Order Submitted → Fulfillment Alert",
+      "area": "Sales",
+      "events": [
+        "sales-orders.submitted"
+      ],
+      "path": "zivvy/sales-orders"
+    },
+    {
+      "file": "workflows/03-billing-invoice-lifecycle.json",
+      "name": "Zivvy Billing — Invoice Submitted / Updated → Finance",
+      "area": "Billing & Accounting",
+      "events": [
+        "sales-invoices.submitted",
+        "sales-invoices.updated",
+        "payment-entries.submitted"
+      ],
+      "path": "zivvy/billing-invoices"
+    },
+    {
+      "file": "workflows/04-purchasing-po-submitted.json",
+      "name": "Zivvy Purchasing — PO Submitted → Ops",
+      "area": "Purchasing",
+      "events": [
+        "purchase-orders.submitted",
+        "purchase-receipts.submitted"
+      ],
+      "path": "zivvy/purchase-orders"
+    },
+    {
+      "file": "workflows/05-stock-movement.json",
+      "name": "Zivvy Stock — Movements & New Items",
+      "area": "Stock",
+      "events": [
+        "stock-entries.submitted",
+        "items.created",
+        "delivery-notes.submitted"
+      ],
+      "path": "zivvy/stock"
+    },
+    {
+      "file": "workflows/06-banking-transaction.json",
+      "name": "Zivvy Banking — New Bank Transaction Alert",
+      "area": "Banking",
+      "events": [
+        "bank-transactions.created",
+        "bank-transactions.updated"
+      ],
+      "path": "zivvy/banking"
+    },
+    {
+      "file": "workflows/07-hr-leave-and-expense.json",
+      "name": "Zivvy HR — Leave / Expense Updates",
+      "area": "HR & People",
+      "events": [
+        "leave-applications.created",
+        "leave-applications.updated",
+        "leave-applications.submitted",
+        "expense-claims.created",
+        "expense-claims.updated",
+        "expense-claims.submitted",
+        "employees.created"
+      ],
+      "path": "zivvy/hr"
+    },
+    {
+      "file": "workflows/08-projects-tasks.json",
+      "name": "Zivvy Projects — Task / Timesheet Updates",
+      "area": "Projects",
+      "events": [
+        "tasks.updated",
+        "tasks.created",
+        "timesheets.submitted",
+        "projects.updated"
+      ],
+      "path": "zivvy/projects"
+    },
+    {
+      "file": "workflows/09-manufacturing-work-order.json",
+      "name": "Zivvy Manufacturing — Work Order / BOM",
+      "area": "Manufacturing",
+      "events": [
+        "work-orders.submitted",
+        "work-orders.updated",
+        "boms.created",
+        "job-cards.updated"
+      ],
+      "path": "zivvy/manufacturing"
+    },
+    {
+      "file": "workflows/10-support-ticket.json",
+      "name": "Zivvy Support — Ticket / Issue Created",
+      "area": "Support",
+      "events": [
+        "support-tickets.created",
+        "support-tickets.updated",
+        "issues.created",
+        "issues.updated"
+      ],
+      "path": "zivvy/support"
+    }
+  ]
+}

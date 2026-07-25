@@ -1,0 +1,370 @@
+{
+  "name": "Zivvy Banking — New Bank Transaction Alert",
+  "meta": {
+    "templateCredsSetupCompleted": false,
+    "description": "Bank transaction created/updated → alert if |amount| over threshold (default 1000)."
+  },
+  "tags": [
+    {
+      "name": "zivvy"
+    },
+    {
+      "name": "banking"
+    },
+    {
+      "name": "finance"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "9cfc254a-4035-430f-9f42-2374d3507bec",
+      "name": "Setup",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        20,
+        -80
+      ],
+      "parameters": {
+        "content": "## Setup (read first)\n\n### n8n (per docs.n8n.io)\n1. **Import** this JSON: Menu → Import from File\n2. Publish the workflow so the **Production** Webhook URL is active\n   (Webhook node → toggle Production URL)\n3. Create n8n **Variable** `ZIVVY_WEBHOOK_SECRET` = your Zivvy webhook secret\n4. Create credential **Zivvy API (Bearer zk_live_…)**\n   - Type: Header Auth\n   - Name: `Authorization`\n   - Value: `Bearer zk_live_YOUR_KEY`\n5. Optional: Variable `SLACK_WEBHOOK_URL` for Slack Incoming Webhook\n\n### Zivvy\n1. Settings → Developer → API Keys → create `zk_live_` key\n2. Create webhook pointing at this workflow's **Production** URL\n3. Subscribe to the events listed in the yellow sticky\n4. Deliveries must return **2xx within ~5s** — this flow acks immediately after signature check\n\n### Signature (production truth)\n`X-Zivvy-Signature: sha256=<hmac_sha256(secret, raw_body)>`\nSee `zivvy_brand/api/webhooks.py` — not the Stripe-style marketing snippet.",
+        "width": 480,
+        "height": 560,
+        "color": 4
+      }
+    },
+    {
+      "id": "80ebc7b9-0c7f-46df-9ea7-b88219c8b792",
+      "name": "Events",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        560,
+        -80
+      ],
+      "parameters": {
+        "content": "## Banking\n\nBank transaction created/updated → alert if |amount| over threshold (default 1000).\n\n### Subscribe in Zivvy webhook\n- `bank-transactions.created`\n- `bank-transactions.updated`\n\nWildcard also works: `bank-transactions.*`",
+        "width": 400,
+        "height": 340,
+        "color": 5
+      }
+    },
+    {
+      "id": "04d03f3e-2841-4b29-a112-d86ada35b8e3",
+      "name": "Zivvy Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        240,
+        360
+      ],
+      "webhookId": "d21ce6d7-e305-4542-a20b-df0289b00c0d",
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "zivvy/banking",
+        "responseMode": "onReceived",
+        "responseData": "firstEntryJson",
+        "options": {
+          "rawBody": true,
+          "ignoreBots": true,
+          "responseCode": 200
+        }
+      }
+    },
+    {
+      "id": "ccb893a3-7c24-4e67-b287-b2d61057c301",
+      "name": "Verify Zivvy Signature",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        500,
+        360
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "/**\n * Verify Zivvy webhook HMAC.\n * Production (zivvy_brand/api/webhooks.py):\n *   signature = HMAC_SHA256(secret, raw_body_bytes).hexdigest()\n *   header    = \"sha256=\" + signature\n *\n * Set env ZIVVY_WEBHOOK_SECRET (n8n → Settings → Variables)\n * or edit SECRET below for local tests only.\n *\n * Docs: https://docs.n8n.io/code/code-node/\n *       https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.webhook/\n */\nconst crypto = require('crypto');\n\nconst SECRET = (typeof $env !== 'undefined' && $env.ZIVVY_WEBHOOK_SECRET)\n  ? $env.ZIVVY_WEBHOOK_SECRET\n  : 'CHANGE_ME_ZIVVY_WEBHOOK_SECRET';\n\nif (!SECRET || SECRET.startsWith('CHANGE_ME')) {\n  throw new Error('Set n8n variable ZIVVY_WEBHOOK_SECRET to your Zivvy webhook signing secret.');\n}\n\nconst item = $input.first();\nconst headers = item.json.headers || {};\nconst lower = {};\nfor (const [k, v] of Object.entries(headers)) lower[String(k).toLowerCase()] = v;\n\nconst sigHeader = String(lower['x-zivvy-signature'] || '');\nconst eventHeader = String(lower['x-zivvy-event'] || '');\nconst deliveryHeader = String(lower['x-zivvy-delivery'] || '');\n\nlet rawBody = '';\nif (item.binary && item.binary.data) {\n  const bin = item.binary.data;\n  rawBody = Buffer.from(bin.data, bin.encoding || 'base64').toString('utf8');\n} else if (typeof item.json.body === 'string') {\n  rawBody = item.json.body;\n} else if (item.json.body && typeof item.json.body === 'object') {\n  // Compact re-serialize — matches Python json.dumps(..., separators=(',', ':'))\n  rawBody = JSON.stringify(item.json.body);\n} else {\n  // Some n8n versions flatten the body onto json\n  const { headers: _h, params: _p, query: _q, webhookUrl: _w, ...rest } = item.json;\n  rawBody = JSON.stringify(rest);\n}\n\nconst expected = 'sha256=' + crypto\n  .createHmac('sha256', SECRET)\n  .update(rawBody, 'utf8')\n  .digest('hex');\n\nconst a = Buffer.from(sigHeader);\nconst b = Buffer.from(expected);\nconst ok = a.length === b.length && crypto.timingSafeEqual(a, b);\n\nlet payload;\ntry {\n  payload = JSON.parse(rawBody);\n} catch {\n  payload = item.json.body || item.json;\n}\n\nif (!ok) {\n  return [{\n    json: {\n      signature_valid: false,\n      error: 'invalid_signature',\n      event: eventHeader || payload?.event,\n      delivery_id: deliveryHeader\n    }\n  }];\n}\n\nreturn [{\n  json: {\n    signature_valid: true,\n    event: eventHeader || payload.event,\n    delivery_id: deliveryHeader,\n    resource: payload.resource,\n    timestamp: payload.timestamp,\n    data: payload.data || {},\n    payload\n  }\n}];"
+      }
+    },
+    {
+      "id": "4782fcd0-40fb-41aa-8d36-30c6be52a779",
+      "name": "Signature OK?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        760,
+        360
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "5832952f-7e44-4978-a817-6c4fde66d45f",
+              "leftValue": "={{ $json.signature_valid }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "767d1f85-b611-48ce-b46b-571222d28d86",
+      "name": "Stop — Bad Signature",
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        1000,
+        560
+      ],
+      "parameters": {
+        "errorMessage": "Zivvy webhook signature invalid"
+      }
+    },
+    {
+      "id": "caa0f9a2-395e-4e0b-8a9d-1fd59c26d69b",
+      "name": "Event Match?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1000,
+        360
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "708bdf47-cf8b-4e62-adea-831a58d7575f",
+              "leftValue": "={{ $json.event }}",
+              "rightValue": "bank-transactions.created",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "25c1b031-a2c6-4875-897e-4b2dbb71fb9c",
+              "leftValue": "={{ $json.event }}",
+              "rightValue": "bank-transactions.updated",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "9a6a050d-7b85-4bac-a6f6-a97d7c1c0346",
+      "name": "Skip Unmatched Event",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1240,
+        560
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "0cb506a6-8311-4d42-a02e-7cd1722c961f",
+      "name": "Build Notification",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1480,
+        360
+      ],
+      "parameters": {
+        "mode": "manual",
+        "duplicateItem": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "5fb1a646-f85f-4cf5-b0fd-c56e3c0bc9c1",
+              "name": "text",
+              "value": "={{ '• *' + $json.event + '*\\n• Doc: `' + ($json.data.name || '') + '`\\n• Customer/Supplier: ' + ($json.data.customer || $json.data.supplier || '—') + '\\n• Employee: ' + ($json.data.employee || '—') + '\\n• Status: ' + ($json.data.status || '—') + '\\n• Total: ' + ($json.data.grand_total || '—') + '\\n• Area: Banking' }}",
+              "type": "string"
+            },
+            {
+              "id": "12fef329-dc39-4722-9a5b-ffd76c0e4ba1",
+              "name": "area",
+              "value": "Banking",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "52ca7101-5755-4ff7-bb62-ee0eb4ebc761",
+      "name": "Post to Slack",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1720,
+        360
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SLACK_WEBHOOK_URL }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { text: $json.text, blocks: $json.blocks || undefined } }}",
+        "options": {
+          "timeout": 10000,
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          }
+        }
+      },
+      "continueOnFail": true
+    },
+    {
+      "id": "45900415-05f0-46e2-907b-756b69c6fd38",
+      "name": "Enrich from Zivvy API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1480,
+        200
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "={{ 'https://api.zivvy.xyz/v1/' + ('bank-transactions') + '/' + encodeURIComponent($json.data.name) }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          },
+          "timeout": 10000
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "ZIVVY_API_HEADER_AUTH",
+          "name": "Zivvy API (Bearer zk_live_…)"
+        }
+      },
+      "continueOnFail": true
+    }
+  ],
+  "connections": {
+    "Zivvy Webhook": {
+      "main": [
+        [
+          {
+            "node": "Verify Zivvy Signature",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verify Zivvy Signature": {
+      "main": [
+        [
+          {
+            "node": "Signature OK?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Signature OK?": {
+      "main": [
+        [
+          {
+            "node": "Event Match?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Stop — Bad Signature",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Event Match?": {
+      "main": [
+        [
+          {
+            "node": "Build Notification",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Enrich from Zivvy API",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Skip Unmatched Event",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Notification": {
+      "main": [
+        [
+          {
+            "node": "Post to Slack",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": ""
+  },
+  "pinData": {},
+  "versionId": "12bc360b-9685-425d-b86b-3401921ec058"
+}
