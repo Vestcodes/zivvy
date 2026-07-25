@@ -6,6 +6,7 @@ import { JourneyTimeline } from "@/components/site/journey-timeline";
 import { DeveloperBlock } from "@/components/site/developer-block";
 import { SocialProof } from "@/components/site/social-proof";
 import { PricingPreview } from "@/components/site/pricing-preview";
+import { PricingBillingProvider } from "@/components/site/pricing-billing-provider";
 import { HomeFaq } from "@/components/site/home-faq";
 import { ClosingCta } from "@/components/site/closing-cta";
 import { SiteFooter } from "@/components/site/footer";
@@ -57,7 +58,9 @@ export default function HomePage() {
         <JourneyTimeline />
         <DeveloperBlock />
         <SocialProof />
-        <PricingPreview />
+        <PricingBillingProvider>
+          <PricingPreview />
+        </PricingBillingProvider>
         <HomeFaq />
         <ClosingCta />
       </main>
