@@ -43,22 +43,26 @@ export interface AddonCatalogEntry {
   title: string;
   description: string;
   category: string;
-  monthly_price: number;
-  currency: string;
+  monthly_price_usd: number;
+  annual_price_usd?: number;
   doctypes_unlocked: string[];
   modules_unlocked?: string[];
-  features?: string[];
+  upstream_frappe_app?: string;
+  upstream_url?: string | null;
+  marketing_summary?: string | null;
 }
 
 export interface ActiveAddon {
-  slug: string;
-  title: string;
-  status: string;
-  current_period_end: string | null;
-  cancel_at_period_end: boolean | 0 | 1;
-  subscription_id?: string;
-  monthly_price?: number;
-  currency?: string;
+  name: string; // Zivvy Tenant Addon docname
+  addon_slug: string;
+  addon_title?: string | null;
+  category?: string | null;
+  status: string; // "active" | "trialing" | "cancelled" | "past_due"
+  quantity?: number;
+  price_locked_usd?: number | null;
+  current_period_start?: string | null;
+  current_period_end?: string | null;
+  polar_subscription_id?: string | null;
 }
 
 export function AddonsManager({ tenant, currentUser }: Props) {
@@ -74,7 +78,7 @@ export function AddonsManager({ tenant, currentUser }: Props) {
 
   const activeBySlug = useMemo(() => {
     const map = new Map<string, ActiveAddon>();
-    for (const a of active) map.set(a.slug, a);
+    for (const a of active) map.set(a.addon_slug, a);
     return map;
   }, [active]);
 
@@ -102,7 +106,7 @@ export function AddonsManager({ tenant, currentUser }: Props) {
     try {
       const result = await frappeCall<{ checkout_url?: string }>(
         "zivvy_brand.api.addons.subscribe",
-        { slug: addon.slug }
+        { addon_slug: addon.slug }
       );
       if (result?.checkout_url) {
         window.open(result.checkout_url, "_blank", "noopener,noreferrer");
@@ -123,9 +127,9 @@ export function AddonsManager({ tenant, currentUser }: Props) {
     setCancelling(true);
     try {
       await frappeCall("zivvy_brand.api.addons.cancel", {
-        slug: cancelTarget.slug,
+        addon_slug: cancelTarget.addon_slug,
       });
-      toast.success(`${cancelTarget.title} will not renew`);
+      toast.success(`${cancelTarget.addon_title ?? cancelTarget.addon_slug} will not renew`);
       setCancelTarget(null);
       fetchData();
     } catch {
@@ -175,7 +179,7 @@ export function AddonsManager({ tenant, currentUser }: Props) {
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Cancel {cancelTarget?.title}?</AlertDialogTitle>
+            <AlertDialogTitle>Cancel {cancelTarget?.addon_title ?? cancelTarget?.addon_slug}?</AlertDialogTitle>
             <AlertDialogDescription>
               Access continues until{" "}
               {cancelTarget?.current_period_end
@@ -209,14 +213,12 @@ interface AddonCardProps {
 }
 
 function AddonCard({ addon, active, subscribing, onSubscribe, onCancel }: AddonCardProps) {
-  const price = formatMoney(addon.monthly_price, addon.currency || "USD");
+  const price = formatMoney(addon.monthly_price_usd, "USD");
   const doctypes = addon.doctypes_unlocked ?? [];
   const shown = doctypes.slice(0, 3);
   const extra = doctypes.length - shown.length;
   const isActive = !!active;
-  const willCancel = active
-    ? active.cancel_at_period_end === true || active.cancel_at_period_end === 1
-    : false;
+  const willCancel = active?.status === "cancelled";
 
   return (
     <Card

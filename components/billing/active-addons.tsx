@@ -55,9 +55,9 @@ export function ActiveAddons() {
     setCancelling(true);
     try {
       await frappeCall("zivvy_brand.api.addons.cancel", {
-        slug: cancelTarget.slug,
+        addon_slug: cancelTarget.addon_slug,
       });
-      toast.success(`${cancelTarget.title} will not renew`);
+      toast.success(`${cancelTarget.addon_title ?? cancelTarget.addon_slug} will not renew`);
       setCancelTarget(null);
       fetchAddons();
     } catch {
@@ -107,24 +107,22 @@ export function ActiveAddons() {
           ) : (
             <div className="space-y-2">
               {addons.map((addon) => {
-                const willCancel =
-                  addon.cancel_at_period_end === true ||
-                  addon.cancel_at_period_end === 1;
+                const willCancel = addon.status === "cancelled";
+                const price =
+                  addon.price_locked_usd ?? undefined;
                 return (
                   <div
-                    key={addon.slug}
+                    key={addon.addon_slug}
                     className="flex items-center justify-between rounded-lg border p-3"
                   >
                     <div className="space-y-1 min-w-0">
                       <div className="flex items-center gap-2">
-                        <span className="font-medium text-sm">{addon.title}</span>
-                        {addon.monthly_price !== undefined && (
+                        <span className="font-medium text-sm">
+                          {addon.addon_title ?? addon.addon_slug}
+                        </span>
+                        {price !== undefined && price !== null && (
                           <span className="text-xs text-muted-foreground">
-                            {formatMoney(
-                              addon.monthly_price,
-                              addon.currency || "USD"
-                            )}
-                            /mo
+                            {formatMoney(price, "USD")}/mo
                           </span>
                         )}
                       </div>
@@ -157,7 +155,7 @@ export function ActiveAddons() {
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Cancel {cancelTarget?.title}?</AlertDialogTitle>
+            <AlertDialogTitle>Cancel {cancelTarget?.addon_title ?? cancelTarget?.addon_slug}?</AlertDialogTitle>
             <AlertDialogDescription>
               Access continues until{" "}
               {cancelTarget?.current_period_end
