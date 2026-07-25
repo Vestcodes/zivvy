@@ -4,6 +4,15 @@ import { ArrowRight, Building2, ClipboardCheck, Landmark, Upload } from "lucide-
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { StatusBadge } from "@/components/ui/status-badge";
 import { formatDate } from "@/lib/format";
 import { frappeGetCount, reportviewGet, type ListRow } from "@/lib/frappe-meta";
 
@@ -163,37 +172,52 @@ export default async function BankingDashboardPage() {
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader>
+      <Card className="p-0">
+        <CardHeader className="p-6 pb-4">
           <CardTitle>Recent statement imports</CardTitle>
           <CardDescription className="mt-1">Latest 5 bank statement imports.</CardDescription>
         </CardHeader>
-        <CardContent>
-          {imports.length === 0 ? (
-            <p className="text-sm text-muted-foreground py-6 text-center">
-              No statement imports yet.
-            </p>
-          ) : (
-            <div className="space-y-2">
+        {imports.length === 0 ? (
+          <div className="pb-8 text-center text-sm text-muted-foreground">
+            No statement imports yet.
+          </div>
+        ) : (
+          <Table>
+            <TableHeader>
+              <TableRow className="bg-secondary/40 hover:bg-secondary/40">
+                <TableHead className="font-medium">Import ID</TableHead>
+                <TableHead className="font-medium">Bank account</TableHead>
+                <TableHead className="text-right font-medium">Records</TableHead>
+                <TableHead className="text-right font-medium">Created</TableHead>
+                <TableHead className="font-medium">Status</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {imports.map((imp) => (
-                <div key={imp.name} className="flex items-center justify-between rounded-lg border px-3 py-2">
-                  <div className="min-w-0 flex-1">
-                    <div className="font-medium text-sm truncate">{imp.name}</div>
-                    <div className="text-xs text-muted-foreground truncate">
-                      {imp.bank_account || "—"} · {formatDate(imp.creation)}
-                    </div>
-                  </div>
-                  <Badge
-                    variant={imp.status === "Success" ? "default" : imp.status === "Error" ? "destructive" : "secondary"}
-                    className="text-xs shrink-0"
-                  >
-                    {imp.status || "Pending"}
-                  </Badge>
-                </div>
+                <TableRow key={imp.name} className="hover:bg-muted/40">
+                  <TableCell>
+                    <Link
+                      href={`/finance/banking/statements/logs/${encodeURIComponent(imp.name)}`}
+                      className="font-mono text-xs hover:underline"
+                    >
+                      {imp.name}
+                    </Link>
+                  </TableCell>
+                  <TableCell className="text-sm">{imp.bank_account || "—"}</TableCell>
+                  <TableCell className="text-right tabular-nums">
+                    {imp.no_of_records ?? "—"}
+                  </TableCell>
+                  <TableCell className="text-right text-xs text-muted-foreground whitespace-nowrap">
+                    {formatDate(imp.creation)}
+                  </TableCell>
+                  <TableCell>
+                    <StatusBadge status={imp.status || "Pending"} />
+                  </TableCell>
+                </TableRow>
               ))}
-            </div>
-          )}
-        </CardContent>
+            </TableBody>
+          </Table>
+        )}
       </Card>
     </div>
   );

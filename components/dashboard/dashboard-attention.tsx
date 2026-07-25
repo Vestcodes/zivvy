@@ -1,38 +1,34 @@
 import Link from "next/link";
-import { AlertCircle, ArrowRight, Boxes, Clock, Receipt, PartyPopper } from "lucide-react";
+import { AlertCircle, ArrowRight, PartyPopper } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { StatusBadge } from "@/components/ui/status-badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { iconForKind } from "@/lib/dashboard-icons";
+import type { StatusTone } from "@/lib/status";
 import type { AttentionItem } from "@/lib/dashboard-data";
-
-const ICON_BY_KIND: Record<AttentionItem["kind"], React.ElementType> = {
-  "overdue-invoice": Receipt,
-  "arriving-po": Clock,
-  "low-stock": Boxes
-};
 
 const SEVERITY_STYLE: Record<AttentionItem["severity"], string> = {
   critical: "text-destructive",
   warning: "text-chart-2",
-  info: "text-muted-foreground"
+  info: "text-muted-foreground",
+};
+
+const SEVERITY_TONE: Record<AttentionItem["severity"], StatusTone> = {
+  critical: "danger",
+  warning: "warning",
+  info: "info",
 };
 
 const SEVERITY_LABEL: Record<AttentionItem["severity"], string> = {
   critical: "Critical",
   warning: "Warning",
-  info: "Info"
-};
-
-const SEVERITY_BADGE: Record<AttentionItem["severity"], string> = {
-  critical: "bg-destructive/10 text-destructive border-destructive/20",
-  warning: "bg-chart-2/10 text-chart-2 border-chart-2/20",
-  info: "bg-muted text-muted-foreground border-transparent"
+  info: "Info",
 };
 
 export function DashboardAttention({
   items,
-  className
+  className,
 }: {
   items: AttentionItem[];
   className?: string;
@@ -69,7 +65,7 @@ export function DashboardAttention({
         ) : (
           <ul className="divide-y divide-border/60">
             {items.map((item, i) => {
-              const Icon = ICON_BY_KIND[item.kind] ?? AlertCircle;
+              const Icon = iconForKind(item.kind);
               return (
                 <li key={`${item.kind}-${i}`}>
                   <Link
@@ -88,9 +84,11 @@ export function DashboardAttention({
                       <p className="truncate text-sm font-medium">{item.title}</p>
                       <p className="truncate text-xs text-muted-foreground">{item.meta}</p>
                     </div>
-                    <Badge variant="outline" className={cn("shrink-0", SEVERITY_BADGE[item.severity])}>
-                      {SEVERITY_LABEL[item.severity]}
-                    </Badge>
+                    <StatusBadge
+                      status={SEVERITY_LABEL[item.severity]}
+                      tone={SEVERITY_TONE[item.severity]}
+                      className="shrink-0"
+                    />
                     <ArrowRight className="size-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
                   </Link>
                 </li>

@@ -1,20 +1,14 @@
 import Link from "next/link";
-import { ArrowRight, CircleDollarSign, Inbox, PackageCheck, Receipt as ReceiptIcon, UserPlus } from "lucide-react";
+import { ArrowRight, Inbox } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { iconForKind } from "@/lib/dashboard-icons";
 import type { ActivityItem } from "@/lib/dashboard-data";
-
-const ICON_BY_KIND: Record<ActivityItem["kind"], React.ElementType> = {
-  payment: CircleDollarSign,
-  delivery: PackageCheck,
-  lead: UserPlus,
-  invoice: ReceiptIcon
-};
 
 export function DashboardActivity({
   items,
-  className
+  className,
 }: {
   items: ActivityItem[];
   className?: string;
@@ -46,7 +40,7 @@ export function DashboardActivity({
         ) : (
           <ul className="divide-y divide-border/60">
             {items.map((item, i) => {
-              const Icon = ICON_BY_KIND[item.kind] ?? Inbox;
+              const Icon = iconForKind(item.kind);
               return (
                 <li key={`${item.kind}-${i}`}>
                   <Link

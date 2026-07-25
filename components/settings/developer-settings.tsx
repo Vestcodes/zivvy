@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import {
   Copy,
@@ -14,13 +13,12 @@ import {
   Webhook,
   Activity,
   ExternalLink,
-  CheckCircle2,
-  XCircle,
   RefreshCw,
 } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { StatusBadge } from "@/components/ui/status-badge";
+import { DataList, type DataListColumn } from "@/components/ui/data-list";
 import {
   Dialog,
   DialogContent,
@@ -48,10 +46,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Badge } from "@/components/ui/badge";
 import { frappeCall } from "@/lib/frappe-client";
-import { cn } from "@/lib/utils";
-import { formatDate } from "@/lib/format";
+import { formatDate, formatDateTime, formatRelative } from "@/lib/format";
+import type { StatusTone } from "@/lib/status";
 
 interface Props {
   tenant: string;
@@ -153,7 +151,6 @@ export function DeveloperSettings({ tenant, tier, currentUser }: Props) {
 // ─────────────────────────────────────────────────────────
 
 function ApiKeysTab({ tenant, currentUser }: { tenant: string; currentUser: string }) {
-  const router = useRouter();
   const [keys, setKeys] = useState<ApiKey[]>([]);
   const [loading, setLoading] = useState(true);
   const [createOpen, setCreateOpen] = useState(false);
@@ -216,6 +213,78 @@ function ApiKeysTab({ tenant, currentUser }: { tenant: string; currentUser: stri
     toast.success("Copied to clipboard");
   };
 
+  const columns: Array<DataListColumn<ApiKey>> = [
+    {
+      key: "label",
+      header: "Label",
+      sortKey: "label",
+      cell: (k) => <span className="font-medium">{k.label}</span>,
+    },
+    {
+      key: "preview",
+      header: "Preview",
+      cell: (k) => (
+        <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs text-muted-foreground">
+          {k.key_preview}
+        </code>
+      ),
+    },
+    {
+      key: "tier",
+      header: "Tier",
+      cell: (k) =>
+        k.tier ? (
+          <Badge variant="outline" className="text-xs">
+            {k.tier}
+          </Badge>
+        ) : (
+          <span className="text-xs text-muted-foreground">—</span>
+        ),
+    },
+    {
+      key: "status",
+      header: "Status",
+      sortKey: "enabled",
+      cell: (k) => (
+        <StatusBadge
+          status={k.enabled ? "Active" : "Revoked"}
+          tone={k.enabled ? "success" : "danger"}
+        />
+      ),
+    },
+    {
+      key: "last_used",
+      header: "Last used",
+      align: "right",
+      sortKey: "last_used",
+      cell: (k) =>
+        k.last_used ? (
+          <span
+            className="whitespace-nowrap text-xs text-muted-foreground"
+            title={formatDateTime(k.last_used)}
+          >
+            {formatRelative(k.last_used)}
+          </span>
+        ) : (
+          <span className="text-xs text-muted-foreground">Never</span>
+        ),
+    },
+    {
+      key: "creation",
+      header: "Created",
+      align: "right",
+      sortKey: "creation",
+      cell: (k) => (
+        <span
+          className="whitespace-nowrap text-xs text-muted-foreground"
+          title={formatDateTime(k.creation)}
+        >
+          {formatDate(k.creation)}
+        </span>
+      ),
+    },
+  ];
+
   return (
     <>
       <Card>
@@ -232,59 +301,38 @@ function ApiKeysTab({ tenant, currentUser }: { tenant: string; currentUser: stri
           </Button>
         </CardHeader>
         <CardContent>
-          {loading ? (
-            <div className="space-y-3">
-              {[1, 2].map((i) => <Skeleton key={i} className="h-14 w-full rounded-lg" />)}
-            </div>
-          ) : keys.length === 0 ? (
-            <p className="text-sm text-muted-foreground py-8 text-center">
-              No API keys yet. Create one to get started.
-            </p>
-          ) : (
-            <div className="space-y-2">
-              {keys.map((key) => (
-                <div
-                  key={key.name}
-                  className="flex items-center justify-between rounded-lg border p-3"
-                >
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2">
-                      <span className="font-medium text-sm">{key.label}</span>
-                      <Badge variant={key.enabled ? "default" : "secondary"} className="text-xs">
-                        {key.enabled ? "Active" : "Revoked"}
-                      </Badge>
-                    </div>
-                    <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                      <code className="bg-muted px-1.5 py-0.5 rounded font-mono">
-                        {key.key_preview}
-                      </code>
-                      {key.last_used && (
-                        <span>Last used {formatDate(key.last_used)}</span>
-                      )}
-                    </div>
-                  </div>
-                  {key.enabled && (
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon-sm">
-                          <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem
-                          className="text-destructive"
-                          onClick={() => setRevokeTarget(key)}
-                        >
-                          <Trash2 className="h-3.5 w-3.5 mr-2" />
-                          Revoke
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
+          <DataList<ApiKey>
+            columns={columns}
+            rows={keys}
+            loading={loading}
+            loadingRowCount={2}
+            rowKey={(k) => k.name}
+            emptyState={
+              <div className="py-12 text-center text-sm text-muted-foreground">
+                No API keys yet. Create one to get started.
+              </div>
+            }
+            rowActions={(k) =>
+              k.enabled ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="icon-sm">
+                      <MoreHorizontal className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem
+                      className="text-destructive"
+                      onClick={() => setRevokeTarget(k)}
+                    >
+                      <Trash2 className="h-3.5 w-3.5 mr-2" />
+                      Revoke
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : null
+            }
+          />
         </CardContent>
       </Card>
 
@@ -425,6 +473,103 @@ function WebhooksTab({ tenant }: { tenant: string }) {
     }
   };
 
+  const columns: Array<DataListColumn<WebhookSub>> = [
+    {
+      key: "label",
+      header: "Label",
+      sortKey: "label",
+      cell: (w) => (
+        <div className="min-w-0 max-w-[220px]">
+          <div className="truncate text-sm font-medium">
+            {w.label || "Untitled"}
+          </div>
+          <div
+            className="truncate font-mono text-xs text-muted-foreground"
+            title={w.url}
+          >
+            {w.url}
+          </div>
+        </div>
+      ),
+    },
+    {
+      key: "events",
+      header: "Events",
+      cell: (w) => {
+        const raw = (w.events || "").trim();
+        if (!raw || raw === "*") {
+          return (
+            <Badge variant="outline" className="text-xs">
+              All events
+            </Badge>
+          );
+        }
+        const list = raw
+          .split(",")
+          .map((s) => s.trim())
+          .filter(Boolean);
+        const visible = list.slice(0, 2);
+        const overflow = list.length - visible.length;
+        return (
+          <div className="flex max-w-[260px] flex-wrap items-center gap-1">
+            {visible.map((ev) => (
+              <Badge key={ev} variant="outline" className="font-mono text-[10px]">
+                {ev}
+              </Badge>
+            ))}
+            {overflow > 0 ? (
+              <span className="text-xs text-muted-foreground">+{overflow}</span>
+            ) : null}
+          </div>
+        );
+      },
+    },
+    {
+      key: "deliveries",
+      header: "Deliveries",
+      align: "right",
+      sortKey: "total_deliveries",
+      cell: (w) => (
+        <span className="tabular-nums text-sm">{w.total_deliveries ?? 0}</span>
+      ),
+    },
+    {
+      key: "last_delivery",
+      header: "Last delivery",
+      cell: (w) =>
+        w.last_status ? (
+          <StatusBadge status={w.last_status} />
+        ) : (
+          <span className="text-xs text-muted-foreground">Never</span>
+        ),
+    },
+    {
+      key: "enabled",
+      header: "Status",
+      sortKey: "enabled",
+      cell: (w) => (
+        <StatusBadge
+          status={w.enabled ? "Active" : "Disabled"}
+          tone={w.enabled ? "success" : "neutral"}
+        />
+      ),
+    },
+    {
+      key: "creation",
+      header: "Created",
+      align: "right",
+      sortKey: "creation",
+      cell: (w) => (
+        <span
+          className="whitespace-nowrap text-xs text-muted-foreground"
+          title={formatDateTime(w.creation)}
+        >
+          {formatDate(w.creation)}
+        </span>
+      ),
+    },
+  ];
+
   return (
     <>
       <Card>
@@ -441,66 +586,36 @@ function WebhooksTab({ tenant }: { tenant: string }) {
           </Button>
         </CardHeader>
         <CardContent>
-          {loading ? (
-            <div className="space-y-3">
-              {[1, 2].map((i) => <Skeleton key={i} className="h-14 w-full rounded-lg" />)}
-            </div>
-          ) : webhooks.length === 0 ? (
-            <p className="text-sm text-muted-foreground py-8 text-center">
-              No webhooks configured. Add one to receive event notifications.
-            </p>
-          ) : (
-            <div className="space-y-2">
-              {webhooks.map((wh) => (
-                <div
-                  key={wh.name}
-                  className="flex items-center justify-between rounded-lg border p-3"
-                >
-                  <div className="space-y-1 min-w-0 flex-1">
-                    <div className="flex items-center gap-2">
-                      <span className="font-medium text-sm truncate">
-                        {wh.label || wh.url}
-                      </span>
-                      <Badge variant={wh.enabled ? "default" : "secondary"} className="text-xs shrink-0">
-                        {wh.enabled ? "Active" : "Disabled"}
-                      </Badge>
-                      {wh.last_status && (
-                        <span className="flex items-center gap-1 text-xs">
-                          {wh.last_status === "Success" ? (
-                            <CheckCircle2 className="h-3 w-3 text-green-500" />
-                          ) : (
-                            <XCircle className="h-3 w-3 text-red-500" />
-                          )}
-                        </span>
-                      )}
-                    </div>
-                    <div className="text-xs text-muted-foreground truncate">
-                      <code className="font-mono">{wh.url}</code>
-                      {wh.total_deliveries > 0 && (
-                        <span className="ml-2">{wh.total_deliveries} deliveries</span>
-                      )}
-                    </div>
-                  </div>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="icon-sm" className="shrink-0">
-                        <MoreHorizontal className="h-4 w-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem
-                        className="text-destructive"
-                        onClick={() => setDeleteTarget(wh)}
-                      >
-                        <Trash2 className="h-3.5 w-3.5 mr-2" />
-                        Delete
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </div>
-              ))}
-            </div>
-          )}
+          <DataList<WebhookSub>
+            columns={columns}
+            rows={webhooks}
+            loading={loading}
+            loadingRowCount={2}
+            rowKey={(w) => w.name}
+            emptyState={
+              <div className="py-12 text-center text-sm text-muted-foreground">
+                No webhooks configured. Add one to receive event notifications.
+              </div>
+            }
+            rowActions={(w) => (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon-sm">
+                    <MoreHorizontal className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem
+                    className="text-destructive"
+                    onClick={() => setDeleteTarget(w)}
+                  >
+                    <Trash2 className="h-3.5 w-3.5 mr-2" />
+                    Delete
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
+          />
         </CardContent>
       </Card>
 
@@ -575,9 +690,20 @@ function WebhooksTab({ tenant }: { tenant: string }) {
 // Events Tab
 // ─────────────────────────────────────────────────────────
 
+/** Map event verb (created/updated/submitted/deleted) to a status tone. */
+function eventVerbTone(eventType: string): StatusTone {
+  const t = eventType.toLowerCase();
+  if (t.includes("delete") || t.includes("cancel")) return "danger";
+  if (t.includes("submit") || t.includes("approve")) return "success";
+  if (t.includes("update") || t.includes("modif")) return "progress";
+  if (t.includes("create")) return "info";
+  return "neutral";
+}
+
 function EventsTab({ tenant }: { tenant: string }) {
   const [events, setEvents] = useState<EventEntry[]>([]);
   const [loading, setLoading] = useState(true);
+  const [payloadTarget, setPayloadTarget] = useState<EventEntry | null>(null);
 
   const fetchEvents = useCallback(async () => {
     try {
@@ -594,52 +720,119 @@ function EventsTab({ tenant }: { tenant: string }) {
 
   useEffect(() => { fetchEvents(); }, [fetchEvents]);
 
-  return (
-    <Card>
-      <CardHeader className="flex-row items-center justify-between space-y-0">
-        <div>
-          <CardTitle>Event Log</CardTitle>
-          <CardDescription className="mt-1">
-            Recent events from your account — use these to debug webhook deliveries.
-          </CardDescription>
+  const columns: Array<DataListColumn<EventEntry>> = [
+    {
+      key: "event_type",
+      header: "Event",
+      sortKey: "event_type",
+      cell: (ev) => (
+        <StatusBadge status={ev.event_type} tone={eventVerbTone(ev.event_type)} />
+      ),
+    },
+    {
+      key: "resource",
+      header: "Resource",
+      cell: (ev) => (
+        <div className="max-w-[260px] min-w-0">
+          <div className="truncate text-xs uppercase tracking-wide text-muted-foreground">
+            {ev.resource || "—"}
+          </div>
+          <div className="truncate font-mono text-xs" title={ev.resource_name}>
+            {ev.resource_name || "—"}
+          </div>
         </div>
-        <Button variant="outline" size="sm" onClick={() => { setLoading(true); fetchEvents(); }}>
-          <RefreshCw className="h-3.5 w-3.5 mr-1.5" />
-          Refresh
-        </Button>
-      </CardHeader>
-      <CardContent>
-        {loading ? (
-          <div className="space-y-3">
-            {[1, 2, 3].map((i) => <Skeleton key={i} className="h-10 w-full rounded-lg" />)}
+      ),
+    },
+    {
+      key: "ref",
+      header: "Ref",
+      cell: (ev) => (
+        <code className="font-mono text-xs text-muted-foreground">{ev.name}</code>
+      ),
+    },
+    {
+      key: "when",
+      header: "When",
+      align: "right",
+      sortKey: "creation",
+      cell: (ev) => (
+        <span
+          className="whitespace-nowrap text-xs text-muted-foreground"
+          title={formatDateTime(ev.creation)}
+        >
+          {formatRelative(ev.creation)}
+        </span>
+      ),
+    },
+  ];
+
+  return (
+    <>
+      <Card>
+        <CardHeader className="flex-row items-center justify-between space-y-0">
+          <div>
+            <CardTitle>Event Log</CardTitle>
+            <CardDescription className="mt-1">
+              Recent events from your account — use these to debug webhook deliveries.
+            </CardDescription>
           </div>
-        ) : events.length === 0 ? (
-          <p className="text-sm text-muted-foreground py-8 text-center">
-            No events yet. Events are logged when documents are created, updated, or submitted.
-          </p>
-        ) : (
-          <div className="space-y-1">
-            {events.map((ev) => (
-              <div
-                key={ev.name}
-                className="flex items-center justify-between rounded-lg border px-3 py-2"
-              >
-                <div className="flex items-center gap-3 min-w-0">
-                  <Badge variant="outline" className="font-mono text-xs shrink-0">
-                    {ev.event_type}
-                  </Badge>
-                  <span className="text-sm text-muted-foreground truncate">
-                    {ev.resource_name}
-                  </span>
-                </div>
-                <span className="text-xs text-muted-foreground shrink-0 ml-4">
-                  {formatDate(ev.creation)}
-                </span>
+          <Button variant="outline" size="sm" onClick={() => { setLoading(true); fetchEvents(); }}>
+            <RefreshCw className="h-3.5 w-3.5 mr-1.5" />
+            Refresh
+          </Button>
+        </CardHeader>
+        <CardContent>
+          <DataList<EventEntry>
+            columns={columns}
+            rows={events}
+            loading={loading}
+            loadingRowCount={3}
+            rowKey={(ev) => ev.name}
+            emptyState={
+              <div className="py-12 text-center text-sm text-muted-foreground">
+                No events yet. Events are logged when documents are created, updated, or submitted.
               </div>
-            ))}
-          </div>
-        )}
-      </CardContent>
-    </Card>
+            }
+            rowActions={(ev) => (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon-sm">
+                    <MoreHorizontal className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={() => setPayloadTarget(ev)}>
+                    View payload
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      navigator.clipboard.writeText(ev.name);
+                      toast.success("Event id copied");
+                    }}
+                  >
+                    <Copy className="h-3.5 w-3.5 mr-2" />
+                    Copy id
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
+          />
+        </CardContent>
+      </Card>
+
+      <Dialog open={!!payloadTarget} onOpenChange={() => setPayloadTarget(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Event payload</DialogTitle>
+            <DialogDescription>
+              {payloadTarget?.event_type} · {payloadTarget?.resource_name}
+            </DialogDescription>
+          </DialogHeader>
+          <pre className="max-h-[400px] overflow-auto rounded-lg border bg-muted p-3 font-mono text-xs">
+            {JSON.stringify(payloadTarget ?? {}, null, 2)}
+          </pre>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }

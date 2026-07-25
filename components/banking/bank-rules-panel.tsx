@@ -6,6 +6,8 @@ import { MoreHorizontal, Plus, Trash2, Pencil } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { StatusBadge } from "@/components/ui/status-badge";
+import { DataList, type DataListColumn } from "@/components/ui/data-list";
 import {
   Dialog,
   DialogContent,
@@ -32,7 +34,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Skeleton } from "@/components/ui/skeleton";
 import {
   Select,
   SelectContent,
@@ -190,8 +191,100 @@ export function BankRulesPanel() {
     }
   };
 
+  const columns: Array<DataListColumn<BankRule>> = [
+    {
+      key: "priority",
+      header: "Priority",
+      align: "right",
+      sortKey: "priority",
+      cell: (r) => (
+        <span className="tabular-nums text-sm">{r.priority ?? "—"}</span>
+      ),
+    },
+    {
+      key: "rule_name",
+      header: "Rule name",
+      sortKey: "rule_name",
+      cell: (r) => (
+        <button
+          type="button"
+          onClick={() => openEdit(r)}
+          className="text-left font-medium hover:underline"
+        >
+          {r.rule_name || r.name}
+        </button>
+      ),
+    },
+    {
+      key: "type",
+      header: "Type",
+      sortKey: "transaction_type",
+      cell: (r) =>
+        r.transaction_type ? (
+          <Badge variant="secondary" className="text-xs">
+            {r.transaction_type}
+          </Badge>
+        ) : (
+          <span className="text-xs text-muted-foreground">any</span>
+        ),
+    },
+    {
+      key: "party",
+      header: "Party filter",
+      cell: (r) =>
+        r.party_type || r.party ? (
+          <div className="min-w-0 max-w-[200px]">
+            <div className="truncate text-xs uppercase tracking-wide text-muted-foreground">
+              {r.party_type || "—"}
+            </div>
+            {r.party ? (
+              <div className="truncate text-sm">{r.party}</div>
+            ) : null}
+          </div>
+        ) : (
+          <span className="text-xs text-muted-foreground">any</span>
+        ),
+    },
+    {
+      key: "company",
+      header: "Company",
+      cell: (r) =>
+        r.company ? (
+          <span className="text-sm">{r.company}</span>
+        ) : (
+          <span className="text-xs text-muted-foreground">—</span>
+        ),
+    },
+    {
+      key: "pattern",
+      header: "Match pattern",
+      cell: (r) =>
+        r.description_rules ? (
+          <div
+            className="max-w-[240px] truncate font-mono text-xs text-muted-foreground"
+            title={r.description_rules}
+          >
+            {r.description_rules}
+          </div>
+        ) : (
+          <span className="text-xs text-muted-foreground">—</span>
+        ),
+    },
+    {
+      key: "status",
+      header: "Status",
+      sortKey: "disabled",
+      cell: (r) => (
+        <StatusBadge
+          status={r.disabled ? "Disabled" : "Active"}
+          tone={r.disabled ? "neutral" : "success"}
+        />
+      ),
+    },
+  ];
+
   return (
-    <div className="mx-auto w-full max-w-4xl space-y-4">
+    <div className="mx-auto w-full max-w-5xl space-y-4">
       <header>
         <h1 className="font-display text-2xl tracking-tight sm:text-3xl">Bank rules</h1>
         <p className="text-sm text-muted-foreground mt-1">
@@ -212,54 +305,38 @@ export function BankRulesPanel() {
           </Button>
         </CardHeader>
         <CardContent>
-          {loading ? (
-            <div className="space-y-2">
-              {[1, 2, 3].map((i) => <Skeleton key={i} className="h-14 w-full" />)}
-            </div>
-          ) : rows.length === 0 ? (
-            <p className="text-sm text-muted-foreground py-12 text-center">
-              No rules yet. Create one to auto-classify transactions.
-            </p>
-          ) : (
-            <div className="space-y-2">
-              {rows.map((r) => (
-                <div key={r.name} className="flex items-center justify-between rounded-lg border p-3">
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-center gap-2">
-                      <span className="font-medium text-sm">{r.rule_name || r.name}</span>
-                      <Badge variant="outline" className="text-xs">Priority {r.priority ?? "—"}</Badge>
-                      {r.transaction_type ? (
-                        <Badge variant="secondary" className="text-xs">{r.transaction_type}</Badge>
-                      ) : null}
-                      {r.disabled ? (
-                        <Badge variant="secondary" className="text-xs">Disabled</Badge>
-                      ) : null}
-                    </div>
-                    {r.description_rules ? (
-                      <div className="text-xs text-muted-foreground mt-1 truncate">
-                        {r.description_rules}
-                      </div>
-                    ) : null}
-                  </div>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="icon-sm">
-                        <MoreHorizontal className="h-4 w-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem onClick={() => openEdit(r)}>
-                        <Pencil className="h-3.5 w-3.5 mr-2" /> Edit
-                      </DropdownMenuItem>
-                      <DropdownMenuItem className="text-destructive" onClick={() => setDeleteTarget(r)}>
-                        <Trash2 className="h-3.5 w-3.5 mr-2" /> Delete
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </div>
-              ))}
-            </div>
-          )}
+          <DataList<BankRule>
+            columns={columns}
+            rows={rows}
+            loading={loading}
+            loadingRowCount={3}
+            rowKey={(r) => r.name}
+            emptyState={
+              <div className="py-12 text-center text-sm text-muted-foreground">
+                No rules yet. Create one to auto-classify transactions.
+              </div>
+            }
+            rowActions={(r) => (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon-sm">
+                    <MoreHorizontal className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={() => openEdit(r)}>
+                    <Pencil className="h-3.5 w-3.5 mr-2" /> Edit
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    className="text-destructive"
+                    onClick={() => setDeleteTarget(r)}
+                  >
+                    <Trash2 className="h-3.5 w-3.5 mr-2" /> Delete
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
+          />
         </CardContent>
       </Card>
 

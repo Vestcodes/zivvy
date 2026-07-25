@@ -3,11 +3,19 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { toast } from "sonner";
-import { ArrowLeftRight, FileText, ListChecks } from "lucide-react";
+import { ArrowLeftRight, FileText, ListChecks, MoreHorizontal } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { StatusBadge } from "@/components/ui/status-badge";
+import { DataList, type DataListColumn } from "@/components/ui/data-list";
 import { frappeCall } from "@/lib/frappe-client";
 import { formatDate, formatMoney } from "@/lib/format";
 
@@ -112,15 +120,79 @@ function TransactionsTab({ bankAccount }: { bankAccount: string }) {
     fetchRows();
   }, [fetchRows]);
 
-  if (loading) {
-    return (
-      <Card>
-        <CardContent className="pt-6 space-y-2">
-          {[1, 2, 3].map((i) => <Skeleton key={i} className="h-10 w-full" />)}
-        </CardContent>
-      </Card>
-    );
-  }
+  const columns: Array<DataListColumn<Transaction>> = [
+    {
+      key: "date",
+      header: "Date",
+      sortKey: "date",
+      cell: (r) => (
+        <span className="whitespace-nowrap text-xs text-muted-foreground">
+          {formatDate(r.date)}
+        </span>
+      ),
+    },
+    {
+      key: "description",
+      header: "Description",
+      cell: (r) => (
+        <div className="min-w-0 max-w-[320px]">
+          <div className="truncate text-sm font-medium" title={r.description}>
+            {r.description || r.name}
+          </div>
+          {!r.description ? (
+            <div className="truncate font-mono text-xs text-muted-foreground">
+              {r.name}
+            </div>
+          ) : null}
+        </div>
+      ),
+    },
+    {
+      key: "deposit",
+      header: "Deposit",
+      align: "right",
+      cell: (r) =>
+        r.deposit && r.deposit > 0 ? (
+          <span className="tabular-nums text-emerald-600 dark:text-emerald-400">
+            {formatMoney(r.deposit, r.currency || "USD")}
+          </span>
+        ) : (
+          <span className="text-muted-foreground">—</span>
+        ),
+    },
+    {
+      key: "withdrawal",
+      header: "Withdrawal",
+      align: "right",
+      cell: (r) =>
+        r.withdrawal && r.withdrawal > 0 ? (
+          <span className="tabular-nums text-red-600 dark:text-red-400">
+            {formatMoney(r.withdrawal, r.currency || "USD")}
+          </span>
+        ) : (
+          <span className="text-muted-foreground">—</span>
+        ),
+    },
+    {
+      key: "unallocated",
+      header: "Unallocated",
+      align: "right",
+      cell: (r) =>
+        r.unallocated_amount !== undefined && r.unallocated_amount !== null ? (
+          <span className="tabular-nums text-xs text-muted-foreground">
+            {formatMoney(r.unallocated_amount, r.currency || "USD")}
+          </span>
+        ) : (
+          <span className="text-muted-foreground">—</span>
+        ),
+    },
+    {
+      key: "status",
+      header: "Status",
+      sortKey: "status",
+      cell: (r) => <StatusBadge status={r.status} />,
+    },
+  ];
 
   return (
     <Card>
@@ -137,38 +209,27 @@ function TransactionsTab({ bankAccount }: { bankAccount: string }) {
         </Link>
       </CardHeader>
       <CardContent>
-        {rows.length === 0 ? (
-          <p className="text-sm text-muted-foreground py-8 text-center">
-            No transactions yet.
-          </p>
-        ) : (
-          <div className="space-y-1">
-            {rows.map((r) => (
-              <div key={r.name} className="flex items-center justify-between rounded-lg border px-3 py-2 text-sm">
-                <div className="min-w-0 flex-1">
-                  <div className="truncate">{r.description || r.name}</div>
-                  <div className="text-xs text-muted-foreground">{formatDate(r.date)}</div>
-                </div>
-                <div className="text-right">
-                  {r.deposit && r.deposit > 0 ? (
-                    <span className="text-emerald-600 dark:text-emerald-400 tabular-nums">
-                      +{formatMoney(r.deposit, r.currency || "USD")}
-                    </span>
-                  ) : (
-                    <span className="text-red-600 dark:text-red-400 tabular-nums">
-                      −{formatMoney(r.withdrawal ?? 0, r.currency || "USD")}
-                    </span>
-                  )}
-                  {r.status ? (
-                    <div className="mt-1">
-                      <Badge variant="outline" className="text-xs">{r.status}</Badge>
-                    </div>
-                  ) : null}
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
+        <DataList<Transaction>
+          columns={columns}
+          rows={rows}
+          loading={loading}
+          loadingRowCount={3}
+          rowKey={(r) => r.name}
+          emptyState={
+            <div className="py-12 text-center text-sm text-muted-foreground">
+              No transactions yet.
+            </div>
+          }
+          rowActions={(r) => (
+            <Button asChild variant="ghost" size="icon-sm" title="Reconcile">
+              <Link
+                href={`/finance/banking/reconciliation?bank_account=${encodeURIComponent(bankAccount)}&tx=${encodeURIComponent(r.name)}`}
+              >
+                <ArrowLeftRight className="h-3.5 w-3.5" />
+              </Link>
+            </Button>
+          )}
+        />
       </CardContent>
     </Card>
   );
@@ -199,15 +260,46 @@ function StatementsTab({ bankAccount }: { bankAccount: string }) {
     fetchRows();
   }, [fetchRows]);
 
-  if (loading) {
-    return (
-      <Card>
-        <CardContent className="pt-6 space-y-2">
-          {[1, 2].map((i) => <Skeleton key={i} className="h-10 w-full" />)}
-        </CardContent>
-      </Card>
-    );
-  }
+  const columns: Array<DataListColumn<Statement>> = [
+    {
+      key: "name",
+      header: "Import ID",
+      sortKey: "name",
+      cell: (r) => (
+        <Link
+          href={`/finance/banking/statements/logs/${encodeURIComponent(r.name)}`}
+          className="font-mono text-xs hover:underline"
+        >
+          {r.name}
+        </Link>
+      ),
+    },
+    {
+      key: "records",
+      header: "Records",
+      align: "right",
+      cell: (r) => (
+        <span className="tabular-nums text-sm">{r.no_of_records ?? "—"}</span>
+      ),
+    },
+    {
+      key: "creation",
+      header: "Created",
+      align: "right",
+      sortKey: "creation",
+      cell: (r) => (
+        <span className="whitespace-nowrap text-xs text-muted-foreground">
+          {formatDate(r.creation)}
+        </span>
+      ),
+    },
+    {
+      key: "status",
+      header: "Status",
+      sortKey: "status",
+      cell: (r) => <StatusBadge status={r.status || "Pending"} />,
+    },
+  ];
 
   return (
     <Card>
@@ -221,28 +313,34 @@ function StatementsTab({ bankAccount }: { bankAccount: string }) {
         </Link>
       </CardHeader>
       <CardContent>
-        {rows.length === 0 ? (
-          <p className="text-sm text-muted-foreground py-8 text-center">
-            No statement imports for this account yet.
-          </p>
-        ) : (
-          <div className="space-y-2">
-            {rows.map((r) => (
-              <div key={r.name} className="flex items-center justify-between rounded-lg border px-3 py-2">
-                <div className="min-w-0 flex-1">
-                  <div className="font-medium text-sm truncate">{r.name}</div>
-                  <div className="text-xs text-muted-foreground">{formatDate(r.creation)}</div>
-                </div>
-                <Badge
-                  variant={r.status === "Success" ? "default" : r.status === "Error" ? "destructive" : "secondary"}
-                  className="text-xs"
-                >
-                  {r.status || "Pending"}
-                </Badge>
-              </div>
-            ))}
-          </div>
-        )}
+        <DataList<Statement>
+          columns={columns}
+          rows={rows}
+          loading={loading}
+          loadingRowCount={2}
+          rowKey={(r) => r.name}
+          emptyState={
+            <div className="py-12 text-center text-sm text-muted-foreground">
+              No statement imports for this account yet.
+            </div>
+          }
+          rowActions={(r) => (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon-sm">
+                  <MoreHorizontal className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem asChild>
+                  <Link href={`/finance/banking/statements/logs/${encodeURIComponent(r.name)}`}>
+                    View log
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
+        />
       </CardContent>
     </Card>
   );
@@ -272,15 +370,50 @@ function RulesTab() {
     fetchRows();
   }, [fetchRows]);
 
-  if (loading) {
-    return (
-      <Card>
-        <CardContent className="pt-6 space-y-2">
-          {[1, 2].map((i) => <Skeleton key={i} className="h-10 w-full" />)}
-        </CardContent>
-      </Card>
-    );
-  }
+  const columns: Array<DataListColumn<Rule>> = [
+    {
+      key: "priority",
+      header: "Priority",
+      align: "right",
+      sortKey: "priority",
+      cell: (r) => (
+        <span className="tabular-nums text-xs text-muted-foreground">
+          {r.priority ?? "—"}
+        </span>
+      ),
+    },
+    {
+      key: "rule_name",
+      header: "Rule name",
+      sortKey: "rule_name",
+      cell: (r) => (
+        <span className="font-medium">{r.rule_name || r.name}</span>
+      ),
+    },
+    {
+      key: "transaction_type",
+      header: "Match type",
+      cell: (r) =>
+        r.transaction_type ? (
+          <Badge variant="secondary" className="text-xs">
+            {r.transaction_type}
+          </Badge>
+        ) : (
+          <span className="text-xs text-muted-foreground">any</span>
+        ),
+    },
+    {
+      key: "status",
+      header: "Status",
+      sortKey: "disabled",
+      cell: (r) => (
+        <StatusBadge
+          status={r.disabled ? "Disabled" : "Active"}
+          tone={r.disabled ? "neutral" : "success"}
+        />
+      ),
+    },
+  ];
 
   return (
     <Card>
@@ -294,27 +427,25 @@ function RulesTab() {
         </Link>
       </CardHeader>
       <CardContent>
-        {rows.length === 0 ? (
-          <p className="text-sm text-muted-foreground py-8 text-center">
-            No rules defined.
-          </p>
-        ) : (
-          <div className="space-y-2">
-            {rows.map((r) => (
-              <div key={r.name} className="flex items-center justify-between rounded-lg border px-3 py-2">
-                <div className="min-w-0 flex-1">
-                  <div className="font-medium text-sm truncate">{r.rule_name || r.name}</div>
-                  <div className="text-xs text-muted-foreground">
-                    Priority {r.priority ?? "—"} · {r.transaction_type || "any"}
-                  </div>
-                </div>
-                <Badge variant={r.disabled ? "secondary" : "default"} className="text-xs">
-                  {r.disabled ? "Disabled" : "Active"}
-                </Badge>
-              </div>
-            ))}
-          </div>
-        )}
+        <DataList<Rule>
+          columns={columns}
+          rows={rows}
+          loading={loading}
+          loadingRowCount={2}
+          rowKey={(r) => r.name}
+          emptyState={
+            <div className="py-12 text-center text-sm text-muted-foreground">
+              No rules defined.
+            </div>
+          }
+          rowActions={(r) => (
+            <Button asChild variant="ghost" size="icon-sm">
+              <Link href={`/finance/banking/rules?edit=${encodeURIComponent(r.name)}`}>
+                <MoreHorizontal className="h-4 w-4" />
+              </Link>
+            </Button>
+          )}
+        />
       </CardContent>
     </Card>
   );

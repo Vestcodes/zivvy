@@ -15,7 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Skeleton } from "@/components/ui/skeleton";
+import { DataList, type DataListColumn } from "@/components/ui/data-list";
 import { frappeCall } from "@/lib/frappe-client";
 import { formatDate, formatMoney } from "@/lib/format";
 import { cn } from "@/lib/utils";
@@ -217,6 +217,148 @@ export function ReconciliationWorkbench({ initialBankAccount }: Props) {
     return selected?.currency ?? accounts.find((a) => a.name === bankAccount)?.account_currency ?? "USD";
   }, [selected, accounts, bankAccount]);
 
+  const txColumns: Array<DataListColumn<BankTransaction>> = [
+    {
+      key: "sel",
+      header: "",
+      headerClassName: "w-6",
+      className: "w-6",
+      cell: (tx) => (
+        <span
+          className={cn(
+            "grid size-4 place-items-center rounded-full border",
+            selected?.name === tx.name
+              ? "border-primary bg-primary"
+              : "border-muted-foreground/40"
+          )}
+        >
+          {selected?.name === tx.name ? (
+            <span className="size-1.5 rounded-full bg-primary-foreground" />
+          ) : null}
+        </span>
+      ),
+    },
+    {
+      key: "date",
+      header: "Date",
+      cell: (tx) => (
+        <span className="whitespace-nowrap text-xs text-muted-foreground">
+          {formatDate(tx.date)}
+        </span>
+      ),
+    },
+    {
+      key: "description",
+      header: "Description",
+      cell: (tx) => (
+        <div className="max-w-[220px] min-w-0">
+          <div className="truncate text-sm font-medium" title={tx.description}>
+            {tx.description || tx.name}
+          </div>
+          {tx.reference_number ? (
+            <div className="truncate font-mono text-xs text-muted-foreground">
+              {tx.reference_number}
+            </div>
+          ) : null}
+        </div>
+      ),
+    },
+    {
+      key: "amount",
+      header: "Amount",
+      align: "right",
+      cell: (tx) =>
+        tx.deposit && tx.deposit > 0 ? (
+          <span className="tabular-nums text-sm font-medium text-emerald-600 dark:text-emerald-400">
+            +{formatMoney(tx.deposit, tx.currency || "USD")}
+          </span>
+        ) : (
+          <span className="tabular-nums text-sm font-medium text-red-600 dark:text-red-400">
+            −{formatMoney(tx.withdrawal ?? 0, tx.currency || "USD")}
+          </span>
+        ),
+    },
+    {
+      key: "unalloc",
+      header: "Unalloc",
+      align: "right",
+      cell: (tx) =>
+        tx.unallocated_amount !== undefined ? (
+          <span className="tabular-nums text-xs text-muted-foreground">
+            {formatMoney(tx.unallocated_amount, tx.currency || "USD")}
+          </span>
+        ) : (
+          <span className="text-muted-foreground">—</span>
+        ),
+    },
+  ];
+
+  const candidateColumns: Array<DataListColumn<MatchCandidate>> = [
+    {
+      key: "doctype",
+      header: "Type",
+      cell: (c) => (
+        <Badge variant="outline" className="text-xs">
+          {c.doctype}
+        </Badge>
+      ),
+    },
+    {
+      key: "name",
+      header: "Name",
+      cell: (c) => (
+        <span className="font-mono text-xs">{c.name}</span>
+      ),
+    },
+    {
+      key: "party",
+      header: "Party",
+      cell: (c) =>
+        c.party ? (
+          <span className="text-sm">{c.party}</span>
+        ) : (
+          <span className="text-xs text-muted-foreground">—</span>
+        ),
+    },
+    {
+      key: "date",
+      header: "Date",
+      align: "right",
+      cell: (c) => (
+        <span className="whitespace-nowrap text-xs text-muted-foreground">
+          {c.posting_date ? formatDate(c.posting_date) : "—"}
+        </span>
+      ),
+    },
+    {
+      key: "amount",
+      header: "Amount",
+      align: "right",
+      cell: (c) => (
+        <span className="tabular-nums text-sm font-medium">
+          {c.amount !== undefined
+            ? formatMoney(c.amount, selectedCurrency)
+            : c.paid_amount !== undefined
+              ? formatMoney(c.paid_amount, selectedCurrency)
+              : "—"}
+        </span>
+      ),
+    },
+    {
+      key: "rank",
+      header: "Score",
+      align: "right",
+      cell: (c) =>
+        c.rank !== undefined ? (
+          <span className="tabular-nums text-xs text-muted-foreground">
+            {c.rank}
+          </span>
+        ) : (
+          <span className="text-muted-foreground">—</span>
+        ),
+    },
+  ];
+
   return (
     <div className="mx-auto w-full max-w-7xl space-y-4">
       <header>
@@ -272,63 +414,26 @@ export function ReconciliationWorkbench({ initialBankAccount }: Props) {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            {loadingTx ? (
-              <div className="space-y-2">
-                {[1, 2, 3, 4].map((i) => <Skeleton key={i} className="h-14 w-full" />)}
-              </div>
-            ) : !bankAccount ? (
+            {!bankAccount ? (
               <div className="py-12 text-center text-sm text-muted-foreground">
                 <Landmark className="h-6 w-6 mx-auto mb-2" />
                 Select a bank account to begin.
               </div>
-            ) : transactions.length === 0 ? (
-              <p className="text-sm text-muted-foreground py-12 text-center">
-                No unreconciled transactions in this date range.
-              </p>
             ) : (
-              <div className="space-y-2">
-                {transactions.map((tx) => {
-                  const isSelected = selected?.name === tx.name;
-                  return (
-                    <button
-                      key={tx.name}
-                      onClick={() => setSelected(tx)}
-                      className={cn(
-                        "w-full text-left rounded-lg border p-3 transition-colors hover:bg-muted/50",
-                        isSelected && "border-primary bg-muted/60"
-                      )}
-                    >
-                      <div className="flex items-start justify-between gap-3">
-                        <div className="min-w-0">
-                          <div className="text-sm font-medium truncate">
-                            {tx.description || tx.name}
-                          </div>
-                          <div className="text-xs text-muted-foreground mt-0.5">
-                            {formatDate(tx.date)}
-                            {tx.reference_number ? ` · ${tx.reference_number}` : ""}
-                          </div>
-                        </div>
-                        <div className="text-right shrink-0">
-                          {tx.deposit && tx.deposit > 0 ? (
-                            <div className="text-sm font-medium text-emerald-600 dark:text-emerald-400 tabular-nums">
-                              +{formatMoney(tx.deposit, tx.currency || "USD")}
-                            </div>
-                          ) : (
-                            <div className="text-sm font-medium text-red-600 dark:text-red-400 tabular-nums">
-                              −{formatMoney(tx.withdrawal ?? 0, tx.currency || "USD")}
-                            </div>
-                          )}
-                          {tx.unallocated_amount !== undefined ? (
-                            <div className="text-xs text-muted-foreground tabular-nums mt-0.5">
-                              Unalloc: {formatMoney(tx.unallocated_amount, tx.currency || "USD")}
-                            </div>
-                          ) : null}
-                        </div>
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
+              <DataList<BankTransaction>
+                columns={txColumns}
+                rows={transactions}
+                loading={loadingTx}
+                loadingRowCount={4}
+                rowKey={(tx) => tx.name}
+                onRowClick={(tx) => setSelected(tx)}
+                isRowSelected={(tx) => selected?.name === tx.name}
+                emptyState={
+                  <div className="py-12 text-center text-sm text-muted-foreground">
+                    No unreconciled transactions in this date range.
+                  </div>
+                }
+              />
             )}
           </CardContent>
         </Card>
@@ -343,9 +448,9 @@ export function ReconciliationWorkbench({ initialBankAccount }: Props) {
           </CardHeader>
           <CardContent>
             {!selected ? (
-              <p className="text-sm text-muted-foreground py-12 text-center">
+              <div className="py-12 text-center text-sm text-muted-foreground">
                 No transaction selected.
-              </p>
+              </div>
             ) : (
               <div className="space-y-4">
                 <div className="flex flex-wrap gap-2">
@@ -357,47 +462,28 @@ export function ReconciliationWorkbench({ initialBankAccount }: Props) {
                   </Button>
                 </div>
 
-                {loadingCandidates ? (
-                  <div className="space-y-2">
-                    {[1, 2, 3].map((i) => <Skeleton key={i} className="h-12 w-full" />)}
-                  </div>
-                ) : candidates.length === 0 ? (
-                  <p className="text-sm text-muted-foreground py-8 text-center">
-                    No match candidates found. Use the actions above to create a new entry.
-                  </p>
-                ) : (
-                  <div className="space-y-2">
-                    {candidates.map((c, idx) => (
-                      <div
-                        key={`${c.doctype}-${c.name}-${idx}`}
-                        className="flex items-center justify-between rounded-lg border p-3"
-                      >
-                        <div className="min-w-0 flex-1">
-                          <div className="text-sm font-medium truncate">{c.name}</div>
-                          <div className="text-xs text-muted-foreground mt-0.5">
-                            <Badge variant="outline" className="mr-1 text-xs">{c.doctype}</Badge>
-                            {c.posting_date ? formatDate(c.posting_date) : "—"}
-                            {c.party ? ` · ${c.party}` : ""}
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-3 shrink-0">
-                          {c.amount !== undefined ? (
-                            <div className="text-sm font-medium tabular-nums">
-                              {formatMoney(c.amount, selectedCurrency)}
-                            </div>
-                          ) : c.paid_amount !== undefined ? (
-                            <div className="text-sm font-medium tabular-nums">
-                              {formatMoney(c.paid_amount, selectedCurrency)}
-                            </div>
-                          ) : null}
-                          <Button size="sm" variant="ghost" onClick={() => handleMatch(c)} disabled={busy}>
-                            <Link2 className="h-3.5 w-3.5 mr-1.5" /> Match
-                          </Button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
+                <DataList<MatchCandidate>
+                  columns={candidateColumns}
+                  rows={candidates}
+                  loading={loadingCandidates}
+                  loadingRowCount={3}
+                  rowKey={(c, idx) => `${c.doctype}-${c.name}-${idx}`}
+                  emptyState={
+                    <div className="py-8 text-center text-sm text-muted-foreground">
+                      No match candidates found. Use the actions above to create a new entry.
+                    </div>
+                  }
+                  rowActions={(c) => (
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => handleMatch(c)}
+                      disabled={busy}
+                    >
+                      <Link2 className="h-3.5 w-3.5 mr-1.5" /> Match
+                    </Button>
+                  )}
+                />
               </div>
             )}
           </CardContent>

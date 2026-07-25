@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { Play, Search } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/table";
 import { frappeCall } from "@/lib/frappe-client";
 import { formatDate, formatMoney } from "@/lib/format";
+import { cn } from "@/lib/utils";
 
 interface Company {
   name: string;
@@ -63,6 +64,14 @@ export function PaymentReconciliationTool() {
   const [allocations, setAllocations] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState(false);
   const [reconciliationDoc, setReconciliationDoc] = useState<string | null>(null);
+  const [selectedInvoices, setSelectedInvoices] = useState<Set<string>>(new Set());
+  const [selectedPayments, setSelectedPayments] = useState<Set<string>>(new Set());
+  const [invoiceSort, setInvoiceSort] = useState<{ key: "date" | "outstanding"; order: "asc" | "desc" }>(
+    { key: "date", order: "desc" }
+  );
+  const [paymentSort, setPaymentSort] = useState<{ key: "date" | "amount"; order: "asc" | "desc" }>(
+    { key: "date", order: "desc" }
+  );
 
   useEffect(() => {
     (async () => {
@@ -121,6 +130,67 @@ export function PaymentReconciliationTool() {
   }, [company, party, partyType, receivableAccount]);
 
   const invoiceKey = (e: UnreconciledEntry) => `${e.reference_type}::${e.reference_name}`;
+
+  function ageDays(iso?: string): string {
+    if (!iso) return "—";
+    const then = new Date(iso).getTime();
+    if (Number.isNaN(then)) return "—";
+    const days = Math.max(0, Math.floor((Date.now() - then) / 86_400_000));
+    return `${days}d`;
+  }
+
+  const sortedInvoices = useMemo(() => {
+    const arr = [...invoices];
+    arr.sort((a, b) => {
+      const dir = invoiceSort.order === "asc" ? 1 : -1;
+      if (invoiceSort.key === "date") {
+        const av = a.invoice_date || a.posting_date || "";
+        const bv = b.invoice_date || b.posting_date || "";
+        return av < bv ? -1 * dir : av > bv ? 1 * dir : 0;
+      }
+      const av = a.outstanding_amount ?? a.amount ?? 0;
+      const bv = b.outstanding_amount ?? b.amount ?? 0;
+      return (av - bv) * dir;
+    });
+    return arr;
+  }, [invoices, invoiceSort]);
+
+  const sortedPayments = useMemo(() => {
+    const arr = [...payments];
+    arr.sort((a, b) => {
+      const dir = paymentSort.order === "asc" ? 1 : -1;
+      if (paymentSort.key === "date") {
+        const av = a.posting_date || "";
+        const bv = b.posting_date || "";
+        return av < bv ? -1 * dir : av > bv ? 1 * dir : 0;
+      }
+      const av = a.amount ?? 0;
+      const bv = b.amount ?? 0;
+      return (av - bv) * dir;
+    });
+    return arr;
+  }, [payments, paymentSort]);
+
+  function toggleInvoiceSort(key: "date" | "outstanding") {
+    setInvoiceSort((prev) =>
+      prev.key === key ? { key, order: prev.order === "asc" ? "desc" : "asc" } : { key, order: "desc" }
+    );
+  }
+
+  function togglePaymentSort(key: "date" | "amount") {
+    setPaymentSort((prev) =>
+      prev.key === key ? { key, order: prev.order === "asc" ? "desc" : "asc" } : { key, order: "desc" }
+    );
+  }
+
+  const invoiceTotal = useMemo(
+    () => invoices.reduce((s, i) => s + (i.outstanding_amount ?? i.amount ?? 0), 0),
+    [invoices]
+  );
+  const paymentTotal = useMemo(
+    () => payments.reduce((s, p) => s + (p.amount ?? 0), 0),
+    [payments]
+  );
 
   const handleAllocate = async () => {
     if (!reconciliationDoc) {
@@ -245,82 +315,218 @@ export function PaymentReconciliationTool() {
       ) : payments.length === 0 && invoices.length === 0 ? null : (
         <>
           <div className="grid gap-4 lg:grid-cols-2">
-            <Card>
-              <CardHeader>
+            <Card className="p-0">
+              <CardHeader className="p-6 pb-4">
                 <CardTitle>Invoices</CardTitle>
-                <CardDescription className="mt-1">Outstanding invoices</CardDescription>
+                <CardDescription className="mt-1">
+                  Outstanding invoices · total{" "}
+                  <span className="tabular-nums">
+                    {formatMoney(invoiceTotal, invoices[0]?.currency || "USD")}
+                  </span>
+                </CardDescription>
               </CardHeader>
-              <CardContent>
-                {invoices.length === 0 ? (
-                  <p className="text-sm text-muted-foreground py-6 text-center">No outstanding invoices.</p>
-                ) : (
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Invoice</TableHead>
-                        <TableHead>Date</TableHead>
-                        <TableHead className="text-right">Outstanding</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {invoices.map((i) => (
-                        <TableRow key={invoiceKey(i)}>
+              {invoices.length === 0 ? (
+                <div className="pb-8 text-center text-sm text-muted-foreground">
+                  No outstanding invoices.
+                </div>
+              ) : (
+                <Table>
+                  <TableHeader>
+                    <TableRow className="bg-secondary/40 hover:bg-secondary/40">
+                      <TableHead className="w-8 font-medium">
+                        <input
+                          type="checkbox"
+                          className="size-4 accent-primary"
+                          checked={
+                            selectedInvoices.size === invoices.length && invoices.length > 0
+                          }
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              setSelectedInvoices(new Set(invoices.map(invoiceKey)));
+                            } else {
+                              setSelectedInvoices(new Set());
+                            }
+                          }}
+                        />
+                      </TableHead>
+                      <TableHead className="font-medium">Type</TableHead>
+                      <TableHead className="font-medium">Invoice #</TableHead>
+                      <TableHead
+                        className="cursor-pointer font-medium hover:text-foreground"
+                        onClick={() => toggleInvoiceSort("date")}
+                      >
+                        Date{invoiceSort.key === "date" ? (invoiceSort.order === "asc" ? " ▲" : " ▼") : ""}
+                      </TableHead>
+                      <TableHead
+                        className="cursor-pointer text-right font-medium hover:text-foreground"
+                        onClick={() => toggleInvoiceSort("outstanding")}
+                      >
+                        Outstanding
+                        {invoiceSort.key === "outstanding"
+                          ? invoiceSort.order === "asc"
+                            ? " ▲"
+                            : " ▼"
+                          : ""}
+                      </TableHead>
+                      <TableHead className="text-right font-medium">Age</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {sortedInvoices.map((i) => {
+                      const k = invoiceKey(i);
+                      const checked = selectedInvoices.has(k);
+                      return (
+                        <TableRow
+                          key={k}
+                          data-state={checked ? "selected" : undefined}
+                          className="hover:bg-muted/40"
+                        >
+                          <TableCell>
+                            <input
+                              type="checkbox"
+                              className="size-4 accent-primary"
+                              checked={checked}
+                              onChange={(e) => {
+                                setSelectedInvoices((prev) => {
+                                  const next = new Set(prev);
+                                  if (e.target.checked) next.add(k);
+                                  else next.delete(k);
+                                  return next;
+                                });
+                              }}
+                            />
+                          </TableCell>
+                          <TableCell>
+                            {i.invoice_type || i.reference_type ? (
+                              <Badge variant="outline" className="text-xs">
+                                {i.invoice_type || i.reference_type}
+                              </Badge>
+                            ) : (
+                              <span className="text-xs text-muted-foreground">—</span>
+                            )}
+                          </TableCell>
                           <TableCell className="font-mono text-xs">
                             {i.invoice_number || i.reference_name}
                           </TableCell>
-                          <TableCell className="text-xs text-muted-foreground">
+                          <TableCell className="whitespace-nowrap text-xs text-muted-foreground">
                             {formatDate(i.invoice_date || i.posting_date)}
                           </TableCell>
                           <TableCell className="text-right tabular-nums">
-                            {formatMoney(i.outstanding_amount ?? i.amount ?? 0, i.currency || "USD")}
+                            {formatMoney(
+                              i.outstanding_amount ?? i.amount ?? 0,
+                              i.currency || "USD"
+                            )}
+                          </TableCell>
+                          <TableCell className="text-right text-xs text-muted-foreground">
+                            {ageDays(i.invoice_date || i.posting_date)}
                           </TableCell>
                         </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                )}
-              </CardContent>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
+              )}
             </Card>
 
-            <Card>
-              <CardHeader>
+            <Card className="p-0">
+              <CardHeader className="p-6 pb-4">
                 <CardTitle>Payments</CardTitle>
-                <CardDescription className="mt-1">Unallocated payments and credits</CardDescription>
+                <CardDescription className="mt-1">
+                  Unallocated payments and credits · total{" "}
+                  <span className="tabular-nums">
+                    {formatMoney(paymentTotal, payments[0]?.currency || "USD")}
+                  </span>
+                </CardDescription>
               </CardHeader>
-              <CardContent>
-                {payments.length === 0 ? (
-                  <p className="text-sm text-muted-foreground py-6 text-center">No unallocated payments.</p>
-                ) : (
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Payment</TableHead>
-                        <TableHead>Date</TableHead>
-                        <TableHead className="text-right">Amount</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {payments.map((p) => (
-                        <TableRow key={invoiceKey(p)}>
-                          <TableCell className="font-mono text-xs">{p.reference_name}</TableCell>
-                          <TableCell className="text-xs text-muted-foreground">
+              {payments.length === 0 ? (
+                <div className="pb-8 text-center text-sm text-muted-foreground">
+                  No unallocated payments.
+                </div>
+              ) : (
+                <Table>
+                  <TableHeader>
+                    <TableRow className="bg-secondary/40 hover:bg-secondary/40">
+                      <TableHead className="w-8 font-medium">
+                        <input
+                          type="checkbox"
+                          className="size-4 accent-primary"
+                          checked={
+                            selectedPayments.size === payments.length && payments.length > 0
+                          }
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              setSelectedPayments(new Set(payments.map(invoiceKey)));
+                            } else {
+                              setSelectedPayments(new Set());
+                            }
+                          }}
+                        />
+                      </TableHead>
+                      <TableHead className="font-medium">Payment #</TableHead>
+                      <TableHead
+                        className="cursor-pointer font-medium hover:text-foreground"
+                        onClick={() => togglePaymentSort("date")}
+                      >
+                        Date{paymentSort.key === "date" ? (paymentSort.order === "asc" ? " ▲" : " ▼") : ""}
+                      </TableHead>
+                      <TableHead
+                        className="cursor-pointer text-right font-medium hover:text-foreground"
+                        onClick={() => togglePaymentSort("amount")}
+                      >
+                        Amount{paymentSort.key === "amount" ? (paymentSort.order === "asc" ? " ▲" : " ▼") : ""}
+                      </TableHead>
+                      <TableHead className="font-medium">Currency</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {sortedPayments.map((p) => {
+                      const k = invoiceKey(p);
+                      const checked = selectedPayments.has(k);
+                      return (
+                        <TableRow
+                          key={k}
+                          data-state={checked ? "selected" : undefined}
+                          className="hover:bg-muted/40"
+                        >
+                          <TableCell>
+                            <input
+                              type="checkbox"
+                              className="size-4 accent-primary"
+                              checked={checked}
+                              onChange={(e) => {
+                                setSelectedPayments((prev) => {
+                                  const next = new Set(prev);
+                                  if (e.target.checked) next.add(k);
+                                  else next.delete(k);
+                                  return next;
+                                });
+                              }}
+                            />
+                          </TableCell>
+                          <TableCell className="font-mono text-xs">
+                            {p.reference_name}
+                          </TableCell>
+                          <TableCell className="whitespace-nowrap text-xs text-muted-foreground">
                             {formatDate(p.posting_date)}
                           </TableCell>
                           <TableCell className="text-right tabular-nums">
                             {formatMoney(p.amount ?? 0, p.currency || "USD")}
                           </TableCell>
+                          <TableCell className="text-xs text-muted-foreground">
+                            {p.currency || "—"}
+                          </TableCell>
                         </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                )}
-              </CardContent>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
+              )}
             </Card>
           </div>
 
           {invoices.length > 0 && payments.length > 0 ? (
-            <Card>
-              <CardHeader className="flex-row items-center justify-between space-y-0">
+            <Card className="p-0">
+              <CardHeader className="flex-row items-center justify-between space-y-0 p-6 pb-4">
                 <div>
                   <CardTitle>Allocation matrix</CardTitle>
                   <CardDescription className="mt-1">
@@ -336,51 +542,74 @@ export function PaymentReconciliationTool() {
                   </Button>
                 </div>
               </CardHeader>
-              <CardContent>
+              <div className="overflow-x-auto">
                 <Table>
                   <TableHeader>
-                    <TableRow>
-                      <TableHead>Payment ↓ / Invoice →</TableHead>
+                    <TableRow className="bg-secondary/40 hover:bg-secondary/40">
+                      <TableHead
+                        className={cn(
+                          "sticky left-0 z-10 min-w-[200px] bg-secondary/40 font-medium"
+                        )}
+                      >
+                        Payment ↓ / Invoice →
+                      </TableHead>
                       {invoices.map((i) => (
-                        <TableHead key={invoiceKey(i)} className="text-xs">
+                        <TableHead
+                          key={invoiceKey(i)}
+                          className="min-w-[120px] text-center font-mono text-xs"
+                        >
                           {i.invoice_number || i.reference_name}
                         </TableHead>
                       ))}
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {payments.map((p) => (
-                      <TableRow key={invoiceKey(p)}>
-                        <TableCell>
-                          <div className="text-xs font-mono">{p.reference_name}</div>
-                          <div className="text-xs text-muted-foreground">
-                            <Badge variant="outline" className="text-xs">
-                              {formatMoney(p.amount ?? 0, p.currency || "USD")}
-                            </Badge>
-                          </div>
-                        </TableCell>
-                        {invoices.map((i) => {
-                          const key = `${invoiceKey(p)}|${invoiceKey(i)}`;
-                          return (
-                            <TableCell key={key}>
-                              <Input
-                                type="number"
-                                min={0}
-                                step="0.01"
-                                value={allocations[key] ?? ""}
-                                onChange={(e) =>
-                                  setAllocations((prev) => ({ ...prev, [key]: e.target.value }))
-                                }
-                                className="h-8 w-24 text-xs tabular-nums"
-                              />
-                            </TableCell>
-                          );
-                        })}
-                      </TableRow>
-                    ))}
+                    {payments.map((p) => {
+                      const rowTotal = invoices.reduce((sum, i) => {
+                        const key = `${invoiceKey(p)}|${invoiceKey(i)}`;
+                        return sum + (Number(allocations[key]) || 0);
+                      }, 0);
+                      return (
+                        <TableRow key={invoiceKey(p)} className="hover:bg-muted/20">
+                          <TableCell
+                            className={cn(
+                              "sticky left-0 z-10 min-w-[200px] bg-card"
+                            )}
+                          >
+                            <div className="font-mono text-xs">{p.reference_name}</div>
+                            <div className="mt-1 flex items-center gap-2">
+                              <Badge variant="outline" className="text-xs">
+                                {formatMoney(p.amount ?? 0, p.currency || "USD")}
+                              </Badge>
+                              <span className="text-xs text-muted-foreground tabular-nums">
+                                allocated{" "}
+                                {formatMoney(rowTotal, p.currency || "USD")}
+                              </span>
+                            </div>
+                          </TableCell>
+                          {invoices.map((i) => {
+                            const key = `${invoiceKey(p)}|${invoiceKey(i)}`;
+                            return (
+                              <TableCell key={key} className="text-center">
+                                <Input
+                                  type="number"
+                                  min={0}
+                                  step="0.01"
+                                  value={allocations[key] ?? ""}
+                                  onChange={(e) =>
+                                    setAllocations((prev) => ({ ...prev, [key]: e.target.value }))
+                                  }
+                                  className="h-8 w-24 text-xs tabular-nums"
+                                />
+                              </TableCell>
+                            );
+                          })}
+                        </TableRow>
+                      );
+                    })}
                   </TableBody>
                 </Table>
-              </CardContent>
+              </div>
             </Card>
           ) : null}
         </>
