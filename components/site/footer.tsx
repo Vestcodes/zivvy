@@ -5,6 +5,7 @@ import Link from "next/link";
 import { toast } from "sonner";
 import { ArrowRight, ExternalLink, Heart, Mail } from "lucide-react";
 import { Logo } from "@/components/site/logo";
+import { SystemStatus } from "@/components/site/system-status";
 import { DotPattern } from "@/components/ui/dot-pattern";
 import { cn } from "@/lib/utils";
 
@@ -154,10 +155,7 @@ export function SiteFooter() {
               place, without the bloat.
             </p>
             <div className="mt-5 flex flex-wrap gap-2 text-[11px] text-muted-foreground">
-              <span className="inline-flex items-center gap-1 rounded-full border border-border/60 bg-background/60 px-2 py-0.5">
-                <span className="size-1.5 rounded-full bg-emerald-500" aria-hidden />
-                All systems go
-              </span>
+              <SystemStatus />
               <span className="inline-flex items-center gap-1 rounded-full border border-border/60 bg-background/60 px-2 py-0.5">
                 EU · US · IN regions
               </span>
