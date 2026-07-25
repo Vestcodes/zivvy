@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { motion } from "motion/react";
 import { ArrowRight } from "lucide-react";
+import { LogoMark } from "@/components/site/logo";
 import type { HubCardItem } from "@/lib/marketing-content";
 import { SiteHeader } from "@/components/site/header";
 import { SiteFooter } from "@/components/site/footer";
@@ -132,10 +133,10 @@ function NetworkDiagram() {
 
       <div
         ref={centerRef}
-        className="relative z-20 flex size-20 items-center justify-center rounded-2xl border border-primary/50 bg-primary/15 font-display text-sm font-semibold text-primary shadow-lg backdrop-blur"
+        className="relative z-20 flex size-20 items-center justify-center rounded-2xl border border-primary/40 bg-background/80 shadow-lg backdrop-blur"
       >
         <span className="absolute inset-0 -z-10 animate-pulse rounded-2xl bg-primary/10" />
-        Zivvy
+        <LogoMark className="size-14" />
       </div>
 
       <div className="flex flex-col items-center gap-6">

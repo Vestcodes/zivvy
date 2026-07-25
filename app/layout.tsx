@@ -47,7 +47,6 @@ export const metadata: Metadata = {
   keywords: [
     "ERP software",
     "business software",
-    "ERPNext alternative",
     "Odoo alternative",
     "small business ERP",
     "accounting software",
@@ -55,6 +54,7 @@ export const metadata: Metadata = {
     "HR software",
     "manufacturing ERP",
     "SaaS ERP",
+    "modern ERP",
     "Zivvy"
   ],
   authors: [{ name: "Vestcodes", url: "https://zivvy.xyz" }],

@@ -112,14 +112,14 @@ export const addonDetails: AddonDetail[] = [
   },
   {
     slug: "erpnext-datev",
-    name: "ERPNext DATEV",
+    name: "DATEV Export",
     category: "Compliance",
     hero: "DATEV export in one click.",
     subtitle: "Deutsche Buchhaltung ohne CSV-Fummelei.",
     description:
-      "Export ERPNext bookings in the exact DATEV shape your Steuerberater expects — HGB-compliant, SKR03 or SKR04, no spreadsheet gymnastics.",
+      "Export your Zivvy bookings in the exact DATEV shape your Steuerberater expects — HGB-compliant, SKR03 or SKR04, no spreadsheet gymnastics.",
     metaDescription:
-      "One-click DATEV export from ERPNext. HGB-compliant, SKR03/SKR04 charts, XML and CSV — send to your Steuerberater without CSV fiddling.",
+      "One-click DATEV export from Zivvy. HGB-compliant, SKR03/SKR04 charts, XML and CSV — send to your Steuerberater without CSV fiddling.",
     price: "€19 / month",
     priceUsd: 21,
     billing: "Per workspace · billed monthly via Polar",
@@ -263,7 +263,7 @@ export const addonDetails: AddonDetail[] = [
     category: "Finance",
     hero: "Batch payments without the spreadsheet.",
     description:
-      "Approve and disburse dozens of vendor and payroll payments at once, straight from ERPNext — SEPA, ACH, or your local rail.",
+      "Approve and disburse dozens of vendor and payroll payments at once, straight from Zivvy — SEPA, ACH, or your local rail.",
     metaDescription:
       "Batch SEPA and ACH disbursements from inside Zivvy. Two-eyes approval, per-vendor limits, and one clean bank file per batch.",
     price: "$25 / month",
