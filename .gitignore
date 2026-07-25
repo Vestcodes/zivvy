@@ -13,3 +13,4 @@ next-env.d.ts
 public/videos/raw/
 public/videos/voiceover/
 scripts/.cache/
+zapier-templates/integration/node_modules/
