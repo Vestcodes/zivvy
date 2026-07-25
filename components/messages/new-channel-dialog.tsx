@@ -38,13 +38,22 @@ export function NewChannelDialog({ open, onOpenChange, onCreated }: Props) {
     e.preventDefault();
     if (!name.trim()) return;
     setCreating(true);
-    const ch = await createChannel(name.trim(), type);
-    if (ch) {
-      onCreated(ch);
-      setName("");
-      setType("Public");
-    } else {
-      toast.error("Failed to create channel");
+    try {
+      const ch = await createChannel(name.trim(), type);
+      if (ch) {
+        onCreated(ch);
+        setName("");
+        setType("Public");
+        toast.success(`Channel #${ch.channel_name || name.trim()} created`);
+      } else {
+        toast.error("Failed to create channel");
+      }
+    } catch (err) {
+      const msg =
+        err instanceof Error && err.message
+          ? err.message.replace(/<[^>]+>/g, "")
+          : "Failed to create channel";
+      toast.error(msg);
     }
     setCreating(false);
   }

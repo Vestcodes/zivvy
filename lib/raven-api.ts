@@ -88,22 +88,40 @@ export async function sendMessage(
   }
 }
 
+/** Raven v2 requires a Workspace on every Channel (autoname = workspace-channel). */
+async function resolveDefaultWorkspace(): Promise<string> {
+  try {
+    const rows = await frappeCall<Array<{ name: string }>>(
+      "frappe.client.get_list",
+      {
+        doctype: "Raven Workspace",
+        fields: JSON.stringify(["name"]),
+        limit_page_length: 1,
+        order_by: "creation asc"
+      }
+    );
+    const name = Array.isArray(rows) && rows[0]?.name ? rows[0].name : null;
+    if (name) return name;
+  } catch {
+    // fall through
+  }
+  return "Raven";
+}
+
 export async function createChannel(
   channelName: string,
   type: "Public" | "Private" = "Public"
 ): Promise<RavenChannel | null> {
-  try {
-    const res = await frappeCall<RavenChannel>("frappe.client.insert", {
-      doc: JSON.stringify({
-        doctype: "Raven Channel",
-        channel_name: channelName,
-        type
-      })
-    });
-    return res ?? null;
-  } catch {
-    return null;
-  }
+  const workspace = await resolveDefaultWorkspace();
+  const res = await frappeCall<RavenChannel>("frappe.client.insert", {
+    doc: JSON.stringify({
+      doctype: "Raven Channel",
+      channel_name: channelName,
+      type,
+      workspace
+    })
+  });
+  return res ?? null;
 }
 
 export async function createDM(userId: string): Promise<RavenChannel | null> {
