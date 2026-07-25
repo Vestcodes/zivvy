@@ -1,16 +1,32 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SignInForm } from "@/components/auth/signin-form";
 import { SignUpForm } from "@/components/auth/signup-form";
 import { ResetForm } from "@/components/auth/reset-form";
+import {
+  isTierSlug,
+  normalizeBilling,
+  type BillingCadence,
+  type TierSlug,
+} from "@/lib/tier-checkout";
 
 type Mode = "signin" | "signup" | "reset";
 
 export function AuthPanel() {
   const [mode, setMode] = useState<Mode>("signin");
+  const search = useSearchParams();
+
+  // Pricing tiles link to /login?plan=<slug>&billing=<cadence>#signup so we
+  // pick up the intent here and pass it down to the auth forms.
+  const pendingPlan = useMemo<{ tier: TierSlug; billing: BillingCadence } | null>(() => {
+    const planParam = search?.get("plan");
+    if (!isTierSlug(planParam)) return null;
+    return { tier: planParam, billing: normalizeBilling(search?.get("billing")) };
+  }, [search]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -29,7 +45,12 @@ export function AuthPanel() {
     setMode(next);
     if (typeof window !== "undefined") {
       const nextHash = next === "signin" ? "" : `#${next}`;
-      history.replaceState(null, "", `${window.location.pathname}${nextHash}`);
+      const currentQuery = window.location.search;
+      history.replaceState(
+        null,
+        "",
+        `${window.location.pathname}${currentQuery}${nextHash}`
+      );
     }
   }
 
@@ -45,10 +66,13 @@ export function AuthPanel() {
               <TabsTrigger value="signup">Create account</TabsTrigger>
             </TabsList>
             <TabsContent value="signin" className="mt-6">
-              <SignInForm onForgotPassword={() => updateHash("reset")} />
+              <SignInForm
+                onForgotPassword={() => updateHash("reset")}
+                pendingPlan={pendingPlan}
+              />
             </TabsContent>
             <TabsContent value="signup" className="mt-6">
-              <SignUpForm />
+              <SignUpForm pendingPlan={pendingPlan} />
             </TabsContent>
           </Tabs>
         )}

@@ -8,6 +8,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { ArrowRight, MailCheck } from "lucide-react";
 import { frappeSignup, FrappeError } from "@/lib/frappe-client";
 import { toast } from "sonner";
+import {
+  stashPendingTier,
+  type BillingCadence,
+  type TierSlug,
+} from "@/lib/tier-checkout";
 
 const DATACENTERS = [
   { value: "india", label: "India (Mumbai)" },
@@ -17,7 +22,11 @@ const DATACENTERS = [
 
 type Status = "idle" | "submitting" | "sent" | "already-registered";
 
-export function SignUpForm() {
+interface Props {
+  pendingPlan?: { tier: TierSlug; billing: BillingCadence } | null;
+}
+
+export function SignUpForm({ pendingPlan }: Props = {}) {
   const [status, setStatus] = useState<Status>("idle");
   const [dc, setDc] = useState<"india" | "eu" | "us">("us");
   const [sentTo, setSentTo] = useState<string>("");
@@ -38,6 +47,11 @@ export function SignUpForm() {
         zivvy_datacenter: dc,
         redirect_to: "/dashboard"
       });
+      // Stash paid-tier intent so /dashboard can pick it up after the user
+      // finishes email verification and lands authenticated.
+      if (pendingPlan) {
+        stashPendingTier(pendingPlan);
+      }
       setSentTo(email);
       setMessage(msg || "");
       setStatus(statusCode === 1 ? "sent" : "already-registered");
@@ -69,12 +83,18 @@ export function SignUpForm() {
             ) : (
               <>
                 <span className="font-medium text-foreground">{sentTo}</span> is already
-                registered. Sign in below, or use "Forgot?" to reset your password.
+                registered. Sign in below, or use &quot;Forgot?&quot; to reset your password.
               </>
             )}
           </p>
           {message && status === "sent" && (
             <p className="mt-2 text-xs text-muted-foreground">{message}</p>
+          )}
+          {pendingPlan && status === "sent" && (
+            <p className="mt-3 text-xs text-muted-foreground">
+              Your {pendingPlan.tier === "pro" ? "Pro" : "Business"} plan is queued —
+              we&apos;ll take you to checkout right after you sign in.
+            </p>
           )}
         </div>
         <div className="grid gap-2">
@@ -147,6 +167,16 @@ export function SignUpForm() {
           Your business data stays in this region.
         </p>
       </div>
+      {pendingPlan && (
+        <p className="rounded-md border border-primary/30 bg-primary/5 px-3 py-2 text-xs text-primary">
+          You picked the{" "}
+          <span className="font-medium">
+            {pendingPlan.tier === "pro" ? "Pro" : "Business"}
+          </span>{" "}
+          plan ({pendingPlan.billing}). We&apos;ll route you to Polar checkout after
+          you verify your email.
+        </p>
+      )}
       {error && (
         <p role="alert" className="text-xs text-destructive">
           {error}

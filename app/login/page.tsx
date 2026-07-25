@@ -10,9 +10,30 @@ export const metadata: Metadata = {
   description: "Sign in to your Zivvy workspace, or create a free account."
 };
 
-export default async function LoginPage() {
+function pickParam(value: string | string[] | undefined): string | undefined {
+  if (Array.isArray(value)) return value[0];
+  return value;
+}
+
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const boot = await fetchBootinfo();
   if (boot.logged_in) {
+    // Preserve any pending plan / billing selection so the dashboard can hand
+    // the user off to Polar checkout instead of silently swallowing the params.
+    const params = (await searchParams) ?? {};
+    const plan = pickParam(params.plan);
+    const billing = pickParam(params.billing);
+    if (plan === "pro" || plan === "business") {
+      const query = new URLSearchParams({ plan });
+      if (billing === "annual" || billing === "monthly") {
+        query.set("billing", billing);
+      }
+      redirect(`/dashboard?${query.toString()}`);
+    }
     redirect("/dashboard");
   }
   return (

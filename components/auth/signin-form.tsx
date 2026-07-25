@@ -9,12 +9,18 @@ import { toast } from "sonner";
 import { LogIn, Mail } from "lucide-react";
 import { frappeLogin, frappeSendLoginLink, FrappeError } from "@/lib/frappe-client";
 import { parseFrappeError } from "@/lib/form-errors";
+import {
+  startTierCheckout,
+  type BillingCadence,
+  type TierSlug,
+} from "@/lib/tier-checkout";
 
 interface Props {
   onForgotPassword?: () => void;
+  pendingPlan?: { tier: TierSlug; billing: BillingCadence } | null;
 }
 
-export function SignInForm({ onForgotPassword }: Props = {}) {
+export function SignInForm({ onForgotPassword, pendingPlan }: Props = {}) {
   const router = useRouter();
   const [pending, setPending] = useState(false);
   const [linkPending, setLinkPending] = useState(false);
@@ -30,6 +36,23 @@ export function SignInForm({ onForgotPassword }: Props = {}) {
     try {
       await frappeLogin(email, password);
       toast.success("Welcome back.");
+
+      // If the user arrived from a pricing tile with a paid tier selected,
+      // hand off directly to Polar checkout before landing on the dashboard.
+      if (pendingPlan) {
+        try {
+          const handedOff = await startTierCheckout(
+            pendingPlan.tier,
+            pendingPlan.billing,
+            (path) => router.push(path)
+          );
+          if (handedOff) return;
+        } catch {
+          // Fall through to the dashboard on checkout failure — the user is
+          // signed in; they can retry from the pricing page or settings.
+        }
+      }
+
       router.refresh();
       router.push("/dashboard");
     } catch (err) {
