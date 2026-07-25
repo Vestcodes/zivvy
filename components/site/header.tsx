@@ -169,7 +169,7 @@ const PRODUCT_MEGA: MegaColumn[] = [
       {
         href: "/developers/webhooks",
         label: "Webhooks",
-        description: "Event delivery — coming soon.",
+        description: "HMAC-signed events for every resource.",
         icon: Webhook
       },
       {

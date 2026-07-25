@@ -720,25 +720,26 @@ export function WebhooksPageContent() {
               <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-3 py-1">
                 <span className="inline-block size-1.5 animate-pulse rounded-full bg-primary" />
                 <AnimatedShinyText className="text-xs font-semibold uppercase tracking-[0.14em] text-primary">
-                  Coming soon
+                  Live
                 </AnimatedShinyText>
               </div>
               <h1 className="font-display text-4xl font-bold tracking-tight sm:text-6xl">
-                Webhooks are coming soon
+                Real-time events from your workspace
               </h1>
               <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-                Real-time event delivery for every resource in Zivvy — CRM,
-                sales, billing, banking, stock, HR, projects, and manufacturing.
+                Subscribe once, receive HMAC-signed POSTs for every meaningful
+                change across CRM, sales, billing, banking, stock, HR, projects,
+                and manufacturing.
               </p>
               <p className="mx-auto mt-3 max-w-2xl text-sm text-muted-foreground">
-                The design below is stable. Subscriptions and payload shape
-                will not change before launch — you can build against it now
-                and flip your endpoint on the day outbound delivery ships.
+                100+ event types across 40+ resources. At-least-once delivery
+                with exponential retry. Available on Free and every paid plan —
+                register your first endpoint in the dashboard.
               </p>
               <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
                 <Button asChild variant="polished">
-                  <Link href="/contact?topic=webhooks">
-                    Notify me at launch
+                  <Link href="/settings/developer">
+                    Register a webhook
                     <ArrowRight className="size-4" />
                   </Link>
                 </Button>
@@ -759,24 +760,23 @@ export function WebhooksPageContent() {
 
         {/* ── Announcement bar ─────────────────────────────────────── */}
         <section className="mx-auto max-w-4xl px-6 pb-10">
-          <div className="flex flex-col items-start gap-3 rounded-xl border border-dashed border-primary/40 bg-primary/[0.04] px-4 py-3 text-sm sm:flex-row sm:items-center">
+          <div className="flex flex-col items-start gap-3 rounded-xl border border-primary/30 bg-primary/[0.04] px-4 py-3 text-sm sm:flex-row sm:items-center">
             <div className="inline-flex items-center gap-2">
               <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-2 py-0.5 text-[10.5px] font-semibold uppercase tracking-[0.14em] text-primary">
                 <Bell className="size-3" />
-                Coming soon
+                Live
               </span>
             </div>
             <p className="text-[13.5px] leading-relaxed text-muted-foreground">
-              Webhook <em>management</em> endpoints are live —
-              you can register, list, and delete subscriptions today. Outbound
-              delivery ships shortly; we&apos;ll announce it on the{" "}
+              Every event below is deliverable today. Register endpoints in{" "}
               <Link
-                href="/blog"
+                href="/settings/developer"
                 className="text-foreground underline-offset-2 hover:underline"
               >
-                Zivvy blog
+                Settings → Developer
               </Link>{" "}
-              and inside the dashboard.
+              or via <code className="rounded bg-muted px-1 font-mono text-[12px]">POST /v1/webhooks</code>.
+              Every delivery is signed <code className="rounded bg-muted px-1 font-mono text-[12px]">X-Zivvy-Signature: sha256=…</code>.
             </p>
           </div>
         </section>
@@ -1096,30 +1096,33 @@ export function WebhooksPageContent() {
           </div>
         </section>
 
-        {/* ── Notify me CTA ───────────────────────────────────────── */}
+        {/* ── Ship your first webhook CTA ─────────────────────────── */}
         <section className="mx-auto max-w-3xl px-6 pb-20 text-center">
           <div className="relative overflow-hidden rounded-2xl border border-border/70 bg-card/70 px-6 py-8">
             <ShineBorder shineColor={["#34d399", "#0f766e"]} duration={14} />
             <h2 className="font-display text-2xl font-semibold tracking-tight">
-              Get told the moment webhooks go live
+              Ship your first webhook in under a minute
             </h2>
             <p className="mt-3 text-sm text-muted-foreground">
-              We&apos;ll email you as soon as outbound delivery ships. No
-              marketing sludge — one message when the switch flips.
+              Register an endpoint, subscribe to the events you care about,
+              and get signed POSTs the moment something happens in your workspace.
             </p>
             <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <Button asChild variant="polished">
-                <Link href="/contact?topic=webhooks">
-                  Notify me
+                <Link href="/settings/developer">
+                  Register a webhook
                   <ArrowRight className="size-4" />
                 </Link>
               </Button>
               <Button asChild variant="outline">
                 <a
-                  href="mailto:api@zivvy.xyz?subject=Webhooks%20early%20access"
+                  href="https://integrate.zivvy.xyz/docs"
+                  target="_blank"
+                  rel="noreferrer noopener"
                   className={cn("inline-flex items-center gap-1")}
                 >
-                  Email the API team
+                  API reference
+                  <ExternalLink className="size-3.5" />
                 </a>
               </Button>
             </div>
