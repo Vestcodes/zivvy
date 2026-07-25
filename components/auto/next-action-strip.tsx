@@ -1,10 +1,32 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { ArrowRight, Sparkles, AlertTriangle, Info, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { requestOpenNew } from "@/components/auto/auto-list-new-button";
 import { cn } from "@/lib/utils";
 import type { NextAction } from "@/lib/next-action";
+
+/** Same-list `?new=1` → open wizard in place; cross-route → navigate. */
+function useCreateHrefHandler(href: string | undefined) {
+  const pathname = usePathname();
+  const router = useRouter();
+  if (!href) return null;
+  try {
+    const url = new URL(href, "https://zivvy.local");
+    if (url.searchParams.get("new") !== "1") return null;
+    return () => {
+      if (url.pathname === pathname) {
+        requestOpenNew();
+        return;
+      }
+      router.push(`${url.pathname}?new=1`);
+    };
+  } catch {
+    return null;
+  }
+}
 
 interface Props {
   action: NextAction | null;
@@ -42,17 +64,33 @@ const TONE_ICON_COLORS: Record<NextAction["tone"], string> = {
  * decide what to recommend, render nothing (silence beats noise).
  */
 export function NextActionStrip({ action, onExecute, className }: Props) {
+  const openCreate = useCreateHrefHandler(
+    action?.kind === "link" ? action.href : undefined
+  );
+
   if (!action) return null;
   const Icon = TONE_ICONS[action.tone];
 
   const cta =
     action.kind === "link" && action.href ? (
-      <Button asChild size="sm" variant={action.tone === "primary" ? "polished" : "outline"}>
-        <Link href={action.href}>
+      openCreate ? (
+        <Button
+          type="button"
+          size="sm"
+          variant={action.tone === "primary" ? "polished" : "outline"}
+          onClick={openCreate}
+        >
           {action.label}
           <ArrowRight />
-        </Link>
-      </Button>
+        </Button>
+      ) : (
+        <Button asChild size="sm" variant={action.tone === "primary" ? "polished" : "outline"}>
+          <Link href={action.href}>
+            {action.label}
+            <ArrowRight />
+          </Link>
+        </Button>
+      )
     ) : (
       <Button
         type="button"
