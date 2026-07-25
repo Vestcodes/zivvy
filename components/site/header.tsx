@@ -24,6 +24,7 @@ import {
   UserRound,
   Users,
   Wallet,
+  Webhook,
   X
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -165,6 +166,12 @@ const PRODUCT_MEGA: MegaColumn[] = [
         external: true
       },
       {
+        href: "/developers/webhooks",
+        label: "Webhooks",
+        description: "Event delivery — coming soon.",
+        icon: Webhook
+      },
+      {
         href: "/blog",
         label: "Blog",
         description: "Product notes and playbooks.",
@@ -244,6 +251,7 @@ const MOBILE_SECTIONS = [
     links: [
       { href: API_DOCS_URL, label: "Docs", external: true },
       { href: API_DOCS_URL, label: "API reference", external: true },
+      { href: "/developers/webhooks", label: "Webhooks" },
       { href: "/support/changelog", label: "Changelog" }
     ]
   },

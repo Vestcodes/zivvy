@@ -56,6 +56,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     entry("/careers", 0.9, "monthly", now)
   ];
 
+  // Developer-facing pages.
+  const developers: Entry[] = [
+    entry("/developers/webhooks", 0.7, "monthly", now)
+  ];
+
   // Hubs + their detail pages.
   const features: Entry[] = [
     entry("/features", 0.8, "monthly", now),
@@ -118,6 +123,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     ...home,
     ...primary,
+    ...developers,
     ...features,
     ...solutions,
     ...industries,
