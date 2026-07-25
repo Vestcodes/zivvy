@@ -15,6 +15,8 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
+import { SeatUpgradeDialog } from "@/components/settings/seat-upgrade-dialog";
 import {
   Dialog,
   DialogContent,
@@ -59,6 +61,7 @@ interface Props {
   seatsUsed: number;
   seatsAllowed: number;
   currentUser: string;
+  hasSubscription: boolean;
 }
 
 function initials(name: string): string {
@@ -70,9 +73,16 @@ function initials(name: string): string {
     .toUpperCase();
 }
 
-export function TeamList({ members, seatsUsed, seatsAllowed, currentUser }: Props) {
+export function TeamList({
+  members,
+  seatsUsed,
+  seatsAllowed,
+  currentUser,
+  hasSubscription
+}: Props) {
   const router = useRouter();
   const [inviteOpen, setInviteOpen] = useState(false);
+  const [seatDialogOpen, setSeatDialogOpen] = useState(false);
   const [removeTarget, setRemoveTarget] = useState<TeamMember | null>(null);
   const [rolesTarget, setRolesTarget] = useState<TeamMember | null>(null);
   const [rolesDraft, setRolesDraft] = useState<Set<string>>(new Set());
@@ -84,6 +94,18 @@ export function TeamList({ members, seatsUsed, seatsAllowed, currentUser }: Prop
   const [removing, setRemoving] = useState(false);
 
   const atCapacity = seatsUsed >= seatsAllowed && seatsAllowed > 0;
+  const seatsPct =
+    seatsAllowed > 0
+      ? Math.min(100, Math.round((seatsUsed / seatsAllowed) * 100))
+      : 0;
+
+  const handleAddTeammate = useCallback(() => {
+    if (atCapacity) {
+      setSeatDialogOpen(true);
+    } else {
+      setInviteOpen(true);
+    }
+  }, [atCapacity]);
 
   const handleInvite = useCallback(async () => {
     const email = inviteEmail.trim();
@@ -160,21 +182,47 @@ export function TeamList({ members, seatsUsed, seatsAllowed, currentUser }: Prop
   return (
     <>
       <div className="space-y-4">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <h1 className="font-display text-2xl tracking-tight sm:text-3xl">Team</h1>
-            <p className="text-sm text-muted-foreground">
-              {seatsUsed} of {seatsAllowed > 0 ? seatsAllowed : "unlimited"} seats used
-            </p>
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+          <div className="flex-1 min-w-0 space-y-3">
+            <div>
+              <h1 className="font-display text-2xl tracking-tight sm:text-3xl">Team</h1>
+              <p className="text-sm text-muted-foreground">
+                Manage teammates and the roles they hold on this workspace.
+              </p>
+            </div>
+            <div className="max-w-md space-y-1.5">
+              <div className="flex items-baseline justify-between gap-2 text-xs">
+                <span className="font-medium text-foreground">Seats used</span>
+                <span
+                  className={cn(
+                    "font-mono",
+                    atCapacity ? "text-amber-600 dark:text-amber-500" : "text-muted-foreground"
+                  )}
+                >
+                  {seatsUsed} of {seatsAllowed > 0 ? seatsAllowed : "unlimited"}
+                </span>
+              </div>
+              {seatsAllowed > 0 && (
+                <Progress
+                  value={seatsPct}
+                  className={cn("h-1.5", atCapacity && "[&>*]:bg-amber-500")}
+                />
+              )}
+              {atCapacity && (
+                <p className="text-xs text-amber-600 dark:text-amber-500">
+                  You&apos;re at the seat cap. Add a seat to invite another teammate.
+                </p>
+              )}
+            </div>
           </div>
           <Button
             variant="polished"
             size="sm"
-            onClick={() => setInviteOpen(true)}
-            disabled={atCapacity}
+            onClick={handleAddTeammate}
+            className="sm:mt-1"
           >
             <UserPlus />
-            {atCapacity ? "Seat limit reached" : "Invite member"}
+            Add teammate
           </Button>
         </div>
 
@@ -283,11 +331,7 @@ export function TeamList({ members, seatsUsed, seatsAllowed, currentUser }: Prop
                   <p className="text-sm text-muted-foreground">
                     No team members yet
                   </p>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setInviteOpen(true)}
-                  >
+                  <Button variant="outline" size="sm" onClick={handleAddTeammate}>
                     <Plus />
                     Invite your first member
                   </Button>
@@ -297,6 +341,16 @@ export function TeamList({ members, seatsUsed, seatsAllowed, currentUser }: Prop
           </CardContent>
         </Card>
       </div>
+
+      {/* Seat-upgrade dialog — opens instead of Invite when at capacity */}
+      <SeatUpgradeDialog
+        open={seatDialogOpen}
+        onOpenChange={setSeatDialogOpen}
+        seatsUsed={seatsUsed}
+        seatsAllowed={seatsAllowed}
+        hasSubscription={hasSubscription}
+        onDirectUpdate={() => setInviteOpen(true)}
+      />
 
       {/* Invite dialog */}
       <Dialog open={inviteOpen} onOpenChange={setInviteOpen}>

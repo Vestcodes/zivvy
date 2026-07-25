@@ -3,6 +3,7 @@ import Link from "next/link";
 import { PlanCard } from "@/components/billing/plan-card";
 import { ManagePlan } from "@/components/billing/manage-plan";
 import { ActiveAddons } from "@/components/billing/active-addons";
+import { SeatsCard } from "@/components/billing/seats-card";
 import { Button } from "@/components/ui/button";
 import { fetchBootinfo } from "@/lib/boot-server";
 
@@ -47,6 +48,9 @@ export default async function BillingPage() {
       </div>
 
       <PlanCard zivvy={boot.zivvy} />
+      <div className="mt-8">
+        <SeatsCard zivvy={boot.zivvy} hasSubscription={hasSubscription} />
+      </div>
       <div className="mt-8">
         <ManagePlan hasSubscription={hasSubscription} currentTier={boot.zivvy.tier} />
       </div>

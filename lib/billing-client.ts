@@ -36,3 +36,21 @@ export function createPortalSession() {
     "zivvy_brand.billing.api.create_portal_session"
   );
 }
+
+export type SeatUpdateMode = "direct" | "checkout" | "portal" | "placeholder";
+
+export interface SeatUpdateResult {
+  mode: SeatUpdateMode;
+  seats?: number;
+  updated?: boolean;
+  checkout_url?: string;
+  portal_url?: string;
+  polar_configured?: boolean;
+}
+
+export function updateSeatQuantity(newQuantity: number) {
+  return frappeCall<SeatUpdateResult>(
+    "zivvy_brand.billing.tier_checkout.update_seat_quantity",
+    { new_quantity: newQuantity }
+  );
+}

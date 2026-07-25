@@ -4,6 +4,7 @@ import { DashboardKpis } from "@/components/dashboard/dashboard-kpis";
 import { DashboardActivity } from "@/components/dashboard/dashboard-activity";
 import { DashboardAttention } from "@/components/dashboard/dashboard-attention";
 import { PendingTierHandoff } from "@/components/billing/pending-tier-handoff";
+import { SeatsReturnToast } from "@/components/billing/seats-return-toast";
 import { fetchDashboardData } from "@/lib/dashboard-data";
 
 export const metadata: Metadata = {
@@ -15,6 +16,7 @@ export default async function DashboardPage() {
   return (
     <div className="mx-auto w-full max-w-6xl space-y-4">
       <PendingTierHandoff />
+      <SeatsReturnToast />
       <DashboardHero />
       <DashboardKpis data={kpis} />
       <div className="grid gap-3 lg:grid-cols-3">
