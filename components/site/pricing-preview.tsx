@@ -10,6 +10,8 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Reveal } from "@/components/ui/reveal";
 import { usePricingBilling } from "@/components/site/pricing-billing-provider";
+import { LocalisedPrice } from "@/components/pricing/localised-price";
+import { PppNotice } from "@/components/pricing/ppp-notice";
 import { cn } from "@/lib/utils";
 
 type Plan = {
@@ -153,7 +155,11 @@ export function PricingPreview({ showIntro = true, className }: Props = {}) {
 
                   <div className="mt-5 flex items-baseline gap-1">
                     <span className="font-display text-4xl font-bold tracking-tight tabular-nums">
-                      ${price}
+                      {isFree ? (
+                        "$0"
+                      ) : (
+                        <LocalisedPrice usdCents={price * 100} />
+                      )}
                     </span>
                     {!isFree && (
                       <span className="text-sm text-muted-foreground">
@@ -164,9 +170,10 @@ export function PricingPreview({ showIntro = true, className }: Props = {}) {
                   {billing === "annual" && !isFree && (
                     <p className="mt-1 text-xs text-muted-foreground">
                       billed as{" "}
-                      <span className="font-mono tabular-nums text-foreground">
-                        ${plan.annual * 12}
-                      </span>
+                      <LocalisedPrice
+                        usdCents={plan.annual * 12 * 100}
+                        className="font-mono text-foreground"
+                      />
                       /seat/year
                     </p>
                   )}
@@ -213,7 +220,9 @@ export function PricingPreview({ showIntro = true, className }: Props = {}) {
         })}
       </div>
 
-      <p className="mt-8 text-center text-xs text-muted-foreground">
+      <PppNotice className="mt-8" />
+
+      <p className="mt-4 text-center text-xs text-muted-foreground">
         All plans include unlimited data · no card required on Free · cancel
         anytime
       </p>

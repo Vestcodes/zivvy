@@ -10,6 +10,7 @@ import {
   PlugZap,
   ShoppingBag
 } from "lucide-react";
+import { LocalisedPrice } from "@/components/pricing/localised-price";
 import { cn } from "@/lib/utils";
 
 /**
@@ -131,9 +132,10 @@ export function PricingAddons() {
                   </div>
 
                   <div className="mt-4 flex items-baseline gap-1">
-                    <span className="font-display text-3xl font-bold tabular-nums leading-none">
-                      ${addon.priceMonthly}
-                    </span>
+                    <LocalisedPrice
+                      usdCents={addon.priceMonthly * 100}
+                      className="font-display text-3xl font-bold leading-none"
+                    />
                     <span className="text-xs text-muted-foreground">
                       / workspace / mo
                     </span>

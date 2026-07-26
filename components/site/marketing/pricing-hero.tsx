@@ -9,6 +9,8 @@ import {
   usePricingBilling,
   type BillingCycle
 } from "@/components/site/pricing-billing-provider";
+import { LocalisedPrice } from "@/components/pricing/localised-price";
+import { RegionPicker } from "@/components/pricing/region-picker";
 import { cn } from "@/lib/utils";
 
 const OPTIONS: { value: BillingCycle; label: string; hint?: string }[] = [
@@ -57,7 +59,11 @@ export function PricingHero() {
         <BlurFade>
           <div className="mb-6 inline-flex items-center justify-center rounded-full border border-border/60 bg-background/70 px-3 py-1 backdrop-blur">
             <AnimatedShinyText className="text-xs font-medium text-muted-foreground">
-              Free · Pro $18 · Business $30 · Add-ons from $15
+              <span className="inline-flex items-center gap-1.5">
+                Free · Pro <LocalisedPrice usdCents={1800} /> · Business{" "}
+                <LocalisedPrice usdCents={3000} /> · Add-ons from{" "}
+                <LocalisedPrice usdCents={1500} />
+              </span>
             </AnimatedShinyText>
           </div>
 
@@ -73,8 +79,9 @@ export function PricingHero() {
             layer on when you need them — never before.
           </p>
 
-          <div className="mt-8 flex justify-center">
+          <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-6">
             <BillingToggle billing={billing} onChange={setBilling} />
+            <RegionPicker label="Prices in" />
           </div>
         </BlurFade>
       </HeroHighlight>

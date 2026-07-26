@@ -6,7 +6,6 @@ import { SiteHeader } from "@/components/site/header";
 import { SiteFooter } from "@/components/site/footer";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { NumberTicker } from "@/components/ui/number-ticker";
 import {
   BentoGrid,
   BentoGridItem,
@@ -20,6 +19,8 @@ import {
 } from "@/components/ui/aceternity";
 import { AddonSubscribeForm } from "@/components/site/marketing/addon-subscribe";
 import { BrandLogo } from "@/components/site/brand-logo";
+import { LocalisedPrice } from "@/components/pricing/localised-price";
+import { PppNotice } from "@/components/pricing/ppp-notice";
 import {
   BreadcrumbJsonLd,
   FaqJsonLd
@@ -49,22 +50,6 @@ const ADDON_BRAND_SLUGS: Record<string, string[]> = {
   "digital-signer": ["digital-signer"],
   "payments-processor": ["payments-processor"]
 };
-
-/**
- * Extract a currency symbol + numeric value from the addon price string
- * (e.g. "$29 / month", "€19 / month"). We fall back to $ when the
- * symbol is not one we recognize.
- */
-function splitPrice(price: string, fallbackUsd: number): {
-  symbol: string;
-  amount: number;
-  suffix: string;
-} {
-  const symbol = price.startsWith("€") ? "€" : "$";
-  const match = price.match(/([\d.]+)/);
-  const amount = match ? Number(match[1]) : fallbackUsd;
-  return { symbol, amount, suffix: "/ mo" };
-}
 
 /**
  * A palette of gradient SVGs used as DirectionAwareHover images for
@@ -108,7 +93,6 @@ export function AddonDetailPage({ addon, loggedIn }: AddonDetailPageProps) {
     question: faq.question,
     answer: faq.answer
   }));
-  const { symbol, amount, suffix } = splitPrice(addon.price, addon.priceUsd);
 
   return (
     <>
@@ -200,21 +184,18 @@ export function AddonDetailPage({ addon, loggedIn }: AddonDetailPageProps) {
                   Pricing
                 </p>
                 <div className="mt-2 flex items-baseline gap-1">
-                  <span className="font-display text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
-                    {symbol}
-                  </span>
-                  <NumberTicker
-                    value={amount}
-                    delay={0.1}
-                    className="font-display text-5xl font-bold tracking-tight text-foreground sm:text-6xl dark:text-foreground"
+                  <LocalisedPrice
+                    usdCents={addon.priceUsd * 100}
+                    className="font-display text-5xl font-bold tracking-tight text-foreground sm:text-6xl"
                   />
                   <span className="ml-1 text-sm font-medium text-muted-foreground">
-                    {suffix}
+                    / mo
                   </span>
                 </div>
                 <p className="mt-1 text-xs text-muted-foreground">
                   {addon.billing}
                 </p>
+                <PppNotice variant="chip" className="mt-3" />
                 <div className="mt-6 space-y-3">
                   <Button
                     asChild

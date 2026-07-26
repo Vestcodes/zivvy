@@ -28,6 +28,7 @@ import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { updateSeatQuantity, type SeatUpdateResult } from "@/lib/billing-client";
 import { FrappeError } from "@/lib/frappe-client";
+import { LocalisedPrice } from "@/components/pricing/localised-price";
 
 interface Props {
   open: boolean;
@@ -35,6 +36,12 @@ interface Props {
   seatsUsed: number;
   seatsAllowed: number;
   hasSubscription: boolean;
+  /**
+   * Optional USD price per seat / month on the current tier. When supplied
+   * we render a `<LocalisedPrice>` next to the delta so the user sees the
+   * incremental spend in their own currency before hitting confirm.
+   */
+  pricePerSeatUsd?: number;
   /** Optional callback fired after a "direct" seat update (no redirect). */
   onDirectUpdate?: (seats: number) => void;
 }
@@ -47,6 +54,7 @@ export function SeatUpgradeDialog({
   seatsUsed,
   seatsAllowed,
   hasSubscription,
+  pricePerSeatUsd,
   onDirectUpdate
 }: Props) {
   const router = useRouter();
@@ -208,7 +216,19 @@ export function SeatUpgradeDialog({
             {delta > 0 && (
               <p className="text-xs text-muted-foreground">
                 Adding <span className="font-medium text-foreground">{delta}</span>{" "}
-                seat{delta === 1 ? "" : "s"} to your workspace.
+                seat{delta === 1 ? "" : "s"} to your workspace
+                {pricePerSeatUsd && pricePerSeatUsd > 0 ? (
+                  <>
+                    {" "}
+                    · +
+                    <LocalisedPrice
+                      usdCents={pricePerSeatUsd * delta * 100}
+                      className="font-medium text-foreground"
+                    />
+                    <span className="text-muted-foreground"> / mo</span>
+                  </>
+                ) : null}
+                .
               </p>
             )}
             {delta === 0 && (

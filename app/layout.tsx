@@ -4,7 +4,9 @@ import { Toaster } from "@/components/ui/sonner";
 import { BootProvider } from "@/components/boot-provider";
 import { QueryProvider } from "@/components/query-provider";
 import { ThemeProvider } from "@/components/theme-provider";
+import { RegionProvider } from "@/components/pricing/region-provider";
 import { fetchBootinfo } from "@/lib/boot-server";
+import { getRegionFromRequestOrCookie } from "@/lib/region";
 import {
   OrganizationJsonLd,
   SoftwareApplicationJsonLd
@@ -124,7 +126,12 @@ export const viewport: Viewport = {
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const bootinfo = await fetchBootinfo();
+  // Both are cheap and independent — run in parallel so the region snapshot
+  // never adds serial latency to the boot fetch.
+  const [bootinfo, region] = await Promise.all([
+    fetchBootinfo(),
+    getRegionFromRequestOrCookie()
+  ]);
   return (
     <html
       lang="en"
@@ -137,8 +144,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
           <QueryProvider>
             <BootProvider bootinfo={bootinfo}>
-              {children}
-              <Toaster position="top-center" />
+              <RegionProvider initial={region}>
+                {children}
+                <Toaster position="top-center" />
+              </RegionProvider>
             </BootProvider>
           </QueryProvider>
         </ThemeProvider>
