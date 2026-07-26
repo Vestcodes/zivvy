@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import {
   BookOpen,
+  ExternalLink,
   LifeBuoy,
   MessageSquare,
   Rocket,
@@ -15,30 +16,42 @@ export const metadata: Metadata = {
   description: "Guides, docs, and ways to get support inside Zivvy."
 };
 
-const LINKS = [
+interface HelpLink {
+  href: string;
+  title: string;
+  description: string;
+  icon: typeof LifeBuoy;
+  external?: boolean;
+}
+
+const LINKS: HelpLink[] = [
   {
     href: "/support/help-center",
     title: "Help center",
     description: "Billing, security, accounts, and troubleshooting.",
-    icon: LifeBuoy
+    icon: LifeBuoy,
+    external: true
   },
   {
     href: "/support/docs",
     title: "Documentation",
     description: "Product docs and how-to guides.",
-    icon: BookOpen
+    icon: BookOpen,
+    external: true
   },
   {
     href: "/support/changelog",
     title: "Changelog",
     description: "What shipped recently.",
-    icon: ScrollText
+    icon: ScrollText,
+    external: true
   },
   {
     href: "/support/roadmap",
     title: "Roadmap",
-    description: "What’s next on the product plan.",
-    icon: Rocket
+    description: "What's next on the product plan.",
+    icon: Rocket,
+    external: true
   },
   {
     href: "/support/tickets",
@@ -46,7 +59,7 @@ const LINKS = [
     description: "Open or track issues for your workspace.",
     icon: MessageSquare
   }
-] as const;
+];
 
 export default function HelpPage() {
   return (
@@ -61,7 +74,7 @@ export default function HelpPage() {
       </div>
 
       <div className="grid gap-3 sm:grid-cols-2">
-        {LINKS.map(({ href, title, description, icon: Icon }) => (
+        {LINKS.map(({ href, title, description, icon: Icon, external }) => (
           <Card key={href} className="border-border/70">
             <CardHeader className="pb-2">
               <div className="flex items-center gap-2">
@@ -74,7 +87,14 @@ export default function HelpPage() {
             </CardHeader>
             <CardContent>
               <Button asChild variant="outline" size="sm">
-                <Link href={href}>Open</Link>
+                {external ? (
+                  <a href={href} target="_blank" rel="noopener noreferrer">
+                    Open
+                    <ExternalLink className="ml-1.5 size-3 text-muted-foreground" />
+                  </a>
+                ) : (
+                  <Link href={href}>Open</Link>
+                )}
               </Button>
             </CardContent>
           </Card>

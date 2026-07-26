@@ -123,7 +123,7 @@ export const CATEGORIES: AppCategory[] = [
 export const APPS: AppTile[] = [
   // WORKSPACE
   { label: "Dashboard",         href: "/dashboard",              icon: LayoutDashboard,  gradient: "from-[#ff00c8] to-[#9000ff]", category: "workspace" },
-  { label: "Stats",             href: "/insights/dashboards",    icon: BarChart3,        gradient: "from-[#22c393] to-[#0f766e]", category: "workspace", module: "Insights", minTier: "business" },
+  { label: "Stats",             href: "/stats",                  icon: BarChart3,        gradient: "from-[#22c393] to-[#0f766e]", category: "workspace", minTier: "business" },
 
   // SALES & CRM
   { label: "Leads",             href: "/crm/leads",              icon: Sparkles,         gradient: "from-[#a855f7] to-[#7c3aed]", category: "sales", module: "CRM" },
