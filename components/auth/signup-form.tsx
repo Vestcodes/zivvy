@@ -5,8 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowRight, MailCheck } from "lucide-react";
-import { frappeSignup, FrappeError } from "@/lib/frappe-client";
+import { ArrowRight, MailCheck, RefreshCw, AlertTriangle } from "lucide-react";
+import { frappeSignup, frappeCall, FrappeError } from "@/lib/frappe-client";
 import { toast } from "sonner";
 import {
   stashPendingTier,
@@ -20,7 +20,7 @@ const DATACENTERS = [
   { value: "us", label: "United States (Virginia)" }
 ] as const;
 
-type Status = "idle" | "submitting" | "sent" | "already-registered";
+type Status = "idle" | "submitting" | "sent" | "sent-no-email" | "already-registered";
 
 interface Props {
   pendingPlan?: { tier: TierSlug; billing: BillingCadence } | null;
@@ -32,6 +32,28 @@ export function SignUpForm({ pendingPlan }: Props = {}) {
   const [sentTo, setSentTo] = useState<string>("");
   const [message, setMessage] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
+  const [resending, setResending] = useState(false);
+
+  async function handleResend() {
+    if (!sentTo || resending) return;
+    setResending(true);
+    try {
+      const result = await frappeCall<[number, string]>(
+        "zivvy_brand.auth.signup.resend_welcome_email",
+        { email: sentTo }
+      );
+      if (result && Array.isArray(result) && result[0] === 1) {
+        toast.success("Welcome email sent — check your inbox.");
+        setStatus("sent");
+      } else {
+        toast.error(result?.[1] || "Could not send email. Try Forgot Password.");
+      }
+    } catch {
+      toast.error("Could not resend. Try using Forgot Password instead.");
+    } finally {
+      setResending(false);
+    }
+  }
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -54,7 +76,13 @@ export function SignUpForm({ pendingPlan }: Props = {}) {
       }
       setSentTo(email);
       setMessage(msg || "");
-      setStatus(statusCode === 1 ? "sent" : "already-registered");
+      if (statusCode === 1) {
+        setStatus("sent");
+      } else if (statusCode === 2) {
+        setStatus("sent-no-email");
+      } else {
+        setStatus("already-registered");
+      }
     } catch (err) {
       const errMsg = err instanceof FrappeError ? err.message : "Could not sign up.";
       setError(errMsg);
@@ -63,18 +91,29 @@ export function SignUpForm({ pendingPlan }: Props = {}) {
     }
   }
 
-  if (status === "sent" || status === "already-registered") {
+  if (status === "sent" || status === "sent-no-email" || status === "already-registered") {
+    const emailFailed = status === "sent-no-email";
     return (
       <div className="space-y-4 text-center">
-        <div className="mx-auto grid size-12 place-items-center rounded-full bg-primary/10 text-primary">
-          <MailCheck className="size-5" />
+        <div className={`mx-auto grid size-12 place-items-center rounded-full ${emailFailed ? "bg-amber-500/10 text-amber-600" : "bg-primary/10 text-primary"}`}>
+          {emailFailed ? <AlertTriangle className="size-5" /> : <MailCheck className="size-5" />}
         </div>
         <div>
           <h3 className="font-display text-lg">
-            {status === "sent" ? "Check your inbox" : "You already have an account"}
+            {emailFailed
+              ? "Account created"
+              : status === "sent"
+                ? "Check your inbox"
+                : "You already have an account"}
           </h3>
           <p className="mt-1 text-sm text-muted-foreground">
-            {status === "sent" ? (
+            {emailFailed ? (
+              <>
+                Your workspace is ready, but we couldn&apos;t deliver the welcome email to{" "}
+                <span className="font-medium text-foreground">{sentTo}</span>. Tap
+                &quot;Resend&quot; below, or use Forgot Password to set a login link.
+              </>
+            ) : status === "sent" ? (
               <>
                 We sent a welcome + verification link to{" "}
                 <span className="font-medium text-foreground">{sentTo}</span>. Follow it
@@ -87,10 +126,7 @@ export function SignUpForm({ pendingPlan }: Props = {}) {
               </>
             )}
           </p>
-          {message && status === "sent" && (
-            <p className="mt-2 text-xs text-muted-foreground">{message}</p>
-          )}
-          {pendingPlan && status === "sent" && (
+          {pendingPlan && (status === "sent" || emailFailed) && (
             <p className="mt-3 text-xs text-muted-foreground">
               Your {pendingPlan.tier === "pro" ? "Pro" : "Business"} plan is queued —
               we&apos;ll take you to checkout right after you sign in.
@@ -98,8 +134,26 @@ export function SignUpForm({ pendingPlan }: Props = {}) {
           )}
         </div>
         <div className="grid gap-2">
+          {(emailFailed || status === "sent") && (
+            <Button
+              type="button"
+              variant={emailFailed ? "polished" : "outline"}
+              className="w-full"
+              onClick={handleResend}
+              disabled={resending}
+            >
+              {resending ? (
+                "Sending…"
+              ) : (
+                <>
+                  <RefreshCw className="size-3.5" />
+                  {emailFailed ? "Resend welcome email" : "Didn’t get it? Resend"}
+                </>
+              )}
+            </Button>
+          )}
           <a
-            href={`/login`}
+            href="/login"
             className="inline-flex h-9 w-full items-center justify-center rounded-md border border-input bg-background text-sm font-medium shadow-xs hover:bg-accent"
           >
             Go to sign in
