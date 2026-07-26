@@ -38,7 +38,7 @@ import { frappeCall, FrappeError } from "@/lib/frappe-client";
 import type { DoctypeMeta, FormGroup } from "@/lib/frappe-meta";
 import { cn } from "@/lib/utils";
 import { parseFrappeError, EMPTY_ERRORS, type ParsedFormError } from "@/lib/form-errors";
-import { computeNextAction, type NextAction } from "@/lib/next-action";
+import { computeNextAction, singular, type NextAction } from "@/lib/next-action";
 import { densifyForm } from "@/lib/form-density";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
@@ -290,7 +290,7 @@ export function AutoFormClient({
     return () => window.removeEventListener("beforeunload", beforeUnload);
   }, [dirty]);
 
-  const singular = title.replace(/s$/, "").toLowerCase();
+  const singularTitle = singular(title).toLowerCase();
 
   const visibleSections = densified.sections.filter((section) => {
     const hasEssentials = section.columns.some((c) =>
@@ -315,7 +315,7 @@ export function AutoFormClient({
           <div className="mt-2 flex flex-wrap items-center justify-between gap-3">
             <div className="flex flex-wrap items-center gap-3">
               <h1 className="font-display text-2xl tracking-tight sm:text-3xl">
-                {isNew ? `New ${singular}` : String(doc.name)}
+                {isNew ? `New ${singularTitle}` : String(doc.name)}
               </h1>
               {meta.is_submittable && !isNew && (
                 <StatusBadge
@@ -531,10 +531,10 @@ export function AutoFormClient({
       <AlertDialog open={dialog === "submit"} onOpenChange={(o) => !o && setDialog(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Submit this {singular}?</AlertDialogTitle>
+            <AlertDialogTitle>Submit this {singularTitle}?</AlertDialogTitle>
             <AlertDialogDescription>
               Submitted records are locked from further edits. You can still cancel a
-              submitted {singular} afterwards.
+              submitted {singularTitle} afterwards.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -549,7 +549,7 @@ export function AutoFormClient({
       <AlertDialog open={dialog === "cancel"} onOpenChange={(o) => !o && setDialog(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Cancel this submitted {singular}?</AlertDialogTitle>
+            <AlertDialogTitle>Cancel this submitted {singularTitle}?</AlertDialogTitle>
             <AlertDialogDescription>
               This reverses the submission and may affect downstream records
               (payments, stock, etc.). Consider whether an amendment is more
@@ -562,7 +562,7 @@ export function AutoFormClient({
               onClick={onCancelDoc}
               className="bg-destructive text-white hover:bg-destructive/90"
             >
-              Cancel {singular}
+              Cancel {singularTitle}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

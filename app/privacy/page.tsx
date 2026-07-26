@@ -82,12 +82,13 @@ export default function PrivacyPage() {
         <li>Comply with legal obligations and respond to lawful requests</li>
       </ul>
 
-      <h2>4. Legal bases (where applicable)</h2>
+      <h2>4. Legal bases (GDPR / UK GDPR)</h2>
       <p>
-        Depending on your location, we rely on: contract performance (providing the service you
-        signed up for); legitimate interests (security, fraud prevention, product reliability);
-        consent (certain optional cookies / analytics); and legal obligation. EU/UK users and
-        others with similar rights may exercise the rights listed in Section 9.
+        Where the EU General Data Protection Regulation (GDPR) or UK GDPR applies, we rely on:
+        contract performance (providing the service you signed up for); legitimate interests
+        (security, fraud prevention, product reliability); consent (certain optional cookies /
+        analytics); and legal obligation. Data subjects in the EU, UK, and other jurisdictions
+        with equivalent rights may exercise the rights listed in Section 9.
       </p>
 
       <h2>5. Region-pinned Customer Data</h2>

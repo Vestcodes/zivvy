@@ -101,7 +101,7 @@ export default async function BlogPostPage({ params }: Props) {
             </h1>
             <p className="mt-4 text-lg text-muted-foreground">{post.excerpt}</p>
             <p className="mt-4 text-sm text-muted-foreground">
-              {post.publishedAt} · {post.readingMinutes} min read · ~{words.toLocaleString()} words
+              By Zivvy Team · {post.publishedAt} · {post.readingMinutes} min read
             </p>
             <div className="mt-4 flex flex-wrap gap-2">
               {post.tags.map((tag) => (

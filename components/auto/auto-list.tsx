@@ -104,13 +104,19 @@ export async function AutoList({
     ? `\`tab${doctype}\`.\`${searchParams.sort}\` ${searchParams.order ?? "DESC"}`
     : null;
 
-  // Build filters: base filters + saved-view filters + optional search on `name` field
   const filters: Array<[string, string, string, string | number | boolean]> = [
     ...(baseFilters ?? []),
     ...viewFilters
   ];
+  let orFilters: Array<[string, string, string, string | number | boolean]> | undefined;
   if (q) {
-    filters.push([doctype, "name", "like", `%${q}%`]);
+    const searchFields: Array<[string, string, string, string | number | boolean]> = [
+      [doctype, "name", "like", `%${q}%`]
+    ];
+    if (titleField) {
+      searchFields.push([doctype, titleField, "like", `%${q}%`]);
+    }
+    orFilters = searchFields;
   }
 
   const [list, count] = await Promise.all([
@@ -118,6 +124,7 @@ export async function AutoList({
       doctype,
       fields: fieldNames,
       filters: filters.length > 0 ? filters : undefined,
+      or_filters: orFilters,
       order_by: sortOverride ?? orderBy,
       start: (page - 1) * size,
       page_length: size
@@ -138,7 +145,6 @@ export async function AutoList({
         <div>
           <h1 className="font-display text-2xl tracking-tight sm:text-3xl">{title}</h1>
           <p className="text-sm text-muted-foreground">
-            {meta.is_submittable ? "Submittable · " : ""}
             {doctype}
             {q && (
               <>

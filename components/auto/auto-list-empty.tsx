@@ -5,6 +5,7 @@ import { Inbox, LogIn, Plus, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { requestOpenNew } from "@/components/auto/auto-list-new-button";
+import { singular } from "@/lib/next-action";
 
 export function AutoListEmpty({
   title,
@@ -82,7 +83,7 @@ export function AutoListEmpty({
           onClick={() => requestOpenNew()}
         >
           <Plus />
-          New {title.replace(/s$/, "").toLowerCase()}
+          New {singular(title).toLowerCase()}
         </Button>
       </CardContent>
     </Card>

@@ -37,6 +37,7 @@ import { Progress } from "@/components/ui/progress";
 import { FieldInput } from "@/components/auto/field-input";
 import { frappeCall } from "@/lib/frappe-client";
 import type { DocField, DoctypeMeta, FormGroup } from "@/lib/frappe-meta";
+import { singular } from "@/lib/next-action";
 import { EMPTY_ERRORS, parseFrappeError, type ParsedFormError } from "@/lib/form-errors";
 import { cn } from "@/lib/utils";
 
@@ -121,8 +122,8 @@ export function AutoFormWizard({
     [isControlled, onOpenChange]
   );
 
-  const singular = title.replace(/s$/, "").toLowerCase();
-  const article = /^[aeiou]/i.test(singular) ? "an" : "a";
+  const singularTitle = singular(title).toLowerCase();
+  const article = /^[aeiou]/i.test(singularTitle) ? "an" : "a";
 
   // Filter out empty groups (defensive — shouldn't happen, but safe).
   const steps = useMemo(
@@ -245,7 +246,7 @@ export function AutoFormWizard({
         doc: JSON.stringify({ ...doc, doctype: meta.name })
       });
       const newName = result?.name;
-      toast.success(`${title.replace(/s$/, "")} created`);
+      toast.success(`${singular(title)} created`);
       setOpen(false);
       if (onCreated && newName) {
         onCreated(newName);
@@ -332,7 +333,7 @@ export function AutoFormWizard({
   const defaultTrigger = (
     <Button variant="polished" size="sm">
       <Plus />
-      New {singular}
+      New {singularTitle}
     </Button>
   );
 
@@ -351,13 +352,13 @@ export function AutoFormWizard({
           <DialogHeader className="px-6 pt-6">
             <div className="flex items-center gap-2 text-xs uppercase tracking-wider text-muted-foreground">
               <Sparkles className="size-3.5" />
-              <span>New {singular}</span>
+              <span>New {singularTitle}</span>
             </div>
             <DialogTitle className="font-display text-xl tracking-tight sm:text-2xl">
-              {step?.label ? step.label : `Create ${singular}`}
+              {step?.label ? step.label : `Create ${singularTitle}`}
             </DialogTitle>
             <DialogDescription className="sr-only">
-              Create {article} new {singular}. Step {currentStep + 1} of {totalSteps}.
+              Create {article} new {singularTitle}. Step {currentStep + 1} of {totalSteps}.
             </DialogDescription>
           </DialogHeader>
 
@@ -450,7 +451,7 @@ export function AutoFormWizard({
                   ) : (
                     <Plus className="size-3.5" />
                   )}
-                  {saving ? "Creating..." : `Create ${singular}`}
+                  {saving ? "Creating..." : `Create ${singularTitle}`}
                 </Button>
               ) : (
                 <Button
@@ -473,7 +474,7 @@ export function AutoFormWizard({
       <AlertDialog open={confirmClose} onOpenChange={setConfirmClose}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Discard this {singular}?</AlertDialogTitle>
+            <AlertDialogTitle>Discard this {singularTitle}?</AlertDialogTitle>
             <AlertDialogDescription>
               You have unsaved changes. Closing now will lose them.
             </AlertDialogDescription>

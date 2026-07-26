@@ -7,6 +7,7 @@ import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { NewRecordWizard } from "@/components/auto/auto-form-wizard";
 import type { DoctypeMeta, FormGroup } from "@/lib/frappe-meta";
+import { singular } from "@/lib/next-action";
 
 /** Dispatched by keyboard / empty-state CTAs on the same list page. */
 export const OPEN_NEW_EVENT = "zivvy:open-new";
@@ -33,7 +34,7 @@ export function AutoListNewButton({
   defaultOpen = false
 }: Props) {
   const router = useRouter();
-  const singular = title.replace(/s$/, "").toLowerCase();
+  const singularTitle = singular(title).toLowerCase();
   const [open, setOpen] = useState(defaultOpen);
 
   useEffect(() => {
@@ -77,7 +78,7 @@ export function AutoListNewButton({
       trigger={
         <Button variant="polished" size="sm">
           <Plus />
-          New {singular}
+          New {singularTitle}
         </Button>
       }
     />

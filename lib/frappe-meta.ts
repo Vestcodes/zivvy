@@ -101,16 +101,15 @@ export async function reportviewGet(opts: {
   doctype: string;
   fields?: string[];
   filters?: Array<[string, string, string, string | number | boolean]> | Record<string, unknown>;
+  or_filters?: Array<[string, string, string, string | number | boolean]>;
   order_by?: string;
   start?: number;
   page_length?: number;
 }): Promise<{ values: ListRow[]; keys: string[] } | null> {
-  // Use frappe.client.get_list — simpler shape (array of dicts) and always
-  // returns even when there are no rows (as `[]`).
   const fields = opts.fields ?? ["name"];
   const filters = opts.filters ? JSON.stringify(opts.filters) : undefined;
+  const or_filters = opts.or_filters ? JSON.stringify(opts.or_filters) : undefined;
   const orderBy = opts.order_by
-    // reportview-style backticks aren't accepted by client.get_list — strip
     ?.replace(/`tab[^`]+`\.`([^`]+)`/g, "$1");
   const res = await frappeServerCall<Record<string, unknown>[]>(
     "frappe.client.get_list",
@@ -118,6 +117,7 @@ export async function reportviewGet(opts: {
       doctype: opts.doctype,
       fields: JSON.stringify(fields),
       filters,
+      or_filters,
       order_by: orderBy,
       limit_start: opts.start ?? 0,
       limit_page_length: opts.page_length ?? 20

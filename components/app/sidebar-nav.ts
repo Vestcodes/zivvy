@@ -191,7 +191,7 @@ export const MODULE_NAVS: Record<string, ModuleNav> = {
   hr: {
     key: "hr",
     title: "People",
-    subtitle: "Employees, leave, shifts, payroll (hrms)",
+    subtitle: "Employees, leave, shifts, payroll",
     items: [
       { label: "Employees", href: "/hr/employees", icon: UserRound, minTier: "pro" },
       { label: "Time off", href: "/hr/time-off", icon: CalendarClock, minTier: "pro" },
@@ -207,7 +207,7 @@ export const MODULE_NAVS: Record<string, ModuleNav> = {
   talent: {
     key: "talent",
     title: "Talent",
-    subtitle: "Recruitment, performance, learning (hrms)",
+    subtitle: "Recruitment, performance, learning",
     items: [
       { label: "Job openings", href: "/talent/openings", icon: BriefcaseBusiness, minTier: "pro" },
       { label: "Applicants", href: "/talent/applicants", icon: UsersRound, minTier: "pro" },

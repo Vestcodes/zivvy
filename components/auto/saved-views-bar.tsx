@@ -119,9 +119,8 @@ export function SavedViewsBar({ doctype, userEmail, tenantName }: Props) {
         next.delete("view");
         const qs = next.toString();
         router.replace(qs ? `?${qs}` : "?", { scroll: false });
-        toast.message("That saved view isn't on this device", {
-          description: "Loaded the default view instead."
-        });
+        // Silently fall back — the URL param referenced a view ID that
+        // doesn't exist in this browser's local storage.
       }
       return;
     }
