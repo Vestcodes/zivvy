@@ -53,7 +53,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     entry("/about", 0.9, "monthly", now),
     entry("/security", 0.9, "monthly", now),
     entry("/contact", 0.9, "monthly", now),
-    entry("/careers", 0.9, "monthly", now)
+    entry("/careers", 0.9, "monthly", now),
+    entry("/status", 0.5, "daily", now),
+    entry("/login", 0.4, "yearly", now)
   ];
 
   // Developer-facing pages.
@@ -103,6 +105,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...ADDON_SLUGS.map((slug) => entry(`/addons/${slug}`, 0.8, "monthly", now))
   ];
 
+  // Support sub-pages.
+  const support: Entry[] = [
+    entry("/support", 0.6, "monthly", now),
+    entry("/support/changelog", 0.6, "monthly", now),
+    entry("/support/docs", 0.6, "monthly", now),
+    entry("/support/roadmap", 0.6, "monthly", now),
+    entry("/support/help-center", 0.6, "monthly", now)
+  ];
+
   // Legal / policy routes — infrequently updated.
   const legal: Entry[] = [
     entry("/privacy", 0.3, "yearly", now),
@@ -110,7 +121,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     entry("/dpa", 0.3, "yearly", now),
     entry("/cookies", 0.3, "yearly", now),
     entry("/refunds", 0.3, "yearly", now),
-    entry("/acceptable-use", 0.3, "yearly", now)
+    entry("/acceptable-use", 0.3, "yearly", now),
+    entry("/responsible-disclosure", 0.3, "yearly", now)
   ];
 
   // Blog — kept from prior implementation. Each post lands on its own URL.
@@ -133,6 +145,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...alternatives,
     ...compare,
     ...addons,
+    ...support,
     ...legal,
     ...blog
   ];

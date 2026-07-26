@@ -366,7 +366,7 @@ export function computeListAction(ctx: ListActionCtx): NextAction | null {
   // once we plumb a "count of drafts" through from the list query.
   if (meta.is_submittable === 1) {
     return {
-      label: `Create a ${singular(title).toLowerCase()}`,
+      label: `Create ${/^[aeiou]/i.test(singular(title)) ? "an" : "a"} ${singular(title).toLowerCase()}`,
       hint: `${total} ${plural(title, total).toLowerCase()} in this workspace so far.`,
       tone: "neutral",
       kind: "link",

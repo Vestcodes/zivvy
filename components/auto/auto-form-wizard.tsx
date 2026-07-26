@@ -122,6 +122,7 @@ export function AutoFormWizard({
   );
 
   const singular = title.replace(/s$/, "").toLowerCase();
+  const article = /^[aeiou]/i.test(singular) ? "an" : "a";
 
   // Filter out empty groups (defensive — shouldn't happen, but safe).
   const steps = useMemo(
@@ -356,7 +357,7 @@ export function AutoFormWizard({
               {step?.label ? step.label : `Create ${singular}`}
             </DialogTitle>
             <DialogDescription className="sr-only">
-              Create a new {singular}. Step {currentStep + 1} of {totalSteps}.
+              Create {article} new {singular}. Step {currentStep + 1} of {totalSteps}.
             </DialogDescription>
           </DialogHeader>
 

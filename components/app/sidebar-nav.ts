@@ -327,7 +327,7 @@ export const MODULE_NAVS: Record<string, ModuleNav> = {
       { label: "Add-ons", href: "/settings/addons", icon: Package },
       { label: "Developer", href: "/settings/developer", icon: Code },
       { label: "Billing", href: "/billing", icon: CreditCard },
-      { label: "Settings", href: "/settings", icon: Settings },
+      { label: "Settings", href: "/settings", icon: Settings, exact: true },
       { label: "Help", href: "/help", icon: LifeBuoy }
     ]
   }

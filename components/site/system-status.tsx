@@ -21,7 +21,7 @@ type ProbeResult = { ok: boolean };
 
 const PROBES: string[] = [
   "https://integrate.zivvy.xyz/health",
-  "https://zivvy.xyz/api/method/frappe.ping",
+  "https://api.zivvy.xyz/api/method/frappe.ping",
   "https://zivvy.xyz/",
 ];
 

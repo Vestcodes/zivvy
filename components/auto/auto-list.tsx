@@ -79,7 +79,12 @@ export async function AutoList({
 
   const listFields = listViewFields(meta);
   const newGroups = groupFieldsForForm(meta, { isNew: true });
-  const fieldNames = ["name", ...listFields.map((f) => f.fieldname).filter((f) => f !== "name")];
+  const titleField = meta.title_field && meta.title_field !== "name" ? meta.title_field : null;
+  const fieldNames = [
+    "name",
+    ...(titleField && !listFields.some((f) => f.fieldname === titleField) ? [titleField] : []),
+    ...listFields.map((f) => f.fieldname).filter((f) => f !== "name")
+  ];
   const orderBy = meta.sort_field
     ? `\`tab${doctype}\`.\`${meta.sort_field}\` ${meta.sort_order ?? "DESC"}`
     : `\`tab${doctype}\`.\`modified\` DESC`;
@@ -177,7 +182,7 @@ export async function AutoList({
             <Table>
               <TableHeader>
                 <TableRow className="bg-secondary/40 hover:bg-secondary/40">
-                  <TableHead className="w-[240px] font-medium">Name</TableHead>
+                  <TableHead className="w-[240px] font-medium">{titleField ? (listFields.find((f) => f.fieldname === titleField)?.label ?? "Name") : "Name"}</TableHead>
                   {listFields
                     .filter((f) => f.fieldname !== "name")
                     .map((f) => (
@@ -200,7 +205,7 @@ export async function AutoList({
                           href={rowHref}
                           className="inline-flex items-center gap-1.5 font-medium text-foreground hover:text-primary"
                         >
-                          {String(row.name)}
+                          {titleField && row[titleField] ? String(row[titleField]) : String(row.name)}
                           <ChevronRight className="size-3.5 text-muted-foreground opacity-0 transition-all group-hover:translate-x-0.5 group-hover:opacity-100" />
                         </Link>
                       </TableCell>
@@ -208,7 +213,7 @@ export async function AutoList({
                         .filter((f) => f.fieldname !== "name")
                         .map((f) => (
                           <TableCell key={f.fieldname} className="text-sm">
-                            <FieldCell field={f} value={row[f.fieldname]} />
+                            <FieldCell field={f} value={row[f.fieldname]} currency={String(boot.sysdefaults?.currency ?? "USD")} />
                           </TableCell>
                         ))}
                     </TableRow>

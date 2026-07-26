@@ -46,18 +46,18 @@ export function AutoListEmpty({
             <Lock className="size-5" />
           </div>
           <p className="mt-3 font-display text-lg">
-            Couldn't load {title.toLowerCase()}
+            {title} aren&apos;t available yet
           </p>
           <p className="mt-1 max-w-sm text-sm text-muted-foreground">
-            This could mean you don't have permission, or the app that powers this
-            module isn't installed on your workspace yet. Try signing in again.
+            This module may not be included in your current plan, or your session
+            may have expired. Try refreshing, or upgrade your plan to unlock it.
           </p>
           <div className="mt-4 flex gap-2">
             <Button asChild variant="outline">
-              <Link href={basePath}>Retry</Link>
+              <Link href={basePath}>Refresh</Link>
             </Button>
             <Button asChild variant="polished">
-              <Link href="/login">Sign in</Link>
+              <Link href="/billing">View plan</Link>
             </Button>
           </div>
         </CardContent>

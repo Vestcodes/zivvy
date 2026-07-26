@@ -41,7 +41,7 @@ async function frappeServerCall<T = unknown>(
   try {
     const res = await fetch(`${FRAPPE_ORIGIN}/api/method/${method}`, {
       method: "POST",
-      next: { revalidate: 60 },
+      cache: "no-store",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "X-Requested-With": "XMLHttpRequest",
@@ -157,7 +157,9 @@ async function _fetchBootinfo(): Promise<Bootinfo> {
       full_name: user.full_name ?? user.email,
       roles: []
     },
-    sysdefaults: tenant?.company ? { company: tenant.company } : undefined,
+    sysdefaults: tenant?.company
+      ? { company: tenant.company, currency: tenant.default_currency ?? "USD" }
+      : undefined,
     app_name: "Zivvy",
     website_title: "Zivvy",
     zivvy

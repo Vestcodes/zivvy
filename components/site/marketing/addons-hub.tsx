@@ -30,7 +30,7 @@ interface AddonsHubProps {
   addons: AddonDetail[];
 }
 
-const DASHBOARD_URL = "https://zivvy.xyz/settings/addons";
+const DASHBOARD_URL = "/signup?redirect=/settings/addons";
 
 /**
  * Which brand marks to show on each addon card. Keyed by addon slug so

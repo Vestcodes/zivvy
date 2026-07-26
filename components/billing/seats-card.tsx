@@ -37,11 +37,12 @@ export function SeatsCard({ zivvy, hasSubscription }: Props) {
   const region = useRegion();
   const pricePerSeatUsd =
     (region.catalog?.tiers?.business?.monthly?.amount_cents ?? 0) / 100;
+  const effectivelyUnlimited = seatsAllowed >= 999;
   const pct =
-    seatsAllowed > 0
+    seatsAllowed > 0 && !effectivelyUnlimited
       ? Math.min(100, Math.round((seatsUsed / seatsAllowed) * 100))
       : 0;
-  const atCap = seatsAllowed > 0 && seatsUsed >= seatsAllowed;
+  const atCap = !effectivelyUnlimited && seatsAllowed > 0 && seatsUsed >= seatsAllowed;
 
   return (
     <>
@@ -61,7 +62,7 @@ export function SeatsCard({ zivvy, hasSubscription }: Props) {
           <div className="mb-2 flex items-baseline justify-between">
             <span className="text-sm font-medium">In use</span>
             <span className="font-mono text-sm text-muted-foreground">
-              {seatsUsed} / {seatsAllowed > 0 ? seatsAllowed : "—"}
+              {seatsUsed} / {effectivelyUnlimited ? "unlimited" : seatsAllowed > 0 ? seatsAllowed : "—"}
             </span>
           </div>
           <Progress value={pct} className="h-1.5" />

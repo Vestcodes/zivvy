@@ -205,7 +205,7 @@ export function SiteFooter() {
 
         <div className="mt-12 flex flex-col items-start justify-between gap-3 border-t border-border/60 pt-6 text-xs text-muted-foreground sm:flex-row sm:items-center">
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-            <span>© {new Date().getFullYear()} Vestcodes.</span>
+            <span>© {new Date().getFullYear()} Zivvy.</span>
             <span aria-hidden className="text-muted-foreground/40">
               ·
             </span>

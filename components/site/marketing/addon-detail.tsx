@@ -40,7 +40,7 @@ interface AddonDetailPageProps {
   loggedIn: boolean;
 }
 
-const DASHBOARD_URL = "https://zivvy.xyz/settings/addons";
+const DASHBOARD_URL = "/signup?redirect=/settings/addons";
 
 /** Brand marks to feature at the top of each addon's detail hero. */
 const ADDON_BRAND_SLUGS: Record<string, string[]> = {

@@ -101,9 +101,10 @@ export function TeamList({
   const [inviting, setInviting] = useState(false);
   const [removing, setRemoving] = useState(false);
 
-  const atCapacity = seatsUsed >= seatsAllowed && seatsAllowed > 0;
+  const effectivelyUnlimited = seatsAllowed >= 999;
+  const atCapacity = !effectivelyUnlimited && seatsUsed >= seatsAllowed && seatsAllowed > 0;
   const seatsPct =
-    seatsAllowed > 0
+    seatsAllowed > 0 && !effectivelyUnlimited
       ? Math.min(100, Math.round((seatsUsed / seatsAllowed) * 100))
       : 0;
 
@@ -207,10 +208,10 @@ export function TeamList({
                     atCapacity ? "text-amber-600 dark:text-amber-500" : "text-muted-foreground"
                   )}
                 >
-                  {seatsUsed} of {seatsAllowed > 0 ? seatsAllowed : "unlimited"}
+                  {seatsUsed} of {effectivelyUnlimited ? "unlimited" : seatsAllowed > 0 ? seatsAllowed : "unlimited"}
                 </span>
               </div>
-              {seatsAllowed > 0 && (
+              {seatsAllowed > 0 && !effectivelyUnlimited && (
                 <Progress
                   value={seatsPct}
                   className={cn("h-1.5", atCapacity && "[&>*]:bg-amber-500")}

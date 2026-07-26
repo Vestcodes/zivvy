@@ -17,6 +17,7 @@ export interface ZivvyTenantSummary {
   seat_limit?: number;
   seats_used?: number;
   company?: string;
+  default_currency?: string;
   owner_user?: string;
   datacenter?: "india" | "eu" | "us";
   polar_customer_id?: string | null;

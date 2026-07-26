@@ -42,7 +42,8 @@ const nextConfig = {
   async redirects() {
     return [
       { source: "/www", destination: "/", permanent: false },
-      { source: "/www/:path*", destination: "/:path*", permanent: false }
+      { source: "/www/:path*", destination: "/:path*", permanent: false },
+      { source: "/settings/billing", destination: "/billing", permanent: false }
     ];
   },
   async rewrites() {

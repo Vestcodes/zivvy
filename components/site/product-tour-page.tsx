@@ -139,12 +139,7 @@ export function ProductTourPageContent() {
           </BlurFade>
           {!heroArcadeTour.arcadeEmbedUrl && !heroArcadeTour.arcadeViewUrl ? (
             <p className="mt-3 text-center text-xs text-muted-foreground">
-              Playing the self-hosted Business tour. Arcade embeds appear here once generation
-              credits are available and URLs are set in{" "}
-              <code className="rounded bg-muted px-1 py-0.5 font-mono text-[11px]">
-                lib/arcade-tours.ts
-              </code>
-              .
+              Playing the self-hosted product tour. Interactive walkthroughs coming soon.
             </p>
           ) : null}
         </section>

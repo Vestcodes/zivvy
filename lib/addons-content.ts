@@ -121,7 +121,7 @@ export const addonDetails: AddonDetail[] = [
     metaDescription:
       "One-click DATEV export from Zivvy. HGB-compliant, SKR03/SKR04 charts, XML and CSV — send to your Steuerberater without CSV fiddling.",
     price: "€19 / month",
-    priceUsd: 21,
+    priceUsd: 19,
     billing: "Per workspace · billed monthly via Polar",
     benefits: [
       {

@@ -12,11 +12,13 @@ const INT_FORMAT = new Intl.NumberFormat();
 export function FieldCell({
   field,
   value,
-  rowHref
+  rowHref,
+  currency = "USD"
 }: {
   field: DocField;
   value: unknown;
   rowHref?: string;
+  currency?: string;
 }) {
   if (value === null || value === undefined || value === "") {
     return <span className="text-muted-foreground">—</span>;
@@ -26,7 +28,7 @@ export function FieldCell({
     case "Currency":
       return (
         <span className="font-mono tabular-nums">
-          {formatMoney(Number(value), "USD", { fractionDigits: 2 })}
+          {formatMoney(Number(value), currency, { fractionDigits: 2 })}
         </span>
       );
 
