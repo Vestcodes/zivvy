@@ -230,33 +230,33 @@ export function groupFieldsForForm(
 }
 
 const LIST_VIEW_OVERRIDES: Record<string, string[]> = {
-  // Sales
-  "Customer":        ["customer_name", "customer_group", "territory"],
-  "Quotation":       ["party_name", "status", "transaction_date", "grand_total"],
-  "Sales Order":     ["customer_name", "status", "delivery_date", "grand_total", "per_delivered"],
-  "Sales Invoice":   ["customer_name", "status", "posting_date", "grand_total", "outstanding_amount"],
-  "Delivery Note":   ["customer_name", "status", "posting_date", "grand_total"],
+  // Sales — title column already shows customer/party name
+  "Customer":        ["customer_group", "territory"],
+  "Quotation":       ["status", "transaction_date", "grand_total"],
+  "Sales Order":     ["status", "delivery_date", "grand_total", "per_delivered"],
+  "Sales Invoice":   ["status", "posting_date", "grand_total", "outstanding_amount"],
+  "Delivery Note":   ["status", "posting_date", "grand_total"],
 
-  // Purchases
-  "Supplier":        ["supplier_name", "supplier_group", "country"],
-  "Purchase Order":  ["supplier_name", "status", "schedule_date", "grand_total", "per_received"],
-  "Purchase Invoice":["supplier_name", "status", "posting_date", "grand_total", "outstanding_amount"],
+  // Purchases — title column already shows supplier name
+  "Supplier":        ["supplier_group", "country"],
+  "Purchase Order":  ["status", "schedule_date", "grand_total", "per_received"],
+  "Purchase Invoice":["status", "posting_date", "grand_total", "outstanding_amount"],
 
-  // Stock
-  "Item":            ["item_name", "item_group", "stock_uom", "is_stock_item"],
+  // Stock — title column already shows item name
+  "Item":            ["item_group", "stock_uom", "is_stock_item"],
   "Stock Entry":     ["stock_entry_type", "purpose", "posting_date", "total_amount"],
 
-  // Finance
-  "Payment Entry":   ["party_name", "payment_type", "posting_date", "paid_amount", "mode_of_payment"],
+  // Finance — title column already shows party name
+  "Payment Entry":   ["payment_type", "posting_date", "paid_amount", "mode_of_payment"],
   "Journal Entry":   ["voucher_type", "posting_date", "total_debit", "cheque_no"],
 
-  // CRM
-  "Lead":            ["lead_name", "company_name", "status", "source"],
-  "Opportunity":     ["party_name", "status", "opportunity_amount", "expected_closing"],
-  "Campaign":        ["campaign_name", "status"],
+  // CRM — title column already shows lead/party name
+  "Lead":            ["company_name", "status", "source"],
+  "Opportunity":     ["status", "opportunity_amount", "expected_closing"],
+  "Campaign":        ["status"],
 
-  // POS
-  "POS Invoice":     ["customer_name", "status", "posting_date", "grand_total"],
+  // POS — title column already shows customer name
+  "POS Invoice":     ["status", "posting_date", "grand_total"],
 };
 
 export function listViewFields(meta: DoctypeMeta): DocField[] {
