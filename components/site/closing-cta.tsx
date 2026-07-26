@@ -51,7 +51,7 @@ export function ClosingCta() {
             borderRadius="0.75rem"
             duration={2600}
             className="h-12 !bg-primary !text-primary-foreground !border-transparent px-7 text-base font-semibold shadow-elevation-md"
-            containerClassName="h-12 w-auto !md:col-span-1"
+            containerClassName="h-12 w-auto md:!col-span-1"
           >
             <span className="inline-flex items-center gap-2">
               Start free

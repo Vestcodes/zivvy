@@ -71,7 +71,7 @@ export function AddonsHub({ addons }: AddonsHubProps) {
                 target="_blank"
                 rel="noreferrer"
                 borderRadius="9999px"
-                containerClassName="h-12 w-auto !md:col-span-1"
+                containerClassName="h-12 w-auto md:!col-span-1"
                 className="border-primary/40 bg-primary/90 px-6 text-sm font-semibold text-primary-foreground dark:bg-primary/90"
                 borderClassName="bg-[radial-gradient(theme(colors.emerald.400)_40%,transparent_60%)]"
                 duration={3500}
@@ -211,7 +211,7 @@ export function AddonsHub({ addons }: AddonsHubProps) {
               target="_blank"
               rel="noreferrer"
               borderRadius="9999px"
-              containerClassName="h-12 w-auto !md:col-span-1"
+              containerClassName="h-12 w-auto md:!col-span-1"
               className="border-primary/40 bg-primary/90 px-6 text-sm font-semibold text-primary-foreground dark:bg-primary/90"
               borderClassName="bg-[radial-gradient(theme(colors.emerald.400)_40%,transparent_60%)]"
               duration={3500}

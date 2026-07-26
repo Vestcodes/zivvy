@@ -390,7 +390,7 @@ function DesktopNav() {
 
   return (
     <Menu setActive={setActive} className="hidden md:flex">
-      <MenuItem setActive={setActive} active={active} item="Product">
+      <MenuItem setActive={setActive} active={active} item="Product" href="/features">
         <div className="grid w-[46rem] grid-cols-3 gap-x-6 gap-y-1">
           {PRODUCT_MEGA.map((col) => (
             <div key={col.heading} className="flex min-w-0 flex-col">
@@ -407,7 +407,7 @@ function DesktopNav() {
         </div>
       </MenuItem>
 
-      <MenuItem setActive={setActive} active={active} item="Integrations">
+      <MenuItem setActive={setActive} active={active} item="Integrations" href="/integrations">
         <div className="grid w-[28rem] grid-cols-2 gap-1">
           {INTEGRATIONS_MENU.map((link) => (
             <MegaLinkItem key={`int-${link.label}`} link={link} />

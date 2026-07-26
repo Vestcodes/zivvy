@@ -7,6 +7,7 @@ import { motion } from "motion/react";
 import { ArrowRight } from "lucide-react";
 import { LogoMark } from "@/components/site/logo";
 import type { HubCardItem } from "@/lib/marketing-content";
+import { MATURITY_LABEL } from "@/lib/integration-guides";
 import { SiteHeader } from "@/components/site/header";
 import { SiteFooter } from "@/components/site/footer";
 import { BrandLogo } from "@/components/site/brand-logo";
@@ -429,11 +430,21 @@ export function IntegrationsHubPage({ items }: Props) {
 
         <section className="mx-auto max-w-6xl px-6 pb-3 pt-8">
           <BlurFade>
-            <CategoryPills
-              categories={availableCategories}
-              active={activeCategory}
-              onChange={setActiveCategory}
-            />
+            <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <CategoryPills
+                categories={availableCategories}
+                active={activeCategory}
+                onChange={setActiveCategory}
+              />
+              <p className="max-w-md text-xs text-muted-foreground">
+                Badges show maturity:{" "}
+                <span className="text-foreground/80">Native</span>,{" "}
+                <span className="text-foreground/80">Add-on</span>,{" "}
+                <span className="text-foreground/80">Via webhooks</span>,{" "}
+                <span className="text-foreground/80">Via API</span>. Every guide documents the
+                real path — not a fictional OAuth connector.
+              </p>
+            </div>
           </BlurFade>
         </section>
 
@@ -456,7 +467,7 @@ export function IntegrationsHubPage({ items }: Props) {
                       {index % 3 === 0 ? (
                         <BorderBeam size={55} duration={8} colorFrom="#34d399" colorTo="#0f766e" />
                       ) : null}
-                      <div className="mb-3 flex items-center justify-between">
+                      <div className="mb-3 flex items-center justify-between gap-2">
                         <div className="flex size-9 items-center justify-center rounded-lg border border-border/70 bg-background/70">
                           <BrandLogo
                             slug={item.slug}
@@ -464,11 +475,18 @@ export function IntegrationsHubPage({ items }: Props) {
                             className="size-5 text-primary"
                           />
                         </div>
-                        {item.category ? (
-                          <Badge variant="outline" className="text-[10px] font-medium">
-                            {item.category}
-                          </Badge>
-                        ) : null}
+                        <div className="flex flex-wrap items-center justify-end gap-1.5">
+                          {item.maturity ? (
+                            <Badge variant="secondary" className="text-[10px] font-semibold uppercase tracking-wide">
+                              {MATURITY_LABEL[item.maturity]}
+                            </Badge>
+                          ) : null}
+                          {item.category ? (
+                            <Badge variant="outline" className="text-[10px] font-medium">
+                              {item.category}
+                            </Badge>
+                          ) : null}
+                        </div>
                       </div>
                       <h2 className="font-display text-lg font-semibold group-hover:text-primary">
                         {item.title}

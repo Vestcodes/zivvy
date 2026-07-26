@@ -39,7 +39,7 @@ const API_BASE = "https://api.zivvy.xyz";
  * the source of truth. We list the resources integrators care about first;
  * the wildcard `*` subscription (documented below) is the way to catch
  * everything, and the full machine-readable catalog lives at
- * `GET /v1/webhooks/events` once the endpoint is public.
+ * `GET /v1/webhooks/events`.
  */
 
 type SampleField = { key: string; type: string; example: string };
@@ -1060,9 +1060,8 @@ export function WebhooksPageContent() {
               <code className="rounded bg-muted px-1 py-0.5 font-mono text-[11.5px]">
                 DELETE /v1/webhooks/:id
               </code>
-              ) are already live. Registrations you make today will start
-              receiving events automatically when outbound delivery ships — no
-              re-registration needed.
+              ) are already live. Registrations you make today start receiving
+              signed deliveries as matching events occur.
             </p>
           </BlurFade>
           <div className="mt-6 overflow-hidden rounded-xl border border-border/70">

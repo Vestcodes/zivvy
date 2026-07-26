@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import type { CodeExample, MarketingDetail } from "@/lib/marketing-content";
+import { MATURITY_HINT, MATURITY_LABEL } from "@/lib/integration-guides";
 import { SiteHeader } from "@/components/site/header";
 import { SiteFooter } from "@/components/site/footer";
 import { Button } from "@/components/ui/button";
@@ -242,6 +243,33 @@ export function MarketingDetailPage({ sectionLabel, sectionHref, entry }: Props)
                 <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
                   {entry.description}
                 </p>
+                {entry.maturity || entry.realPath ? (
+                  <div className="mt-5 rounded-xl border border-border/70 bg-card/60 p-4 text-left">
+                    <div className="flex flex-wrap items-center gap-2">
+                      {entry.maturity ? (
+                        <Badge variant="outline" className="text-[10px] font-semibold uppercase tracking-wide">
+                          {MATURITY_LABEL[entry.maturity]}
+                        </Badge>
+                      ) : null}
+                      {entry.category ? (
+                        <Badge variant="secondary" className="text-[10px] font-medium">
+                          {entry.category}
+                        </Badge>
+                      ) : null}
+                    </div>
+                    {entry.maturity ? (
+                      <p className="mt-2 text-xs text-muted-foreground">
+                        {MATURITY_HINT[entry.maturity]}
+                      </p>
+                    ) : null}
+                    {entry.realPath ? (
+                      <p className="mt-3 text-sm text-foreground/90">
+                        <span className="font-medium text-foreground">Real path: </span>
+                        {entry.realPath}
+                      </p>
+                    ) : null}
+                  </div>
+                ) : null}
                 <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                   <Button asChild variant="polished" size="lg">
                     <Link href={entry.ctaHref}>
@@ -275,6 +303,36 @@ export function MarketingDetailPage({ sectionLabel, sectionHref, entry }: Props)
               </div>
             </BlurFade>
           </section>
+
+          {entry.setupSteps && entry.setupSteps.length > 0 ? (
+            <section className="mx-auto max-w-5xl px-6 py-8">
+              <BlurFade>
+                <div className="flex items-center gap-2">
+                  <Workflow className="size-5 text-primary" />
+                  <h2 className="font-display text-2xl font-semibold tracking-tight">
+                    How to integrate
+                  </h2>
+                </div>
+                <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
+                  Steps for the path that works in production today — not a hypothetical native
+                  connector.
+                </p>
+                <ol className="mt-6 space-y-3">
+                  {entry.setupSteps.map((step, idx) => (
+                    <li
+                      key={step}
+                      className="flex gap-4 rounded-xl border border-border/60 bg-card/50 px-4 py-3"
+                    >
+                      <span className="font-mono text-xs font-semibold text-primary">
+                        {String(idx + 1).padStart(2, "0")}
+                      </span>
+                      <span className="text-sm text-foreground/90">{step}</span>
+                    </li>
+                  ))}
+                </ol>
+              </BlurFade>
+            </section>
+          ) : null}
 
           <section className="mx-auto max-w-5xl px-6 py-10">
             <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">

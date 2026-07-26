@@ -63,7 +63,7 @@ const SECURITY_POSTURE = [
     Icon: Cookie,
     title: "Session cookies",
     body:
-      "HTTP-only, Secure, SameSite=Lax session cookies with short sliding expiry. Sessions are revocable per device from the account panel.",
+      "HTTP-only, SameSite=Lax session cookies with short sliding expiry. Cookies are marked Secure on HTTPS (including when TLS terminates at the edge). Sessions are revocable per device from the account panel.",
     className: ""
   },
   {

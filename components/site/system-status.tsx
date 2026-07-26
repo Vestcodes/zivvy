@@ -12,8 +12,7 @@ import { cn } from "@/lib/utils";
  *
  * The component is SSR-safe: initial render always draws the green
  * "All systems go" state so there is zero layout shift when the hook fires.
- * The link target (status.zivvy.xyz) may or may not resolve today — that
- * is intentional and the parent supplies no fallback.
+ * The footer links to `/status` on the main site (status.zivvy.xyz is retired).
  */
 
 type StatusLevel = "operational" | "partial" | "degraded";
@@ -112,14 +111,12 @@ export function SystemStatus({ className }: { className?: string }) {
 
   return (
     <a
-      href="https://status.zivvy.xyz"
-      target="_blank"
-      rel="noreferrer noopener"
+      href="/status"
       className={cn(
         "inline-flex items-center gap-1 rounded-full border border-border/60 bg-background/60 px-2 py-0.5 text-[11px] text-muted-foreground transition-colors hover:text-foreground",
         className,
       )}
-      aria-label={`System status: ${LABELS[level]}. Opens status page in a new tab.`}
+      aria-label={`System status: ${LABELS[level]}. Opens status page.`}
     >
       <StatusDot level={level} />
       {LABELS[level]}

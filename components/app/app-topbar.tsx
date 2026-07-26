@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { toast } from "sonner";
 import { CreditCard, LifeBuoy, LogOut, Settings } from "lucide-react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
@@ -93,12 +92,16 @@ function TopbarUserAvatar() {
   async function onLogout() {
     try {
       await frappeLogout();
-      purgeAllSavedViews();
-      window.location.href = "/login";
     } catch (err) {
-      toast.error("Sign-out failed — please try again.");
+      // Still clear client state and bounce — session cookies may already be dead.
       console.error(err);
     }
+    try {
+      purgeAllSavedViews();
+    } catch {
+      // localStorage may be unavailable
+    }
+    window.location.href = "/login";
   }
 
   return (

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Clapperboard, ExternalLink, Play } from "lucide-react";
 import { SiteHeader } from "@/components/site/header";
 import { SiteFooter } from "@/components/site/footer";
 import { Button } from "@/components/ui/button";
@@ -9,31 +9,101 @@ import { BlurFade } from "@/components/ui/blur-fade";
 import { MagicCard } from "@/components/ui/magic-card";
 import { DotPattern } from "@/components/ui/dot-pattern";
 import { ShimmerButton } from "@/components/ui/shimmer-button";
+import { Badge } from "@/components/ui/badge";
 import { ProductTourVideo } from "@/components/site/product-tour-video";
+import { HeroVideoDialog } from "@/components/ui/hero-video-dialog";
+import { BorderBeam } from "@/components/ui/border-beam";
+import {
+  heroArcadeTour,
+  moduleArcadeTours,
+  type ArcadeTour
+} from "@/lib/arcade-tours";
 import { cn } from "@/lib/utils";
 
-const STEPS = [
-  {
-    time: "00:00",
-    title: "Land in Business",
-    body: "Open the live workspace and the dashboard your team actually uses."
-  },
-  {
-    time: "00:25",
-    title: "CRM → cash",
-    body: "Leads, quotes, orders, and invoices without hopping tools."
-  },
-  {
-    time: "01:00",
-    title: "Stock, books, people",
-    body: "Inventory, payments, and HR in the same product."
-  },
-  {
-    time: "01:40",
-    title: "Make & inspect",
-    body: "BOMs, work orders, and quality — Business-tier depth."
+function TourPlayer({ tour, showBeam = false }: { tour: ArcadeTour; showBeam?: boolean }) {
+  const embed = tour.arcadeEmbedUrl || tour.arcadeViewUrl;
+  if (embed) {
+    return (
+      <div className="relative overflow-hidden rounded-xl">
+        <HeroVideoDialog
+          animationStyle="top-in-bottom-out"
+          videoSrc={embed}
+          thumbnailSrc={tour.thumbnailSrc}
+          thumbnailAlt={`${tour.title} — Zivvy product tour`}
+        />
+        {showBeam ? (
+          <BorderBeam
+            size={140}
+            duration={9}
+            colorFrom="#34d399"
+            colorTo="#0f766e"
+            borderWidth={1.5}
+          />
+        ) : null}
+      </div>
+    );
   }
-];
+  if (tour.isHero) {
+    return <ProductTourVideo showBeam={showBeam} animationStyle="top-in-bottom-out" />;
+  }
+  return null;
+}
+
+function ModuleCard({ tour, index }: { tour: ArcadeTour; index: number }) {
+  const hasArcade = Boolean(tour.arcadeEmbedUrl || tour.arcadeViewUrl);
+  return (
+    <BlurFade delay={0.04 + index * 0.04}>
+      <li id={tour.anchor} className="scroll-mt-24">
+        <MagicCard
+          className="flex h-full flex-col rounded-xl border border-border/70 bg-card/70 p-5"
+          gradientFrom="#34d399"
+          gradientTo="#0f766e"
+          gradientColor="rgba(27, 152, 114, 0.1)"
+        >
+          <div className="flex items-start justify-between gap-3">
+            <div className="flex size-9 items-center justify-center rounded-lg border border-border/70 bg-background/70">
+              <Clapperboard className="size-4 text-primary" />
+            </div>
+            {tour.chapterTime ? (
+              <Badge variant="outline" className="font-mono text-[10px]">
+                {tour.chapterTime}
+              </Badge>
+            ) : null}
+          </div>
+          <h2 className="mt-3 font-display text-lg font-semibold">{tour.title}</h2>
+          <p className="mt-2 flex-1 text-sm text-muted-foreground">{tour.description}</p>
+          <div className="mt-4 flex flex-wrap gap-2">
+            {hasArcade ? (
+              <Button asChild size="sm" variant="polished">
+                <a
+                  href={tour.arcadeViewUrl || tour.arcadeEmbedUrl || "#"}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Watch Arcade
+                  <ExternalLink className="size-3.5" />
+                </a>
+              </Button>
+            ) : (
+              <Button asChild size="sm" variant="polished">
+                <a href="#full-tour">
+                  <Play className="size-3.5" />
+                  See in full tour
+                </a>
+              </Button>
+            )}
+            <Button asChild size="sm" variant="outline">
+              <Link href={tour.fallbackHref}>
+                {tour.fallbackLabel}
+                <ArrowRight className="size-3.5" />
+              </Link>
+            </Button>
+          </div>
+        </MagicCard>
+      </li>
+    </BlurFade>
+  );
+}
 
 export function ProductTourPageContent() {
   return (
@@ -49,41 +119,59 @@ export function ProductTourPageContent() {
           />
           <div className="mx-auto max-w-3xl px-6 pb-6 pt-20 text-center sm:pt-24">
             <BlurFade>
+              <p className="mb-3 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                Product tours
+              </p>
               <h1 className="font-display text-4xl font-bold tracking-tight sm:text-5xl">
                 See Zivvy in motion
               </h1>
               <p className="mx-auto mt-4 max-w-xl text-lg text-muted-foreground">
-                A short Business-tier tour — CRM through manufacturing.
+                Full Business-tier walkthrough, plus module tours for CRM, stock, books, people,
+                manufacturing, banking, and integrations.
               </p>
             </BlurFade>
           </div>
         </section>
 
-        <section className="mx-auto max-w-5xl px-6 py-2">
+        <section id="full-tour" className="mx-auto max-w-5xl scroll-mt-24 px-6 py-2">
           <BlurFade delay={0.08}>
-            <ProductTourVideo showBeam animationStyle="top-in-bottom-out" />
+            <TourPlayer tour={heroArcadeTour} showBeam />
           </BlurFade>
+          {!heroArcadeTour.arcadeEmbedUrl && !heroArcadeTour.arcadeViewUrl ? (
+            <p className="mt-3 text-center text-xs text-muted-foreground">
+              Playing the self-hosted Business tour. Arcade embeds appear here once generation
+              credits are available and URLs are set in{" "}
+              <code className="rounded bg-muted px-1 py-0.5 font-mono text-[11px]">
+                lib/arcade-tours.ts
+              </code>
+              .
+            </p>
+          ) : null}
         </section>
 
         <section className="mx-auto max-w-5xl px-6 py-12">
+          <BlurFade>
+            <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <h2 className="font-display text-2xl font-semibold tracking-tight">
+                  Module tours
+                </h2>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  Jump to a workflow. Each card deep-links the full tour chapter and a focused
+                  guide page.
+                </p>
+              </div>
+              <Link
+                href="/integrations"
+                className="text-sm font-medium text-primary underline-offset-4 hover:underline"
+              >
+                Browse integrations
+              </Link>
+            </div>
+          </BlurFade>
           <ol className="grid gap-3 sm:grid-cols-2">
-            {STEPS.map((step, index) => (
-              <BlurFade key={step.title} delay={0.05 + index * 0.05}>
-                <li>
-                  <MagicCard
-                    className="h-full rounded-xl border border-border/70 bg-card/70 p-5"
-                    gradientFrom="#34d399"
-                    gradientTo="#0f766e"
-                    gradientColor="rgba(27, 152, 114, 0.1)"
-                  >
-                    <p className="font-mono text-xs text-muted-foreground">
-                      {step.time}
-                    </p>
-                    <h2 className="mt-1 font-display text-lg font-semibold">{step.title}</h2>
-                    <p className="mt-2 text-sm text-muted-foreground">{step.body}</p>
-                  </MagicCard>
-                </li>
-              </BlurFade>
+            {moduleArcadeTours.map((tour, index) => (
+              <ModuleCard key={tour.id} tour={tour} index={index} />
             ))}
           </ol>
         </section>

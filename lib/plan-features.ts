@@ -50,7 +50,7 @@ export const MODULE_MIN_TIER: Record<string, ZivvyTier> = {
  */
 export const DOCTYPE_MIN_TIER: Record<string, ZivvyTier> = {
   // Business tier
-  BOM: "business",
+  BOM: "pro",
   "Work Order": "business",
   "Job Card": "business",
   "Subcontracting Order": "business",
@@ -62,6 +62,7 @@ export const DOCTYPE_MIN_TIER: Record<string, ZivvyTier> = {
   "Asset Movement": "business",
 
   // Pro tier
+  "Sales Invoice": "pro",
   "POS Invoice": "pro",
   "POS Profile": "pro",
   "POS Opening Entry": "pro",

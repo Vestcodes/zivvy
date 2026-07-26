@@ -31,10 +31,11 @@ Outputs:
 ## Recording
 
 ```bash
-# Ensure demo.business can log in (401 = re-seed with env forwarded — see record-product-tour.mjs header)
+# Ensure demo@zivvy.xyz (or demo.business) can log in (401 = re-seed with env forwarded — see record-product-tour.mjs header)
 node scripts/record-product-tour.mjs
 node scripts/generate-voiceover.mjs
 node scripts/mux-voiceover.mjs
 ```
 
+Arcade embeds for `/product-tour` module tours: see [`ARCADE_TOURS.md`](./ARCADE_TOURS.md).
 The recorder **hard-fails** unless `/api/method/login` returns HTTP 200 and the Next.js dashboard shell is visible. Do not ship a cut that only shows a failed sign-in.

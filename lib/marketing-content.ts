@@ -1,3 +1,9 @@
+import {
+  guideForIntegration,
+  MATURITY_HINT,
+  MATURITY_LABEL
+} from "@/lib/integration-guides";
+
 export type FaqItem = {
   q: string;
   a: string;
@@ -27,6 +33,17 @@ export type MarketingDetail = {
   docsUrl?: string;
   addonRequired?: string;
   addonPrice?: string;
+  /** Integration pages only — honest connector maturity */
+  maturity?:
+    | "native"
+    | "addon"
+    | "via-webhooks"
+    | "via-api"
+    | "coming-soon";
+  /** One-sentence real integration path */
+  realPath?: string;
+  /** Numbered how-to for the real path */
+  setupSteps?: string[];
   category?:
     | "Payments"
     | "Ecommerce"
@@ -73,6 +90,7 @@ export type HubCardItem = {
   title: string;
   description: string;
   category?: MarketingDetail["category"];
+  maturity?: MarketingDetail["maturity"];
 };
 
 function bySlug<T extends { slug: string }>(items: T[]): Record<string, T> {
@@ -3169,6 +3187,28 @@ export const featureBySlug = bySlug(featureDetails);
 export const solutionBySlug = bySlug(solutionDetails);
 export const useCaseBySlug = bySlug(useCaseDetails);
 export const industryBySlug = bySlug(industryDetails);
+
+for (const entry of integrationDetails) {
+  const guide = guideForIntegration(entry.slug);
+  if (!guide) continue;
+  entry.maturity = guide.maturity;
+  entry.realPath = guide.realPath;
+  entry.setupSteps = guide.setupSteps;
+  const maturityFaq = {
+    q: "What is the maturity of this integration?",
+    a: `${MATURITY_LABEL[guide.maturity]}. ${MATURITY_HINT[guide.maturity]} Real path: ${guide.realPath}`
+  };
+  const howFaq = {
+    q: "How do I integrate this for real?",
+    a: guide.setupSteps.map((step, i) => `${i + 1}. ${step}`).join(" ")
+  };
+  const existingQs = new Set(entry.faqs.map((f) => f.q));
+  const extras: FaqItem[] = [];
+  if (!existingQs.has(maturityFaq.q)) extras.push(maturityFaq);
+  if (!existingQs.has(howFaq.q)) extras.push(howFaq);
+  if (extras.length) entry.faqs = [...extras, ...entry.faqs];
+}
+
 export const integrationBySlug = bySlug(integrationDetails);
 export const compareBySlug = bySlug(compareDetails);
 export const alternativeBySlug = bySlug(alternativeDetails);
@@ -3198,11 +3238,12 @@ export const industryCards: HubCardItem[] = industryDetails.map(({ slug, title, 
 }));
 
 export const integrationCards: HubCardItem[] = integrationDetails.map(
-  ({ slug, title, description, category }) => ({
+  ({ slug, title, description, category, maturity }) => ({
     slug,
     title,
     description,
-    category
+    category,
+    maturity
   })
 );
 

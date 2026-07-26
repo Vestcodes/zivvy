@@ -13,8 +13,11 @@
  *        DEMO_FREE_PASSWORD=\"$DEMO_FREE_PASSWORD\" \
  *        DEMO_PRO_PASSWORD=\"$DEMO_PRO_PASSWORD\" \
  *        DEMO_BUSINESS_PASSWORD=\"$DEMO_BUSINESS_PASSWORD\" \
+ *        DEMO_ARCADE_PASSWORD=\"$DEMO_ARCADE_PASSWORD\" \
  *        bench --site zivvy.xyz execute zivvy_brand.setup.seed_demo_accounts.seed_demo_accounts"'
- */
+ *
+ * Default login is demo@zivvy.xyz (Arcade / product-tour). Override with
+ * DEMO_BUSINESS_EMAIL / DEMO_BUSINESS_PASSWORD for demo.business@zivvy.xyz.
 import fs from "node:fs";
 import path from "node:path";
 import { createRequire } from "node:module";
@@ -164,9 +167,17 @@ async function loginSuccessfully(page, email, password) {
 
 async function main() {
   const creds = parseEnvFile(CRED_PATH);
-  const email = process.env.DEMO_BUSINESS_EMAIL || "demo.business@zivvy.xyz";
-  const password = process.env.DEMO_BUSINESS_PASSWORD || creds.DEMO_BUSINESS_PASSWORD;
-  if (!password) throw new Error("Missing DEMO_BUSINESS_PASSWORD");
+  const email = process.env.DEMO_BUSINESS_EMAIL || process.env.DEMO_ARCADE_EMAIL || "demo@zivvy.xyz";
+  const password =
+    process.env.DEMO_BUSINESS_PASSWORD ||
+    process.env.DEMO_ARCADE_PASSWORD ||
+    creds.DEMO_BUSINESS_PASSWORD ||
+    creds.DEMO_ARCADE_PASSWORD;
+  if (!password) {
+    throw new Error(
+      "Missing DEMO_ARCADE_PASSWORD or DEMO_BUSINESS_PASSWORD (prefer demo@zivvy.xyz Arcade account)"
+    );
+  }
 
   fs.mkdirSync(RAW_DIR, { recursive: true });
   for (const f of fs.readdirSync(RAW_DIR)) {

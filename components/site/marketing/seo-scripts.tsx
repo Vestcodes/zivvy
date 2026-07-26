@@ -30,6 +30,11 @@ function JsonLdScript({ data }: JsonLdProps) {
   );
 }
 
+/** Generic JSON-LD — pass one object or an array of schema graphs. */
+export function JsonLd({ data }: JsonLdProps) {
+  return <JsonLdScript data={data} />;
+}
+
 /** Global Organization schema. Render once, in the root layout. */
 export function OrganizationJsonLd() {
   return <JsonLdScript data={orgJsonLd()} />;

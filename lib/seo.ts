@@ -185,3 +185,55 @@ export function productJsonLd(
     }
   };
 }
+
+export interface VideoLdInput {
+  name: string;
+  description: string;
+  /** Absolute or site-relative URL to the playable video / embed page */
+  contentUrl: string;
+  /** Absolute or site-relative thumbnail */
+  thumbnailUrl: string;
+  /** ISO 8601 duration e.g. PT2M */
+  duration?: string;
+  uploadDate?: string;
+}
+
+/** VideoObject — product tour and module demos. */
+export function videoJsonLd(video: VideoLdInput): Record<string, unknown> {
+  const abs = (url: string) => (url.startsWith("http") ? url : `${SITE_ORIGIN}${url}`);
+  return {
+    "@context": "https://schema.org",
+    "@type": "VideoObject",
+    name: video.name,
+    description: video.description,
+    contentUrl: abs(video.contentUrl),
+    thumbnailUrl: abs(video.thumbnailUrl),
+    uploadDate: video.uploadDate ?? "2026-07-01",
+    ...(video.duration ? { duration: video.duration } : {}),
+    publisher: {
+      "@type": "Organization",
+      name: "Vestcodes",
+      logo: {
+        "@type": "ImageObject",
+        url: `${SITE_ORIGIN}/icon.svg`
+      }
+    }
+  };
+}
+
+/** ItemList of tour modules for /product-tour. */
+export function tourItemListJsonLd(
+  items: Array<{ name: string; url: string; position: number }>
+): Record<string, unknown> {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "Zivvy product tours",
+    itemListElement: items.map((item) => ({
+      "@type": "ListItem",
+      position: item.position,
+      name: item.name,
+      url: item.url.startsWith("http") ? item.url : `${SITE_ORIGIN}${item.url}`
+    }))
+  };
+}

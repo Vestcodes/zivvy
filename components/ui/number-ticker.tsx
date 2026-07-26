@@ -34,6 +34,8 @@ export function NumberTicker({
     let timer: ReturnType<typeof setTimeout> | null = null
 
     if (isInView) {
+      // Animate from startValue → value once visible (SSR already shows final value).
+      motionValue.set(direction === "down" ? value : startValue)
       timer = setTimeout(() => {
         motionValue.set(direction === "down" ? startValue : value)
       }, delay * 1000)
@@ -68,7 +70,10 @@ export function NumberTicker({
       )}
       {...props}
     >
-      {startValue}
+      {Intl.NumberFormat("en-US", {
+        minimumFractionDigits: decimalPlaces,
+        maximumFractionDigits: decimalPlaces,
+      }).format(direction === "down" ? value : startValue === 0 ? value : startValue)}
     </span>
   )
 }

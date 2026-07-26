@@ -18,21 +18,29 @@ export const MenuItem = ({
   setActive,
   active,
   item,
+  href,
   children
 }: {
   setActive: (item: string) => void;
   active: string | null;
   item: string;
+  /** When set, the trigger is a real link (keyboard + crawlable). */
+  href?: string;
   children?: React.ReactNode;
 }) => {
+  const triggerClass =
+    "cursor-pointer text-sm text-muted-foreground transition-colors hover:text-foreground";
   return (
     <div onMouseEnter={() => setActive(item)} className="relative">
-      <motion.p
-        transition={{ duration: 0.3 }}
-        className="cursor-pointer text-sm text-muted-foreground transition-colors hover:text-foreground"
-      >
-        {item}
-      </motion.p>
+      {href ? (
+        <Link href={href} className={triggerClass} onFocus={() => setActive(item)}>
+          <motion.span transition={{ duration: 0.3 }}>{item}</motion.span>
+        </Link>
+      ) : (
+        <motion.p transition={{ duration: 0.3 }} className={triggerClass}>
+          {item}
+        </motion.p>
+      )}
       {active !== null && (
         <motion.div
           initial={{ opacity: 0, scale: 0.85, y: 10 }}

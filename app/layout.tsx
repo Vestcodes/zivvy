@@ -41,7 +41,7 @@ const DESCRIPTION =
 export const metadata: Metadata = {
   title: {
     default: TITLE,
-    template: "%s · Zivvy"
+    template: "%s"
   },
   description: DESCRIPTION,
   metadataBase: new URL(SITE_ORIGIN),
