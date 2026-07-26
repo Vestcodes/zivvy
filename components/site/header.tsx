@@ -429,6 +429,13 @@ function DesktopNav() {
       >
         Pricing
       </Link>
+      <Link
+        href="/blog"
+        className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+        onMouseEnter={() => setActive(null)}
+      >
+        Blog
+      </Link>
       <a
         href={API_DOCS_URL}
         target="_blank"
