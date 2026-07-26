@@ -76,7 +76,6 @@ function humanize(segment: string): string {
 interface TopbarProps {
   notifications?: Notification[];
   unreadCount?: number;
-  unreadChat?: number;
 }
 
 // Compact avatar + dropdown for the top-right of the app shell.
@@ -157,7 +156,7 @@ function TopbarUserAvatar() {
   );
 }
 
-export function AppTopbar({ notifications = [], unreadCount = 0, unreadChat = 0 }: TopbarProps) {
+export function AppTopbar({ notifications = [], unreadCount = 0 }: TopbarProps) {
   const pathname = usePathname();
   const boot = useZivvyBoot();
   const segments = pathname.split("/").filter(Boolean);
@@ -227,7 +226,6 @@ export function AppTopbar({ notifications = [], unreadCount = 0, unreadChat = 0 
         <NotificationBell
           notifications={notifications}
           unreadCount={unreadCount}
-          unreadChat={unreadChat}
         />
         <TopbarUserAvatar />
       </div>

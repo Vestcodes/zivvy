@@ -31,7 +31,6 @@ export const MODULE_MIN_TIER: Record<string, ZivvyTier> = {
   "E-commerce Integrations": "business",
 
   Helpdesk: "pro",                // /helpdesk — Frappe Helpdesk (Pro)
-  Raven: "pro",                   // /raven    — team chat (Pro)
 
   // Free — bundled product apps that ship on every tier.
   // Wiki + CRM don't appear here (implicit "free") to keep the map lean.
@@ -95,9 +94,6 @@ export const DOCTYPE_MIN_TIER: Record<string, ZivvyTier> = {
   "HD Ticket": "pro",
   "HD Article": "pro",
   "HD Team": "pro",
-  // Raven (Pro)
-  "Raven Channel": "pro",
-  "Raven Message": "pro",
   // Insights (Business)
   "Insights Dashboard": "business",
   "Insights Query": "business",

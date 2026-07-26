@@ -6,8 +6,8 @@ import type { Socket } from "socket.io-client";
 
 /**
  * Realtime activity — opens a socket.io connection to the Frappe backend,
- * listens for notification + Raven events, and exposes a local delta counter
- * that supplements the server-rendered initial count.
+ * listens for notification events, and exposes a local delta counter that
+ * supplements the server-rendered initial count.
  *
  * The pattern is deliberately conservative:
  *  - Connect once, guarded by an auth check (server-rendered initialUnread
@@ -45,7 +45,6 @@ interface Options {
 
 interface Api {
   notifDelta: number;
-  chatDelta: number;
   connected: boolean;
   flush: () => void;
 }
@@ -53,7 +52,6 @@ interface Api {
 export function useRealtimeActivity({ enabled }: Options): Api {
   const router = useRouter();
   const [notifDelta, setNotifDelta] = useState(0);
-  const [chatDelta, setChatDelta] = useState(0);
   const [connected, setConnected] = useState(false);
   const socketRef = useRef<Socket | null>(null);
 
@@ -85,10 +83,6 @@ export function useRealtimeActivity({ enabled }: Options): Api {
 
       socket.on("notification", () => setNotifDelta((v) => v + 1));
       socket.on("notification_alert", () => setNotifDelta((v) => v + 1));
-
-      socket.on("raven:new_message", () => setChatDelta((v) => v + 1));
-      socket.on("raven_new_message", () => setChatDelta((v) => v + 1));
-      socket.on("message_created", () => setChatDelta((v) => v + 1));
     });
 
     return () => {
@@ -104,9 +98,8 @@ export function useRealtimeActivity({ enabled }: Options): Api {
 
   const flush = () => {
     setNotifDelta(0);
-    setChatDelta(0);
     router.refresh();
   };
 
-  return { notifDelta, chatDelta, connected, flush };
+  return { notifDelta, connected, flush };
 }

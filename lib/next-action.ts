@@ -244,19 +244,6 @@ const DOCTYPE_OVERRIDES: Record<string, (ctx: Ctx) => NextAction | null> = {
       };
     }
     return null;
-  },
-
-  // Raven Channel — the "empty channel" case.
-  "Raven Channel": (ctx) => {
-    if (!ctx.doc.channel_description && !ctx.doc.last_message_details) {
-      return {
-        label: "Send the first message",
-        hint: "Empty channels feel dead. Kick things off with a hello or purpose.",
-        tone: "primary",
-        kind: "review"
-      };
-    }
-    return null;
   }
 };
 

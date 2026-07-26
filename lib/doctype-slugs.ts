@@ -100,11 +100,6 @@ export const SLUG_TO_DOCTYPE: Record<string, string> = {
   "helpdesk/teams":        "HD Team",
   "helpdesk/contracts":    "HD Service Contract",
 
-  // Raven — team chat (Pro tier)
-  "raven/channels":        "Raven Channel",
-  "raven/dms":             "Raven Channel",
-  "raven/threads":         "Raven Message",
-
   // Insights — analytics / BI (Business tier)
   "insights/dashboards":   "Insights Dashboard",
   "insights/charts":       "Insights Chart",

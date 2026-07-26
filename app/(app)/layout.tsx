@@ -2,7 +2,6 @@ import { Suspense } from "react";
 import { redirect } from "next/navigation";
 import { fetchBootinfo } from "@/lib/boot-server";
 import { fetchNotifications, fetchUnreadCount } from "@/lib/notifications";
-import { fetchUnreadChatCount } from "@/lib/raven-unread";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AppSidebar } from "@/components/app/app-sidebar";
@@ -10,17 +9,15 @@ import { AppTopbar } from "@/components/app/app-topbar";
 import { KeyboardShortcuts } from "@/components/app/keyboard-shortcuts";
 
 async function TopbarWithData() {
-  const [notifications, unreadCount, unreadChat] = await Promise.all([
+  const [notifications, unreadCount] = await Promise.all([
     fetchNotifications(20),
-    fetchUnreadCount(),
-    fetchUnreadChatCount()
+    fetchUnreadCount()
   ]);
 
   return (
     <AppTopbar
       notifications={notifications}
       unreadCount={unreadCount}
-      unreadChat={unreadChat}
     />
   );
 }

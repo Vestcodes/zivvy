@@ -58,14 +58,12 @@ import {
   Route as RouteIcon,
   MapPinned,
   BookOpen,
-  Hash,
   Headphones,
   BarChart3,
   LineChart,
   ShoppingBag,
   Tags,
   FileText,
-  MessageSquare,
   Users2
 } from "lucide-react";
 import type { ZivvyTier } from "@/lib/boot-types";
@@ -91,8 +89,7 @@ export const MODULE_NAVS: Record<string, ModuleNav> = {
     key: "dashboard",
     title: "Workspace",
     items: [
-      { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard, exact: true },
-      { label: "Messages", href: "/messages", icon: MessagesSquare }
+      { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard, exact: true }
     ]
   },
 
@@ -289,17 +286,6 @@ export const MODULE_NAVS: Record<string, ModuleNav> = {
     ]
   },
 
-  raven: {
-    key: "raven",
-    title: "Chat",
-    subtitle: "Channels, DMs, threads",
-    items: [
-      { label: "Channels", href: "/raven/channels", icon: Hash, module: "Raven", minTier: "pro" },
-      { label: "Direct messages", href: "/raven/dms", icon: MessageSquare, module: "Raven", minTier: "pro" },
-      { label: "Threads", href: "/raven/threads", icon: MessagesSquare, module: "Raven", minTier: "pro" }
-    ]
-  },
-
   insights: {
     key: "insights",
     title: "Insights",
@@ -349,8 +335,7 @@ export const MODULE_NAVS: Record<string, ModuleNav> = {
 
 const ALIAS: Record<string, string> = {
   billing: "settings",
-  help: "settings",
-  messages: "dashboard"
+  help: "settings"
 };
 
 export function navForPath(pathname: string): ModuleNav | null {

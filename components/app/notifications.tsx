@@ -2,15 +2,12 @@
 
 import { useCallback, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import {
   Bell,
   BellDot,
   CheckCheck,
   ExternalLink,
-  Inbox,
-  MessageCircle,
-  ArrowRight
+  Inbox
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,12 +16,6 @@ import {
   PopoverTrigger
 } from "@/components/ui/popover";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger
-} from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { useNotifications } from "@/hooks/use-notifications";
 import { useRealtimeActivity } from "@/hooks/use-realtime-activity";
@@ -34,7 +25,6 @@ import { SLUG_TO_DOCTYPE } from "@/lib/doctype-slugs";
 interface Props {
   notifications: Notification[];
   unreadCount: number;
-  unreadChat: number;
 }
 
 const DOCTYPE_TO_SLUG: Record<string, string> = {};
@@ -68,16 +58,13 @@ function stripHtml(html: string): string {
 }
 
 /**
- * ActivityPill — the single topbar surface for notifications AND unread chat.
- * Coalesces what was previously two separate buttons (Bell + ChatBadge) into
- * one control with tabs. Realtime is layered on top via useRealtimeActivity —
- * client-side deltas add to the server-rendered initial count and flush when
- * the popover opens.
+ * NotificationBell — the topbar surface for unread notifications. Realtime
+ * is layered on top via useRealtimeActivity — client-side deltas add to the
+ * server-rendered initial count and flush when the popover opens.
  */
 export function NotificationBell({
   notifications: serverNotifs,
-  unreadCount: serverUnread,
-  unreadChat: serverUnreadChat
+  unreadCount: serverUnread
 }: Props) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -90,13 +77,11 @@ export function NotificationBell({
     markAllRead
   } = useNotifications({ items: serverNotifs, unreadCount: serverUnread });
 
-  const { notifDelta, chatDelta, connected, flush } = useRealtimeActivity({
+  const { notifDelta, connected, flush } = useRealtimeActivity({
     enabled: true
   });
 
   const notifUnread = baseUnread + notifDelta;
-  const chatUnread = serverUnreadChat + chatDelta;
-  const totalUnread = notifUnread + chatUnread;
 
   const handleClick = useCallback((notif: Notification) => {
     if (!notif.read) {
@@ -127,21 +112,18 @@ export function NotificationBell({
           variant="ghost"
           size="icon-sm"
           aria-label={
-            totalUnread > 0
-              ? `Activity — ${notifUnread} notification${notifUnread === 1 ? "" : "s"} and ${chatUnread} chat message${chatUnread === 1 ? "" : "s"}`
-              : "Activity"
+            notifUnread > 0
+              ? `Notifications — ${notifUnread} unread`
+              : "Notifications"
           }
           className="relative"
         >
-          {totalUnread > 0 ? <BellDot /> : <Bell />}
-          {totalUnread > 0 && (
+          {notifUnread > 0 ? <BellDot /> : <Bell />}
+          {notifUnread > 0 && (
             <span
-              className={cn(
-                "absolute -top-0.5 -right-0.5 flex size-4 items-center justify-center rounded-full text-[9px] font-bold text-destructive-foreground",
-                chatUnread > 0 && notifUnread === 0 ? "bg-primary text-primary-foreground" : "bg-destructive"
-              )}
+              className="absolute -top-0.5 -right-0.5 flex size-4 items-center justify-center rounded-full bg-destructive text-[9px] font-bold text-destructive-foreground"
             >
-              {totalUnread > 9 ? "9+" : totalUnread}
+              {notifUnread > 9 ? "9+" : notifUnread}
             </span>
           )}
           {connected && (
@@ -155,7 +137,7 @@ export function NotificationBell({
       </PopoverTrigger>
       <PopoverContent align="end" className="w-80 p-0 sm:w-96" sideOffset={8}>
         <div className="flex items-center justify-between border-b px-4 py-3">
-          <h3 className="text-sm font-semibold">Activity</h3>
+          <h3 className="text-sm font-semibold">Notifications</h3>
           {notifUnread > 0 && (
             <Button
               variant="ghost"
@@ -169,80 +151,12 @@ export function NotificationBell({
           )}
         </div>
 
-        <Tabs defaultValue="all" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 rounded-none border-b bg-transparent p-0">
-            <TabsTrigger
-              value="all"
-              className="rounded-none border-b-2 border-transparent bg-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none"
-            >
-              All{totalUnread > 0 && <span className="ms-1 text-[10px] text-muted-foreground">{totalUnread}</span>}
-            </TabsTrigger>
-            <TabsTrigger
-              value="chat"
-              className="rounded-none border-b-2 border-transparent bg-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none"
-            >
-              Chat{chatUnread > 0 && <span className="ms-1 rounded-full bg-primary/15 px-1.5 text-[10px] font-semibold text-primary">{chatUnread}</span>}
-            </TabsTrigger>
-            <TabsTrigger
-              value="alerts"
-              className="rounded-none border-b-2 border-transparent bg-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none"
-            >
-              Alerts{notifUnread > 0 && <span className="ms-1 rounded-full bg-destructive/15 px-1.5 text-[10px] font-semibold text-destructive">{notifUnread}</span>}
-            </TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="all" className="mt-0">
-            <ChatSummary chatUnread={chatUnread} />
-            <NotificationList
-              items={items}
-              onClick={handleClick}
-            />
-          </TabsContent>
-
-          <TabsContent value="chat" className="mt-0">
-            <ScrollArea className="max-h-[400px]">
-              <ChatSummary chatUnread={chatUnread} expanded />
-            </ScrollArea>
-          </TabsContent>
-
-          <TabsContent value="alerts" className="mt-0">
-            <NotificationList
-              items={items}
-              onClick={handleClick}
-              filterUnreadOnly={false}
-            />
-          </TabsContent>
-        </Tabs>
+        <NotificationList
+          items={items}
+          onClick={handleClick}
+        />
       </PopoverContent>
     </Popover>
-  );
-}
-
-function ChatSummary({ chatUnread, expanded = false }: { chatUnread: number; expanded?: boolean }) {
-  if (chatUnread === 0 && !expanded) return null;
-  return (
-    <Link
-      href="/raven/channels"
-      className={cn(
-        "flex items-center gap-3 border-b bg-primary/[0.03] px-4 py-3 transition-colors hover:bg-primary/[0.06]",
-        expanded && "border-b-0"
-      )}
-    >
-      <div className="grid size-9 place-items-center rounded-lg bg-primary/10 text-primary">
-        <MessageCircle className="size-4" />
-      </div>
-      <div className="min-w-0 flex-1">
-        <p className="text-sm font-medium">
-          {chatUnread > 0
-            ? `${chatUnread} unread ${chatUnread === 1 ? "message" : "messages"}`
-            : "Team chat"}
-        </p>
-        <p className="text-xs text-muted-foreground">
-          {chatUnread > 0 ? "Jump into channels to catch up." : "Open Raven"}
-        </p>
-      </div>
-      <ArrowRight className="size-4 shrink-0 text-muted-foreground/60" />
-    </Link>
   );
 }
 
