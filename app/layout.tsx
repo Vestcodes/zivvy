@@ -11,6 +11,7 @@ import {
   OrganizationJsonLd,
   SoftwareApplicationJsonLd
 } from "@/components/site/marketing/seo-scripts";
+import { PostHogProvider } from "@/components/posthog-provider";
 import { SITE_ORIGIN } from "@/lib/seo";
 import "./globals.css";
 
@@ -141,16 +142,18 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body className="min-h-dvh">
         <OrganizationJsonLd />
         <SoftwareApplicationJsonLd />
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
-          <QueryProvider>
-            <BootProvider bootinfo={bootinfo}>
-              <RegionProvider initial={region}>
-                {children}
-                <Toaster position="top-center" />
-              </RegionProvider>
-            </BootProvider>
-          </QueryProvider>
-        </ThemeProvider>
+        <PostHogProvider>
+          <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
+            <QueryProvider>
+              <BootProvider bootinfo={bootinfo}>
+                <RegionProvider initial={region}>
+                  {children}
+                  <Toaster position="top-center" />
+                </RegionProvider>
+              </BootProvider>
+            </QueryProvider>
+          </ThemeProvider>
+        </PostHogProvider>
       </body>
     </html>
   );
