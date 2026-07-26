@@ -31,6 +31,12 @@ export function createCheckout(
   }>("zivvy_brand.billing.api.create_checkout", { plan, seats, billing });
 }
 
+export function syncMyRoles() {
+  return frappeCall<{ ok: boolean; synced?: boolean; granted?: string[] }>(
+    "zivvy_brand.billing.api.sync_my_roles"
+  );
+}
+
 export function createPortalSession() {
   return frappeCall<{ ok: boolean; url?: string; requires_checkout?: boolean }>(
     "zivvy_brand.billing.api.create_portal_session"

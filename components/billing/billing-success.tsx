@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2, CheckCircle2, AlertCircle } from "lucide-react";
-import { getMyPlan, type MyPlan } from "@/lib/billing-client";
+import { getMyPlan, syncMyRoles, type MyPlan } from "@/lib/billing-client";
 
 type Status = "polling" | "confirmed" | "timeout";
 
@@ -27,6 +27,7 @@ export function BillingSuccess() {
         setPlan(p);
         const active = p.subscription_status === "active" || p.subscription_status === "trialing";
         if (active && p.tier !== "free") {
+          syncMyRoles().catch(() => {});
           setStatus("confirmed");
           return;
         }
