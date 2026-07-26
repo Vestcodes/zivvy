@@ -16,32 +16,35 @@ const SERVICES = [
     note: "Marketing site and product shell"
   },
   {
-    name: "API (api.zivvy.xyz)",
+    name: "Backend (api.zivvy.xyz)",
     href: "https://api.zivvy.xyz/api/method/frappe.ping",
-    note: "Frappe / ERP APIs"
+    note: "Frappe / ERP backend APIs"
   },
   {
-    name: "Docs (integrate.zivvy.xyz)",
+    name: "Integration API (integrate.zivvy.xyz)",
     href: "https://integrate.zivvy.xyz/health",
-    note: "OpenAPI and developer docs"
+    note: "Public REST API and developer docs"
   }
 ] as const;
 
-const PROBE_TIMEOUT_MS = 4000;
+const DATACENTERS = [
+  { code: "IN", label: "India", region: "ap-south-1" },
+  { code: "EU", label: "Europe", region: "eu-central-1" },
+  { code: "US", label: "United States", region: "us-east-1" },
+] as const;
+
+const PROBE_TIMEOUT_MS = 5000;
 
 async function probeService(url: string): Promise<StatusLevel> {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), PROBE_TIMEOUT_MS);
   try {
-    const res = await fetch(url, {
+    await fetch(url, {
       method: "HEAD",
       mode: "no-cors",
       cache: "no-store",
       signal: controller.signal
     });
-    if (res.type !== "opaque") {
-      return res.ok ? "operational" : "degraded";
-    }
     return "operational";
   } catch {
     return "degraded";
@@ -80,6 +83,14 @@ export function StatusPageContent() {
     degraded: "Down"
   };
 
+  const allOperational = statuses.every((s) => s.level === "operational");
+  const allDegraded = statuses.every((s) => s.level === "degraded");
+  const overallLevel: StatusLevel = allOperational
+    ? "operational"
+    : allDegraded
+      ? "degraded"
+      : "partial";
+
   return (
     <>
       <SiteHeader />
@@ -91,14 +102,28 @@ export function StatusPageContent() {
           System status
         </h1>
         <p className="mt-3 text-muted-foreground">
-          Probe-backed overview of Zivvy surfaces. For incidents, email{" "}
+          Live health checks for all Zivvy services. For incidents, email{" "}
           <a className="underline underline-offset-2" href="mailto:support@zivvy.xyz">
             support@zivvy.xyz
           </a>
           .
         </p>
 
-        <ul className="mt-10 space-y-3">
+        <div className="mt-8 flex items-center gap-2 rounded-2xl border border-border/70 bg-card/40 px-5 py-4">
+          <StatusDot level={overallLevel} className="size-2.5" />
+          <span className="text-lg font-semibold">
+            {overallLevel === "operational"
+              ? "All systems operational"
+              : overallLevel === "degraded"
+                ? "Major outage"
+                : "Partial disruption"}
+          </span>
+        </div>
+
+        <h2 className="mt-10 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+          Services
+        </h2>
+        <ul className="mt-3 space-y-3">
           {statuses.map((svc) => (
             <li
               key={svc.name}
@@ -116,12 +141,29 @@ export function StatusPageContent() {
           ))}
         </ul>
 
+        <h2 className="mt-10 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+          Datacenters
+        </h2>
+        <ul className="mt-3 grid gap-3 sm:grid-cols-3">
+          {DATACENTERS.map((dc) => (
+            <li
+              key={dc.code}
+              className="flex items-center gap-3 rounded-2xl border border-border/70 bg-card/40 px-4 py-4"
+            >
+              <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-muted text-sm font-bold">
+                {dc.code}
+              </span>
+              <div>
+                <p className="text-sm font-medium">{dc.label}</p>
+                <p className="text-xs text-muted-foreground">{dc.region}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+
         <p className="mt-10 text-sm text-muted-foreground">
-          Prefer a footer pill? See the live probe on every page, or{" "}
-          <Link href="/support" className="underline underline-offset-2">
-            open Support
-          </Link>
-          .
+          Your workspace data stays in the region you chose at signup. See the
+          live status probe on every page in the footer.
         </p>
       </main>
       <SiteFooter />

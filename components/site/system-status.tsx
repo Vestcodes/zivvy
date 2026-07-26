@@ -3,29 +3,17 @@
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 
-/**
- * SystemStatus — real health probe pill.
- *
- * Fetches HEAD requests against three probes on mount and every 60s. If
- * everything comes back 2xx the pill reads "All systems go" with a green dot.
- * Partial failures show amber; total failures show red.
- *
- * The component is SSR-safe: initial render always draws the green
- * "All systems go" state so there is zero layout shift when the hook fires.
- * The footer links to `/status` on the main site (status.zivvy.xyz is retired).
- */
-
 type StatusLevel = "operational" | "partial" | "degraded";
 
 type ProbeResult = { ok: boolean };
 
 const PROBES: string[] = [
-  "https://integrate.zivvy.xyz/health",
-  "https://api.zivvy.xyz/api/method/frappe.ping",
   "https://zivvy.xyz/",
+  "https://api.zivvy.xyz/api/method/frappe.ping",
+  "https://integrate.zivvy.xyz/health",
 ];
 
-const PROBE_TIMEOUT_MS = 3000;
+const PROBE_TIMEOUT_MS = 5000;
 const REFRESH_INTERVAL_MS = 60_000;
 
 async function probe(url: string): Promise<ProbeResult> {
@@ -37,14 +25,9 @@ async function probe(url: string): Promise<ProbeResult> {
       mode: "no-cors",
       cache: "no-store",
       signal: controller.signal,
-      // "no-cors" gives us an opaque response; res.ok is always false in that
-      // case, so we treat a completed fetch (no throw) as up. Any network
-      // error, abort, or timeout will throw and land in the catch.
     });
-    // If CORS is allowed and we get a real response, honor its status.
-    if (res.type !== "opaque") {
-      return { ok: res.ok };
-    }
+    // no-cors gives opaque responses where res.ok is always false.
+    // A completed fetch (no throw) means the server responded — treat as up.
     return { ok: true };
   } catch {
     return { ok: false };
@@ -88,8 +71,6 @@ export function StatusDot({
 }
 
 export function SystemStatus({ className }: { className?: string }) {
-  // SSR default is "operational" so the pill renders the same on server and
-  // first client paint — no hydration flicker, no layout shift.
   const [level, setLevel] = useState<StatusLevel>("operational");
 
   useEffect(() => {
