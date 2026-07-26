@@ -404,6 +404,95 @@
   background-image: linear-gradient(to bottom, var(--primary-light), var(--primary-dark) 70%);
 }
 
+/* Prose styles for BabyLoveGrowth HTML articles */
+.prose-zivvy h2 {
+  margin-top: 3rem;
+  scroll-margin-top: 6rem;
+  font-family: var(--font-sans);
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.3;
+}
+.prose-zivvy h3 {
+  margin-top: 2rem;
+  scroll-margin-top: 6rem;
+  font-family: var(--font-sans);
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.3;
+}
+.prose-zivvy p {
+  margin-top: 1rem;
+  font-size: 1rem;
+  line-height: 1.75;
+  color: color-mix(in oklab, var(--foreground) 90%, transparent);
+}
+.prose-zivvy ul,
+.prose-zivvy ol {
+  margin-top: 1rem;
+  padding-left: 1.25rem;
+  font-size: 1rem;
+  line-height: 1.75;
+  color: color-mix(in oklab, var(--foreground) 90%, transparent);
+}
+.prose-zivvy ul { list-style-type: disc; }
+.prose-zivvy ol { list-style-type: decimal; }
+.prose-zivvy li { margin-top: 0.5rem; }
+.prose-zivvy a {
+  color: var(--primary);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.prose-zivvy a:hover { opacity: 0.8; }
+.prose-zivvy blockquote {
+  margin-top: 1.5rem;
+  border-left: 3px solid color-mix(in oklab, var(--primary) 30%, transparent);
+  padding: 0.75rem 1.25rem;
+  font-style: italic;
+  color: color-mix(in oklab, var(--foreground) 80%, transparent);
+}
+.prose-zivvy img {
+  margin-top: 1.5rem;
+  border-radius: 0.75rem;
+  max-width: 100%;
+  height: auto;
+}
+.prose-zivvy table {
+  margin-top: 1.5rem;
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+.prose-zivvy th,
+.prose-zivvy td {
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border);
+  text-align: left;
+}
+.prose-zivvy th {
+  font-weight: 600;
+  background: color-mix(in oklab, var(--muted) 30%, transparent);
+}
+.prose-zivvy pre {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  background: color-mix(in oklab, var(--muted) 40%, transparent);
+  overflow-x: auto;
+  font-size: 0.875rem;
+}
+.prose-zivvy code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+}
+.prose-zivvy hr {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  border-color: var(--border);
+}
+
 /* Legacy brand shadow — points at primary */
 @utility shadow-brand {
   box-shadow:

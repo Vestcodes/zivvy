@@ -1,5 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
+import { readingTimeMinutes, stripToText } from "babylovegrowth-next-js-blog";
+import { getBlogClient } from "@/lib/blg-client";
 
 export type BlogLink = {
   label: string;
@@ -35,6 +37,11 @@ export type BlogPost = {
   secondaryCta?: BlogLink;
   internalLinks: BlogLink[];
   sections: BlogSection[];
+  source?: "local" | "blg";
+  heroImage?: string;
+  contentHtml?: string;
+  jsonLd?: Record<string, unknown> | null;
+  faqJsonLd?: Record<string, unknown> | null;
 };
 
 const CONTENT_DIR = path.join(process.cwd(), "content", "blog");
@@ -49,12 +56,7 @@ function isPost(value: unknown): value is BlogPost {
   );
 }
 
-export function getBlogCategories(): string[] {
-  const cats = new Set(getAllBlogPosts().map((p) => p.category));
-  return Array.from(cats).sort((a, b) => a.localeCompare(b));
-}
-
-export function getAllBlogPosts(): BlogPost[] {
+function getLocalPosts(): BlogPost[] {
   if (!fs.existsSync(CONTENT_DIR)) return [];
   const files = fs
     .readdirSync(CONTENT_DIR)
@@ -65,23 +67,95 @@ export function getAllBlogPosts(): BlogPost[] {
   for (const file of files) {
     const raw = fs.readFileSync(path.join(CONTENT_DIR, file), "utf8");
     const parsed: unknown = JSON.parse(raw);
-    if (isPost(parsed)) posts.push(parsed);
+    if (isPost(parsed)) posts.push({ ...parsed, source: "local" });
   }
+  return posts;
+}
 
-  return posts.sort(
+function getLocalPost(slug: string): BlogPost | undefined {
+  const file = path.join(CONTENT_DIR, `${slug}.json`);
+  if (!fs.existsSync(file)) return undefined;
+  const parsed: unknown = JSON.parse(fs.readFileSync(file, "utf8"));
+  return isPost(parsed) ? { ...parsed, source: "local" } : undefined;
+}
+
+async function getBlgPosts(): Promise<BlogPost[]> {
+  const client = getBlogClient();
+  if (!client) return [];
+  try {
+    const articles = await client.getAllArticles({ publishedOnly: true });
+    return articles.map((a) => ({
+      slug: a.slug,
+      title: a.title,
+      metaTitle: a.title,
+      metaDescription: a.meta_description || a.excerpt || "",
+      excerpt: a.excerpt || a.meta_description || "",
+      category: a.keywords?.[0] || "Blog",
+      tags: a.keywords || [],
+      publishedAt: a.created_at?.split("T")[0] || "",
+      readingMinutes: 0,
+      primaryCta: { label: "Start free", href: "/signup" },
+      internalLinks: [],
+      sections: [],
+      source: "blg" as const,
+      heroImage: a.hero_image_url || undefined,
+    }));
+  } catch {
+    return [];
+  }
+}
+
+export async function getBlogCategories(): Promise<string[]> {
+  const posts = await getAllBlogPosts();
+  const cats = new Set(posts.map((p) => p.category));
+  return Array.from(cats).sort((a, b) => a.localeCompare(b));
+}
+
+export async function getAllBlogPosts(): Promise<BlogPost[]> {
+  const [local, blg] = await Promise.all([getLocalPosts(), getBlgPosts()]);
+  const localSlugs = new Set(local.map((p) => p.slug));
+  const merged = [...local, ...blg.filter((p) => !localSlugs.has(p.slug))];
+  return merged.sort(
     (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
   );
 }
 
-export function getBlogPost(slug: string): BlogPost | undefined {
-  const file = path.join(CONTENT_DIR, `${slug}.json`);
-  if (!fs.existsSync(file)) return undefined;
-  const parsed: unknown = JSON.parse(fs.readFileSync(file, "utf8"));
-  return isPost(parsed) ? parsed : undefined;
+export async function getBlogPost(slug: string): Promise<BlogPost | undefined> {
+  const local = getLocalPost(slug);
+  if (local) return local;
+
+  const client = getBlogClient();
+  if (!client) return undefined;
+  try {
+    const article = await client.getArticleBySlug(slug);
+    if (!article) return undefined;
+    return {
+      slug: article.slug,
+      title: article.title,
+      metaTitle: article.title,
+      metaDescription: article.meta_description || article.excerpt || "",
+      excerpt: article.excerpt || article.meta_description || "",
+      category: article.keywords?.[0] || "Blog",
+      tags: article.keywords || [],
+      publishedAt: article.created_at?.split("T")[0] || "",
+      readingMinutes: readingTimeMinutes(article.content_markdown || ""),
+      primaryCta: { label: "Start free", href: "/signup" },
+      internalLinks: [],
+      sections: [],
+      source: "blg",
+      heroImage: article.hero_image_url || undefined,
+      contentHtml: article.content_html,
+      jsonLd: article.jsonLd,
+      faqJsonLd: article.faqJsonLd,
+    };
+  } catch {
+    return undefined;
+  }
 }
 
-export function getBlogSlugs(): string[] {
-  return getAllBlogPosts().map((post) => post.slug);
+export async function getBlogSlugs(): Promise<string[]> {
+  const posts = await getAllBlogPosts();
+  return posts.map((post) => post.slug);
 }
 
 export function estimateWordCount(post: BlogPost): number {

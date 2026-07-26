@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { SiteHeader } from "@/components/site/header";
@@ -17,13 +18,14 @@ type Props = {
   params: Promise<{ slug: string }>;
 };
 
-export function generateStaticParams() {
-  return getBlogSlugs().map((slug) => ({ slug }));
+export async function generateStaticParams() {
+  const slugs = await getBlogSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const post = getBlogPost(slug);
+  const post = await getBlogPost(slug);
   if (!post) return { title: "Post not found — Zivvy" };
 
   return {
@@ -48,16 +50,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
-  const post = getBlogPost(slug);
+  const post = await getBlogPost(slug);
   if (!post) notFound();
 
-  const toc = getToc(post);
-  const words = estimateWordCount(post);
-  const related = getAllBlogPosts()
+  const toc = post.source === "blg" ? [] : getToc(post);
+  const words = post.source === "blg" ? post.readingMinutes * 250 : estimateWordCount(post);
+  const allPosts = await getAllBlogPosts();
+  const related = allPosts
     .filter((p) => p.slug !== post.slug && p.category === post.category)
     .slice(0, 3);
 
-  const jsonLd = {
+  const jsonLd = post.jsonLd || {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     headline: post.title,
@@ -85,6 +88,12 @@ export default async function BlogPostPage({ params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      {post.faqJsonLd ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(post.faqJsonLd) }}
+        />
+      ) : null}
       <SiteHeader />
       <main>
         <section className="mx-auto max-w-3xl px-6 pb-6 pt-20 sm:pt-24">
@@ -116,6 +125,19 @@ export default async function BlogPostPage({ params }: Props) {
           </BlurFade>
         </section>
 
+        {post.heroImage ? (
+          <div className="mx-auto max-w-3xl px-6 pb-6">
+            <Image
+              src={post.heroImage}
+              alt={post.title}
+              width={960}
+              height={540}
+              className="rounded-xl border border-border/70"
+              priority
+            />
+          </div>
+        ) : null}
+
         {toc.length > 0 ? (
           <nav className="mx-auto max-w-3xl px-6 pb-4">
             <div className="rounded-xl border border-border/70 bg-card/50 p-4">
@@ -135,7 +157,14 @@ export default async function BlogPostPage({ params }: Props) {
           </nav>
         ) : null}
 
-        <BlogPostBody post={post} />
+        {post.source === "blg" && post.contentHtml ? (
+          <article
+            className="prose-zivvy mx-auto max-w-3xl px-6 pb-16 pt-4"
+            dangerouslySetInnerHTML={{ __html: post.contentHtml }}
+          />
+        ) : (
+          <BlogPostBody post={post} />
+        )}
 
         {related.length > 0 ? (
           <section className="mx-auto max-w-3xl px-6 pb-20">

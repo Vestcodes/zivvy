@@ -29,7 +29,8 @@ type Props = {
 
 export default async function BlogPage({ searchParams }: Props) {
   const params = searchParams ? await searchParams : {};
-  const posts = getAllBlogPosts().map((post) => ({
+  const allPosts = await getAllBlogPosts();
+  const posts = allPosts.map((post) => ({
     slug: post.slug,
     title: post.title,
     excerpt: post.excerpt,
@@ -38,7 +39,7 @@ export default async function BlogPage({ searchParams }: Props) {
     publishedAt: post.publishedAt,
     readingMinutes: post.readingMinutes
   }));
-  const categories = getBlogCategories();
+  const categories = await getBlogCategories();
 
   return (
     <>

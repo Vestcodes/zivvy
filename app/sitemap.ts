@@ -40,7 +40,7 @@ function entry(
   };
 }
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
 
   // Home
@@ -126,9 +126,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ];
 
   // Blog — kept from prior implementation. Each post lands on its own URL.
+  const allPosts = await getAllBlogPosts();
   const blog: Entry[] = [
     entry("/blog", 0.8, "weekly", now),
-    ...getAllBlogPosts().map((post) =>
+    ...allPosts.map((post) =>
       entry(`/blog/${post.slug}`, 0.65, "monthly", new Date(post.publishedAt))
     )
   ];
