@@ -98,7 +98,7 @@ export const SLUG_TO_DOCTYPE: Record<string, string> = {
   "helpdesk/tickets":      "HD Ticket",
   "helpdesk/kb":           "HD Article",
   "helpdesk/teams":        "HD Team",
-  "helpdesk/contracts":    "HD Service Contract",
+  "helpdesk/contracts":    "HD Service Level Agreement",
 
   // Insights — analytics / BI (Business tier)
   "insights/dashboards":   "Insights Dashboard",
