@@ -77,13 +77,16 @@ export async function AutoList({
     return <AutoListSkeleton title={title} basePath={basePath} reason="unavailable" />;
   }
 
-  const listFields = listViewFields(meta);
+  const allListFields = listViewFields(meta);
   const newGroups = groupFieldsForForm(meta, { isNew: true });
   const titleField = meta.title_field && meta.title_field !== "name" ? meta.title_field : null;
+  const listFields = titleField
+    ? allListFields.filter((f) => f.fieldname !== titleField)
+    : allListFields;
   const fieldNames = [
     "name",
-    ...(titleField && !listFields.some((f) => f.fieldname === titleField) ? [titleField] : []),
-    ...listFields.map((f) => f.fieldname).filter((f) => f !== "name")
+    ...(titleField ? [titleField] : []),
+    ...allListFields.map((f) => f.fieldname).filter((f) => f !== "name")
   ];
   const orderBy = meta.sort_field
     ? `\`tab${doctype}\`.\`${meta.sort_field}\` ${meta.sort_order ?? "DESC"}`
@@ -166,15 +169,18 @@ export async function AutoList({
         </div>
       </header>
 
-      <NextActionStrip
-        action={computeListAction({ meta, total: count, basePath, title })}
-      />
-
-      <SavedViewsBar
-        doctype={doctype}
-        userEmail={boot.user?.name ?? null}
-        tenantName={boot.zivvy?.tenant?.name ?? null}
-      />
+      {list && (
+        <>
+          <NextActionStrip
+            action={computeListAction({ meta, total: count, basePath, title })}
+          />
+          <SavedViewsBar
+            doctype={doctype}
+            userEmail={boot.user?.name ?? null}
+            tenantName={boot.zivvy?.tenant?.name ?? null}
+          />
+        </>
+      )}
 
       {!list || shownOnPage === 0 ? (
         <AutoListEmpty
@@ -188,7 +194,7 @@ export async function AutoList({
             <Table>
               <TableHeader>
                 <TableRow className="bg-secondary/40 hover:bg-secondary/40">
-                  <TableHead className="w-[240px] font-medium">{titleField ? (listFields.find((f) => f.fieldname === titleField)?.label ?? "Name") : "Name"}</TableHead>
+                  <TableHead className="w-[240px] font-medium">{titleField ? (allListFields.find((f) => f.fieldname === titleField)?.label ?? meta.fields.find((f) => f.fieldname === titleField)?.label ?? "Name") : "Name"}</TableHead>
                   {listFields
                     .filter((f) => f.fieldname !== "name")
                     .map((f) => (

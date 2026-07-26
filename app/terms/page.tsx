@@ -159,8 +159,8 @@ export default function TermsPage() {
       <p>
         These Terms are governed by applicable law without regard to conflict-of-law rules that
         would require another jurisdiction’s law. Mandatory consumer protections in your country of
-        residence remain unaffected. For dispute venue and any registered entity details not yet
-        published here, contact <a href="mailto:support@zivvy.xyz">support@zivvy.xyz</a>.
+        residence remain unaffected. For dispute venue and registered entity details, contact{" "}
+        <a href="mailto:contact@vestcodes.com">contact@vestcodes.com</a>.
       </p>
 
       <h2>12. Changes</h2>
@@ -172,10 +172,9 @@ export default function TermsPage() {
 
       <h2>13. Contact</h2>
       <p>
-        Zivvy · <a href="mailto:support@zivvy.xyz">support@zivvy.xyz</a>
+        Vestcodes · <a href="mailto:contact@vestcodes.com">contact@vestcodes.com</a>
         <br />
-        Registered company name, address, and tax identifiers will be published here when finalized.
-        Until then, use support@zivvy.xyz for legal and billing inquiries.
+        Product support: <a href="mailto:support@zivvy.xyz">support@zivvy.xyz</a>
       </p>
     </LegalShell>
   );

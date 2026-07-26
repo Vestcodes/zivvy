@@ -16,10 +16,18 @@ interface Props {
   }>;
 }
 
+const ACRONYMS: Record<string, string> = {
+  bom: "BOM",
+  rfqs: "RFQs",
+  slas: "SLAs",
+  kb: "KB",
+  pos: "POS",
+};
+
 function humanize(seg: string): string {
   return seg
     .split("-")
-    .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
+    .map((s) => ACRONYMS[s] ?? s.charAt(0).toUpperCase() + s.slice(1))
     .join(" ");
 }
 

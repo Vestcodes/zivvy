@@ -110,6 +110,8 @@ interface Props {
 
 const COOKIE_MAX_AGE_DAYS = 30;
 
+const catalogCache = new Map<string, TieredCatalog>();
+
 /**
  * Write the same country/currency cookies the Edge middleware sets. Kept
  * here so a client-side region switch stays consistent with a server-side
@@ -163,6 +165,14 @@ export function RegionProvider({ initial, children }: Props) {
   useEffect(() => {
     let cancelled = false;
     const country = snapshot.country;
+
+    const cached = catalogCache.get(country);
+    if (cached) {
+      setCatalog(cached);
+      setCatalogState("ready");
+      return;
+    }
+
     setCatalogState("loading");
     fetch(
       `/api/method/zivvy_brand.pricing.api.get_localised_pricing?country=${encodeURIComponent(country)}`,
@@ -182,6 +192,7 @@ export function RegionProvider({ initial, children }: Props) {
         if (!message || !message.tiers) {
           throw new Error("empty catalog");
         }
+        catalogCache.set(country, message);
         setCatalog(message);
         setCatalogState("ready");
       })

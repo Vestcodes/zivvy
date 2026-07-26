@@ -229,10 +229,46 @@ export function groupFieldsForForm(
   return sections.filter((s) => s.columns.some((c) => c.fields.length > 0));
 }
 
+const LIST_VIEW_OVERRIDES: Record<string, string[]> = {
+  // Sales
+  "Customer":        ["customer_name", "customer_group", "territory"],
+  "Quotation":       ["party_name", "status", "transaction_date", "grand_total"],
+  "Sales Order":     ["customer_name", "status", "delivery_date", "grand_total", "per_delivered"],
+  "Sales Invoice":   ["customer_name", "status", "posting_date", "grand_total", "outstanding_amount"],
+  "Delivery Note":   ["customer_name", "status", "posting_date", "grand_total"],
+
+  // Purchases
+  "Supplier":        ["supplier_name", "supplier_group", "country"],
+  "Purchase Order":  ["supplier_name", "status", "schedule_date", "grand_total", "per_received"],
+  "Purchase Invoice":["supplier_name", "status", "posting_date", "grand_total", "outstanding_amount"],
+
+  // Stock
+  "Item":            ["item_name", "item_group", "stock_uom", "is_stock_item"],
+  "Stock Entry":     ["stock_entry_type", "purpose", "posting_date", "total_amount"],
+
+  // Finance
+  "Payment Entry":   ["party_name", "payment_type", "posting_date", "paid_amount", "mode_of_payment"],
+  "Journal Entry":   ["voucher_type", "posting_date", "total_debit", "cheque_no"],
+
+  // CRM
+  "Lead":            ["lead_name", "company_name", "status", "source"],
+  "Opportunity":     ["party_name", "status", "opportunity_amount", "expected_closing"],
+  "Campaign":        ["campaign_name", "status"],
+
+  // POS
+  "POS Invoice":     ["customer_name", "status", "posting_date", "grand_total"],
+};
+
 export function listViewFields(meta: DoctypeMeta): DocField[] {
+  const overrideNames = LIST_VIEW_OVERRIDES[meta.name];
+  if (overrideNames) {
+    const fields = overrideNames
+      .map((name) => meta.fields.find((f) => f.fieldname === name))
+      .filter((f): f is DocField => f != null && !f.hidden);
+    if (fields.length > 0) return fields;
+  }
   const explicit = meta.fields.filter((f) => f.in_list_view === 1 && !f.hidden);
   if (explicit.length > 0) return explicit;
-  // Fallback: pick likely useful fields
   return meta.fields.filter((f) => {
     if (f.hidden) return false;
     if (f.is_virtual) return false;

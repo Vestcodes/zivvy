@@ -35,9 +35,9 @@ export default function DpaPage() {
           Data is processed in Zivvy (CRM records, invoices, employees, inventory, etc.).
         </li>
         <li>
-          <strong>Zivvy (processor / service provider)</strong>: we process Customer Data only to
-          provide, secure, support, and improve the service under your instructions (including
-          configuration you set in-product).
+          <strong>Vestcodes, operating as Zivvy (processor / service provider)</strong>: we process
+          Customer Data only to provide, secure, support, and improve the service under your
+          instructions (including configuration you set in-product).
         </li>
       </ul>
 

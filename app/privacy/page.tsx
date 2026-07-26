@@ -38,9 +38,8 @@ export default function PrivacyPage() {
         addendum.
       </p>
       <p>
-        Controller contact: <a href="mailto:support@zivvy.xyz">support@zivvy.xyz</a>. Registered
-        entity details will be published when finalized; we do not invent registration numbers or
-        addresses on this page.
+        Data controller: Vestcodes ·{" "}
+        <a href="mailto:contact@vestcodes.com">contact@vestcodes.com</a>
       </p>
 
       <h2>2. Information we collect</h2>
@@ -170,7 +169,9 @@ export default function PrivacyPage() {
 
       <h2>13. Contact</h2>
       <p>
-        Zivvy · <a href="mailto:support@zivvy.xyz">support@zivvy.xyz</a>
+        Vestcodes · <a href="mailto:contact@vestcodes.com">contact@vestcodes.com</a>
+        <br />
+        Product support: <a href="mailto:support@zivvy.xyz">support@zivvy.xyz</a>
       </p>
     </LegalShell>
   );
