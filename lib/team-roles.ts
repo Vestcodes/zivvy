@@ -18,12 +18,13 @@ export interface TeamMember {
 
 /** Mirrors zivvy_brand/tenants/api.py — must stay in sync. */
 export const ASSIGNABLE_ROLES = [
-  "System Manager",
   "Accounts Manager",
   "Accounts User",
   "Sales Manager",
+  "Sales Master Manager",
   "Sales User",
   "Purchase Manager",
+  "Purchase Master Manager",
   "Purchase User",
   "Stock Manager",
   "Stock User",
@@ -33,7 +34,10 @@ export const ASSIGNABLE_ROLES = [
   "HR User",
   "Projects Manager",
   "Projects User",
-  "Support Team"
+  "Support Team",
+  "Item Manager",
+  "Wiki Approver",
+  "Insights User",
 ] as const;
 
 export type AssignableRole = (typeof ASSIGNABLE_ROLES)[number];

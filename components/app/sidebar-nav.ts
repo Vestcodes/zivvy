@@ -324,6 +324,7 @@ export const MODULE_NAVS: Record<string, ModuleNav> = {
     subtitle: "Team, billing, preferences",
     items: [
       { label: "Team", href: "/settings/team", icon: UserCog },
+      { label: "Roles", href: "/settings/roles", icon: ShieldCheck },
       { label: "Add-ons", href: "/settings/addons", icon: Package },
       { label: "Developer", href: "/settings/developer", icon: Code },
       { label: "Billing", href: "/billing", icon: CreditCard },
