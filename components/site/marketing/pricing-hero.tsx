@@ -60,9 +60,19 @@ export function PricingHero() {
           <div className="mb-6 inline-flex items-center justify-center rounded-full border border-border/60 bg-background/70 px-3 py-1 backdrop-blur">
             <AnimatedShinyText className="text-xs font-medium text-muted-foreground">
               <span className="inline-flex items-center gap-1.5">
-                Free · Pro <LocalisedPrice usdCents={1800} /> · Business{" "}
-                <LocalisedPrice usdCents={3000} /> · Add-ons from{" "}
-                <LocalisedPrice usdCents={1500} />
+                Free · Pro{" "}
+                <LocalisedPrice
+                  tier="pro"
+                  billing="monthly"
+                  amountCents={1800}
+                />{" "}
+                · Business{" "}
+                <LocalisedPrice
+                  tier="business"
+                  billing="monthly"
+                  amountCents={3000}
+                />{" "}
+                · Add-ons from <LocalisedPrice amountCents={1500} />
               </span>
             </AnimatedShinyText>
           </div>

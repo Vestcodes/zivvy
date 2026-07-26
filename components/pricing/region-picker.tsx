@@ -2,15 +2,12 @@
 
 /**
  * `<RegionPicker>` — dropdown that lets a user preview localised pricing
- * for a different country. Writes the same three cookies the middleware
- * would set (`zv_country` / `zv_currency` / `zv_ppp_bp`) via the
- * `RegionProvider.setRegion()` shim, then `router.refresh()` so any
- * server-rendered price re-runs.
+ * for a different country. Writes the same country/currency cookies the
+ * middleware would set via the `RegionProvider.setRegion()` shim, then
+ * `router.refresh()` so any server-rendered price re-runs.
  *
  * Kept intentionally lean: a curated list of the countries we actually
- * profile on marketing pages, plus every PPP-tier country so a founder
- * from Karachi or Manila can see the discount without hitting an admin
- * URL. Full 240-country picker isn't a v1 need.
+ * profile on marketing pages. Full 240-country picker isn't a v1 need.
  */
 
 import { useMemo } from "react";
@@ -24,7 +21,7 @@ import {
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select";
-import { PPP_FACTORS, REGION_CURRENCY } from "@/lib/pricing";
+import { REGION_CURRENCY } from "@/lib/pricing";
 import { useRegion } from "@/hooks/use-region";
 import { cn } from "@/lib/utils";
 
@@ -35,18 +32,10 @@ interface CountryOption {
 }
 
 /**
- * The visible menu. `PPP_TIER_CODES` and `MARKETING_CODES` are the two
- * groups shown in the dropdown — the split makes it visually clear which
- * countries get the discount without us claiming a "discount" verbatim.
+ * The visible menu — a single list of countries we actively profile on
+ * marketing pages. Country selection drives which Polar-native currency
+ * the tier cards render.
  */
-const PPP_TIER_CODES: CountryOption[] = [
-  { code: "IN", label: "India", flag: "🇮🇳" },
-  { code: "BR", label: "Brazil", flag: "🇧🇷" },
-  { code: "MX", label: "Mexico", flag: "🇲🇽" },
-  { code: "ID", label: "Indonesia", flag: "🇮🇩" },
-  { code: "PL", label: "Poland", flag: "🇵🇱" }
-];
-
 const MARKETING_CODES: CountryOption[] = [
   { code: "US", label: "United States", flag: "🇺🇸" },
   { code: "GB", label: "United Kingdom", flag: "🇬🇧" },
@@ -61,6 +50,11 @@ const MARKETING_CODES: CountryOption[] = [
   { code: "JP", label: "Japan", flag: "🇯🇵" },
   { code: "AE", label: "United Arab Emirates", flag: "🇦🇪" },
   { code: "ZA", label: "South Africa", flag: "🇿🇦" },
+  { code: "IN", label: "India", flag: "🇮🇳" },
+  { code: "BR", label: "Brazil", flag: "🇧🇷" },
+  { code: "MX", label: "Mexico", flag: "🇲🇽" },
+  { code: "ID", label: "Indonesia", flag: "🇮🇩" },
+  { code: "PL", label: "Poland", flag: "🇵🇱" },
   { code: "PH", label: "Philippines", flag: "🇵🇭" },
   { code: "PK", label: "Pakistan", flag: "🇵🇰" },
   { code: "TR", label: "Türkiye", flag: "🇹🇷" }
@@ -76,18 +70,11 @@ interface Props {
 export function RegionPicker({ className, triggerClassName, label }: Props) {
   const region = useRegion();
 
-  // Merge PPP tier + marketing lists, dedupe, and always guarantee the
-  // active country is present — a user landing from an obscure country
-  // should still see their own flag as the current value.
+  // Guarantee the active country is present — a user landing from an
+  // obscure country should still see their own flag as the current value.
   const options = useMemo<CountryOption[]>(() => {
-    const seen = new Set<string>();
-    const merged: CountryOption[] = [];
-    for (const opt of [...PPP_TIER_CODES, ...MARKETING_CODES]) {
-      if (!seen.has(opt.code)) {
-        seen.add(opt.code);
-        merged.push(opt);
-      }
-    }
+    const seen = new Set(MARKETING_CODES.map((o) => o.code));
+    const merged = [...MARKETING_CODES];
     if (!seen.has(region.country) && REGION_CURRENCY[region.country]) {
       merged.push({
         code: region.country,
@@ -132,24 +119,8 @@ export function RegionPicker({ className, triggerClassName, label }: Props) {
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            <SelectLabel>Adjusted for regional pricing</SelectLabel>
-            {PPP_TIER_CODES.map((opt) => (
-              <SelectItem key={opt.code} value={opt.code}>
-                <span className="inline-flex items-center gap-2">
-                  <span aria-hidden>{opt.flag}</span>
-                  <span>{opt.label}</span>
-                  {PPP_FACTORS[opt.code] !== undefined && (
-                    <span className="text-[10px] text-muted-foreground">
-                      · −{Math.round((1 - PPP_FACTORS[opt.code]) * 100)}%
-                    </span>
-                  )}
-                </span>
-              </SelectItem>
-            ))}
-          </SelectGroup>
-          <SelectGroup>
-            <SelectLabel>All other regions</SelectLabel>
-            {MARKETING_CODES.map((opt) => (
+            <SelectLabel>Currency</SelectLabel>
+            {options.map((opt) => (
               <SelectItem key={opt.code} value={opt.code}>
                 <span className="inline-flex items-center gap-2">
                   <span aria-hidden>{opt.flag}</span>

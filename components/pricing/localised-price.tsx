@@ -1,68 +1,82 @@
 "use client";
 
 /**
- * `<LocalisedPrice usdCents={1800} />` — the one price-render primitive.
+ * `<LocalisedPrice />` — the one price-render primitive.
  *
- * Reads the RegionProvider snapshot (populated on the server from cookies +
- * Vercel geo headers) so SSR and hydration match without a flash of USD.
- * If you're outside a RegionProvider the default snapshot (US / USD / 1.0)
- * kicks in, which is exactly the same fallback the middleware writes on
- * the first request.
+ * Three shapes, in priority order:
+ *   • `<LocalisedPrice tier="pro" billing="monthly" amountCents={1800} />` —
+ *     read the backend-formatted string for that tier/billing out of the
+ *     `RegionProvider` catalog and render it as-is. Falls back to
+ *     `amountCents` formatted as USD if the catalog isn't ready yet.
+ *   • `<LocalisedPrice value="₹1,999" />` — render a pre-formatted string
+ *     verbatim. Used when the caller already has the backend `formatted`.
+ *   • `<LocalisedPrice amountCents={1800} currency="USD" />` — format a
+ *     native-unit amount via `Intl.NumberFormat`. Used for add-ons and
+ *     seat-delta UI that reference USD Polar-native prices directly (no
+ *     PPP math, no FX conversion).
  *
- * Callers pass USD *cents* — the same shape our webhooks + Polar catalog
- * carry — so we can compose PPP into integer maths without float drift.
+ * Optional `showUsdNote` renders a "Billed in USD at checkout" line under
+ * the price when the region's currency isn't natively supported by Polar.
  */
 
 import { useMemo } from "react";
-import { formatLocalisedPrice } from "@/lib/pricing";
 import { useRegion } from "@/hooks/use-region";
+import { formatLocalisedPrice } from "@/lib/pricing";
 import { cn } from "@/lib/utils";
 
 interface Props {
-  /** Base USD price in cents. e.g. $18 → `1800`. */
-  usdCents: number;
-  /**
-   * Optional currency override — bypasses the region context entirely.
-   * Handy for a comparison label that must stay in USD.
-   */
+  /** Pre-formatted price string. Wins over amountCents. */
+  value?: string;
+  /** Amount in the currency's minor units (cents / paise / …). */
+  amountCents?: number;
+  /** ISO-4217 currency code for `amountCents`. Defaults to USD. */
   currency?: string;
-  /** Optional PPP factor override (0..1). Ignored when `currency` is set. */
-  ppp?: number;
-  /** Optional BCP-47 locale override. Default resolves from currency. */
+  /** Optional BCP-47 locale override for `Intl.NumberFormat`. */
   locale?: string;
   className?: string;
   /**
-   * When true, suppress the PPP factor entirely (checkout-side display
-   * where we quote the FX-only price without the discount).
+   * Tier + billing pair — when both are set we pull the backend-formatted
+   * price out of the region catalog. Falls back to `amountCents` formatting
+   * while the catalog is loading or errored.
    */
-  ignorePpp?: boolean;
+  tier?: "pro" | "business";
+  billing?: "monthly" | "annual";
+  /**
+   * When true AND the region's currency isn't a Polar checkout currency,
+   * render a small caption clarifying that the final charge is in USD.
+   */
+  showUsdNote?: boolean;
 }
 
 export function LocalisedPrice({
-  usdCents,
-  currency: currencyProp,
-  ppp: pppProp,
+  value,
+  amountCents,
+  currency,
   locale,
   className,
-  ignorePpp = false
+  tier,
+  billing,
+  showUsdNote
 }: Props) {
   const region = useRegion();
 
-  const formatted = useMemo(() => {
-    const currency = currencyProp ?? region.currency;
-    const ppp = ignorePpp ? 1 : pppProp ?? region.pppFactor;
-    return formatLocalisedPrice(usdCents, { currency, ppp, locale });
-  }, [
-    usdCents,
-    currencyProp,
-    pppProp,
-    ignorePpp,
-    locale,
-    region.currency,
-    region.pppFactor
-  ]);
+  const catalogFormatted = useMemo(() => {
+    if (!tier || !billing) return null;
+    if (region.catalogState !== "ready") return null;
+    return region.catalog?.tiers?.[tier]?.[billing]?.formatted ?? null;
+  }, [tier, billing, region.catalog, region.catalogState]);
 
-  return (
+  const formatted = useMemo(() => {
+    if (catalogFormatted) return catalogFormatted;
+    if (value !== undefined) return value;
+    const amount = (amountCents ?? 0) / 100;
+    return formatLocalisedPrice(amount, {
+      currency: currency ?? "USD",
+      locale
+    });
+  }, [catalogFormatted, value, amountCents, currency, locale]);
+
+  const priceSpan = (
     <span
       // `tabular-nums` keeps the digit columns aligned when the toggle
       // swaps monthly/annual — matches every other price render in the app.
@@ -71,6 +85,18 @@ export function LocalisedPrice({
       aria-label={formatted}
     >
       {formatted}
+    </span>
+  );
+
+  const shouldShowNote = showUsdNote && !region.checkoutCurrencySupported;
+  if (!shouldShowNote) return priceSpan;
+
+  return (
+    <span className="inline-flex flex-col">
+      {priceSpan}
+      <span className="block text-xs text-muted-foreground mt-0.5">
+        Billed in USD at checkout
+      </span>
     </span>
   );
 }

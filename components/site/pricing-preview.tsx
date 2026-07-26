@@ -11,7 +11,6 @@ import { Badge } from "@/components/ui/badge";
 import { Reveal } from "@/components/ui/reveal";
 import { usePricingBilling } from "@/components/site/pricing-billing-provider";
 import { LocalisedPrice } from "@/components/pricing/localised-price";
-import { PppNotice } from "@/components/pricing/ppp-notice";
 import { cn } from "@/lib/utils";
 
 type Plan = {
@@ -158,7 +157,12 @@ export function PricingPreview({ showIntro = true, className }: Props = {}) {
                       {isFree ? (
                         "$0"
                       ) : (
-                        <LocalisedPrice usdCents={price * 100} />
+                        <LocalisedPrice
+                          tier={plan.slug as "pro" | "business"}
+                          billing={billing}
+                          amountCents={price * 100}
+                          showUsdNote
+                        />
                       )}
                     </span>
                     {!isFree && (
@@ -171,7 +175,7 @@ export function PricingPreview({ showIntro = true, className }: Props = {}) {
                     <p className="mt-1 text-xs text-muted-foreground">
                       billed as{" "}
                       <LocalisedPrice
-                        usdCents={plan.annual * 12 * 100}
+                        amountCents={plan.annual * 12 * 100}
                         className="font-mono text-foreground"
                       />
                       /seat/year
@@ -220,9 +224,7 @@ export function PricingPreview({ showIntro = true, className }: Props = {}) {
         })}
       </div>
 
-      <PppNotice className="mt-8" />
-
-      <p className="mt-4 text-center text-xs text-muted-foreground">
+      <p className="mt-8 text-center text-xs text-muted-foreground">
         All plans include unlimited data · no card required on Free · cancel
         anytime
       </p>

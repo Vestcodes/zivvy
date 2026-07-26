@@ -11,8 +11,8 @@
  *   2. `x-vercel-ip-country` (production) or `x-country-code` (proxies).
  *   3. `US` as a hard fallback.
  *
- * Currency + PPP always derive from the *same* country string — that keeps
- * SSR and client hydration in lockstep even when the cookie set by the
+ * Currency always derives from the *same* country string — that keeps SSR
+ * and client hydration in lockstep even when the cookie set by the
  * middleware only lands on the second request. See `middleware.ts` for
  * the cookie-write side of this contract.
  */
@@ -20,9 +20,7 @@
 import { cookies, headers } from "next/headers";
 import {
   resolveCurrency,
-  resolvePpp,
   resolveRegion,
-  pppBasisPointsToFactor,
   normalizeCountryCode
 } from "@/lib/pricing";
 
@@ -31,9 +29,7 @@ export interface ServerRegionSnapshot {
   country: string;
   /** ISO-4217 (uppercase) — falls back to `USD` when the country is unknown. */
   currency: string;
-  /** PPP multiplier on the base USD price. `1` when no discount applies. */
-  pppFactor: number;
-  /** Bucketed region tag ("us" | "eu" | "gb" | "ca" | "ppp" | "row"). */
+  /** Bucketed region tag ("us" | "eu" | "gb" | "ca" | "row"). */
   region: string;
   /** Where the country resolution came from — useful for debugging + logs. */
   source: "cookie" | "geo" | "fallback";
@@ -78,17 +74,9 @@ export async function getRegionFromRequestOrCookie(): Promise<ServerRegionSnapsh
       ? cookieCurrency
       : undefined) ?? resolveCurrency(country);
 
-  // PPP: cookie value wins so a `?zv_region=IN` override propagates on the
-  // same request. Falls back to computing from the country.
-  const cookieBp = cookieStore.get("zv_ppp_bp")?.value;
-  const pppFactor = cookieBp
-    ? pppBasisPointsToFactor(cookieBp)
-    : resolvePpp(country);
-
   return {
     country,
     currency,
-    pppFactor,
     region: resolveRegion(country),
     source
   };

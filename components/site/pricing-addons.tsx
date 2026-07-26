@@ -133,7 +133,7 @@ export function PricingAddons() {
 
                   <div className="mt-4 flex items-baseline gap-1">
                     <LocalisedPrice
-                      usdCents={addon.priceMonthly * 100}
+                      amountCents={addon.priceMonthly * 100}
                       className="font-display text-3xl font-bold leading-none"
                     />
                     <span className="text-xs text-muted-foreground">

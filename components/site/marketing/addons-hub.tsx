@@ -17,7 +17,6 @@ import {
   TextGenerateEffect
 } from "@/components/ui/aceternity";
 import { LocalisedPrice } from "@/components/pricing/localised-price";
-import { PppNotice } from "@/components/pricing/ppp-notice";
 import type { AddonDetail } from "@/lib/addons-content";
 
 /**
@@ -90,7 +89,6 @@ export function AddonsHub({ addons }: AddonsHubProps) {
         </section>
 
         <section className="mx-auto max-w-6xl px-6 pb-24 pt-4">
-          <PppNotice className="mb-8" />
           <div className="grid gap-6 sm:grid-cols-2">
             {addons.map((addon) => (
               <HoverBorderGradient
@@ -118,7 +116,7 @@ export function AddonsHub({ addons }: AddonsHubProps) {
                       </Badge>
                       <div className="text-right">
                         <LocalisedPrice
-                          usdCents={addon.priceUsd * 100}
+                          amountCents={addon.priceUsd * 100}
                           className="font-display text-2xl font-bold tracking-tight text-foreground"
                         />
                         <div className="mt-0.5 text-[10px] uppercase tracking-[0.12em] text-muted-foreground">

@@ -1,25 +1,17 @@
 /**
- * Localised pricing v1 — country → currency, PPP factor, FX conversion.
+ * Localised pricing — country → currency mapping + Intl formatting.
  *
- * Mirror of the backend `regions.py`. Kept as a pure module (no Next.js
- * imports) so both the Edge middleware AND client components can import
- * it without pulling `next/headers`.
+ * Kept as a pure module (no Next.js imports) so both the Edge middleware
+ * AND client components can import it without pulling `next/headers`.
+ *
+ * v2 rip-out: no PPP factors, no FX conversion. Polar-native prices are
+ * rendered as-is. Any localised amount + currency the backend supplies is
+ * simply formatted via `Intl.NumberFormat` — no client-side maths.
  *
  * Design decisions:
  *   • Country codes are always uppercased before lookup.
  *   • Currency codes are always uppercased ISO-4217.
- *   • Any unknown country falls back to USD at PPP 1.0.
- *   • The FX table is static per quarter; drift is acceptable because we
- *     never charge the localised amount — Polar checkout still runs in
- *     USD (v1). See `backend_contract` for the eventual v2 gating.
- *   • PPP is a MULTIPLIER on base USD, applied BEFORE FX conversion.
- *
- * Rounding rules (see `roundLocalPrice`):
- *   • Zero-decimal currencies (JPY, KRW, VND, CLP, IDR) → nearest whole unit.
- *   • Any localised amount ≥ 10 → nearest whole unit (ERP positioning; no
- *     ".99" consumer-y endings).
- *   • Amount < 10 → 2 decimals, but never a "…99" ending — those bump up
- *     to the next whole unit.
+ *   • Any unknown country falls back to USD.
  */
 
 // ─── Region → Currency ──────────────────────────────────────────────────────
@@ -77,7 +69,7 @@ export const REGION_CURRENCY: Record<string, string> = {
   RO: "RON",
   BG: "BGN",
 
-  // Emerging markets — PPP-tier countries first
+  // Emerging markets
   IN: "INR",
   BR: "BRL",
   MX: "MXN",
@@ -213,73 +205,6 @@ export const ZERO_DECIMAL: ReadonlySet<string> = new Set([
   "IDR"
 ]);
 
-// ─── FX + PPP ───────────────────────────────────────────────────────────────
-
-/**
- * USD-anchored FX rates. Static v1 table refreshed manually per quarter.
- * Last updated 2026-Q3. Drift is acceptable because checkout is USD-only.
- */
-export const FX_RATES: Record<string, number> = {
-  USD: 1,
-  EUR: 0.93,
-  GBP: 0.79,
-  CAD: 1.37,
-  AUD: 1.53,
-  NZD: 1.66,
-  CHF: 0.88,
-  SEK: 10.5,
-  NOK: 10.8,
-  DKK: 6.9,
-  PLN: 4.1,
-  CZK: 23,
-  HUF: 355,
-  RON: 4.6,
-  BGN: 1.82,
-  INR: 84,
-  BRL: 5.5,
-  MXN: 20,
-  IDR: 15800,
-  JPY: 155,
-  SGD: 1.34,
-  HKD: 7.8,
-  TWD: 32,
-  KRW: 1350,
-  MYR: 4.7,
-  THB: 34.5,
-  PHP: 57,
-  VND: 25000,
-  AED: 3.67,
-  SAR: 3.75,
-  ILS: 3.7,
-  TRY: 34,
-  ZAR: 18.5,
-  EGP: 49,
-  NGN: 1600,
-  KES: 129,
-  ARS: 950,
-  CLP: 940,
-  COP: 4100,
-  PEN: 3.8,
-  CNY: 7.2,
-  PKR: 278,
-  BDT: 118,
-  LKR: 300,
-  UAH: 41
-};
-
-/**
- * PPP discount factors — conservative v1. Keys are ISO-3166 alpha-2 upper.
- * A value of `1.0` means "no discount" (the default for every country not
- * listed here). See design brief `ppp_factors` for rationale.
- */
-export const PPP_FACTORS: Record<string, number> = {
-  IN: 0.4,
-  BR: 0.5,
-  MX: 0.6,
-  ID: 0.5,
-  PL: 0.7
-};
-
 // ─── Resolvers ──────────────────────────────────────────────────────────────
 
 /**
@@ -296,12 +221,6 @@ export function resolveCurrency(country: string | null | undefined): string {
   return mapped;
 }
 
-/** Country → PPP multiplier. Unknown / non-PPP countries return 1.0. */
-export function resolvePpp(country: string | null | undefined): number {
-  if (!country) return 1;
-  return PPP_FACTORS[country.toUpperCase()] ?? 1;
-}
-
 /** Country → derived region tag, useful for tax / GDPR copy. */
 export function resolveRegion(country: string | null | undefined): string {
   if (!country) return "row"; // rest-of-world
@@ -310,79 +229,38 @@ export function resolveRegion(country: string | null | undefined): string {
   if (code === "GB") return "gb";
   if (code === "CA") return "ca";
   if (EU_COUNTRIES.has(code)) return "eu";
-  if (PPP_FACTORS[code] !== undefined) return "ppp";
   return "row";
 }
 
-// ─── Rounding + format ─────────────────────────────────────────────────────
-
-/**
- * Convert a raw computed local amount into the display value. Never returns
- * a ".99" tail — those bump to the next whole unit so the ERP tone stays
- * clean.
- */
-export function roundLocalPrice(amount: number, currency: string): number {
-  if (!Number.isFinite(amount)) return 0;
-  if (ZERO_DECIMAL.has(currency)) return Math.round(amount);
-  if (amount >= 10) return Math.round(amount);
-  const twoDecimals = Math.round(amount * 100) / 100;
-  const fractional = twoDecimals - Math.floor(twoDecimals);
-  // Never "…99" — reads as consumer-y; bump to next whole.
-  if (fractional >= 0.985) return Math.ceil(twoDecimals);
-  return twoDecimals;
-}
-
-export interface LocalisedPriceResult {
-  amount: number;
-  currency: string;
-  pppFactor: number;
-  baseUsd: number;
-}
-
-/**
- * The one function every UI/back-end code path should call. Given a USD
- * base price and a country code, returns the display amount + currency +
- * PPP factor. All rounding/FX logic lives here.
- */
-export function computeLocalPrice(
-  usd: number,
-  country: string | null | undefined
-): LocalisedPriceResult {
-  const pppFactor = resolvePpp(country);
-  const currency = resolveCurrency(country);
-  const fxRate = FX_RATES[currency] ?? 1;
-  const adjustedUsd = usd * pppFactor;
-  const amount = roundLocalPrice(adjustedUsd * fxRate, currency);
-  return { amount, currency, pppFactor, baseUsd: usd };
-}
+// ─── Format ────────────────────────────────────────────────────────────────
 
 export interface FormatLocalisedPriceOpts {
   currency: string;
-  /** PPP factor as a multiplier on USD (0.4 = 60% off). Default: 1. */
-  ppp?: number;
   /** BCP-47 locale for formatting. Default: "en-US". */
   locale?: string;
 }
 
 /**
- * `<LocalisedPrice>` glue. Callers pass USD *cents* so integer maths stays
- * exact all the way from webhook to display. PPP is applied here so the
- * component itself stays declarative.
+ * Format an amount in the given currency using `Intl.NumberFormat`. Amount
+ * is expressed in the currency's native units (e.g. dollars, not cents).
  *
- *   formatLocalisedPrice(1800, { currency: "INR", ppp: 0.4 }) → "₹605"
+ * The backend `get_localised_pricing` endpoint already returns a `formatted`
+ * string — prefer that. This helper exists for callsites that need to render
+ * a plain USD figure client-side (add-ons, seat deltas) without hitting the
+ * pricing endpoint.
+ *
+ *   formatLocalisedPrice(18, { currency: "USD" }) → "$18"
  */
 export function formatLocalisedPrice(
-  usdCents: number,
+  amount: number,
   opts: FormatLocalisedPriceOpts
 ): string {
-  const { currency: rawCurrency, ppp = 1, locale = "en-US" } = opts;
+  const { currency: rawCurrency, locale = "en-US" } = opts;
   const currency = SUPPORTED_CURRENCIES.has(rawCurrency.toUpperCase())
     ? rawCurrency.toUpperCase()
     : "USD";
-  const usd = (usdCents / 100) * ppp;
-  const fxRate = FX_RATES[currency] ?? 1;
-  const amount = roundLocalPrice(usd * fxRate, currency);
   const zeroDecimal = ZERO_DECIMAL.has(currency) || amount >= 10;
+  const value = Number.isFinite(amount) ? amount : 0;
   try {
     return new Intl.NumberFormat(locale, {
       style: "currency",
@@ -390,7 +268,7 @@ export function formatLocalisedPrice(
       currencyDisplay: "narrowSymbol",
       minimumFractionDigits: zeroDecimal ? 0 : 2,
       maximumFractionDigits: zeroDecimal ? 0 : 2
-    }).format(amount);
+    }).format(value);
   } catch {
     // Defensive fallback — the Intl currency list is large but not
     // exhaustive on every JS runtime. Show a plain formatted number with
@@ -398,24 +276,8 @@ export function formatLocalisedPrice(
     return `${new Intl.NumberFormat(locale, {
       minimumFractionDigits: zeroDecimal ? 0 : 2,
       maximumFractionDigits: zeroDecimal ? 0 : 2
-    }).format(amount)} ${currency}`;
+    }).format(value)} ${currency}`;
   }
-}
-
-// ─── Cookie serialisation helpers ──────────────────────────────────────────
-
-/** Serialise a PPP factor to basis points for cookie transport. 1.0 → 10000. */
-export function pppFactorToBasisPoints(factor: number): number {
-  if (!Number.isFinite(factor)) return 10000;
-  return Math.max(0, Math.round(factor * 10000));
-}
-
-/** Inverse of `pppFactorToBasisPoints`. Invalid input → 1.0 (no discount). */
-export function pppBasisPointsToFactor(bp: number | string | null | undefined): number {
-  if (bp === null || bp === undefined || bp === "") return 1;
-  const n = typeof bp === "string" ? Number(bp) : bp;
-  if (!Number.isFinite(n) || n <= 0) return 1;
-  return n / 10000;
 }
 
 /**

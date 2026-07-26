@@ -222,8 +222,9 @@ export function SeatUpgradeDialog({
                     {" "}
                     · +
                     <LocalisedPrice
-                      usdCents={pricePerSeatUsd * delta * 100}
+                      amountCents={pricePerSeatUsd * delta * 100}
                       className="font-medium text-foreground"
+                      showUsdNote
                     />
                     <span className="text-muted-foreground"> / mo</span>
                   </>

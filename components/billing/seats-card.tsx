@@ -20,6 +20,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { SeatUpgradeDialog } from "@/components/settings/seat-upgrade-dialog";
 import type { ZivvyBoot } from "@/lib/boot-types";
+import { useRegion } from "@/hooks/use-region";
 
 interface Props {
   zivvy: ZivvyBoot;
@@ -30,6 +31,12 @@ export function SeatsCard({ zivvy, hasSubscription }: Props) {
   const [open, setOpen] = useState(false);
   const seatsUsed = zivvy.seats_used ?? 0;
   const seatsAllowed = zivvy.seats_allowed ?? 0;
+  // Business-tier monthly per-seat price (from region catalog) feeds the
+  // seat-upgrade dialog's delta rendering. Zero while the catalog is
+  // loading — the dialog gates its price line on `> 0`.
+  const region = useRegion();
+  const pricePerSeatUsd =
+    (region.catalog?.tiers?.business?.monthly?.amount_cents ?? 0) / 100;
   const pct =
     seatsAllowed > 0
       ? Math.min(100, Math.round((seatsUsed / seatsAllowed) * 100))
@@ -75,6 +82,7 @@ export function SeatsCard({ zivvy, hasSubscription }: Props) {
         seatsUsed={seatsUsed}
         seatsAllowed={seatsAllowed}
         hasSubscription={hasSubscription}
+        pricePerSeatUsd={pricePerSeatUsd}
       />
     </>
   );

@@ -48,6 +48,7 @@ import type { TeamMember } from "@/lib/team-roles";
 import { ASSIGNABLE_ROLES } from "@/lib/team-roles";
 import { cn } from "@/lib/utils";
 import { formatDate } from "@/lib/format";
+import { useRegion } from "@/hooks/use-region";
 import {
   Select,
   SelectContent,
@@ -81,6 +82,13 @@ export function TeamList({
   hasSubscription
 }: Props) {
   const router = useRouter();
+  // Business-tier monthly per-seat price from the region catalog — feeds
+  // the seat-upgrade dialog so the delta rendering shows a real currency
+  // figure. Falls back to 0 (which the dialog interprets as "hide") while
+  // the catalog is still loading or errored.
+  const region = useRegion();
+  const pricePerSeatUsd =
+    (region.catalog?.tiers?.business?.monthly?.amount_cents ?? 0) / 100;
   const [inviteOpen, setInviteOpen] = useState(false);
   const [seatDialogOpen, setSeatDialogOpen] = useState(false);
   const [removeTarget, setRemoveTarget] = useState<TeamMember | null>(null);
@@ -349,6 +357,7 @@ export function TeamList({
         seatsUsed={seatsUsed}
         seatsAllowed={seatsAllowed}
         hasSubscription={hasSubscription}
+        pricePerSeatUsd={pricePerSeatUsd}
         onDirectUpdate={() => setInviteOpen(true)}
       />
 

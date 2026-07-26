@@ -20,7 +20,6 @@ import {
 import { AddonSubscribeForm } from "@/components/site/marketing/addon-subscribe";
 import { BrandLogo } from "@/components/site/brand-logo";
 import { LocalisedPrice } from "@/components/pricing/localised-price";
-import { PppNotice } from "@/components/pricing/ppp-notice";
 import {
   BreadcrumbJsonLd,
   FaqJsonLd
@@ -185,7 +184,7 @@ export function AddonDetailPage({ addon, loggedIn }: AddonDetailPageProps) {
                 </p>
                 <div className="mt-2 flex items-baseline gap-1">
                   <LocalisedPrice
-                    usdCents={addon.priceUsd * 100}
+                    amountCents={addon.priceUsd * 100}
                     className="font-display text-5xl font-bold tracking-tight text-foreground sm:text-6xl"
                   />
                   <span className="ml-1 text-sm font-medium text-muted-foreground">
@@ -195,7 +194,6 @@ export function AddonDetailPage({ addon, loggedIn }: AddonDetailPageProps) {
                 <p className="mt-1 text-xs text-muted-foreground">
                   {addon.billing}
                 </p>
-                <PppNotice variant="chip" className="mt-3" />
                 <div className="mt-6 space-y-3">
                   <Button
                     asChild
