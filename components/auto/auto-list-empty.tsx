@@ -47,11 +47,11 @@ export function AutoListEmpty({
             <Lock className="size-5" />
           </div>
           <p className="mt-3 font-display text-lg">
-            {title} aren&apos;t available yet
+            This feature isn&apos;t available yet
           </p>
           <p className="mt-1 max-w-sm text-sm text-muted-foreground">
-            This module may not be included in your current plan, or your session
-            may have expired. Try refreshing, or upgrade your plan to unlock it.
+            {title} could not be loaded. This module may not be set up for your
+            workspace, or your session may have expired.
           </p>
           <div className="mt-4 flex gap-2">
             <Button asChild variant="outline">
