@@ -80,8 +80,12 @@ export async function AutoList({
   const allListFields = listViewFields(meta);
   const newGroups = groupFieldsForForm(meta, { isNew: true });
   const titleField = meta.title_field && meta.title_field !== "name" ? meta.title_field : null;
+  const titleMeta = titleField ? meta.fields.find((f) => f.fieldname === titleField) : null;
+  const titleDefault = typeof titleMeta?.default === "string" ? titleMeta.default : "";
+  const titleSourceField = titleDefault.match(/^\{(\w+)\}$/)?.[1] ?? null;
+  const titleExclude = new Set([titleField, titleSourceField].filter(Boolean) as string[]);
   const listFields = titleField
-    ? allListFields.filter((f) => f.fieldname !== titleField)
+    ? allListFields.filter((f) => !titleExclude.has(f.fieldname))
     : allListFields;
   const fieldNames = [
     "name",
@@ -194,7 +198,7 @@ export async function AutoList({
             <Table>
               <TableHeader>
                 <TableRow className="bg-secondary/40 hover:bg-secondary/40">
-                  <TableHead className="w-[240px] font-medium">{titleField ? (allListFields.find((f) => f.fieldname === titleField)?.label ?? meta.fields.find((f) => f.fieldname === titleField)?.label ?? "Name") : "Name"}</TableHead>
+                  <TableHead className="w-[240px] font-medium">{titleField ? (titleSourceField ? meta.fields.find((f) => f.fieldname === titleSourceField)?.label : null) ?? allListFields.find((f) => f.fieldname === titleField)?.label ?? titleMeta?.label ?? "Name" : "Name"}</TableHead>
                   {listFields
                     .filter((f) => f.fieldname !== "name")
                     .map((f) => (
