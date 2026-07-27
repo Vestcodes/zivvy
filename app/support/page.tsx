@@ -6,8 +6,7 @@ export const metadata: Metadata = makeMetadata({
   title: "Support",
   description:
     "Search Zivvy docs, the REST + webhook API reference at integrate.zivvy.xyz/docs, guides, changelog, and roadmap — same tenant model, no login required.",
-  canonicalPath: "/support",
-  ogImage: "/og/support.png"
+  canonicalPath: "/support"
 });
 
 export default function SupportPage() {

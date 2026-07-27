@@ -93,6 +93,24 @@ export function CareersPageContent() {
           </div>
         </section>
 
+        <section className="mx-auto max-w-3xl px-6 pb-10">
+          <div className="rounded-2xl border border-border/70 bg-card/70 px-6 py-8 text-center">
+            <p className="font-display text-lg font-semibold">
+              No open positions right now
+            </p>
+            <p className="mt-2 text-sm text-muted-foreground">
+              We hire when the work demands it. Check back or send your resume
+              to{" "}
+              <a
+                href="mailto:careers@zivvy.xyz"
+                className="font-medium text-primary underline-offset-4 hover:underline"
+              >
+                careers@zivvy.xyz
+              </a>
+            </p>
+          </div>
+        </section>
+
         <section className="mx-auto max-w-3xl px-6 pb-20 text-center">
           <div className="relative overflow-hidden rounded-2xl border border-border/70 bg-card/70 px-6 py-8">
             <ShineBorder shineColor={["#34d399", "#0f766e"]} duration={14} />

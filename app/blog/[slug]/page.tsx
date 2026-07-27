@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { SiteHeader } from "@/components/site/header";
 import { SiteFooter } from "@/components/site/footer";
 import { BlogPostBody } from "@/components/site/blog/blog-post-body";
+import { BlogHeroImage } from "@/components/site/blog/blog-hero-image";
 import { BlurFade } from "@/components/ui/blur-fade";
 import {
   estimateWordCount,
@@ -127,14 +127,7 @@ export default async function BlogPostPage({ params }: Props) {
 
         {post.heroImage ? (
           <div className="mx-auto max-w-3xl px-6 pb-6">
-            <Image
-              src={post.heroImage}
-              alt={post.title}
-              width={960}
-              height={540}
-              className="rounded-xl border border-border/70"
-              priority
-            />
+            <BlogHeroImage src={post.heroImage} alt={post.title} />
           </div>
         ) : null}
 

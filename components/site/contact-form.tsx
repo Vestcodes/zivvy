@@ -40,9 +40,9 @@ export function ContactForm() {
           <div className="mx-auto grid size-12 place-items-center rounded-full bg-primary/10 text-primary">
             <CheckCircle2 className="size-5" />
           </div>
-          <h3 className="mt-3 font-display text-lg">Message received</h3>
+          <h3 className="mt-3 font-display text-lg">Thanks!</h3>
           <p className="mt-1 max-w-sm text-sm text-muted-foreground">
-            We'll be in touch within one business day. Faster on Pro.
+            We'll be in touch within 1 business day.
           </p>
           <button
             type="button"

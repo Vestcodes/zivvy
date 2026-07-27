@@ -53,11 +53,11 @@ export const FlipWords = ({
           className,
         )}
         key={currentWord}
+        role="status"
+        aria-label={currentWord}
         aria-live="polite"
         aria-atomic="true"
       >
-        {/* Screen readers get the full phrase; letter spans are decorative. */}
-        <span className="sr-only">{currentWord}</span>
         <span aria-hidden="true">
           {currentWord.split(" ").map((word, wordIndex) => (
             <motion.span

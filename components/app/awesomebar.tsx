@@ -2,7 +2,31 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Search, ArrowRight, PlusCircle, LayoutDashboard, CreditCard, LifeBuoy, Settings } from "lucide-react";
+import {
+  Search,
+  ArrowRight,
+  PlusCircle,
+  LayoutDashboard,
+  CreditCard,
+  LifeBuoy,
+  Settings,
+  UserCog,
+  ShieldCheck,
+  Package,
+  Code,
+  Landmark,
+  KanbanSquare,
+  Sparkles,
+  Receipt,
+  Users,
+  ClipboardList,
+  ScrollText,
+  ShoppingCart,
+  Truck,
+  Boxes,
+  UserRound,
+  Ticket
+} from "lucide-react";
 import {
   CommandDialog,
   CommandEmpty,
@@ -17,17 +41,32 @@ import { MODULE_NAVS } from "@/components/app/sidebar-nav";
 import { Button } from "@/components/ui/button";
 
 const QUICK_ACTIONS = [
-  { label: "New sales invoice", href: "/sales/invoices?new=1", icon: PlusCircle },
-  { label: "New customer", href: "/sales/customers?new=1", icon: PlusCircle },
-  { label: "New purchase order", href: "/purchases/orders?new=1", icon: PlusCircle },
-  { label: "New item", href: "/stock/items?new=1", icon: PlusCircle }
+  { label: "New sales invoice", href: "/sales/invoices?new=1", icon: Receipt },
+  { label: "New customer", href: "/sales/customers?new=1", icon: Users },
+  { label: "New quotation", href: "/sales/quotations?new=1", icon: ScrollText },
+  { label: "New sales order", href: "/sales/orders?new=1", icon: ShoppingCart },
+  { label: "New lead", href: "/crm/leads?new=1", icon: Sparkles },
+  { label: "New opportunity", href: "/crm/opportunities?new=1", icon: KanbanSquare },
+  { label: "New purchase order", href: "/purchases/orders?new=1", icon: ClipboardList },
+  { label: "New purchase invoice", href: "/purchases/invoices?new=1", icon: Receipt },
+  { label: "New supplier", href: "/purchases/suppliers?new=1", icon: Users },
+  { label: "New item", href: "/stock/items?new=1", icon: PlusCircle },
+  { label: "New stock entry", href: "/stock/entries?new=1", icon: Boxes },
+  { label: "New delivery note", href: "/sales/deliveries?new=1", icon: Truck },
+  { label: "New employee", href: "/hr/employees?new=1", icon: UserRound },
+  { label: "New support ticket", href: "/support/tickets?new=1", icon: Ticket }
 ];
 
 const JUMP = [
   { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+  { label: "Banking", href: "/finance/banking", icon: Landmark },
   { label: "Billing", href: "/billing", icon: CreditCard },
   { label: "Help", href: "/help", icon: LifeBuoy },
-  { label: "Settings", href: "/settings", icon: Settings }
+  { label: "Settings", href: "/settings", icon: Settings },
+  { label: "Team", href: "/settings/team", icon: UserCog },
+  { label: "Roles", href: "/settings/roles", icon: ShieldCheck },
+  { label: "Add-ons", href: "/settings/addons", icon: Package },
+  { label: "Developer settings", href: "/settings/developer", icon: Code }
 ];
 
 export function AwesomebarTrigger() {

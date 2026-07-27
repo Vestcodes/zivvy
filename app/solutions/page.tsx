@@ -7,8 +7,7 @@ export const metadata: Metadata = makeMetadata({
   title: "Solutions",
   description:
     "One tenant shaped to your world — country-ready tax, industry-tuned modules, and team-shaped starters across 22+ profiles.",
-  canonicalPath: "/solutions",
-  ogImage: "/og/solutions.png"
+  canonicalPath: "/solutions"
 });
 
 export default function SolutionsPage() {

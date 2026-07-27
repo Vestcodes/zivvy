@@ -7,8 +7,7 @@ export const metadata: Metadata = makeMetadata({
   title: "Use Cases",
   description:
     "Concrete workflows mapped to Zivvy REST resources and webhook events — project delivery, onboarding, support, planning, CRM automation.",
-  canonicalPath: "/use-cases",
-  ogImage: "/og/use-cases.png"
+  canonicalPath: "/use-cases"
 });
 
 export default function UseCasesPage() {

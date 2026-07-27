@@ -7,8 +7,7 @@ export const metadata: Metadata = makeMetadata({
   title: "Alternatives",
   description:
     "Migration guides from Odoo, Zoho, and legacy ERP — mapped to Zivvy tenants, REST resources, and webhook events. No feature bingo.",
-  canonicalPath: "/alternatives",
-  ogImage: "/og/alternatives.png"
+  canonicalPath: "/alternatives"
 });
 
 export default function AlternativesPage() {

@@ -19,12 +19,12 @@ export function AutoListEmpty({
   if (reason === "auth") {
     return (
       <Card className="border-border/70 bg-card">
-        <CardContent className="flex flex-col items-center py-16 text-center">
+        <CardContent className="flex flex-col items-center px-4 py-16 text-center">
           <div className="grid size-12 place-items-center rounded-full bg-secondary text-secondary-foreground">
             <LogIn className="size-5" />
           </div>
-          <p className="mt-3 font-display text-lg">Sign in to load {title.toLowerCase()}</p>
-          <p className="mt-1 max-w-sm text-sm text-muted-foreground">
+          <p className="mt-3 max-w-xs font-display text-lg break-words sm:max-w-sm">Sign in to load {title.toLowerCase()}</p>
+          <p className="mt-1 max-w-xs text-sm text-muted-foreground break-words sm:max-w-sm">
             This view reads live data from your Zivvy workspace. Sign in with your
             work account to see records.
           </p>
@@ -42,14 +42,14 @@ export function AutoListEmpty({
   if (reason === "unavailable") {
     return (
       <Card className="border-border/70 bg-card">
-        <CardContent className="flex flex-col items-center py-16 text-center">
+        <CardContent className="flex flex-col items-center px-4 py-16 text-center">
           <div className="grid size-12 place-items-center rounded-full bg-secondary text-muted-foreground">
             <Lock className="size-5" />
           </div>
-          <p className="mt-3 font-display text-lg">
+          <p className="mt-3 max-w-xs font-display text-lg break-words sm:max-w-sm">
             This feature isn&apos;t available yet
           </p>
-          <p className="mt-1 max-w-sm text-sm text-muted-foreground">
+          <p className="mt-1 max-w-xs text-sm text-muted-foreground break-words sm:max-w-sm">
             {title} could not be loaded. This module may not be set up for your
             workspace, or your session may have expired.
           </p>
@@ -68,12 +68,12 @@ export function AutoListEmpty({
 
   return (
     <Card className="border-border/70 bg-card">
-      <CardContent className="flex flex-col items-center py-16 text-center">
+      <CardContent className="flex flex-col items-center px-4 py-16 text-center">
         <div className="grid size-12 place-items-center rounded-full bg-secondary text-secondary-foreground">
           <Inbox className="size-5" />
         </div>
-        <p className="mt-3 font-display text-lg">No {title.toLowerCase()} yet</p>
-        <p className="mt-1 max-w-sm text-sm text-muted-foreground">
+        <p className="mt-3 max-w-xs font-display text-lg break-words sm:max-w-sm">No {title.toLowerCase()} yet</p>
+        <p className="mt-1 max-w-xs text-sm text-muted-foreground break-words sm:max-w-sm">
           Get started by creating your first record. It'll appear here.
         </p>
         <Button

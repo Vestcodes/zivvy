@@ -26,7 +26,8 @@ const LEGAL_LINKS = [
   { href: "/acceptable-use", label: "Acceptable use" },
   { href: "/refunds", label: "Billing & refunds" },
   { href: "/dpa", label: "DPA" },
-  { href: "/security", label: "Security" }
+  { href: "/security", label: "Security" },
+  { href: "/responsible-disclosure", label: "Responsible disclosure" }
 ] as const;
 
 type Heading = { id: string; text: string; level: 2 | 3 };

@@ -205,12 +205,12 @@ export function SiteFooter() {
 
         <div className="mt-12 flex flex-col items-start justify-between gap-3 border-t border-border/60 pt-6 text-xs text-muted-foreground sm:flex-row sm:items-center">
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-            <span>© {new Date().getFullYear()} Zivvy.</span>
+            <span>© {new Date().getFullYear()} Vestcodes</span>
             <span aria-hidden className="text-muted-foreground/40">
               ·
             </span>
             <span className="inline-flex items-center gap-1">
-              Made with <Heart className="size-3 text-rose-500" aria-hidden fill="currentColor" /> care
+              Made with <Heart className="size-3 text-rose-500" aria-hidden fill="currentColor" /> in Germany
             </span>
             <span aria-hidden className="text-muted-foreground/40">
               ·

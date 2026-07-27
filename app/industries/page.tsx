@@ -7,8 +7,7 @@ export const metadata: Metadata = makeMetadata({
   title: "Industries",
   description:
     "Same tenant model, same REST and webhook surface — different defaults for healthcare, education, manufacturing, SaaS, and finance.",
-  canonicalPath: "/industries",
-  ogImage: "/og/industries.png"
+  canonicalPath: "/industries"
 });
 
 export default function IndustriesPage() {

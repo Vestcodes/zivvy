@@ -11,7 +11,7 @@ import type { Metadata } from "next";
 
 export const SITE_ORIGIN = "https://zivvy.xyz";
 const TITLE_SUFFIX = " — Zivvy";
-const DEFAULT_OG_IMAGE = "/og/default.png";
+const DEFAULT_OG_IMAGE = "/opengraph-image";
 
 export interface MakeMetadataInput {
   title: string;

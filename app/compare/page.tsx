@@ -7,8 +7,7 @@ export const metadata: Metadata = makeMetadata({
   title: "Compare",
   description:
     "Side-by-side comparisons of Zivvy against Odoo, Zoho, and NetSuite — pricing model, operator UX, REST + webhook surface, time to value.",
-  canonicalPath: "/compare",
-  ogImage: "/og/compare.png"
+  canonicalPath: "/compare"
 });
 
 export default function ComparePage() {

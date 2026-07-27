@@ -7,8 +7,7 @@ export const metadata: Metadata = makeMetadata({
   title: "Features",
   description:
     "Every Zivvy capability is a REST endpoint, a webhook event, and a form in the same tenant. Free, Pro, Business tiers.",
-  canonicalPath: "/features",
-  ogImage: "/og/features.png"
+  canonicalPath: "/features"
 });
 
 export default function FeaturesPage() {
