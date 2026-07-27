@@ -46,7 +46,9 @@ export function AddonLock({
 
           <div className="space-y-2 max-w-md">
             <h2 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">
-              {moduleName} is part of {addonTitle}
+              {moduleName === addonTitle
+                ? `Unlock ${addonTitle}`
+                : `${moduleName} is part of ${addonTitle}`}
             </h2>
             <p className="text-sm text-muted-foreground">
               {description ??

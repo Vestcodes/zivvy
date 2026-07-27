@@ -62,7 +62,8 @@ import {
   ArrowLeftRight,
   Upload,
   SendHorizontal,
-  Scale
+  Scale,
+  FileDown
 } from "lucide-react";
 import type { ZivvyTier } from "@/lib/boot-types";
 
@@ -166,6 +167,7 @@ export const APPS: AppTile[] = [
   { label: "Payments",          href: "/finance/payments",       icon: BadgeDollarSign,  gradient: "from-[#22c55e] to-[#15803d]", category: "accounting", module: "Accounts", minTier: "pro" },
   { label: "Journal entries",   href: "/finance/journal",        icon: ScrollText,       gradient: "from-[#059669] to-[#065f46]", category: "accounting", module: "Accounts", minTier: "pro" },
   { label: "Reports",           href: "/finance/reports",        icon: ClipboardCheck,   gradient: "from-[#0d9488] to-[#115e59]", category: "accounting", module: "Accounts", minTier: "pro" },
+  { label: "DATEV export",      href: "/finance/datev",          icon: FileDown,         gradient: "from-[#009EE3] to-[#0069a1]", category: "accounting", module: "Accounts", minTier: "pro" },
 
   // PEOPLE (HR — hrms app)
   { label: "Employees",         href: "/hr/employees",           icon: UserRound,        gradient: "from-[#3b82f6] to-[#2563eb]", category: "people", minTier: "pro" },

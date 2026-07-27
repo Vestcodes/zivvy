@@ -4,6 +4,7 @@ import {
   BarChart3,
   BookOpen,
   ClipboardCheck,
+  FileDown,
   Landmark,
   Scale,
   Wallet
@@ -52,6 +53,12 @@ const REPORTS = [
     title: "Subscription & seats",
     description: "Your Zivvy plan and seat usage.",
     icon: ClipboardCheck
+  },
+  {
+    href: "/finance/datev",
+    title: "DATEV export",
+    description: "Export GL entries in DATEV CSV format for your Steuerberater.",
+    icon: FileDown
   }
 ] as const;
 

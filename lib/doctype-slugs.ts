@@ -39,6 +39,9 @@ export const SLUG_TO_DOCTYPE: Record<string, string> = {
   "finance/payments":      "Payment Entry",
   "finance/journal":       "Journal Entry",
 
+  // DATEV (add-on: erpnext-datev)
+  "finance/datev/settings": "DATEV Settings",
+
   // Manufacturing
   "manufacturing/bom":              "BOM",
   "manufacturing/work-orders":      "Work Order",

@@ -62,7 +62,9 @@ import {
   ShoppingBag,
   Tags,
   FileText,
-  Users2
+  Users2,
+  FileDown,
+  Settings2
 } from "lucide-react";
 import type { ZivvyTier } from "@/lib/boot-types";
 
@@ -180,7 +182,9 @@ export const MODULE_NAVS: Record<string, ModuleNav> = {
       { label: "Chart of accounts", href: "/finance/accounts", icon: Landmark, module: "Accounts", minTier: "pro" },
       { label: "Payments", href: "/finance/payments", icon: BadgeDollarSign, module: "Accounts", minTier: "pro" },
       { label: "Journal entries", href: "/finance/journal", icon: ScrollText, module: "Accounts", minTier: "pro" },
-      { label: "Reports", href: "/finance/reports", icon: ClipboardCheck, module: "Accounts", minTier: "pro" }
+      { label: "Reports", href: "/finance/reports", icon: ClipboardCheck, module: "Accounts", minTier: "pro" },
+      { label: "DATEV export", href: "/finance/datev", icon: FileDown, module: "Accounts", minTier: "pro" },
+      { label: "DATEV settings", href: "/finance/datev/settings", icon: Settings2, module: "Accounts", minTier: "pro" }
     ]
   },
 
