@@ -9,8 +9,11 @@ import { fetchBootinfo } from "@/lib/boot-server";
 import { getRegionFromRequestOrCookie } from "@/lib/region";
 import {
   OrganizationJsonLd,
-  SoftwareApplicationJsonLd
+  SoftwareApplicationJsonLd,
+  WebSiteJsonLd
 } from "@/components/site/marketing/seo-scripts";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { PostHogProvider } from "@/components/posthog-provider";
 import { SITE_ORIGIN } from "@/lib/seo";
 import "./globals.css";
@@ -141,6 +144,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     >
       <body className="min-h-dvh">
         <OrganizationJsonLd />
+        <WebSiteJsonLd />
         <SoftwareApplicationJsonLd />
         <PostHogProvider>
           <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
@@ -154,6 +158,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             </QueryProvider>
           </ThemeProvider>
         </PostHogProvider>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

@@ -1,4 +1,5 @@
 import { AboutPageContent } from "@/components/site/marketing/about-page";
+import { BreadcrumbJsonLd } from "@/components/site/marketing/seo-scripts";
 import { makeMetadata } from "@/lib/seo";
 
 export const metadata = makeMetadata({
@@ -9,5 +10,13 @@ export const metadata = makeMetadata({
 });
 
 export default function AboutPage() {
-  return <AboutPageContent />;
+  return (
+    <>
+      <BreadcrumbJsonLd items={[
+        { name: "Home", url: "/" },
+        { name: "About", url: "/about" }
+      ]} />
+      <AboutPageContent />
+    </>
+  );
 }

@@ -62,13 +62,17 @@ export function orgJsonLd(): Record<string, unknown> {
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "Zivvy",
+    name: "Vestcodes",
     legalName: "Vestcodes",
     url: SITE_ORIGIN,
     logo: `${SITE_ORIGIN}/icon.svg`,
     description:
-      "Zivvy is business software for founder-led teams — sales, stock, accounting, HR and manufacturing in one clean product.",
+      "Vestcodes builds Zivvy — cloud ERP for founder-led teams covering finance, sales, stock, HR, projects, and quality in one product.",
     foundingDate: "2026",
+    address: {
+      "@type": "PostalAddress",
+      addressCountry: "DE"
+    },
     contactPoint: [
       {
         "@type": "ContactPoint",
@@ -79,6 +83,23 @@ export function orgJsonLd(): Record<string, unknown> {
       }
     ],
     sameAs: []
+  };
+}
+
+/** WebSite — site-level entity with optional search action. */
+export function websiteJsonLd(): Record<string, unknown> {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Zivvy",
+    url: SITE_ORIGIN,
+    description:
+      "Cloud ERP covering finance, sales, stock, HR, projects, and quality — built for founder-led teams.",
+    publisher: {
+      "@type": "Organization",
+      name: "Vestcodes",
+      url: SITE_ORIGIN
+    }
   };
 }
 

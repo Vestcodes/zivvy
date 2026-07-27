@@ -6,7 +6,7 @@ import { PricingFaq } from "@/components/site/pricing-faq";
 import { PricingCompare } from "@/components/site/pricing-compare";
 import { PricingAddons } from "@/components/site/pricing-addons";
 import { PricingBillingProvider } from "@/components/site/pricing-billing-provider";
-import { FaqJsonLd, ProductJsonLd } from "@/components/site/marketing/seo-scripts";
+import { BreadcrumbJsonLd, FaqJsonLd, ProductJsonLd } from "@/components/site/marketing/seo-scripts";
 import { makeMetadata } from "@/lib/seo";
 
 export const metadata = makeMetadata({
@@ -62,6 +62,10 @@ export default function PricingPage() {
         description="Per seat, per month. Everything in Pro plus manufacturing, assets, subcontracting and multi-company."
         priceUsd={30}
       />
+      <BreadcrumbJsonLd items={[
+        { name: "Home", url: "/" },
+        { name: "Pricing", url: "/pricing" }
+      ]} />
       <FaqJsonLd faqs={PRICING_FAQ_LD} />
       <SiteHeader />
       <main>

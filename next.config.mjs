@@ -31,6 +31,7 @@ const nextConfig = {
       "lucide-react",
       "radix-ui",
       "@radix-ui/react-icons",
+      "@tanstack/react-query",
       "motion",
       "cmdk",
     ],

@@ -18,6 +18,8 @@ type Props = {
   showBeam?: boolean;
   animationStyle?: "from-center" | "top-in-bottom-out" | "from-bottom";
   thumbnailAlt?: string;
+  /** Set true when the thumbnail is above the fold (LCP candidate). */
+  priority?: boolean;
 };
 
 /**
@@ -28,7 +30,8 @@ export function ProductTourVideo({
   className,
   showBeam = false,
   animationStyle = "from-center",
-  thumbnailAlt = "Zivvy product tour"
+  thumbnailAlt = "Zivvy product tour",
+  priority,
 }: Props) {
   return (
     <div className={cn("relative overflow-hidden rounded-xl", className)}>
@@ -39,6 +42,7 @@ export function ProductTourVideo({
           videoSrcWebm={VIDEO_SRC_WEBM}
           thumbnailSrc={POSTER_SRC}
           thumbnailAlt={thumbnailAlt}
+          priority={priority}
         />
       </div>
       <div className="hidden dark:block">
@@ -48,6 +52,7 @@ export function ProductTourVideo({
           videoSrcWebm={VIDEO_SRC_WEBM}
           thumbnailSrc={POSTER_SRC}
           thumbnailAlt={thumbnailAlt}
+          priority={priority}
         />
       </div>
       {showBeam ? (

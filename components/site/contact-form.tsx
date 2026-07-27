@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { CheckCircle2, Send } from "lucide-react";
+import { trackContactSubmitted } from "@/lib/analytics";
 
 type Status = "idle" | "submitting" | "sent";
 
@@ -20,16 +21,26 @@ export function ContactForm() {
     setError(null);
     const data = new FormData(event.currentTarget);
     try {
-      const res = await fetch("/api/method/zivvy_brand.analytics.contact.submit_contact", {
+      const res = await fetch("/api/contact", {
         method: "POST",
         credentials: "include",
         body: data
       });
-      if (!res.ok) throw new Error(await res.text());
+      if (!res.ok) {
+        if (res.status === 429) {
+          throw new Error("rate_limited");
+        }
+        throw new Error(await res.text());
+      }
+      trackContactSubmitted();
       setStatus("sent");
     } catch (err) {
       setStatus("idle");
-      setError("Couldn't send your message. Please try again in a moment.");
+      setError(
+        err instanceof Error && err.message === "rate_limited"
+          ? "You've sent too many messages. Please wait a few minutes and try again."
+          : "Couldn't send your message. Please try again in a moment."
+      );
     }
   }
 

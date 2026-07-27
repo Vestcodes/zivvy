@@ -4,6 +4,7 @@ import {
   orgJsonLd,
   productJsonLd,
   softwareAppJsonLd,
+  websiteJsonLd,
   type BreadcrumbLdItem,
   type FaqEntry
 } from "@/lib/seo";
@@ -38,6 +39,11 @@ export function JsonLd({ data }: JsonLdProps) {
 /** Global Organization schema. Render once, in the root layout. */
 export function OrganizationJsonLd() {
   return <JsonLdScript data={orgJsonLd()} />;
+}
+
+/** Global WebSite schema. Render once, in the root layout. */
+export function WebSiteJsonLd() {
+  return <JsonLdScript data={websiteJsonLd()} />;
 }
 
 /** Global SoftwareApplication schema. Render once, in the root layout. */

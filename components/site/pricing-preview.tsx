@@ -12,6 +12,7 @@ import { Reveal } from "@/components/ui/reveal";
 import { usePricingBilling } from "@/components/site/pricing-billing-provider";
 import { LocalisedPrice } from "@/components/pricing/localised-price";
 import { cn } from "@/lib/utils";
+import { trackPlanSelected } from "@/lib/analytics";
 
 type Plan = {
   slug: "free" | "pro" | "business";
@@ -199,6 +200,7 @@ export function PricingPreview({ showIntro = true, className }: Props = {}) {
                   <MovingBorderButton
                     as={Link}
                     href={href}
+                    onClick={() => trackPlanSelected({ plan: plan.slug, billing, price })}
                     duration={isFeatured ? 2400 : 4000}
                     borderRadius="0.75rem"
                     containerClassName="w-full h-11 text-base"

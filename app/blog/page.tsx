@@ -3,6 +3,7 @@ import { SiteHeader } from "@/components/site/header";
 import { SiteFooter } from "@/components/site/footer";
 import { BlogIndex } from "@/components/site/blog/blog-index";
 import { BlogCta } from "@/components/site/blog/blog-cta";
+import { BreadcrumbJsonLd } from "@/components/site/marketing/seo-scripts";
 import { BlurFade } from "@/components/ui/blur-fade";
 import { AnimatedShinyText } from "@/components/ui/animated-shiny-text";
 import { RetroGrid } from "@/components/ui/retro-grid";
@@ -43,6 +44,10 @@ export default async function BlogPage({ searchParams }: Props) {
 
   return (
     <>
+      <BreadcrumbJsonLd items={[
+        { name: "Home", url: "/" },
+        { name: "Blog", url: "/blog" }
+      ]} />
       <SiteHeader />
       <main>
         <section className="relative overflow-hidden">

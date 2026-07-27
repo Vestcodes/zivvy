@@ -7,6 +7,7 @@ import {
   MovingBorderButton,
   WavyBackground,
 } from "@/components/ui/aceternity";
+import { trackCtaClicked } from "@/lib/analytics";
 
 /**
  * Final CTA — full-width Wavy canvas with the Start free / Book a demo pair.
@@ -52,6 +53,7 @@ export function ClosingCta() {
             duration={2600}
             className="h-12 !bg-primary !text-primary-foreground !border-transparent px-7 text-base font-semibold shadow-elevation-md"
             containerClassName="h-12 w-auto md:!col-span-1"
+            onClick={() => trackCtaClicked({ location: "closing_cta", label: "start_free" })}
           >
             <span className="inline-flex items-center gap-2">
               Start free

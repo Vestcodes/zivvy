@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { SolutionsHubPage } from "@/components/site/marketing/solutions-hub";
+import { BreadcrumbJsonLd } from "@/components/site/marketing/seo-scripts";
 import { solutionProfiles } from "@/lib/solutions-content";
 import { makeMetadata } from "@/lib/seo";
 
@@ -11,5 +12,13 @@ export const metadata: Metadata = makeMetadata({
 });
 
 export default function SolutionsPage() {
-  return <SolutionsHubPage profiles={solutionProfiles} />;
+  return (
+    <>
+      <BreadcrumbJsonLd items={[
+        { name: "Home", url: "/" },
+        { name: "Solutions", url: "/solutions" }
+      ]} />
+      <SolutionsHubPage profiles={solutionProfiles} />
+    </>
+  );
 }

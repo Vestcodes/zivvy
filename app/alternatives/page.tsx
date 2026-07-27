@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { AlternativesHubPage } from "@/components/site/marketing/alternatives-hub";
+import { BreadcrumbJsonLd } from "@/components/site/marketing/seo-scripts";
 import { alternativeCards } from "@/lib/marketing-content";
 import { makeMetadata } from "@/lib/seo";
 
@@ -11,5 +12,13 @@ export const metadata: Metadata = makeMetadata({
 });
 
 export default function AlternativesPage() {
-  return <AlternativesHubPage items={alternativeCards} />;
+  return (
+    <>
+      <BreadcrumbJsonLd items={[
+        { name: "Home", url: "/" },
+        { name: "Alternatives", url: "/alternatives" }
+      ]} />
+      <AlternativesHubPage items={alternativeCards} />
+    </>
+  );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useCallback } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
@@ -115,8 +116,7 @@ export const ProductItem = ({
 }) => {
   return (
     <Link href={href} className="flex space-x-3 rounded-lg p-1 transition-colors hover:bg-accent/60">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
+      <Image
         src={src}
         width={140}
         height={70}

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { FeaturesHubPage } from "@/components/site/marketing/features-hub";
+import { BreadcrumbJsonLd } from "@/components/site/marketing/seo-scripts";
 import { featureCards } from "@/lib/marketing-content";
 import { makeMetadata } from "@/lib/seo";
 
@@ -11,5 +12,13 @@ export const metadata: Metadata = makeMetadata({
 });
 
 export default function FeaturesPage() {
-  return <FeaturesHubPage deepDives={featureCards} />;
+  return (
+    <>
+      <BreadcrumbJsonLd items={[
+        { name: "Home", url: "/" },
+        { name: "Features", url: "/features" }
+      ]} />
+      <FeaturesHubPage deepDives={featureCards} />
+    </>
+  );
 }

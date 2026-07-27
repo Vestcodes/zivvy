@@ -20,7 +20,7 @@ import {
 } from "@/lib/arcade-tours";
 import { cn } from "@/lib/utils";
 
-function TourPlayer({ tour, showBeam = false }: { tour: ArcadeTour; showBeam?: boolean }) {
+function TourPlayer({ tour, showBeam = false, priority = false }: { tour: ArcadeTour; showBeam?: boolean; priority?: boolean }) {
   const embed = tour.arcadeEmbedUrl || tour.arcadeViewUrl;
   if (embed) {
     return (
@@ -30,6 +30,7 @@ function TourPlayer({ tour, showBeam = false }: { tour: ArcadeTour; showBeam?: b
           videoSrc={embed}
           thumbnailSrc={tour.thumbnailSrc}
           thumbnailAlt={`${tour.title} — Zivvy product tour`}
+          priority={priority}
         />
         {showBeam ? (
           <BorderBeam
@@ -44,7 +45,7 @@ function TourPlayer({ tour, showBeam = false }: { tour: ArcadeTour; showBeam?: b
     );
   }
   if (tour.isHero) {
-    return <ProductTourVideo showBeam={showBeam} animationStyle="top-in-bottom-out" />;
+    return <ProductTourVideo showBeam={showBeam} animationStyle="top-in-bottom-out" priority={priority} />;
   }
   return null;
 }
@@ -135,7 +136,7 @@ export function ProductTourPageContent() {
 
         <section id="full-tour" className="mx-auto max-w-5xl scroll-mt-24 px-6 py-2">
           <BlurFade delay={0.08}>
-            <TourPlayer tour={heroArcadeTour} showBeam />
+            <TourPlayer tour={heroArcadeTour} showBeam priority />
           </BlurFade>
           {!heroArcadeTour.arcadeEmbedUrl && !heroArcadeTour.arcadeViewUrl ? (
             <p className="mt-3 text-center text-xs text-muted-foreground">

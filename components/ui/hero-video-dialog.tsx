@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { createPortal } from "react-dom"
+import Image from "next/image"
 import { Play, XIcon } from "lucide-react"
 import { AnimatePresence, motion } from "motion/react"
 
@@ -25,6 +26,8 @@ interface HeroVideoProps {
   thumbnailSrc: string
   thumbnailAlt?: string
   className?: string
+  /** Set true for above-the-fold thumbnails (adds fetchpriority="high"). */
+  priority?: boolean
 }
 
 const animationVariants = {
@@ -85,6 +88,7 @@ export function HeroVideoDialog({
   thumbnailSrc,
   thumbnailAlt = "Video thumbnail",
   className,
+  priority,
 }: HeroVideoProps) {
   const [isVideoOpen, setIsVideoOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
@@ -179,12 +183,13 @@ export function HeroVideoDialog({
         className="group relative w-full cursor-pointer border-0 bg-transparent p-0 text-left"
         onClick={() => setIsVideoOpen(true)}
       >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <Image
           src={thumbnailSrc}
           alt={thumbnailAlt}
           width={1920}
           height={1080}
+          priority={priority}
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1024px"
           className="w-full rounded-xl border border-border/70 shadow-lg transition-all duration-200 ease-out group-hover:brightness-[0.8]"
         />
         <div className="absolute inset-0 flex scale-[0.9] items-center justify-center rounded-xl transition-all duration-200 ease-out group-hover:scale-100">

@@ -15,6 +15,7 @@ import {
   TextGenerateEffect,
 } from "@/components/ui/aceternity";
 import { cn } from "@/lib/utils";
+import { trackCtaClicked } from "@/lib/analytics";
 
 const FLIP_WORDS = ["Faster ops", "Cleaner books", "Happier team"];
 
@@ -103,6 +104,7 @@ export function Hero() {
               duration={2600}
               className="h-12 !bg-primary !text-primary-foreground !border-transparent px-7 text-base font-semibold shadow-elevation-md"
               containerClassName="h-12 w-auto md:!col-span-1"
+              onClick={() => trackCtaClicked({ location: "hero", label: "start_free" })}
             >
               <span className="inline-flex items-center gap-2">
                 Start free

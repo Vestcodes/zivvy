@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { motion } from "motion/react";
 import { AnimatedShinyText } from "@/components/ui/animated-shiny-text";
 import { BlurFade } from "@/components/ui/blur-fade";
@@ -12,6 +13,7 @@ import {
 import { LocalisedPrice } from "@/components/pricing/localised-price";
 import { RegionPicker } from "@/components/pricing/region-picker";
 import { cn } from "@/lib/utils";
+import { trackPricingViewed } from "@/lib/analytics";
 
 const OPTIONS: { value: BillingCycle; label: string; hint?: string }[] = [
   { value: "monthly", label: "Monthly" },
@@ -29,6 +31,10 @@ const OPTIONS: { value: BillingCycle; label: string; hint?: string }[] = [
  */
 export function PricingHero() {
   const { billing, setBilling } = usePricingBilling();
+
+  useEffect(() => {
+    trackPricingViewed();
+  }, []);
 
   return (
     <Spotlight

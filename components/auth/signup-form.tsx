@@ -13,6 +13,7 @@ import {
   type BillingCadence,
   type TierSlug,
 } from "@/lib/tier-checkout";
+import { trackSignupStarted, trackSignupCompleted } from "@/lib/analytics";
 
 const DATACENTERS = [
   { value: "india", label: "India (Mumbai)" },
@@ -61,6 +62,7 @@ export function SignUpForm({ pendingPlan }: Props = {}) {
     setStatus("submitting");
     const data = new FormData(event.currentTarget);
     const email = String(data.get("email") ?? "").trim();
+    trackSignupStarted({ datacenter: dc, has_pending_plan: Boolean(pendingPlan) });
     try {
       const [statusCode, msg] = await frappeSignup({
         full_name: String(data.get("full_name") ?? "").trim(),
@@ -77,8 +79,10 @@ export function SignUpForm({ pendingPlan }: Props = {}) {
       setSentTo(email);
       setMessage(msg || "");
       if (statusCode === 1) {
+        trackSignupCompleted({ datacenter: dc, pending_tier: pendingPlan?.tier });
         setStatus("sent");
       } else if (statusCode === 2) {
+        trackSignupCompleted({ datacenter: dc, pending_tier: pendingPlan?.tier, email_failed: true });
         setStatus("sent-no-email");
       } else {
         setStatus("already-registered");
