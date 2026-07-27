@@ -47,18 +47,18 @@ export function AutoListEmpty({
             <Lock className="size-5" />
           </div>
           <p className="mt-3 max-w-xs font-display text-lg break-words sm:max-w-sm">
-            This feature isn&apos;t available yet
+            {title} couldn&apos;t be loaded
           </p>
           <p className="mt-1 max-w-xs text-sm text-muted-foreground break-words sm:max-w-sm">
-            {title} could not be loaded. This module may not be set up for your
-            workspace, or your session may have expired.
+            This module may not be configured for your workspace yet, or your
+            session may have expired. Try refreshing the page.
           </p>
           <div className="mt-4 flex gap-2">
             <Button asChild variant="outline">
               <Link href={basePath}>Refresh</Link>
             </Button>
             <Button asChild variant="polished">
-              <Link href="/billing">View plan</Link>
+              <Link href="/settings">Settings</Link>
             </Button>
           </div>
         </CardContent>

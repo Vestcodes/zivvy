@@ -54,9 +54,7 @@ import {
   Timer,
   Banknote,
   Ship,
-  Package2,
   Route as RouteIcon,
-  MapPinned,
   BookOpen,
   Headphones,
   BarChart3,
@@ -160,12 +158,10 @@ export const MODULE_NAVS: Record<string, ModuleNav> = {
   shipping: {
     key: "shipping",
     title: "Shipping",
-    subtitle: "Shipments, carriers, tracking",
+    subtitle: "Shipments, rules, tracking",
     items: [
       { label: "Shipments", href: "/shipping/shipments", icon: Ship, module: "Stock" },
-      { label: "Parcels", href: "/shipping/parcels", icon: Package2, module: "Stock" },
-      { label: "Shipping rules", href: "/shipping/rules", icon: RouteIcon, module: "Stock" },
-      { label: "Carriers", href: "/shipping/carriers", icon: MapPinned, module: "Stock" }
+      { label: "Shipping rules", href: "/shipping/rules", icon: RouteIcon, module: "Stock" }
     ]
   },
 

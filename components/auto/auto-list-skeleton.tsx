@@ -25,15 +25,15 @@ export function AutoListSkeleton({
           </div>
           <p className="mt-3 font-display text-lg">{title} couldn&apos;t be loaded</p>
           <p className="mt-1 max-w-sm text-sm text-muted-foreground">
-            Your session may have expired, or this module isn&apos;t available on your
-            current plan. Try signing in again.
+            This module may not be configured for your workspace yet, or your
+            session may have expired. Try refreshing the page.
           </p>
           <div className="mt-4 flex gap-2">
             <Button asChild variant="outline">
-              <Link href={basePath}>Retry</Link>
+              <Link href={basePath}>Refresh</Link>
             </Button>
             <Button asChild variant="polished">
-              <Link href="/login">Sign in</Link>
+              <Link href="/settings">Settings</Link>
             </Button>
           </div>
         </CardContent>

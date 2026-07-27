@@ -1,13 +1,14 @@
-import type { Metadata } from "next";
 import { SiteHeader } from "@/components/site/header";
 import { SiteFooter } from "@/components/site/footer";
 import { ContactForm } from "@/components/site/contact-form";
 import { Mail, MapPin, MessagesSquare } from "lucide-react";
+import { makeMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Contact — Zivvy",
-  description: "Talk to the Zivvy team. Sales, support, partnerships."
-};
+export const metadata = makeMetadata({
+  title: "Contact",
+  description: "Talk to the Zivvy team. Sales, support, partnerships.",
+  canonicalPath: "/contact",
+});
 
 const CONTACTS = [
   {

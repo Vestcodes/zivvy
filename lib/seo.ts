@@ -125,14 +125,14 @@ export function softwareAppJsonLd(): Record<string, unknown> {
       {
         "@type": "Offer",
         name: "Pro",
-        price: "15",
+        price: "18",
         priceCurrency: "USD",
         description: "Full accounting, stock, HR and projects. Per seat, per month."
       },
       {
         "@type": "Offer",
         name: "Business",
-        price: "25",
+        price: "30",
         priceCurrency: "USD",
         description: "Manufacturing, assets, subcontracting. Per seat, per month."
       }

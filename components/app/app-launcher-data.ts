@@ -58,9 +58,7 @@ import {
   Timer,
   Banknote,
   Ship,
-  Package2,
   Route as RouteIcon,
-  MapPinned,
   ArrowLeftRight,
   Upload,
   SendHorizontal,
@@ -154,9 +152,7 @@ export const APPS: AppTile[] = [
 
   // SHIPPING
   { label: "Shipments",         href: "/shipping/shipments",     icon: Ship,             gradient: "from-[#0ea5e9] to-[#0369a1]", category: "shipping", module: "Stock" },
-  { label: "Parcels",           href: "/shipping/parcels",       icon: Package2,         gradient: "from-[#38bdf8] to-[#075985]", category: "shipping", module: "Stock" },
   { label: "Shipping rules",    href: "/shipping/rules",         icon: RouteIcon,        gradient: "from-[#0284c7] to-[#0c4a6e]", category: "shipping", module: "Stock" },
-  { label: "Carriers",          href: "/shipping/carriers",      icon: MapPinned,        gradient: "from-[#0891b2] to-[#164e63]", category: "shipping", module: "Stock" },
 
   // ACCOUNTING
   { label: "Banking",              href: "/finance/banking",                   icon: Landmark,         gradient: "from-[#0ea5e9] to-[#0369a1]", category: "accounting", module: "Accounts" },

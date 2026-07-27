@@ -69,11 +69,9 @@ export const SLUG_TO_DOCTYPE: Record<string, string> = {
   "talent/goals":          "Goal",
   "talent/training":       "Training Event",
 
-  // Shipping (erpnext-shipping + stock core)
+  // Shipping (stock core)
   "shipping/shipments":    "Shipment",
-  "shipping/parcels":      "Shipment Parcel",
   "shipping/rules":        "Shipping Rule",
-  "shipping/carriers":     "Parcel Service",
 
   // CRM
   "crm/leads":             "Lead",
