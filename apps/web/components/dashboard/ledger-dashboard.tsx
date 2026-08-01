@@ -6,15 +6,18 @@ import { personaCopy, resolvePersona } from "@/lib/dashboard-persona";
 import { cn } from "@/lib/utils";
 
 /**
- * The operator ledger. Replaces the KPI-grid dashboard with a single-column
- * ledger of things that need the operator's call today, then this week.
+ * The operator ledger.
  *
- * Design contract (from docs/product/UX_POLISH_PLAN.md phase 3):
+ * Design contract:
+ *   - The page IS the ledger — not a widget in a template. It bleeds through
+ *     the app-shell's content padding via negative margins matched to each
+ *     breakpoint, and it fills the viewport vertically so the identity reads
+ *     as "this is the page" rather than "this is a beige card sitting in
+ *     the app".
  *   - No KPI cards. Every number appears next to the thing to do about it.
- *   - Time is the primary axis (Today / This week). Never module.
- *   - Row shape: [status dot] [subject + note] [amount, mono, right] [verb + arrow]
- *   - Three earned accents: clay=overdue, copper=waiting, spruce=done. Nothing else.
- *   - Standing card at the bottom is the one exception — cash on hand, not an action.
+ *   - Time is the axis (Today / This week). Never module.
+ *   - Row: [status dot] [subject + note] [amount, mono, right] [verb + arrow]
+ *   - Three earned accents: clay=overdue, copper=waiting, spruce=done.
  */
 
 type Tone = "clay" | "copper" | "spruce" | "ink";
@@ -39,7 +42,6 @@ function toneForAttention(severity: AttentionItem["severity"]): Tone {
 
 function toneForActivity(kind: ActivityItem["kind"]): Tone {
   if (kind === "payment") return "spruce";
-  if (kind === "invoice") return "ink";
   if (kind === "delivery") return "spruce";
   return "ink";
 }
@@ -52,8 +54,6 @@ function ctaForAttention(item: AttentionItem): string {
 }
 
 function extractAmount(meta: string): { amount?: string; note: string } {
-  // dashboard-data meta is a free string; pull the leading currency amount if
-  // one is there so it lines up on the numeric rail.
   const match = meta.match(/^([$€£₹¥]\s*[\d,]+(?:\.\d+)?)\s*[·•\-—]?\s*(.*)$/);
   if (match) return { amount: match[1].replace(/\s+/, ""), note: match[2] || meta };
   return { note: meta };
@@ -92,8 +92,12 @@ function activityToRow(item: ActivityItem, idx: number): LedgerRow {
 
 function Row({ row }: { row: LedgerRow }) {
   return (
-    <article className="ledger-row grid grid-cols-[10px_1fr_auto_auto] items-center gap-x-6 py-4 max-md:grid-cols-[10px_1fr] max-md:gap-y-1.5">
-      <span className={cn("ledger-dot mt-1 self-start")} data-tone={row.tone === "ink" ? undefined : row.tone} aria-hidden />
+    <article className="ledger-row grid grid-cols-[10px_1fr_auto_auto] items-center gap-x-6 py-5 max-md:grid-cols-[10px_1fr] max-md:gap-y-1.5">
+      <span
+        className="ledger-dot mt-1 self-start"
+        data-tone={row.tone === "ink" ? undefined : row.tone}
+        aria-hidden
+      />
       <div className="min-w-0 max-md:col-start-2">
         <p className="type-ledger-title">
           {row.title}
@@ -101,7 +105,12 @@ function Row({ row }: { row: LedgerRow }) {
         </p>
         <p className="type-ledger-note mt-1">{row.note}</p>
       </div>
-      <p className={cn("type-ledger-amount min-w-[8ch]", row.amountKind === "none" && "text-[color:var(--ledger-pencil)]")}>
+      <p
+        className={cn(
+          "type-ledger-amount min-w-[8ch]",
+          row.amountKind === "none" && "text-[color:var(--ledger-pencil)]"
+        )}
+      >
         {row.amount ?? (row.amountKind === "none" ? "—" : "")}
       </p>
       <Link
@@ -118,7 +127,7 @@ function Row({ row }: { row: LedgerRow }) {
 
 function BandHead({ label, count }: { label: string; count: number }) {
   return (
-    <header className="mb-5 flex items-baseline justify-between">
+    <header className="mb-6 flex items-baseline justify-between">
       <p className="type-ledger-eyebrow">{label}</p>
       <p className="type-ledger-eyebrow tabular-nums">
         <span className="text-[color:var(--ledger-rule)]">·</span> {count}
@@ -127,22 +136,21 @@ function BandHead({ label, count }: { label: string; count: number }) {
   );
 }
 
-function buildHeroLine(
+function buildHero(
   attention: AttentionItem[],
-  activity: ActivityItem[],
-  personaLabel: string
+  activity: ActivityItem[]
 ): { title: string; meta: string } {
   const criticals = attention.filter((a) => a.severity === "critical");
-  const waiting = attention.filter((a) => a.severity === "warning");
+  const waiting = attention.filter((a) => a.severity !== "critical");
   const totalMoney = attention
     .map((a) => extractAmount(a.meta).amount)
     .filter(Boolean).length;
 
   let title: string;
   if (attention.length === 0 && activity.length === 0) {
-    title = `Nothing on your plate. Get ahead on next week.`;
+    title = "Nothing on your plate. Get ahead on next week.";
   } else if (attention.length === 0) {
-    title = `Books are clear. Recent activity is below.`;
+    title = "Books are clear. Recent movement is below.";
   } else if (criticals.length > 0) {
     title = `${criticals.length} ${criticals.length === 1 ? "thing needs" : "things need"} your call today.`;
   } else if (waiting.length > 0) {
@@ -154,10 +162,8 @@ function buildHeroLine(
   const bits: string[] = [];
   if (criticals.length > 0) bits.push(`${criticals.length} overdue`);
   if (waiting.length > 0) bits.push(`${waiting.length} waiting`);
-  if (totalMoney > 0) bits.push(`money on the line`);
-  const meta = bits.length > 0
-    ? bits.join(" · ")
-    : `${personaLabel.toLowerCase()} · nothing urgent`;
+  if (totalMoney > 0) bits.push("money on the line");
+  const meta = bits.length > 0 ? bits.join(" · ") : "";
 
   return { title, meta };
 }
@@ -184,72 +190,103 @@ export async function LedgerDashboard() {
     .map(attentionToRow);
   const activityRows = activity.slice(0, 6).map(activityToRow);
 
-  const hero = buildHeroLine(attention, activity, copy.eyebrow);
+  const hero = buildHero(attention, activity);
   const greeting = getGreeting();
+  const hasAnyRows = criticalRows.length + waitingRows.length + activityRows.length > 0;
 
   return (
-    <div className="surface-ledger mx-auto -mx-4 max-w-4xl px-4 pb-16 sm:mx-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-      {/* Persona strip — mono, no wrapping card */}
-      <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 pt-4">
-        <span className="type-ledger-eyebrow">{copy.eyebrow}</span>
-        <span className="type-ledger-eyebrow text-[color:var(--ledger-rule)]">·</span>
-        <span className="type-ledger-eyebrow">{today}</span>
-      </div>
+    // Full-bleed wrapper: cancels the app-shell's inner padding so the ledger
+    // paints the whole content area corner-to-corner. Height fills the
+    // viewport minus the topbar so short states still read as "the page".
+    <div
+      className={cn(
+        "surface-ledger relative flex flex-col",
+        "mx-[-1rem] my-[-1rem] md:mx-[-1.25rem] md:my-[-1.25rem] lg:mx-[-1.5rem] lg:my-[-1.25rem]",
+        "min-h-[calc(100dvh-var(--app-topbar-height,3rem))]"
+      )}
+    >
+      {/* Masthead — the ledger's own topline, sitting on the bone */}
+      <header className="mx-auto w-full max-w-5xl px-6 pt-10 pb-6 md:px-10 md:pt-14 lg:px-14 lg:pt-16">
+        <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+          <span className="type-ledger-eyebrow">{copy.eyebrow}</span>
+          <span className="type-ledger-eyebrow text-[color:var(--ledger-rule)]" aria-hidden>·</span>
+          <span className="type-ledger-eyebrow">{today}</span>
+        </div>
+      </header>
 
-      {/* Hero — the thesis line */}
-      <section className="border-b border-[color:var(--ledger-rule)] py-8 sm:py-10">
-        <p className="type-ledger-eyebrow mb-3">
+      {/* Hero — the thesis */}
+      <section className="mx-auto w-full max-w-5xl px-6 pb-10 md:px-10 md:pb-14 lg:px-14 lg:pb-16">
+        <p className="type-ledger-eyebrow mb-4">
           {greeting}{firstName ? `, ${firstName}` : ""}
         </p>
         <h1 className="type-ledger-hero">{hero.title}</h1>
-        <p className="mt-4 max-w-[52ch] text-[15px] text-[color:var(--ledger-pencil)]">
-          {hero.meta}
-        </p>
+        {hero.meta && (
+          <p className="mt-5 max-w-[52ch] text-[15px] text-[color:var(--ledger-pencil)]">
+            {hero.meta}
+          </p>
+        )}
       </section>
 
-      {/* Today */}
-      {criticalRows.length > 0 && (
-        <section className="py-8">
-          <BandHead label="Today" count={criticalRows.length} />
-          <div>
-            {criticalRows.map((row) => (
-              <Row key={row.key} row={row} />
-            ))}
+      {/* Bands — only render if there's something to show */}
+      {hasAnyRows && (
+        <div className="border-t border-[color:var(--ledger-rule)]">
+          <div className="mx-auto w-full max-w-5xl px-6 md:px-10 lg:px-14">
+            {criticalRows.length > 0 && (
+              <section className="py-10 md:py-12">
+                <BandHead label="Today" count={criticalRows.length} />
+                <div>
+                  {criticalRows.map((row) => (
+                    <Row key={row.key} row={row} />
+                  ))}
+                </div>
+              </section>
+            )}
+            {waitingRows.length > 0 && (
+              <section className={cn("py-10 md:py-12", criticalRows.length > 0 && "ledger-band")}>
+                <BandHead label="This week" count={waitingRows.length} />
+                <div>
+                  {waitingRows.map((row) => (
+                    <Row key={row.key} row={row} />
+                  ))}
+                </div>
+              </section>
+            )}
+            {activityRows.length > 0 && (
+              <section
+                className={cn(
+                  "py-10 md:py-12",
+                  (criticalRows.length > 0 || waitingRows.length > 0) && "ledger-band"
+                )}
+              >
+                <BandHead label="Recent movement" count={activityRows.length} />
+                <div>
+                  {activityRows.map((row) => (
+                    <Row key={row.key} row={row} />
+                  ))}
+                </div>
+              </section>
+            )}
           </div>
-        </section>
+        </div>
       )}
 
-      {/* This week */}
-      {waitingRows.length > 0 && (
-        <section className={cn("py-8", criticalRows.length > 0 && "ledger-band")}>
-          <BandHead label="This week" count={waitingRows.length} />
-          <div>
-            {waitingRows.map((row) => (
-              <Row key={row.key} row={row} />
-            ))}
+      {/* Colophon anchors the bottom so short states still fill the page */}
+      <div className="mt-auto">
+        <div className="mx-auto w-full max-w-5xl px-6 py-8 md:px-10 md:py-10 lg:px-14">
+          <div className="flex items-baseline justify-between border-t border-[color:var(--ledger-rule-soft)] pt-5">
+            <span className="type-ledger-eyebrow">
+              {boot.zivvy?.tenant?.company ?? "Zivvy"} · {copy.eyebrow.toLowerCase()}
+            </span>
+            <Link
+              href="/apps"
+              className="ledger-cta"
+            >
+              See every workspace
+              <span aria-hidden><ArrowUpRight className="size-3.5" /></span>
+            </Link>
           </div>
-        </section>
-      )}
-
-      {/* Recent movement */}
-      {activityRows.length > 0 && (
-        <section className={cn("py-8", (criticalRows.length > 0 || waitingRows.length > 0) && "ledger-band")}>
-          <BandHead label="Recent movement" count={activityRows.length} />
-          <div>
-            {activityRows.map((row) => (
-              <Row key={row.key} row={row} />
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* True empty — hero already reads the message, no need for a party emoji */}
-      {criticalRows.length === 0 && waitingRows.length === 0 && activityRows.length === 0 && (
-        <section className="py-8 ledger-band">
-          <p className="type-ledger-title">Nothing on your plate.</p>
-          <p className="type-ledger-note mt-1">This is your moment to get ahead on next week.</p>
-        </section>
-      )}
+        </div>
+      </div>
     </div>
   );
 }
