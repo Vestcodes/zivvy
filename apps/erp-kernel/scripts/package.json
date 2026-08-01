@@ -1,0 +1,11 @@
+{
+  "name": "zivvy-smoke",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "smoke": "node scripts/smoke_zivvy.mjs"
+  },
+  "devDependencies": {
+    "playwright": "^1.54.1"
+  }
+}

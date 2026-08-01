@@ -1,0 +1,86 @@
+{% extends "templates/marketing/base.html" %}
+
+{% block marketing_content %}
+<header class="zivvy-page-hero">
+	<div class="zivvy-page-hero__inner">
+		<h1>{{ _("Start fast with Zivvy in 3 steps") }}</h1>
+		<p>{{ _("This guide is built for operators and founders: launch quickly, understand plan fit, and keep billing and tenancy predictable as you scale.") }}</p>
+	</div>
+</header>
+
+<section class="zivvy-section zivvy-docs">
+	<nav class="zivvy-doc-anchors" aria-label="{{ _('Docs sections') }}">
+		<a href="#start">{{ _("Start in 3 steps") }}</a>
+		<a href="#plans">{{ _("Plan fit") }}</a>
+		<a href="#billing">{{ _("Billing flow") }}</a>
+		<a href="#tenancy">{{ _("Tenancy and region") }}</a>
+		<a href="#api">{{ _("API") }}</a>
+	</nav>
+
+	<article class="zivvy-api-group">
+		<h2 id="start">{{ _("Start in 3 steps") }}</h2>
+		<div class="zivvy-doc-steps">
+			<article class="zivvy-doc-step">
+				<p class="step">{{ _("Step 1") }}</p>
+				<h3>{{ _("Create your workspace") }}</h3>
+				<p>{{ _("Open") }} <a href="/login#signup">/login#signup</a> {{ _("with your work email, optional company name, and datacenter preference.") }}</p>
+			</article>
+			<article class="zivvy-doc-step">
+				<p class="step">{{ _("Step 2") }}</p>
+				<h3>{{ _("Run your first workflow") }}</h3>
+				<p>{{ _("Use CRM and order workflows first, then invite teammates and align seat usage with your operating structure.") }}</p>
+			</article>
+			<article class="zivvy-doc-step">
+				<p class="step">{{ _("Step 3") }}</p>
+				<h3>{{ _("Upgrade only when needed") }}</h3>
+				<p>{{ _("When you need paid capabilities (finance depth, barcode inventory, advanced ops), upgrade from Billing in-product.") }}</p>
+			</article>
+		</div>
+	</article>
+
+	<article class="zivvy-api-group">
+		<h2 id="plans">{{ _("Plan fit") }}</h2>
+		<p>{{ _("Use this decision guide to avoid overbuying too early or delaying important capabilities too long.") }}</p>
+		<ul>
+			<li><strong>{{ _("Free") }}</strong> — {{ _("Use when validating CRM + order flow. Barcode workflows are blocked.") }}</li>
+			<li><strong>{{ _("Pro") }}</strong> — {{ _("$18 / user / month for finance, inventory, and barcode-enabled operations.") }}</li>
+			<li><strong>{{ _("Business") }}</strong> — {{ _("$30 / user / month for advanced manufacturing, quality, assets, and multi-company depth.") }}</li>
+		</ul>
+		<p class="zivvy-note-card">{{ _("Paid inventory barcode access is enforced server-side. Free workspaces are guided to upgrade safely through Billing.") }}</p>
+	</article>
+
+	<article class="zivvy-api-group">
+		<h2 id="billing">{{ _("Billing flow") }}</h2>
+		<p>{{ _("Billing is designed so operators can understand plan state and next actions in one place.") }}</p>
+		<ul>
+			<li>{{ _("See effective plan, subscription status, and seat usage at a glance.") }}</li>
+			<li>{{ _("Upgrade to Pro or Business with clear plan cards and customer-safe messaging.") }}</li>
+			<li>{{ _("Use Manage billing to open Polar portal for invoices and payment method updates.") }}</li>
+			<li>{{ _("If portal is not ready yet, complete one checkout first, then return to portal management.") }}</li>
+		</ul>
+		<div class="zivvy-inline-actions">
+			<a class="zivvy-btn zivvy-btn--primary" href="/app/billing">{{ _("Open Billing") }}</a>
+			<a class="zivvy-btn zivvy-btn--ghost" href="/pricing">{{ _("Compare plans") }}</a>
+		</div>
+	</article>
+
+	<article class="zivvy-api-group">
+		<h2 id="tenancy">{{ _("Tenancy and region preference") }}</h2>
+		<ul>
+			<li>{{ _("Each workspace is tenant-aware: users, plan checks, and seat controls are scoped to your tenant.") }}</li>
+			<li>{{ _("Choose datacenter preference at signup (India, EU, US). This preference is saved to your workspace profile.") }}</li>
+			<li>{{ _("Need help planning production rollout?") }} <a href="/contact">{{ _("Contact support") }}</a>.</li>
+		</ul>
+	</article>
+
+	<article class="zivvy-api-group">
+		<h2 id="api">{{ _("API and integrations") }}</h2>
+		<p>{{ _("Use the Developers guide for endpoint groups, auth patterns, and copy-paste request/response examples.") }}</p>
+		<div class="zivvy-inline-actions">
+			<a class="zivvy-btn zivvy-btn--primary" href="/developers">{{ _("Open Developers guide") }}</a>
+			<a class="zivvy-btn zivvy-btn--ghost" href="/pricing">{{ _("Pricing") }}</a>
+			<a class="zivvy-btn zivvy-btn--ghost" href="/login#signup">{{ _("Create workspace") }}</a>
+		</div>
+	</article>
+</section>
+{% endblock %}

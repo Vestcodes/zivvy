@@ -1,0 +1,146 @@
+---
+title: Authentication
+description: API key management, scopes, rate limits, and security best practices.
+order: 2
+---
+
+# Authentication
+
+The Zivvy API uses API keys for authentication. Every request must include a valid key in the `X-API-Key` header. There is no session or cookie-based auth — the API is stateless.
+
+## Creating API keys
+
+1. Log in to your [Zivvy dashboard](https://zivvy.xyz/dashboard).
+2. Navigate to **Settings → API Keys**.
+3. Click **Create Key** and give it a descriptive name (e.g., "Shopify integration" or "Inventory sync").
+4. Select the appropriate scope and environment.
+5. Copy the key immediately — it is only shown once.
+
+## Key environments
+
+| Environment | Prefix | Description |
+|-------------|--------|-------------|
+| Live | `zk_live_` | Reads and writes production data |
+| Test | `zk_test_` | Operates against a sandboxed copy of your data |
+
+Test keys are ideal for development. They return realistic responses but never touch your real records. You can freely create, update, and delete resources in the sandbox without consequences.
+
+## Key scopes
+
+Each API key has a scope that controls what it can do:
+
+| Scope | Permissions |
+|-------|-------------|
+| `read` | Read-only access to all resources. Cannot create, update, or delete. |
+| `write` | Read and write access. Can create and update resources but cannot delete or manage settings. |
+| `admin` | Full access. Can delete resources, manage API keys, and modify account settings. |
+
+Choose the most restrictive scope that meets your needs. A reporting dashboard only needs `read`. An integration that syncs orders needs `write`. Only your internal admin tools should use `admin`.
+
+## Authenticating requests
+
+Include your API key in the `X-API-Key` header on every request:
+
+```bash
+curl https://integrate.zivvy.xyz/v1/items \
+  -H "X-API-Key: zk_live_abc123def456"
+```
+
+### Python
+
+```python
+import requests
+
+headers = {
+    "X-API-Key": "zk_live_abc123def456"
+}
+
+response = requests.get(
+    "https://integrate.zivvy.xyz/v1/items",
+    headers=headers
+)
+
+data = response.json()
+print(data["data"])
+```
+
+### JavaScript
+
+```javascript
+const response = await fetch("https://integrate.zivvy.xyz/v1/items", {
+  headers: {
+    "X-API-Key": "zk_live_abc123def456",
+  },
+});
+
+const { data } = await response.json();
+console.log(data);
+```
+
+## Rate limits
+
+Rate limits vary by plan and are enforced per API key:
+
+| Plan | Requests per minute | Burst limit |
+|------|---------------------|-------------|
+| Free | 100 | 20 req/sec |
+| Pro | 1,000 | 100 req/sec |
+| Business | 5,000 | 500 req/sec |
+
+When you exceed the limit, the API returns a `429` status with a `RATE_LIMITED` error. The response includes headers to help you manage your usage:
+
+| Header | Description |
+|--------|-------------|
+| `X-RateLimit-Limit` | Your per-minute limit |
+| `X-RateLimit-Remaining` | Requests remaining in the current window |
+| `X-RateLimit-Reset` | Unix timestamp when the window resets |
+| `Retry-After` | Seconds to wait before retrying |
+
+```bash
+HTTP/1.1 429 Too Many Requests
+X-RateLimit-Limit: 100
+X-RateLimit-Remaining: 0
+X-RateLimit-Reset: 1700000060
+Retry-After: 12
+
+{
+  "error": {
+    "code": "RATE_LIMITED",
+    "message": "Rate limit exceeded. Try again in 12 seconds.",
+    "status": 429
+  }
+}
+```
+
+## Key rotation
+
+Rotate your API keys periodically to limit exposure from leaked credentials:
+
+1. Create a new key with the same scope in the dashboard.
+2. Update your application to use the new key.
+3. Verify the integration works with the new key.
+4. Revoke the old key.
+
+Both keys remain valid simultaneously, so there is no downtime during rotation. We recommend rotating keys every 90 days.
+
+## Revoking keys
+
+To revoke a key:
+
+1. Go to **Settings → API Keys** in the dashboard.
+2. Click the key you want to revoke.
+3. Click **Revoke Key** and confirm.
+
+Revocation is immediate. Any request using the revoked key will receive a `401 UNAUTHORIZED` response. This action cannot be undone — you will need to create a new key.
+
+## Security best practices
+
+- **Never expose keys in client-side code.** API keys should only be used in server-side applications. Never embed them in JavaScript that runs in the browser, mobile apps, or public repositories.
+- **Use environment variables.** Store keys in environment variables or a secrets manager, not in source code.
+- **Scope keys narrowly.** Grant each key only the permissions it needs. A read-only dashboard should not have `admin` scope.
+- **Rotate regularly.** Rotate keys every 90 days, or immediately if you suspect a leak.
+- **Monitor usage.** Check the API Keys page in the dashboard for unusual activity. Each key shows its last-used timestamp and request count.
+- **Use test keys for development.** Never use live keys in development or staging environments.
+- **Restrict by IP (Business plan).** On the Business plan, you can restrict each key to a list of allowed IP addresses for an additional layer of security.
+
+> If you believe a key has been compromised, revoke it immediately from the dashboard and create a replacement. There is no penalty for revoking and recreating keys.

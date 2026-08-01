@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" fill="none" role="img" aria-label="Zivvy">
+  <!-- Official Zivvy mark: purple circle + black descending pill-bars (from lucide tornado geometry in icon.svg) -->
+  <circle cx="64" cy="64" r="60" fill="#AF33F2"/>
+  <g transform="translate(64 64) scale(3.35) translate(-12 -12)" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" fill="none">
+    <path d="M21 4H3"/>
+    <path d="M18 8H6"/>
+    <path d="M19 12H9"/>
+    <path d="M16 16h-6"/>
+    <path d="M11 20H9"/>
+  </g>
+</svg>

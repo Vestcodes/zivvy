@@ -1,0 +1,41 @@
+{% extends "templates/marketing/base.html" %}
+
+{% block marketing_content %}
+<header class="zivvy-page-hero">
+	<div class="zivvy-page-hero__inner">
+		<h1>{{ _("Contact") }}</h1>
+		<p>{{ _("Questions about Zivvy, plans, or onboarding? Vestcodes Co is here.") }}</p>
+	</div>
+</header>
+
+<section class="zivvy-section" style="padding-top:1.5rem;">
+	<div class="zivvy-contact-grid">
+		<div class="zivvy-contact-card">
+			<h2 style="font-family:Sora,sans-serif;margin:0 0 0.75rem;font-size:1.25rem;">{{ _("Email us") }}</h2>
+			<p style="color:#64748b;line-height:1.55;">
+				{{ _("We read every message. For billing portal issues, System Managers can also open Desk → Billing.") }}
+			</p>
+			<p style="margin:1rem 0 0;">
+				<a class="zivvy-btn zivvy-btn--primary" href="mailto:contact@vestcodes.com">contact@vestcodes.com</a>
+			</p>
+			<p style="margin-top:1.25rem;color:#64748b;font-size:0.92rem;">
+				Vestcodes Co · India<br>
+				<a href="/privacy">{{ _("Privacy") }}</a> · <a href="/terms">{{ _("Terms") }}</a>
+			</p>
+		</div>
+		<form class="zivvy-contact-form" id="zivvy-contact-form">
+			<h2 style="font-family:Sora,sans-serif;margin:0 0 0.5rem;font-size:1.25rem;">{{ _("Send a message") }}</h2>
+			<label for="zivvy_contact_name">{{ _("Name") }}</label>
+			<input id="zivvy_contact_name" name="full_name" required autocomplete="name">
+			<label for="zivvy_contact_email">{{ _("Email") }}</label>
+			<input id="zivvy_contact_email" name="email" type="email" required autocomplete="email">
+			<label for="zivvy_contact_message">{{ _("Message") }}</label>
+			<textarea id="zivvy_contact_message" name="message" required></textarea>
+			<p style="margin-top:1rem;">
+				<button type="submit" class="zivvy-btn zivvy-btn--primary">{{ _("Send") }}</button>
+			</p>
+			<p id="zivvy-contact-status" class="text-muted" style="min-height:1.25rem;font-size:0.9rem;" aria-live="polite"></p>
+		</form>
+	</div>
+</section>
+{% endblock %}

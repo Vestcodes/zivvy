@@ -1,0 +1,151 @@
+{
+ "actions": [],
+ "creation": "2026-07-23 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "credentials_section",
+  "access_token",
+  "webhook_secret",
+  "use_sandbox",
+  "column_break_creds",
+  "organization_id",
+  "organization_slug",
+  "products_section",
+  "pro_product_id",
+  "business_product_id",
+  "pro_annual_product_id",
+  "business_annual_product_id",
+  "urls_section",
+  "success_url",
+  "cancel_url",
+  "help_section",
+  "setup_notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "credentials_section",
+   "fieldtype": "Section Break",
+   "label": "Polar Credentials"
+  },
+  {
+   "description": "Organization Access Token (OAT). Prefer env POLAR_ACCESS_TOKEN in production.",
+   "fieldname": "access_token",
+   "fieldtype": "Password",
+   "label": "Access Token"
+  },
+  {
+   "description": "Webhook signing secret from Polar endpoint setup. Prefer env POLAR_WEBHOOK_SECRET.",
+   "fieldname": "webhook_secret",
+   "fieldtype": "Password",
+   "label": "Webhook Secret"
+  },
+  {
+   "default": "0",
+   "description": "Use https://sandbox-api.polar.sh/v1 when enabled (or POLAR_USE_SANDBOX=1). Live production uses api.polar.sh.",
+   "fieldname": "use_sandbox",
+   "fieldtype": "Check",
+   "label": "Use Sandbox API"
+  },
+  {
+   "fieldname": "column_break_creds",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "Optional Polar organization ID (UUID). Required for product create if not using an org token.",
+   "fieldname": "organization_id",
+   "fieldtype": "Data",
+   "label": "Organization ID"
+  },
+  {
+   "description": "Optional Polar org slug (e.g. vestcodes) for dashboard reference.",
+   "fieldname": "organization_slug",
+   "fieldtype": "Data",
+   "label": "Organization Slug"
+  },
+  {
+   "fieldname": "products_section",
+   "fieldtype": "Section Break",
+   "label": "Seat Products"
+  },
+  {
+   "description": "Polar Product ID for Pro ($18/user/mo seat-based). Env: POLAR_PRO_PRODUCT_ID.",
+   "fieldname": "pro_product_id",
+   "fieldtype": "Data",
+   "label": "Pro Product ID"
+  },
+  {
+   "description": "Polar Product ID for Business ($30/user/mo seat-based). Env: POLAR_BUSINESS_PRODUCT_ID.",
+   "fieldname": "business_product_id",
+   "fieldtype": "Data",
+   "label": "Business Product ID"
+  },
+  {
+   "description": "Polar Product ID for Pro annual ($168/seat/year, 20% off). Env: POLAR_PRO_ANNUAL_PRODUCT_ID.",
+   "fieldname": "pro_annual_product_id",
+   "fieldtype": "Data",
+   "label": "Pro Annual Product ID"
+  },
+  {
+   "description": "Polar Product ID for Business annual ($288/seat/year, 20% off). Env: POLAR_BUSINESS_ANNUAL_PRODUCT_ID.",
+   "fieldname": "business_annual_product_id",
+   "fieldtype": "Data",
+   "label": "Business Annual Product ID"
+  },
+  {
+   "fieldname": "urls_section",
+   "fieldtype": "Section Break",
+   "label": "Checkout URLs"
+  },
+  {
+   "default": "https://zivvy.xyz/app/billing",
+   "description": "Polar success_url. Production default: https://zivvy.xyz/app/billing",
+   "fieldname": "success_url",
+   "fieldtype": "Data",
+   "label": "Success URL",
+   "options": "URL"
+  },
+  {
+   "default": "https://zivvy.xyz/pricing",
+   "description": "Polar return_url / cancel. Production default: https://zivvy.xyz/pricing",
+   "fieldname": "cancel_url",
+   "fieldtype": "Data",
+   "label": "Cancel / Return URL",
+   "options": "URL"
+  },
+  {
+   "fieldname": "help_section",
+   "fieldtype": "Section Break",
+   "label": "Setup"
+  },
+  {
+   "fieldname": "setup_notes",
+   "fieldtype": "HTML",
+   "label": "Setup Notes",
+   "options": "<p><strong>Production domain:</strong> <a href=\"https://zivvy.xyz\" target=\"_blank\" rel=\"noopener\">https://zivvy.xyz</a></p><p>Create seat-based products in <a href=\"https://polar.sh\" target=\"_blank\" rel=\"noopener\">Polar</a> (Zivvy Pro $18/seat/mo, Zivvy Business $30/seat/mo, plus Annual SKUs at 20% off), copy Product IDs here or into env, and register this webhook:</p><p><code>https://zivvy.xyz/api/method/zivvy_brand.billing.webhooks.polar_webhook</code></p><p>Events: <code>subscription.created</code>, <code>subscription.updated</code>, <code>subscription.active</code>, <code>subscription.canceled</code>, <code>subscription.revoked</code>, <code>order.paid</code>.</p><p>Optional: Desk → Billing, or <code>bench execute zivvy_brand.billing.setup_polar.setup_polar_products</code> when <code>POLAR_ACCESS_TOKEN</code> is set. Never commit tokens.</p><p>Docs: <code>scripts/setup_polar.md</code> and <code>DEPLOY.md</code> in the zivvy_brand app repo.</p>"
+  }
+ ],
+ "issingle": 1,
+ "links": [],
+ "modified": "2026-07-24 01:10:00.000000",
+ "modified_by": "Administrator",
+ "module": "Zivvy Brand",
+ "name": "Polar Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

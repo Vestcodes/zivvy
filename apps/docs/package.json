@@ -1,0 +1,13 @@
+{
+  "name": "@zivvy/docs",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build-docs.mjs",
+    "typecheck": "pnpm verify",
+    "lint": "pnpm verify",
+    "test": "pnpm verify",
+    "verify": "node scripts/verify-docs.mjs"
+  }
+}

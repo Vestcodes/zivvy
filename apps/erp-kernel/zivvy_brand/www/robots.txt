@@ -1,0 +1,24 @@
+User-agent: *
+Allow: /
+Allow: /home
+Allow: /features
+Allow: /pricing
+Allow: /blog
+Allow: /contact
+Allow: /terms
+Allow: /privacy
+Allow: /cookies
+Allow: /acceptable-use
+Allow: /assets/
+
+# Product / API surfaces — not for general marketing crawl
+Disallow: /app
+Disallow: /app/
+Disallow: /api
+Disallow: /api/
+Disallow: /desk
+Disallow: /desk/
+Disallow: /private/
+Disallow: /login
+
+Sitemap: https://zivvy.xyz/sitemap.xml

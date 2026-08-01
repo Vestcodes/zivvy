@@ -1,0 +1,29 @@
+{
+ "content": null,
+ "creation": "2026-07-23 00:00:00.000000",
+ "docstatus": 0,
+ "doctype": "Page",
+ "idx": 0,
+ "modified": "2026-07-23 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Zivvy Brand",
+ "name": "zivvy-finance",
+ "owner": "Administrator",
+ "page_name": "zivvy-finance",
+ "roles": [
+  {
+   "role": "All"
+  },
+  {
+   "role": "Sales User"
+  },
+  {
+   "role": "Purchase User"
+  },
+  {
+   "role": "System Manager"
+  }
+ ],
+ "standard": "Yes",
+ "title": "Zivvy Finance"
+}

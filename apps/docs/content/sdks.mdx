@@ -1,0 +1,301 @@
+---
+title: SDKs & Libraries
+description: Official client libraries for JavaScript, Python, Go, and Ruby.
+order: 6
+---
+
+# SDKs & Libraries
+
+> Official SDKs are **coming soon**. This page shows the planned interfaces and what to expect. Until the SDKs are released, use the REST API directly with any HTTP client.
+
+We are building official client libraries so you can integrate with Zivvy in your language of choice without managing HTTP requests, authentication, pagination, or error handling yourself.
+
+## Planned SDKs
+
+| Language | Package | Status |
+|----------|---------|--------|
+| JavaScript / TypeScript | `@zivvy/sdk` | In development |
+| Python | `zivvy` | In development |
+| Go | `github.com/zivvy/zivvy-go` | Planned |
+| Ruby | `zivvy` | Planned |
+
+All SDKs will share a consistent design:
+
+- Typed models for every resource
+- Automatic pagination helpers
+- Built-in retry logic with exponential backoff
+- Rate limit handling (waits and retries automatically)
+- Comprehensive error types
+- Support for both live and test environments
+
+## JavaScript / TypeScript
+
+### Installation
+
+```bash
+npm install @zivvy/sdk
+```
+
+### Usage
+
+```typescript
+import { Zivvy } from '@zivvy/sdk';
+
+const zivvy = new Zivvy('zk_live_your_key_here');
+
+// List items with filtering
+const items = await zivvy.items.list({
+  limit: 10,
+  item_group: 'Electronics',
+  sort: 'modified',
+  order: 'desc',
+});
+
+console.log(items.data);     // Item[]
+console.log(items.meta);     // { total, limit, offset }
+
+// Get a single item
+const item = await zivvy.items.get('IT-00001');
+console.log(item.item_name); // "Standing Desk"
+
+// Create an item
+const newItem = await zivvy.items.create({
+  item_code: 'IT-00100',
+  item_name: 'Ergonomic Chair',
+  item_group: 'Furniture',
+  standard_rate: 349.00,
+  stock_uom: 'Nos',
+});
+
+// Update an item
+await zivvy.items.update('IT-00100', {
+  standard_rate: 379.00,
+});
+
+// Delete an item
+await zivvy.items.delete('IT-00100');
+```
+
+### Pagination helpers
+
+```typescript
+// Auto-paginate through all items
+for await (const item of zivvy.items.listAll({ item_group: 'Furniture' })) {
+  console.log(item.item_name);
+}
+
+// Or collect everything into an array
+const allItems = await zivvy.items.listAll().toArray();
+```
+
+### Error handling
+
+```typescript
+import { Zivvy, ZivvyError, RateLimitError } from '@zivvy/sdk';
+
+try {
+  const item = await zivvy.items.get('IT-99999');
+} catch (err) {
+  if (err instanceof RateLimitError) {
+    console.log(`Rate limited. Retry after ${err.retryAfter}s`);
+  } else if (err instanceof ZivvyError) {
+    console.log(`Error ${err.code}: ${err.message}`);
+  }
+}
+```
+
+### Configuration
+
+```typescript
+const zivvy = new Zivvy('zk_live_your_key_here', {
+  baseUrl: 'https://integrate.zivvy.xyz/v1',  // default
+  timeout: 30000,                         // request timeout in ms
+  maxRetries: 3,                          // auto-retry on 429 and 5xx
+});
+```
+
+## Python
+
+### Installation
+
+```bash
+pip install zivvy
+```
+
+### Usage
+
+```python
+from zivvy import Zivvy
+
+zivvy = Zivvy("zk_live_your_key_here")
+
+# List items
+items = zivvy.items.list(limit=10, item_group="Electronics")
+for item in items.data:
+    print(item.item_name, item.standard_rate)
+
+# Get a single item
+item = zivvy.items.get("IT-00001")
+print(item.item_name)
+
+# Create an item
+new_item = zivvy.items.create(
+    item_code="IT-00100",
+    item_name="Ergonomic Chair",
+    item_group="Furniture",
+    standard_rate=349.00,
+    stock_uom="Nos",
+)
+
+# Update an item
+zivvy.items.update("IT-00100", standard_rate=379.00)
+
+# Delete an item
+zivvy.items.delete("IT-00100")
+```
+
+### Auto-pagination
+
+```python
+# Iterate through all items without managing pagination
+for item in zivvy.items.list_all(item_group="Furniture"):
+    print(item.item_name)
+
+# Or collect into a list
+all_items = list(zivvy.items.list_all())
+```
+
+### Async support
+
+```python
+from zivvy import AsyncZivvy
+
+zivvy = AsyncZivvy("zk_live_your_key_here")
+
+items = await zivvy.items.list(limit=10)
+```
+
+### Error handling
+
+```python
+from zivvy import Zivvy, ZivvyError, RateLimitError, NotFoundError
+
+try:
+    item = zivvy.items.get("IT-99999")
+except NotFoundError:
+    print("Item does not exist")
+except RateLimitError as e:
+    print(f"Rate limited. Retry after {e.retry_after}s")
+except ZivvyError as e:
+    print(f"API error {e.code}: {e.message}")
+```
+
+## Go
+
+### Installation
+
+```bash
+go get github.com/zivvy/zivvy-go
+```
+
+### Usage
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "log"
+
+    "github.com/zivvy/zivvy-go"
+)
+
+func main() {
+    client := zivvy.NewClient("zk_live_your_key_here")
+    ctx := context.Background()
+
+    // List items
+    items, err := client.Items.List(ctx, &zivvy.ListParams{
+        Limit:     10,
+        ItemGroup: "Electronics",
+    })
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    for _, item := range items.Data {
+        fmt.Printf("%s: $%.2f\n", item.ItemName, item.StandardRate)
+    }
+
+    // Get a single item
+    item, err := client.Items.Get(ctx, "IT-00001")
+    if err != nil {
+        log.Fatal(err)
+    }
+    fmt.Println(item.ItemName)
+}
+```
+
+## Ruby
+
+### Installation
+
+```bash
+gem install zivvy
+```
+
+### Usage
+
+```ruby
+require "zivvy"
+
+zivvy = Zivvy::Client.new("zk_live_your_key_here")
+
+# List items
+items = zivvy.items.list(limit: 10, item_group: "Electronics")
+items.data.each do |item|
+  puts "#{item.item_name}: #{item.standard_rate}"
+end
+
+# Get a single item
+item = zivvy.items.get("IT-00001")
+puts item.item_name
+
+# Create an item
+new_item = zivvy.items.create(
+  item_code: "IT-00100",
+  item_name: "Ergonomic Chair",
+  item_group: "Furniture",
+  standard_rate: 349.00,
+  stock_uom: "Nos"
+)
+```
+
+## Using the REST API directly
+
+Until the SDKs are available, you can use any HTTP client. The API is straightforward REST with JSON:
+
+```bash
+# List items
+curl https://integrate.zivvy.xyz/v1/items \
+  -H "X-API-Key: zk_live_your_key_here"
+
+# Create an item
+curl -X POST https://integrate.zivvy.xyz/v1/items \
+  -H "X-API-Key: zk_live_your_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "item_code": "IT-00100",
+    "item_name": "Ergonomic Chair",
+    "item_group": "Furniture",
+    "standard_rate": 349.00,
+    "stock_uom": "Nos"
+  }'
+```
+
+See the [Getting Started](/docs/guides/getting-started) guide and the [API Reference](/docs) for complete endpoint documentation.
+
+## Stay updated
+
+We will announce SDK releases on the [Zivvy blog](https://zivvy.xyz/blog) and in the dashboard. You can also watch the GitHub repositories for updates once they are published.

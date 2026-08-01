@@ -1,0 +1,105 @@
+{% extends "templates/marketing/base.html" %}
+
+{% block marketing_content %}
+<header class="zivvy-page-hero">
+	<div class="zivvy-page-hero__inner">
+		<h1>{{ _("Developers quick-start") }}</h1>
+		<p>{{ _("Build on Zivvy with clear auth patterns, grouped endpoint cards, and copy-paste request/response examples.") }}</p>
+	</div>
+</header>
+
+<section class="zivvy-section zivvy-developers">
+	<div class="zivvy-dev-top">
+		<article class="zivvy-api-intro">
+			<p><strong>{{ _("Base URL") }}</strong></p>
+			<p><code>{{ api_base }}</code></p>
+			<p>
+				<strong>{{ _("OpenAPI") }}</strong>:
+				<a href="{{ openapi_url }}" target="_blank" rel="noopener">openapi.json</a>
+			</p>
+		</article>
+		<article class="zivvy-api-intro">
+			<p><strong>{{ _("Start in 3 steps") }}</strong></p>
+			<ol>
+				<li>{{ _("Choose auth method (session cookie or API token).") }}</li>
+				<li>{{ _("Use guest/customer endpoint cards below.") }}</li>
+				<li>{{ _("Check plan-required routes before enabling workflows.") }}</li>
+			</ol>
+		</article>
+	</div>
+	<p class="zivvy-api-note">
+		{{ _("This page includes public customer APIs only. Internal operations setup and webhook administration are intentionally excluded.") }}
+	</p>
+
+	<nav class="zivvy-doc-anchors" aria-label="{{ _('Endpoint groups') }}">
+		{% for group in endpoints %}
+		<a href="#group-{{ loop.index }}">{{ group.group }}</a>
+		{% endfor %}
+		<a href="#integration-help">{{ _("Integration help") }}</a>
+	</nav>
+
+	<div class="zivvy-api-split">
+		<article class="zivvy-api-auth">
+			<h2>{{ _("Authentication") }}</h2>
+			<ul>
+				<li><strong>{{ _("Session") }}</strong> — {{ _("Sign in at") }} <a href="/login">/login</a>; {{ _("browser cookies apply to") }} <code>/api/method/…</code>.</li>
+				<li><strong>{{ _("API token") }}</strong> — {{ _("Desk → User → API Access, then send") }} <code>Authorization: token api_key:api_secret</code>.</li>
+				<li><strong>{{ _("Guest routes") }}</strong> — {{ _("Marked as Guest and usable without login.") }}</li>
+			</ul>
+		</article>
+		<article class="zivvy-api-auth">
+			<h2>{{ _("Plan-aware access") }}</h2>
+			<p>{{ _("Some APIs are available on all plans, while others require paid plans.") }}</p>
+			<ul>
+				{% for code in ["free", "pro", "business"] %}
+				{% set plan = plans[code] %}
+				<li><strong>{{ plan.label }}</strong> — {% if plan.price_usd == 0 %}$0{% else %}${{ plan.price_usd }}/user/mo{% endif %}</li>
+				{% endfor %}
+			</ul>
+			<p class="zivvy-note-card">{{ _("Barcode API access is blocked on Free and included on Pro/Business inventory workflows.") }}</p>
+		</article>
+	</div>
+
+	{% for group in endpoints %}
+	<article id="group-{{ loop.index }}" class="zivvy-api-group">
+		<h2>{{ group.group }}</h2>
+		<p class="zivvy-api-meta">{{ _("Auth") }}: {{ group.auth }} · {{ _("Plan") }}: {{ group.plan }}</p>
+		<div class="zivvy-endpoint-grid">
+		{% for item in group.routes %}
+		<details class="zivvy-api-endpoint" {% if loop.first %}open{% endif %}>
+			<summary class="zivvy-api-endpoint__summary">
+				<div class="zivvy-api-endpoint__head">
+					<span class="zivvy-api-method">{{ item.method }}</span>
+					<code class="zivvy-api-path">{{ item.path }}</code>
+				</div>
+				<span class="zivvy-api-endpoint__summary-text">{{ item.summary }}</span>
+			</summary>
+			<div class="zivvy-api-endpoint__body">
+				{% if item.plan_req %}
+				<p class="zivvy-api-plan-req">{{ _("Requires") }}: {{ item.plan_req }}</p>
+				{% endif %}
+				{% if item.body %}
+				<p class="zivvy-api-label">{{ _("Request") }}</p>
+				<pre class="zivvy-api-code"><code>{{ item.body }}</code></pre>
+				{% endif %}
+				<p class="zivvy-api-label">{{ _("Response") }}</p>
+				<pre class="zivvy-api-code"><code>{{ item.response }}</code></pre>
+			</div>
+		</details>
+		{% endfor %}
+		</div>
+	</article>
+	{% endfor %}
+
+	<article id="integration-help" class="zivvy-api-group">
+		<h2>{{ _("Need private integration support?") }}</h2>
+		<p>{{ _("For migration tooling, rollout planning, or private integration support, contact the Zivvy team so we can guide implementation safely.") }}</p>
+	</article>
+
+	<div class="zivvy-inline-actions">
+		<a class="zivvy-btn zivvy-btn--primary" href="/pricing">{{ _("See pricing") }}</a>
+		<a class="zivvy-btn zivvy-btn--ghost" href="/docs">{{ _("Open docs") }}</a>
+		<a class="zivvy-btn zivvy-btn--ghost" href="/login">{{ _("Sign in") }}</a>
+	</div>
+</section>
+{% endblock %}

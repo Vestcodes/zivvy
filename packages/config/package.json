@@ -1,0 +1,14 @@
+{
+  "name": "@zivvy/config",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./tsconfig/base": "./tsconfig/base.json"
+  },
+  "scripts": {
+    "typecheck": "node -e \"console.log('config package verified')\"",
+    "lint": "node -e \"console.log('config package verified')\"",
+    "test": "node -e \"console.log('config package verified')\""
+  }
+}

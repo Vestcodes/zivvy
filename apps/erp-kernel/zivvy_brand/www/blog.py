@@ -1,0 +1,23 @@
+from zivvy_brand.marketing.seo import apply_seo, organization_ld, website_ld
+from zivvy_brand.www.cache import apply_public_cache
+
+no_cache = 0
+
+
+def get_context(context):
+	from zivvy_brand.blog.posts import list_posts
+
+	apply_public_cache(context, max_age=300, stale_while_revalidate=120)
+	context.show_sidebar = False
+	context.active_nav = "blog"
+	context.posts = list_posts()
+	apply_seo(
+		context,
+		"/blog",
+		title="Blog",
+		description=(
+			"Zivvy blog — CRM for Indian SMEs, plan guides, Polar billing, data residency, "
+			"and migrating from spreadsheets. https://zivvy.xyz/blog"
+		),
+		json_ld=[organization_ld(), website_ld()],
+	)

@@ -1,0 +1,191 @@
+{% extends "templates/marketing/base.html" %}
+
+{% block marketing_content %}
+<section class="zivvy-hero" aria-label="Zivvy">
+	<div class="zivvy-hero__inner">
+		<div class="zivvy-hero__content">
+			<p class="zivvy-hero__eyebrow">{{ _("For founder-led and ops-led teams") }}</p>
+			<h1 class="zivvy-hero__brand">Zivvy</h1>
+			<p class="zivvy-hero__headline">{{ _("Close revenue, operations, and billing in one workspace your team actually uses.") }}</p>
+			<p class="zivvy-hero__support">
+				{{ _("Replace disconnected CRM sheets and billing confusion with one multi-tenant flow from lead to cash. Start free, then upgrade only when your workflow depth needs it.") }}
+			</p>
+			<div class="zivvy-hero__ctas">
+				<a class="zivvy-btn zivvy-btn--primary zivvy-btn--large" href="/login#signup" data-zivvy-event="cta_start_free">
+					{{ _("Start free workspace") }}
+				</a>
+				<a class="zivvy-btn zivvy-btn--ghost zivvy-btn--large" href="/pricing" data-zivvy-event="cta_see_pricing">
+					{{ _("Compare plans") }}
+				</a>
+			</div>
+			<div class="zivvy-hero__metrics">
+				<span class="zivvy-pill">{{ _("Free starts in under 10 minutes") }}</span>
+				<span class="zivvy-pill">{{ _("2-seat starter path") }}</span>
+				<span class="zivvy-pill">{{ _("Billing + seats in one place") }}</span>
+				<span class="zivvy-pill">{{ _("Datacenter preference at signup") }}</span>
+			</div>
+		</div>
+		<aside class="zivvy-signal-band" aria-label="{{ _('Operational signal rail') }}">
+			<p class="zivvy-signal-band__title">{{ _("What improves after switch") }}</p>
+			<div class="zivvy-signal-band__line">
+				<span>{{ _("Lead to quote handoff clarity") }}</span>
+				<span>{{ _("Single workflow") }}</span>
+			</div>
+			<div class="zivvy-signal-band__line">
+				<span>{{ _("Open receivables visibility") }}</span>
+				<span>{{ _("Real-time") }}</span>
+			</div>
+			<div class="zivvy-signal-band__line">
+				<span>{{ _("Seat and plan controls") }}</span>
+				<span>{{ _("In Billing") }}</span>
+			</div>
+			<div class="zivvy-signal-band__line">
+				<span>{{ _("Barcode capability") }}</span>
+				<span>{{ _("Pro / Business") }}</span>
+			</div>
+		</aside>
+	</div>
+</section>
+
+<section class="zivvy-section">
+	<p class="zivvy-section__eyebrow">{{ _("Outcome-focused proof") }}</p>
+	<h2>{{ _("Built to increase operating confidence, not just add screens.") }}</h2>
+	<p class="zivvy-section__lead">{{ _("Each block below maps to a conversion concern: speed to value, revenue control, and low-risk scaling.") }}</p>
+	<div class="zivvy-proof-grid">
+		<article class="zivvy-proof-card">
+			<div class="zivvy-proof-card__kpi">{{ _("Faster activation") }}</div>
+			<h3>{{ _("Sign up to first pipeline workflow in one sitting.") }}</h3>
+			<p>{{ _("Create tenant, pick datacenter preference, invite teammates, and start with CRM + order flow without implementation drag.") }}</p>
+		</article>
+		<article class="zivvy-proof-card">
+			<div class="zivvy-proof-card__kpi">{{ _("Stronger cash control") }}</div>
+			<h3>{{ _("See plan, seats, and billing state without support tickets.") }}</h3>
+			<p>{{ _("Operators can move from Free to Pro/Business and manage subscriptions in-product through a clear, customer-safe billing flow.") }}</p>
+		</article>
+		<article class="zivvy-proof-card">
+			<div class="zivvy-proof-card__kpi">{{ _("Lower upgrade friction") }}</div>
+			<h3>{{ _("Feature gating is explicit, so teams know when to upgrade.") }}</h3>
+			<p>{{ _("Paid-only capabilities like barcode workflows are clearly documented on pricing and billing screens.") }}</p>
+		</article>
+	</div>
+</section>
+
+<section class="zivvy-section zivvy-section--soft">
+	<div class="zivvy-how-grid">
+		<div>
+			<p class="zivvy-section__eyebrow">{{ _("How it works") }}</p>
+			<h2>{{ _("From visitor to production workspace in 3 steps.") }}</h2>
+			<p class="zivvy-section__lead">{{ _("The onboarding path is intentionally short so evaluation momentum is not lost between signup and first value.") }}</p>
+			<div class="zivvy-inline-actions">
+				<a class="zivvy-btn zivvy-btn--ghost" href="/pricing" data-zivvy-event="cta_how_pricing">{{ _("See onboarding plan fit") }}</a>
+			</div>
+		</div>
+		<div class="zivvy-how-steps">
+			<article class="zivvy-how-step">
+				<p class="step">{{ _("Step 1") }}</p>
+				<h3>{{ _("Create workspace") }}</h3>
+				<p>{{ _("Sign up with work email, optional company, and datacenter preference (India, EU, US).") }}</p>
+			</article>
+			<article class="zivvy-how-step">
+				<p class="step">{{ _("Step 2") }}</p>
+				<h3>{{ _("Run core workflow") }}</h3>
+				<p>{{ _("Start with CRM + order flow on Free, invite teammates, and establish a single operating view.") }}</p>
+			</article>
+			<article class="zivvy-how-step">
+				<p class="step">{{ _("Step 3") }}</p>
+				<h3>{{ _("Upgrade when needed") }}</h3>
+				<p>{{ _("Move to Pro or Business from Billing when finance, barcode, or advanced operations become a bottleneck.") }}</p>
+			</article>
+		</div>
+	</div>
+</section>
+
+<section class="zivvy-section">
+	<p class="zivvy-section__eyebrow">{{ _("Plan fit guidance") }}</p>
+	<h2>{{ _("Choose the plan that matches your current execution stage.") }}</h2>
+	<p class="zivvy-section__lead">{{ _("Start lean, then expand workflow depth without replatforming.") }}</p>
+	<div class="zivvy-plan-fit-grid">
+		<article class="zivvy-plan-fit-card">
+			<h3>{{ plans.free.label }}</h3>
+			<p class="zivvy-plan-fit-card__price">$0</p>
+			<p>{{ _("Best for founder-led teams proving process discipline with CRM, opportunities, and order fundamentals.") }}</p>
+		</article>
+		<article class="zivvy-plan-fit-card is-featured">
+			<p class="zivvy-plan-fit-card__tag">{{ _("Most teams upgrade here") }}</p>
+			<h3>{{ plans.pro.label }}</h3>
+			<p class="zivvy-plan-fit-card__price">${{ plans.pro.price_usd }} <span>/ {{ _("user / month") }}</span></p>
+			<p>{{ _("Best for finance, inventory, HRMS, and barcode workflows with predictable per-seat pricing.") }}</p>
+		</article>
+		<article class="zivvy-plan-fit-card">
+			<h3>{{ plans.business.label }}</h3>
+			<p class="zivvy-plan-fit-card__price">${{ plans.business.price_usd }} <span>/ {{ _("user / month") }}</span></p>
+			<p>{{ _("Best for ecommerce channel sync, manufacturing, and multi-company operations.") }}</p>
+		</article>
+	</div>
+	<div class="zivvy-inline-actions">
+		<a class="zivvy-btn zivvy-btn--primary" href="/pricing" data-zivvy-event="cta_see_pricing">{{ _("See full plan comparison") }}</a>
+	</div>
+</section>
+
+<section class="zivvy-section">
+	<p class="zivvy-section__eyebrow">{{ _("Trust and compliance signals") }}</p>
+	<h2>{{ _("Credible foundations for billing, data, and tenancy.") }}</h2>
+	<p class="zivvy-section__lead">
+		{{ _("No fake logo wall. Just clear evidence about ownership, billing, and platform controls teams evaluate before signup.") }}
+	</p>
+	<div class="zivvy-proof-grid">
+		<article>
+			<h3>{{ _("Public pricing + explicit gating") }}</h3>
+			<p>{{ _("Plan boundaries and paid capabilities are visible before signup, reducing surprise friction later.") }}</p>
+		</article>
+		<article>
+			<h3>{{ _("Merchant of record billing") }}</h3>
+			<p>{{ _("Checkout and portal are handled through Polar with tenant-scoped metadata and server-side checks.") }}</p>
+		</article>
+		<article>
+			<h3>{{ _("Tenant-aware access controls") }}</h3>
+			<p>{{ _("Roles, seat allowances, and plan-level permissions are enforced per workspace for safer scale.") }}</p>
+		</article>
+	</div>
+</section>
+
+<section class="zivvy-section">
+	<p class="zivvy-section__eyebrow">{{ _("Signup friction killer FAQ") }}</p>
+	<h2>{{ _("Answers teams ask before creating an account.") }}</h2>
+	<div class="zivvy-faq-grid">
+		<article class="zivvy-faq-card">
+			<h3>{{ _("Can I start without a sales call?") }}</h3>
+			<p>{{ _("Yes. Start on Free from /login#signup and invite up to your soft seat cap immediately.") }}</p>
+		</article>
+		<article class="zivvy-faq-card">
+			<h3>{{ _("When do I need to upgrade?") }}</h3>
+			<p>{{ _("Upgrade when your team needs paid workflows like inventory barcode operations, deeper finance, or advanced operations modules.") }}</p>
+		</article>
+		<article class="zivvy-faq-card">
+			<h3>{{ _("How does billing work?") }}</h3>
+			<p>{{ _("Billing is per active seat. Checkout and invoice management happen via Polar from your Billing page.") }}</p>
+		</article>
+		<article class="zivvy-faq-card">
+			<h3>{{ _("Can we choose region/data residency preference?") }}</h3>
+			<p>{{ _("Yes. Select India, EU, or US at signup. The preference is saved to your tenant profile for residency planning.") }}</p>
+		</article>
+		<article class="zivvy-faq-card">
+			<h3>{{ _("Is each workspace isolated?") }}</h3>
+			<p>{{ _("Yes. Zivvy is tenant-aware: users, plan checks, and seat controls are scoped to your workspace.") }}</p>
+		</article>
+		<article class="zivvy-faq-card">
+			<h3>{{ _("Who do we contact for onboarding help?") }}</h3>
+			<p>{{ _("Reach the team at contact@vestcodes.com for onboarding, billing questions, and production rollout guidance.") }}</p>
+		</article>
+	</div>
+</section>
+
+<section class="zivvy-final-cta">
+	<h2>{{ _("Start free today, upgrade only when value is proven.") }}</h2>
+	<p>{{ _("Create your workspace now, run your first workflow, and move to Pro or Business in-product when your team needs deeper controls.") }}</p>
+	<div class="zivvy-final-cta__actions">
+		<a class="zivvy-btn zivvy-btn--primary zivvy-btn--large" href="/login#signup" data-zivvy-event="cta_start_free">{{ _("Create free workspace") }}</a>
+		<a class="zivvy-btn zivvy-btn--ghost zivvy-btn--large" href="/pricing" data-zivvy-event="cta_see_pricing">{{ _("Review pricing first") }}</a>
+	</div>
+</section>
+{% endblock %}

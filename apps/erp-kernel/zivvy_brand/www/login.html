@@ -1,0 +1,273 @@
+{% extends "templates/web.html" %}
+{# Frappe v15 has no login macros.html — overlay copy under zivvy_brand/templates #}
+{% from "templates/includes/login/macros.html" import alert_banner %}
+
+{% block navbar %}{% endblock %}
+{% block footer %}{% endblock %}
+{% block sidebar %}{% endblock %}
+
+{% block title %}{{ _("Sign In") }} · Zivvy{% endblock %}
+
+{% set zivvy_logo = "/assets/zivvy_brand/images/zivvy-logo.svg" %}
+
+{% macro email_login_body() -%}
+{% if not disable_user_pass_login or (ldap_settings and ldap_settings.enabled) %}
+<div class="page-card-body">
+	{{ alert_banner("error") }}
+	<div class="form-group">
+		<label class="form-label" for="login_email">{{ login_label or _("Email") }}</label>
+		<div class="email-field">
+			<input type="text" id="login_email" class="form-control"
+				placeholder="{% if login_name_placeholder %}{{ login_name_placeholder }}{% else %}{{ _('jane@example.com') }}{% endif %}"
+				required autofocus autocomplete="username">
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="form-label" for="login_password">{{ _("Password") }}</label>
+		<div class="password-field">
+			<input type="password" id="login_password" class="form-control" placeholder="••••••••"
+				autocomplete="current-password" required>
+			{# v15 login.js toggles via .text("Show"/"Hide") on this control #}
+			<span toggle="#login_password" class="toggle-password text-muted">{{ _("Show") }}</span>
+		</div>
+		{% if not disable_user_pass_login %}
+		<p class="forgot-password-message">
+			<a href="#forgot">{{ _("Forgot password?") }}</a>
+		</p>
+		{% endif %}
+	</div>
+</div>
+{% endif %}
+<div class="page-card-actions">
+	{% if not disable_user_pass_login %}
+	{# btn-primary required by Frappe v15 login.set_status() #}
+	<button class="btn btn-primary btn-block btn-login" type="submit">
+		{{ _("Continue") }}</button>
+	{% endif %}
+	{% if ldap_settings and ldap_settings.enabled %}
+	<button class="btn btn-primary btn-block btn-ldap-login" type="button">
+		{{ _("Login with LDAP") }}</button>
+	{% endif %}
+	{% if login_with_email_link %}
+	<a href="#login-with-email-link" class="btn btn-default btn-block btn-login-option btn-login-with-email-link">
+		{{ _("Login with Email Link") }}</a>
+	{% endif %}
+	{% if social_login %}
+	<div class="social-logins text-center">
+		<div class="social-login-buttons">
+			{% for provider in provider_logins %}
+			<div class="login-button-wrapper">
+				<a href="{{ provider.auth_url }}"
+					class="btn btn-default btn-block btn-login-option btn-{{ provider.name }}">
+					{% if provider.icon %}
+						{{ provider.icon }}
+					{% endif %}
+					{{ _("Login with {0}").format(provider.provider_name) }}</a>
+			</div>
+			{% endfor %}
+		</div>
+	</div>
+	{% endif %}
+</div>
+{% endmacro %}
+
+{% block head_include %}
+{{ include_style('login.bundle.css') }}
+<link rel="stylesheet" href="/assets/zivvy_brand/css/zivvy_legal.css?v=20260723-revamp">
+<link rel="icon" href="/assets/zivvy_brand/images/zivvy-favicon.svg" type="image/svg+xml">
+<meta name="robots" content="{{ robots_meta or 'noindex, nofollow' }}">
+<meta name="description" content="{{ meta_description or 'Sign in to Zivvy — CRM and operations for growing teams. https://zivvy.xyz/login' }}">
+<link rel="canonical" href="{{ canonical_url or 'https://zivvy.xyz/login' }}">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Zivvy">
+<meta property="og:title" content="Sign In · Zivvy">
+<meta property="og:description" content="{{ meta_description or 'Sign in to Zivvy.' }}">
+<meta property="og:url" content="{{ canonical_url or 'https://zivvy.xyz/login' }}">
+<meta property="og:image" content="{{ og_image or 'https://zivvy.xyz/assets/zivvy_brand/images/zivvy-logo.png' }}">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Sign In · Zivvy">
+<meta name="twitter:description" content="{{ meta_description or 'Sign in to Zivvy.' }}">
+{% include "templates/includes/posthog_boot.html" %}
+<style>
+	body { --logo: url("{{ zivvy_logo }}"); }
+</style>
+{% endblock %}
+
+{% macro logo_section(title=null, subtitle=null) %}
+<div class="page-card-head">
+	<img class="app-logo" src="{{ zivvy_logo }}" alt="Zivvy">
+	{% if title %}
+	<h4>{{ _(title) }}</h4>
+	{% else %}
+	<h4>{{ _('Sign In') }}</h4>
+	{% endif %}
+	{% if subtitle %}
+	<p class="page-card-subtitle">{{ _(subtitle) }}</p>
+	{% endif %}
+</div>
+{% endmacro %}
+
+{% block page_content %}
+<script>document.body.classList.add("zivvy-login");</script>
+<div class="zivvy-login-shell">
+	<div class="zivvy-login-layout">
+		<aside class="zivvy-login-story">
+			<div class="zivvy-login-story__brand">{{ _("Zivvy workspace access") }}</div>
+			<h1>{{ _("Welcome back. Keep sales, operations, and billing in one flow.") }}</h1>
+			<p>
+				{{ _("Zivvy is built for founder-led and ops-led teams that want a low-friction path from signup to daily execution.") }}
+			</p>
+			<ul class="zivvy-login-story__list">
+				<li>{{ _("Create a workspace on Free first — no paid commitment required.") }}</li>
+				<li>{{ _("Choose datacenter preference during signup (India, EU, or US).") }}</li>
+				<li>{{ _("Upgrade in-product when you need barcode, deeper finance, or advanced operations.") }}</li>
+			</ul>
+			<div class="zivvy-login-story__meta">
+				<span class="zivvy-login-story__chip">{{ _("Multi-tenant") }}</span>
+				<span class="zivvy-login-story__chip">{{ _("Per-seat billing") }}</span>
+				<span class="zivvy-login-story__chip">{{ _("Plan-aware access") }}</span>
+				<span class="zivvy-login-story__chip">{{ _("Start in minutes") }}</span>
+			</div>
+		</aside>
+		<div class="zivvy-login-panel">
+		<div class="zivvy-lockup">
+			<img src="{{ zivvy_logo }}" alt="Zivvy">
+			<p class="brand-name">Zivvy</p>
+		</div>
+
+		<noscript>
+			<div class="text-center my-5 page-card">
+				<h4>{{ _("Javascript is disabled on your browser") }}</h4>
+				<p class="text-muted">
+					{{ _("You need to enable JavaScript for your app to work.") }}
+				</p>
+			</div>
+		</noscript>
+
+		<section class="for-login">
+			<div class="login-content page-card">
+				{{ logo_section(_('Sign In'), _('Welcome! Please sign in to continue.')) }}
+				<form class="form-signin form-login" role="form">
+					{{ email_login_body() }}
+				</form>
+				{%- if not disable_signup and not disable_user_pass_login -%}
+				<div class="text-center sign-up-message">
+					{{ _("Don't have an account?") }}
+					<a href="#signup">{{ _("Sign up") }}</a>
+				</div>
+				{%- endif -%}
+			</div>
+		</section>
+
+		{%- if social_login -%}
+		<section class="for-email-login">
+			<div class="login-content page-card">
+				{{ logo_section(_('Sign In'), _('Welcome! Please sign in to continue.')) }}
+				<form class="form-signin form-login" role="form">
+					{{ email_login_body() }}
+				</form>
+				{%- if not disable_signup and not disable_user_pass_login -%}
+				<div class="text-center sign-up-message">
+					{{ _("Don't have an account?") }}
+					<a href="#signup">{{ _("Sign up") }}</a>
+				</div>
+				{%- endif -%}
+			</div>
+		</section>
+		{%- endif -%}
+
+		<section class='for-signup {{ "signup-disabled" if disable_signup else "" }}'>
+			<div class="login-content page-card">
+				{{ logo_section(_('Sign Up'), _("Create your workspace in under 2 minutes.")) }}
+				<p class="zivvy-signup-hint">{{ _("Use your work email, add an optional company name, and choose your datacenter preference before continuing.") }}</p>
+				{%- if not disable_signup -%}
+				{# HTML from frappe.www.login.get_context (via www/login.py) #}
+				{{ signup_form_template }}
+				{%- else -%}
+				<div class="page-card-head mb-2">
+					<span class="indicator gray">{{ _("Signup Disabled") }}</span>
+					<p class="text-muted text-normal sign-up-message mt-1 mb-8">{{ _("Signups have been disabled for this website.") }}</p>
+					<div><a href="/" class="btn btn-primary btn-block">{{ _("Home") }}</a></div>
+				</div>
+				{%- endif -%}
+			</div>
+		</section>
+
+		<section class="for-forgot">
+			<div class="login-content page-card">
+				{{ logo_section(_('Forgot Password?'), _("Please enter your email, we'll send you password reset link")) }}
+				<form class="form-signin form-forgot hide" role="form">
+					<div class="page-card-body">
+						{{ alert_banner("success") }}
+						{{ alert_banner("error") }}
+						<div class="form-group">
+							<label class="form-label" for="forgot_email">{{ _("Email") }}</label>
+							<div class="email-field">
+								<input type="email" id="forgot_email" class="form-control"
+									placeholder="{{ _('jane@example.com') }}" required autofocus autocomplete="username">
+							</div>
+						</div>
+					</div>
+					<div class="page-card-actions">
+						<button class="btn btn-primary btn-block btn-forgot" type="submit">
+							{{ _("Send Link") }}</button>
+					</div>
+				</form>
+				<div class="text-center sign-up-message">
+					<a href="#login">{{ _("Back to sign in") }}</a>
+				</div>
+			</div>
+		</section>
+
+		<section class="for-login-with-email-link">
+			<div class="login-content page-card">
+				{{ logo_section(_('Sign In'), _('Welcome! Please sign in to continue.')) }}
+				<form class="form-signin form-login-with-email-link hide" role="form">
+					<div class="page-card-body">
+						{{ alert_banner("success", _("Please check your email.")) }}
+						{{ alert_banner("error") }}
+						<div class="form-group">
+							<label class="form-label" for="login_with_email_link_email">{{ _("Email") }}</label>
+							<div class="email-field">
+								<input type="email" id="login_with_email_link_email" class="form-control"
+									placeholder="{{ _('jane@example.com') }}" required autofocus autocomplete="username">
+							</div>
+						</div>
+					</div>
+					<div class="page-card-actions">
+						<button class="btn btn-primary btn-block btn-login-with-email-link" type="submit">
+							{{ _("Send login link") }}</button>
+						<a href="#login" class="btn btn-default btn-block btn-login-option">
+							{{ _("Login with password") }}</a>
+					</div>
+				</form>
+				{%- if not disable_signup -%}
+				<div class="text-center sign-up-message">
+					{{ _("Don't have an account?") }}
+					<a href="#signup">{{ _("Sign up") }}</a>
+				</div>
+				{%- endif -%}
+			</div>
+		</section>
+
+		<p class="zivvy-login-footnote">
+			{{ _("Powered by") }}
+			<a href="https://zivvy.xyz" target="_blank" rel="noopener">Zivvy</a>
+			<span class="zivvy-login-legal">
+				· <a href="https://zivvy.xyz/home">{{ _("Home") }}</a>
+				· <a href="https://zivvy.xyz/terms">{{ _("Terms") }}</a>
+				· <a href="https://zivvy.xyz/privacy">{{ _("Privacy") }}</a>
+				· <a href="https://zivvy.xyz/cookies">{{ _("Cookies") }}</a>
+				· <a href="https://zivvy.xyz/pricing">{{ _("Pricing") }}</a>
+			</span>
+		</p>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>{% include "templates/includes/login/login.js" %}</script>
+<script src="/assets/zivvy_brand/js/zivvy_signup.js?v=20260723-revamp"></script>
+<script src="/assets/zivvy_brand/js/zivvy_cookie_banner.js"></script>
+{% endblock %}

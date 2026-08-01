@@ -1,0 +1,385 @@
+{
+  "name": "Zivvy Projects — Task / Timesheet Updates",
+  "meta": {
+    "templateCredsSetupCompleted": false,
+    "description": "Task/timesheet/project changes → project Slack."
+  },
+  "tags": [
+    {
+      "name": "zivvy"
+    },
+    {
+      "name": "projects"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "9e5ae512-55f8-45b4-8404-a622c373e712",
+      "name": "Setup",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        20,
+        -80
+      ],
+      "parameters": {
+        "content": "## Setup (read first)\n\n### n8n (per docs.n8n.io)\n1. **Import** this JSON: Menu → Import from File\n2. Publish the workflow so the **Production** Webhook URL is active\n   (Webhook node → toggle Production URL)\n3. Create n8n **Variable** `ZIVVY_WEBHOOK_SECRET` = your Zivvy webhook secret\n4. Create credential **Zivvy API (Bearer zk_live_…)**\n   - Type: Header Auth\n   - Name: `Authorization`\n   - Value: `Bearer zk_live_YOUR_KEY`\n5. Optional: Variable `SLACK_WEBHOOK_URL` for Slack Incoming Webhook\n\n### Zivvy\n1. Settings → Developer → API Keys → create `zk_live_` key\n2. Create webhook pointing at this workflow's **Production** URL\n3. Subscribe to the events listed in the yellow sticky\n4. Deliveries must return **2xx within ~5s** — this flow acks immediately after signature check\n\n### Signature (production truth)\n`X-Zivvy-Signature: sha256=<hmac_sha256(secret, raw_body)>`\nSee `zivvy_brand/api/webhooks.py` — not the Stripe-style marketing snippet.",
+        "width": 480,
+        "height": 560,
+        "color": 4
+      }
+    },
+    {
+      "id": "0fe6e099-4e31-4b46-8ba4-067dd4e4a5b8",
+      "name": "Events",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        560,
+        -80
+      ],
+      "parameters": {
+        "content": "## Projects\n\nTask/timesheet/project changes → project Slack.\n\n### Subscribe in Zivvy webhook\n- `tasks.updated`\n- `tasks.created`\n- `timesheets.submitted`\n- `projects.updated`\n\nWildcard also works: `tasks.*`",
+        "width": 400,
+        "height": 340,
+        "color": 5
+      }
+    },
+    {
+      "id": "defeae6a-0c61-4ea1-966e-2cf22c742836",
+      "name": "Zivvy Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        240,
+        360
+      ],
+      "webhookId": "883acb83-0467-4696-b2d9-97ccbe797c01",
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "zivvy/projects",
+        "responseMode": "onReceived",
+        "responseData": "firstEntryJson",
+        "options": {
+          "rawBody": true,
+          "ignoreBots": true,
+          "responseCode": 200
+        }
+      }
+    },
+    {
+      "id": "f547df95-d157-4707-af0f-6c5d6967c84b",
+      "name": "Verify Zivvy Signature",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        500,
+        360
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "/**\n * Verify Zivvy webhook HMAC.\n * Production (zivvy_brand/api/webhooks.py):\n *   signature = HMAC_SHA256(secret, raw_body_bytes).hexdigest()\n *   header    = \"sha256=\" + signature\n *\n * Set env ZIVVY_WEBHOOK_SECRET (n8n → Settings → Variables)\n * or edit SECRET below for local tests only.\n *\n * Docs: https://docs.n8n.io/code/code-node/\n *       https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.webhook/\n */\nconst crypto = require('crypto');\n\nconst SECRET = (typeof $env !== 'undefined' && $env.ZIVVY_WEBHOOK_SECRET)\n  ? $env.ZIVVY_WEBHOOK_SECRET\n  : 'CHANGE_ME_ZIVVY_WEBHOOK_SECRET';\n\nif (!SECRET || SECRET.startsWith('CHANGE_ME')) {\n  throw new Error('Set n8n variable ZIVVY_WEBHOOK_SECRET to your Zivvy webhook signing secret.');\n}\n\nconst item = $input.first();\nconst headers = item.json.headers || {};\nconst lower = {};\nfor (const [k, v] of Object.entries(headers)) lower[String(k).toLowerCase()] = v;\n\nconst sigHeader = String(lower['x-zivvy-signature'] || '');\nconst eventHeader = String(lower['x-zivvy-event'] || '');\nconst deliveryHeader = String(lower['x-zivvy-delivery'] || '');\n\nlet rawBody = '';\nif (item.binary && item.binary.data) {\n  const bin = item.binary.data;\n  rawBody = Buffer.from(bin.data, bin.encoding || 'base64').toString('utf8');\n} else if (typeof item.json.body === 'string') {\n  rawBody = item.json.body;\n} else if (item.json.body && typeof item.json.body === 'object') {\n  // Compact re-serialize — matches Python json.dumps(..., separators=(',', ':'))\n  rawBody = JSON.stringify(item.json.body);\n} else {\n  // Some n8n versions flatten the body onto json\n  const { headers: _h, params: _p, query: _q, webhookUrl: _w, ...rest } = item.json;\n  rawBody = JSON.stringify(rest);\n}\n\nconst expected = 'sha256=' + crypto\n  .createHmac('sha256', SECRET)\n  .update(rawBody, 'utf8')\n  .digest('hex');\n\nconst a = Buffer.from(sigHeader);\nconst b = Buffer.from(expected);\nconst ok = a.length === b.length && crypto.timingSafeEqual(a, b);\n\nlet payload;\ntry {\n  payload = JSON.parse(rawBody);\n} catch {\n  payload = item.json.body || item.json;\n}\n\nif (!ok) {\n  return [{\n    json: {\n      signature_valid: false,\n      error: 'invalid_signature',\n      event: eventHeader || payload?.event,\n      delivery_id: deliveryHeader\n    }\n  }];\n}\n\nreturn [{\n  json: {\n    signature_valid: true,\n    event: eventHeader || payload.event,\n    delivery_id: deliveryHeader,\n    resource: payload.resource,\n    timestamp: payload.timestamp,\n    data: payload.data || {},\n    payload\n  }\n}];"
+      }
+    },
+    {
+      "id": "6d5d738b-7263-4c38-8438-794a8afe5e97",
+      "name": "Signature OK?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        760,
+        360
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "fd21d62c-c6a4-49dc-bce5-cd74a4f6e96e",
+              "leftValue": "={{ $json.signature_valid }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "07dfb420-e342-41ef-9723-43a26ef82636",
+      "name": "Stop — Bad Signature",
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        1000,
+        560
+      ],
+      "parameters": {
+        "errorMessage": "Zivvy webhook signature invalid"
+      }
+    },
+    {
+      "id": "81c3609b-d39d-4391-8c33-ab5f6ba5d696",
+      "name": "Event Match?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1000,
+        360
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "879dc077-fe23-4203-ab4d-ca6ab01748fb",
+              "leftValue": "={{ $json.event }}",
+              "rightValue": "tasks.updated",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "281e5ade-04ae-4691-9ec4-9c7a8ce608ae",
+              "leftValue": "={{ $json.event }}",
+              "rightValue": "tasks.created",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "3dd20b49-1c09-4c1a-9542-2876d2ede16f",
+              "leftValue": "={{ $json.event }}",
+              "rightValue": "timesheets.submitted",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "48719a3e-0e57-4ed0-b32f-7c65be65c579",
+              "leftValue": "={{ $json.event }}",
+              "rightValue": "projects.updated",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "ccff2d96-545a-4079-9733-5a7fc64625b9",
+      "name": "Skip Unmatched Event",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1240,
+        560
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "e169021e-c5e2-4ce4-9d6c-26378cc55bcf",
+      "name": "Build Notification",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1480,
+        360
+      ],
+      "parameters": {
+        "mode": "manual",
+        "duplicateItem": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e1da802a-4ed5-443a-984e-737ecfae0b3b",
+              "name": "text",
+              "value": "={{ '• *' + $json.event + '*\\n• Doc: `' + ($json.data.name || '') + '`\\n• Customer/Supplier: ' + ($json.data.customer || $json.data.supplier || '—') + '\\n• Employee: ' + ($json.data.employee || '—') + '\\n• Status: ' + ($json.data.status || '—') + '\\n• Total: ' + ($json.data.grand_total || '—') + '\\n• Area: Projects' }}",
+              "type": "string"
+            },
+            {
+              "id": "e85dbf02-9554-4fb5-8ba4-dd01bea76389",
+              "name": "area",
+              "value": "Projects",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "2d47c7de-d884-48dd-a430-cead3a2e792f",
+      "name": "Post to Slack",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1720,
+        360
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SLACK_WEBHOOK_URL }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { text: $json.text, blocks: $json.blocks || undefined } }}",
+        "options": {
+          "timeout": 10000,
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          }
+        }
+      },
+      "continueOnFail": true
+    },
+    {
+      "id": "f15e35f8-5a09-4fcd-bc0e-1ea49cd12aef",
+      "name": "Enrich from Zivvy API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1480,
+        200
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "={{ 'https://api.zivvy.xyz/v1/' + ($json.resource) + '/' + encodeURIComponent($json.data.name) }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          },
+          "timeout": 10000
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "ZIVVY_API_HEADER_AUTH",
+          "name": "Zivvy API (Bearer zk_live_…)"
+        }
+      },
+      "continueOnFail": true
+    }
+  ],
+  "connections": {
+    "Zivvy Webhook": {
+      "main": [
+        [
+          {
+            "node": "Verify Zivvy Signature",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verify Zivvy Signature": {
+      "main": [
+        [
+          {
+            "node": "Signature OK?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Signature OK?": {
+      "main": [
+        [
+          {
+            "node": "Event Match?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Stop — Bad Signature",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Event Match?": {
+      "main": [
+        [
+          {
+            "node": "Build Notification",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Enrich from Zivvy API",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Skip Unmatched Event",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Notification": {
+      "main": [
+        [
+          {
+            "node": "Post to Slack",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": ""
+  },
+  "pinData": {},
+  "versionId": "83b283f6-3e44-4560-b52d-bb00cf1cb381"
+}

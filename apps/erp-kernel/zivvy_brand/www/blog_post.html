@@ -1,0 +1,39 @@
+{% extends "templates/marketing/base.html" %}
+
+{% block marketing_content %}
+<header class="zivvy-page-hero">
+	<div class="zivvy-page-hero__inner" style="max-width:720px;">
+		<p style="margin:0 0 0.5rem;"><a href="/blog" style="color:#4f46e5;text-decoration:none;font-weight:600;">← {{ _("Blog") }}</a></p>
+		<h1>{{ post.title }}</h1>
+		<p class="zivvy-blog-post__meta" style="margin-top:0.75rem;">{{ post.date }} · Zivvy</p>
+	</div>
+</header>
+
+<article class="zivvy-blog-post">
+	<div class="prose">
+		{% for block in post.body %}
+			{% if block[0] == "h2" %}
+				<h2>{{ block[1] }}</h2>
+			{% elif block[0] == "p" %}
+				<p>{{ block[1] }}</p>
+			{% elif block[0] == "ul" %}
+				<ul>
+					{% for item in block[1] %}
+					<li>{{ item }}</li>
+					{% endfor %}
+				</ul>
+			{% endif %}
+		{% endfor %}
+	</div>
+	{% if more_posts %}
+	<section style="margin-top:3rem;padding-top:1.5rem;border-top:1px solid #e2e8f0;">
+		<h2 style="font-family:Sora,sans-serif;font-size:1.15rem;">{{ _("More from the blog") }}</h2>
+		<ul style="padding-left:1.1rem;line-height:1.7;">
+			{% for p in more_posts %}
+			<li><a href="/blog/{{ p.slug }}">{{ p.title }}</a></li>
+			{% endfor %}
+		</ul>
+	</section>
+	{% endif %}
+</article>
+{% endblock %}

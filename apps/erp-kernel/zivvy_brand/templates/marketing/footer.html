@@ -1,0 +1,32 @@
+<footer class="zivvy-footer">
+	<div class="zivvy-footer__inner">
+		<div class="zivvy-footer__brand">
+			<p class="zivvy-footer__lockup">Zivvy</p>
+			<p class="zivvy-footer__tag">{{ _("A multi-tenant operating system for founders and ops teams who want one source of truth for sales, cash, and execution.") }}</p>
+			<p class="zivvy-footer__entity">Vestcodes Co · India · <a href="https://zivvy.xyz">zivvy.xyz</a> · <a href="mailto:contact@vestcodes.com">contact@vestcodes.com</a></p>
+		</div>
+		<div class="zivvy-footer__cols">
+			<div>
+				<h3>{{ _("Product") }}</h3>
+				<a href="/features">{{ _("Features") }}</a>
+				<a href="/pricing">{{ _("Pricing") }}</a>
+				<a href="/blog">{{ _("Blog") }}</a>
+				<a href="/login#signup" data-zivvy-event="cta_start_free">{{ _("Start free") }}</a>
+			</div>
+			<div>
+				<h3>{{ _("Legal") }}</h3>
+				<a href="/terms">{{ _("Terms") }}</a>
+				<a href="/privacy">{{ _("Privacy") }}</a>
+				<a href="/cookies">{{ _("Cookies") }}</a>
+				<a href="/acceptable-use">{{ _("Acceptable Use") }}</a>
+			</div>
+			<div>
+				<h3>{{ _("Company") }}</h3>
+				<a href="/contact">{{ _("Contact") }}</a>
+				<a href="https://vestcodes.com" target="_blank" rel="noopener">Vestcodes</a>
+				<a href="/app/billing">{{ _("Billing") }}</a>
+			</div>
+		</div>
+	</div>
+	<p class="zivvy-footer__copy">© {{ frappe.utils.nowdate()[:4] }} Vestcodes Co. {{ _("All rights reserved.") }}</p>
+</footer>

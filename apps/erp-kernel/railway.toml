@@ -1,0 +1,16 @@
+# Railway project: zivvy (organization: Vestcodes — NEVER Actimi / Ovok)
+# Dashboard: https://railway.com/project/caac48aa-d4a4-4d0a-966a-570713c417cb
+#
+# Apply to the `web` service (Dockerfile build). worker/scheduler can reuse
+# the same image with different start commands when you scale out later.
+
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "deploy/Dockerfile"
+
+[deploy]
+healthcheckPath = "/api/method/ping"
+# First boot may create the site (ERPNext install); entrypoint serves a temp ping stub meanwhile.
+healthcheckTimeout = 600
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 10

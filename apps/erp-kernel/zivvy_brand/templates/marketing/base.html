@@ -1,0 +1,46 @@
+{% extends "templates/web.html" %}
+
+{% block navbar %}{% endblock %}
+{% block footer %}{% endblock %}
+{% block sidebar %}{% endblock %}
+
+{% block title %}{{ page_title or "Zivvy" }} · Zivvy{% endblock %}
+
+{% block head_include %}
+<link rel="stylesheet" href="/assets/zivvy_brand/css/zivvy_marketing.css?v=20260723-revamp">
+<link rel="icon" href="/assets/zivvy_brand/images/zivvy-favicon.svg" type="image/svg+xml">
+{% if robots_meta %}<meta name="robots" content="{{ robots_meta }}">{% endif %}
+<meta name="description" content="{{ meta_description or 'Zivvy — modern business software for growing teams in India and beyond.' }}">
+<link rel="canonical" href="{{ canonical_url or 'https://zivvy.xyz/home' }}">
+<meta property="og:type" content="{{ og_type or 'website' }}">
+<meta property="og:site_name" content="Zivvy">
+<meta property="og:title" content="{{ page_title or 'Zivvy' }} · Zivvy">
+<meta property="og:description" content="{{ meta_description or 'Zivvy — modern business software for growing teams.' }}">
+<meta property="og:url" content="{{ canonical_url or 'https://zivvy.xyz/home' }}">
+<meta property="og:image" content="{{ og_image or 'https://zivvy.xyz/assets/zivvy_brand/images/zivvy-logo.png' }}">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="{{ page_title or 'Zivvy' }} · Zivvy">
+<meta name="twitter:description" content="{{ meta_description or 'Zivvy — modern business software for growing teams.' }}">
+<meta name="twitter:image" content="{{ og_image or 'https://zivvy.xyz/assets/zivvy_brand/images/zivvy-logo.png' }}">
+{% if json_ld_blocks %}
+{% for block in json_ld_blocks %}
+<script type="application/ld+json">{{ block|safe }}</script>
+{% endfor %}
+{% endif %}
+{% include "templates/includes/posthog_boot.html" %}
+{% endblock %}
+
+{% block page_content %}
+<script>document.body.classList.add("zivvy-marketing");</script>
+<div class="zivvy-mkt">
+	{% include "templates/marketing/nav.html" %}
+	<main class="zivvy-mkt__main">
+		{% block marketing_content %}{% endblock %}
+	</main>
+	{% include "templates/marketing/footer.html" %}
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="/assets/zivvy_brand/js/zivvy_marketing.js?v=20260723-revamp"></script>
+{% endblock %}

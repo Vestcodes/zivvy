@@ -1,0 +1,17 @@
+node_modules
+.next
+out
+.env.local
+.env.*.local
+*.log
+.DS_Store
+.vercel
+.env*
+!.env.example
+!.env.template
+
+# Video production intermediates (keep final mp4/webm/poster)
+public/videos/raw/
+public/videos/voiceover/
+scripts/.cache/
+zapier-templates/integration/node_modules/

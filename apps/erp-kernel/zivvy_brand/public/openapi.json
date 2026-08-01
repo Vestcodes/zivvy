@@ -1,0 +1,214 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Zivvy Customer API",
+    "description": "Intentional customer-facing allowlist for https://zivvy.xyz. Admin Polar setup, webhooks, and demo seeding are excluded.",
+    "version": "1.0.0",
+    "contact": {
+      "name": "Vestcodes",
+      "email": "contact@vestcodes.com",
+      "url": "https://zivvy.xyz"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://zivvy.xyz",
+      "description": "Production"
+    }
+  ],
+  "tags": [
+    { "name": "Guest" },
+    { "name": "Customer" },
+    { "name": "Billing" }
+  ],
+  "paths": {
+    "/api/method/ping": {
+      "get": {
+        "tags": ["Guest"],
+        "summary": "Health check",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "pong",
+            "content": {
+              "application/json": {
+                "example": { "message": "pong" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/method/zivvy_brand.billing.api.get_public_pricing": {
+      "get": {
+        "tags": ["Guest"],
+        "summary": "Public pricing matrix",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Free / Pro / Business feature matrix"
+          }
+        }
+      }
+    },
+    "/api/method/zivvy_brand.analytics.contact.submit_contact": {
+      "post": {
+        "tags": ["Guest"],
+        "summary": "Contact form",
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["full_name", "email", "message"],
+                "properties": {
+                  "full_name": { "type": "string" },
+                  "email": { "type": "string", "format": "email" },
+                  "message": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "{ ok: true }" }
+        }
+      }
+    },
+    "/api/method/zivvy_brand.marketing.api.send_contact_message": {
+      "post": {
+        "tags": ["Guest"],
+        "summary": "Alternate contact form",
+        "security": [],
+        "responses": {
+          "200": { "description": "{ ok: true }" }
+        }
+      }
+    },
+    "/api/method/zivvy_brand.auth.signup.sign_up": {
+      "post": {
+        "tags": ["Guest"],
+        "summary": "Website signup — Tenant + Company + Desk user",
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["email", "full_name", "zivvy_datacenter"],
+                "properties": {
+                  "email": { "type": "string" },
+                  "full_name": { "type": "string" },
+                  "company_name": {
+                    "type": "string",
+                    "description": "Optional. Becomes Zivvy Tenant name + Company."
+                  },
+                  "redirect_to": { "type": "string" },
+                  "zivvy_datacenter": {
+                    "type": "string",
+                    "enum": ["india", "eu", "us"],
+                    "description": "Data residency preference. Routing may still be single-region today; preference is stored for future multi-region routing and compliance."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Signup result tuple" }
+        }
+      }
+    },
+    "/api/method/zivvy_brand.billing.api.get_my_plan": {
+      "get": {
+        "tags": ["Customer"],
+        "summary": "Effective plan for current user's tenant (per-tenant seats)",
+        "security": [{ "ApiKeyAuth": [] }, { "SessionCookie": [] }],
+        "responses": {
+          "200": { "description": "Plan status including tenant_id / tenancy_mode (no Polar secrets)" }
+        }
+      }
+    },
+    "/api/method/zivvy_brand.billing.api.get_billing_status": {
+      "get": {
+        "tags": ["Billing"],
+        "summary": "Billing status + Polar readiness",
+        "description": "System Manager, or demo account for status. No secrets returned.",
+        "security": [{ "ApiKeyAuth": [] }, { "SessionCookie": [] }],
+        "responses": {
+          "200": { "description": "Billing status" }
+        }
+      }
+    },
+    "/api/method/zivvy_brand.billing.api.create_checkout": {
+      "post": {
+        "tags": ["Billing"],
+        "summary": "Create Polar checkout (System Manager)",
+        "security": [{ "ApiKeyAuth": [] }, { "SessionCookie": [] }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["plan"],
+                "properties": {
+                  "plan": { "type": "string", "enum": ["pro", "business"] },
+                  "seats": { "type": "integer", "minimum": 1 }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Checkout URL" }
+        }
+      }
+    },
+    "/api/method/zivvy_brand.billing.api.create_portal_session": {
+      "post": {
+        "tags": ["Billing"],
+        "summary": "Polar customer portal (System Manager)",
+        "security": [{ "ApiKeyAuth": [] }, { "SessionCookie": [] }],
+        "responses": {
+          "200": { "description": "Portal URL" }
+        }
+      }
+    },
+    "/api/resource/{Doctype}": {
+      "get": {
+        "tags": ["Customer"],
+        "summary": "List resources (role + plan gated)",
+        "security": [{ "ApiKeyAuth": [] }, { "SessionCookie": [] }],
+        "parameters": [
+          {
+            "name": "Doctype",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Resource list" }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "Authorization",
+        "description": "token api_key:api_secret"
+      },
+      "SessionCookie": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "sid"
+      }
+    }
+  }
+}

@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="bgBefore" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0f172a"/>
+      <stop offset="1" stop-color="#1e293b"/>
+    </linearGradient>
+    <linearGradient id="borderBefore" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#334155"/>
+      <stop offset="1" stop-color="#1e293b"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="400" fill="url(#bgBefore)"/>
+  <g font-family="system-ui, -apple-system, sans-serif">
+    <text x="24" y="34" fill="#64748b" font-size="10" font-weight="600" letter-spacing="1.5">BEFORE</text>
+    <text x="24" y="60" fill="#e2e8f0" font-size="18" font-weight="700">Six tools. Five contracts. One tenant per BU.</text>
+    <g transform="translate(24,84)">
+      <g>
+        <rect width="168" height="86" rx="10" fill="#0b1220" stroke="url(#borderBefore)"/>
+        <text x="14" y="26" fill="#f59e0b" font-size="10" font-weight="700" letter-spacing="1">SALES CRM</text>
+        <text x="14" y="46" fill="#94a3b8" font-size="11">Custom OAuth · webhook v1</text>
+        <text x="14" y="64" fill="#64748b" font-size="10">seats: 24 · $348/mo</text>
+      </g>
+      <g transform="translate(180,0)">
+        <rect width="168" height="86" rx="10" fill="#0b1220" stroke="url(#borderBefore)"/>
+        <text x="14" y="26" fill="#ec4899" font-size="10" font-weight="700" letter-spacing="1">ACCOUNTING</text>
+        <text x="14" y="46" fill="#94a3b8" font-size="11">SFTP export · nightly</text>
+        <text x="14" y="64" fill="#64748b" font-size="10">seats: 12 · $612/mo</text>
+      </g>
+      <g transform="translate(360,0)">
+        <rect width="168" height="86" rx="10" fill="#0b1220" stroke="url(#borderBefore)"/>
+        <text x="14" y="26" fill="#38bdf8" font-size="10" font-weight="700" letter-spacing="1">WAREHOUSE</text>
+        <text x="14" y="46" fill="#94a3b8" font-size="11">SOAP · IP allow-list</text>
+        <text x="14" y="64" fill="#64748b" font-size="10">seats: 8 · $480/mo</text>
+      </g>
+    </g>
+    <g transform="translate(24,188)">
+      <g>
+        <rect width="168" height="86" rx="10" fill="#0b1220" stroke="url(#borderBefore)"/>
+        <text x="14" y="26" fill="#a78bfa" font-size="10" font-weight="700" letter-spacing="1">HR &amp; PAYROLL</text>
+        <text x="14" y="46" fill="#94a3b8" font-size="11">CSV upload · monthly</text>
+        <text x="14" y="64" fill="#64748b" font-size="10">seats: 30 · $410/mo</text>
+      </g>
+      <g transform="translate(180,0)">
+        <rect width="168" height="86" rx="10" fill="#0b1220" stroke="url(#borderBefore)"/>
+        <text x="14" y="26" fill="#34d399" font-size="10" font-weight="700" letter-spacing="1">MRP MODULE</text>
+        <text x="14" y="46" fill="#94a3b8" font-size="11">On-prem VPN · queue lag</text>
+        <text x="14" y="64" fill="#64748b" font-size="10">seats: 6 · $780/mo</text>
+      </g>
+      <g transform="translate(360,0)">
+        <rect width="168" height="86" rx="10" fill="#0b1220" stroke="url(#borderBefore)"/>
+        <text x="14" y="26" fill="#fb7185" font-size="10" font-weight="700" letter-spacing="1">SUPPORT</text>
+        <text x="14" y="46" fill="#94a3b8" font-size="11">Email polling · no signature</text>
+        <text x="14" y="64" fill="#64748b" font-size="10">seats: 10 · $240/mo</text>
+      </g>
+    </g>
+    <g transform="translate(24,296)">
+      <rect width="552" height="72" rx="10" fill="#0b1220" stroke="#334155"/>
+      <text x="16" y="26" fill="#94a3b8" font-size="11" font-weight="600">Monthly bill</text>
+      <text x="16" y="52" fill="#f87171" font-size="22" font-weight="700">$2,970</text>
+      <text x="220" y="26" fill="#94a3b8" font-size="11" font-weight="600">Time to close</text>
+      <text x="220" y="52" fill="#f87171" font-size="22" font-weight="700">11 days</text>
+      <text x="400" y="26" fill="#94a3b8" font-size="11" font-weight="600">Auth models</text>
+      <text x="400" y="52" fill="#f87171" font-size="22" font-weight="700">5</text>
+    </g>
+  </g>
+</svg>

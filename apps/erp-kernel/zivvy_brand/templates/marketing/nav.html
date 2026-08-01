@@ -1,0 +1,31 @@
+<header class="zivvy-nav">
+	<div class="zivvy-nav__inner">
+		<a class="zivvy-nav__brand" href="/home" aria-label="Zivvy home">
+			<img src="/assets/zivvy_brand/images/zivvy-logo.svg" alt="Zivvy" width="28" height="28">
+			<span class="zivvy-nav__wordmark">Zivvy</span>
+			<span class="zivvy-nav__signal">{{ _("Start free") }}</span>
+		</a>
+		<nav class="zivvy-nav__links" aria-label="Primary">
+			<a href="/features" {% if active_nav == "features" %}class="is-active"{% endif %}>{{ _("Features") }}</a>
+			<a href="/pricing" {% if active_nav == "pricing" %}class="is-active"{% endif %}>{{ _("Pricing") }}</a>
+			<a href="/blog" {% if active_nav == "blog" %}class="is-active"{% endif %}>{{ _("Blog") }}</a>
+			<a href="/contact" {% if active_nav == "contact" %}class="is-active"{% endif %}>{{ _("Contact") }}</a>
+		</nav>
+		<div class="zivvy-nav__actions">
+			<a class="zivvy-btn zivvy-btn--ghost" href="/login" data-zivvy-event="cta_login">{{ _("Sign in") }}</a>
+			<a class="zivvy-btn zivvy-btn--primary" href="/login#signup" data-zivvy-event="cta_start_free">{{ _("Start free") }}</a>
+		</div>
+		<button type="button" class="zivvy-nav__toggle" aria-expanded="false" aria-controls="zivvy-nav-drawer" data-zivvy-nav-toggle>
+			<span class="sr-only">{{ _("Menu") }}</span>
+			<span></span><span></span>
+		</button>
+	</div>
+	<div id="zivvy-nav-drawer" class="zivvy-nav__drawer" hidden>
+		<a href="/features">{{ _("Features") }}</a>
+		<a href="/pricing">{{ _("Pricing") }}</a>
+		<a href="/blog">{{ _("Blog") }}</a>
+		<a href="/contact">{{ _("Contact") }}</a>
+		<a href="/login" data-zivvy-event="cta_login">{{ _("Sign in") }}</a>
+		<a class="zivvy-btn zivvy-btn--primary" href="/login#signup" data-zivvy-event="cta_start_free">{{ _("Start free") }}</a>
+	</div>
+</header>

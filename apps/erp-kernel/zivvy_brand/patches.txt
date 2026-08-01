@@ -1,0 +1,6 @@
+[pre_model_sync]
+# Patches listed in this section will be executed before doctypes are migrated
+
+[post_model_sync]
+zivvy_brand.patches.v1_0.ensure_tenancy
+zivvy_brand.patches.v1_0.add_hotpath_indexes

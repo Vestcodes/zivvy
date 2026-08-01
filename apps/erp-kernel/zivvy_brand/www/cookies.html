@@ -1,0 +1,58 @@
+{% extends "templates/legal/legal_shell.html" %}
+
+{% block legal_body %}
+<p>
+	This Cookie Policy explains how <strong>Vestcodes Co</strong> uses cookies and
+	similar technologies on Zivvy websites, login pages, and the product interface.
+</p>
+
+<h2>1. What are cookies?</h2>
+<p>
+	Cookies are small text files stored on your device. We also use localStorage for
+	lightweight preferences such as cookie consent.
+</p>
+
+<h2>2. Types we use</h2>
+<ul>
+	<li><strong>Strictly necessary</strong> — session authentication, CSRF protection, security, load balancing. These are required for the service to function.</li>
+	<li><strong>Preferences</strong> — remember cookie consent and similar UI choices (stored in localStorage where possible).</li>
+	<li><strong>Analytics (optional)</strong> — when PostHog is enabled for a deployment, we use it to understand aggregate product and marketing usage. Analytics scripts load only after you choose <em>Accept all</em>.</li>
+</ul>
+
+<h2>3. Consent</h2>
+<p>
+	On first visit to our website/login, we show a lightweight consent banner. You can
+	accept all cookies (including optional analytics) or continue with essential-only.
+	Your choice is stored in <code>localStorage</code> under
+	<code>zivvy_cookie_consent</code>. You can clear site data in your browser to reset
+	the banner. PostHog does not load on Essential-only.
+</p>
+
+<h2>4. Domain</h2>
+<p>
+	Production cookies and sessions for Zivvy are scoped to
+	<strong>zivvy.xyz</strong> (and optionally <code>.zivvy.xyz</code> when sharing
+	across subdomains). We prefer the apex host
+	<a href="https://zivvy.xyz">https://zivvy.xyz</a>; <code>www.zivvy.xyz</code>
+	should redirect to the apex when configured.
+</p>
+
+<h2>5. Managing cookies</h2>
+<p>
+	Most browsers let you block or delete cookies via settings. Blocking strictly
+	necessary cookies may prevent login or core features from working.
+</p>
+
+<h2>6. Third parties</h2>
+<p>
+	Billing flows may redirect you to <strong>Polar</strong> (polar.sh), which sets its
+	own cookies under Polar’s policies. We do not control third-party cookies on
+	external domains.
+</p>
+
+<h2>7. Contact</h2>
+<p>
+	Questions: <a href="mailto:contact@vestcodes.com">contact@vestcodes.com</a><br>
+	See also our <a href="/privacy">Privacy Policy</a>.
+</p>
+{% endblock %}

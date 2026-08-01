@@ -1,0 +1,137 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "hash",
+ "creation": "2026-07-25 12:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "tenant",
+  "addon",
+  "status",
+  "column_break_identity",
+  "quantity",
+  "price_locked_usd",
+  "period_section",
+  "current_period_start",
+  "current_period_end",
+  "column_break_period",
+  "cancelled_at",
+  "polar_section",
+  "polar_subscription_id"
+ ],
+ "fields": [
+  {
+   "fieldname": "tenant",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Tenant",
+   "options": "Zivvy Tenant",
+   "reqd": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "addon",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Addon",
+   "options": "Zivvy Addon",
+   "reqd": 1,
+   "search_index": 1
+  },
+  {
+   "default": "trialing",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Status",
+   "options": "active\ntrialing\ncancelled\npast_due",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_identity",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "1",
+   "fieldname": "quantity",
+   "fieldtype": "Int",
+   "label": "Quantity",
+   "non_negative": 1
+  },
+  {
+   "description": "Price at time of subscription (USD).",
+   "fieldname": "price_locked_usd",
+   "fieldtype": "Currency",
+   "label": "Price Locked (USD)"
+  },
+  {
+   "fieldname": "period_section",
+   "fieldtype": "Section Break",
+   "label": "Current Period"
+  },
+  {
+   "fieldname": "current_period_start",
+   "fieldtype": "Datetime",
+   "label": "Current Period Start"
+  },
+  {
+   "fieldname": "current_period_end",
+   "fieldtype": "Datetime",
+   "label": "Current Period End"
+  },
+  {
+   "fieldname": "column_break_period",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "cancelled_at",
+   "fieldtype": "Datetime",
+   "label": "Cancelled At"
+  },
+  {
+   "fieldname": "polar_section",
+   "fieldtype": "Section Break",
+   "label": "Polar Billing"
+  },
+  {
+   "fieldname": "polar_subscription_id",
+   "fieldtype": "Data",
+   "label": "Polar Subscription ID"
+  }
+ ],
+ "links": [],
+ "modified": "2026-07-25 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Zivvy Brand",
+ "name": "Zivvy Tenant Addon",
+ "naming_rule": "Random",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "cancel": 1,
+   "read": 1,
+   "role": "Zivvy Tenant Admin"
+  }
+ ],
+ "search_fields": "tenant,addon,status",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

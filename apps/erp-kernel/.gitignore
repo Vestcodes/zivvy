@@ -1,0 +1,34 @@
+.demo-credentials.local
+.env
+.env.local
+*.local
+
+# Deps / build / caches — must stay out of Railway `up` snapshots
+node_modules/
+.pnp.*
+.yarn/
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+*.egg-info/
+.eggs/
+dist/
+build/
+.venv/
+venv/
+
+# Local QA artifacts (large PNGs break Railway code snapshots)
+e2e-screenshots/
+playwright-report/
+test-results/
+
+# Editor / OS
+.DS_Store
+.cursor/
+.idea/
+*.swp
+*.swo
+
+# Railway local pulls
+.railway-config-pull-*/

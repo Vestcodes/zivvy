@@ -1,0 +1,67 @@
+name: Performance
+
+on:
+  pull_request:
+    paths:
+      - "apps/web/**"
+      - "packages/**"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
+      - "turbo.json"
+      - ".github/workflows/performance.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: performance-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lighthouse:
+    name: Lighthouse Budget
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Enable pnpm
+        run: |
+          corepack enable
+          corepack prepare pnpm@11.6.0 --activate
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Build web
+        run: pnpm --filter @zivvy/web build
+
+      - name: Setup Chrome
+        uses: browser-actions/setup-chrome@v1
+
+      - name: Start web
+        run: |
+          pnpm --filter @zivvy/web start &
+          echo $! > /tmp/zivvy-web.pid
+
+      - name: Wait for web
+        run: pnpm dlx wait-on@latest http://127.0.0.1:3000
+
+      - name: Run Lighthouse CI
+        run: pnpm dlx @lhci/cli@latest autorun --config=apps/web/lighthouserc.cjs
+
+      - name: Stop web
+        if: always()
+        run: |
+          if [ -f /tmp/zivvy-web.pid ]; then
+            kill "$(cat /tmp/zivvy-web.pid)" || true
+          fi

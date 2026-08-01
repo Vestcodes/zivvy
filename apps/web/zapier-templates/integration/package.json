@@ -1,0 +1,23 @@
+{
+  "name": "zivvy-zapier",
+  "version": "1.0.0",
+  "description": "Zivvy Zapier Platform CLI integration — REST Hook triggers for main ERP areas + create actions.",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --testTimeout=10000",
+    "validate": "zapier validate",
+    "push": "zapier push"
+  },
+  "engines": {
+    "node": ">=18",
+    "npm": ">=9"
+  },
+  "dependencies": {
+    "zapier-platform-core": "17.9.1"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "zapier-platform-cli": "17.9.1"
+  },
+  "private": true
+}

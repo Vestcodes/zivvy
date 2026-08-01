@@ -1,0 +1,115 @@
+{
+  "name": "Zivvy Webhook Delivery",
+  "module": "Zivvy Brand",
+  "doctype": "DocType",
+  "document_type": "Other",
+  "engine": "InnoDB",
+  "field_order": [
+    "webhook",
+    "event",
+    "resource",
+    "resource_name",
+    "column_break_1",
+    "success",
+    "status_code",
+    "response_time_ms",
+    "error",
+    "zivvy_tenant",
+    "section_break_payload",
+    "request_payload",
+    "response_body"
+  ],
+  "fields": [
+    {
+      "fieldname": "webhook",
+      "fieldtype": "Link",
+      "label": "Webhook",
+      "options": "Zivvy Webhook",
+      "reqd": 1,
+      "in_list_view": 1
+    },
+    {
+      "fieldname": "event",
+      "fieldtype": "Data",
+      "label": "Event",
+      "reqd": 1,
+      "in_list_view": 1
+    },
+    {
+      "fieldname": "resource",
+      "fieldtype": "Data",
+      "label": "Resource"
+    },
+    {
+      "fieldname": "resource_name",
+      "fieldtype": "Data",
+      "label": "Resource Name"
+    },
+    {
+      "fieldname": "column_break_1",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "success",
+      "fieldtype": "Check",
+      "label": "Success",
+      "in_list_view": 1
+    },
+    {
+      "fieldname": "status_code",
+      "fieldtype": "Int",
+      "label": "Status Code",
+      "in_list_view": 1
+    },
+    {
+      "fieldname": "response_time_ms",
+      "fieldtype": "Int",
+      "label": "Response Time (ms)"
+    },
+    {
+      "fieldname": "error",
+      "fieldtype": "Small Text",
+      "label": "Error"
+    },
+    {
+      "fieldname": "zivvy_tenant",
+      "fieldtype": "Data",
+      "label": "Tenant",
+      "reqd": 1
+    },
+    {
+      "fieldname": "section_break_payload",
+      "fieldtype": "Section Break",
+      "label": "Payload",
+      "collapsible": 1
+    },
+    {
+      "fieldname": "request_payload",
+      "fieldtype": "Code",
+      "label": "Request Payload",
+      "options": "JSON",
+      "read_only": 1
+    },
+    {
+      "fieldname": "response_body",
+      "fieldtype": "Code",
+      "label": "Response Body",
+      "options": "JSON",
+      "read_only": 1
+    }
+  ],
+  "permissions": [
+    {
+      "role": "System Manager",
+      "read": 1
+    },
+    {
+      "role": "Zivvy Tenant Admin",
+      "read": 1
+    }
+  ],
+  "sort_field": "creation",
+  "sort_order": "DESC",
+  "autoname": "format:ZDEL-{#####}",
+  "naming_rule": "Expression (old style)"
+}

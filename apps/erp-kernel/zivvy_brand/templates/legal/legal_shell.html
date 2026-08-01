@@ -1,0 +1,55 @@
+{% extends "templates/web.html" %}
+
+{% block title %}{{ page_title }} · Zivvy{% endblock %}
+
+{% block head_include %}
+<link rel="stylesheet" href="/assets/zivvy_brand/css/zivvy_legal.css?v=20260723-revamp">
+<link rel="icon" href="/assets/zivvy_brand/images/zivvy-favicon.svg" type="image/svg+xml">
+<meta name="description" content="{{ meta_description or (page_title ~ ' for Zivvy by Vestcodes Co. https://zivvy.xyz') }}">
+<link rel="canonical" href="{{ canonical_url or 'https://zivvy.xyz' }}">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Zivvy">
+<meta property="og:title" content="{{ page_title }} · Zivvy">
+<meta property="og:description" content="{{ meta_description or (page_title ~ ' — Zivvy') }}">
+<meta property="og:url" content="{{ canonical_url or 'https://zivvy.xyz' }}">
+<meta property="og:image" content="{{ og_image or 'https://zivvy.xyz/assets/zivvy_brand/images/zivvy-logo.png' }}">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="{{ page_title }} · Zivvy">
+<meta name="twitter:description" content="{{ meta_description or (page_title ~ ' — Zivvy') }}">
+<meta name="twitter:image" content="{{ og_image or 'https://zivvy.xyz/assets/zivvy_brand/images/zivvy-logo.png' }}">
+{% if json_ld_blocks %}
+{% for block in json_ld_blocks %}
+<script type="application/ld+json">{{ block|safe }}</script>
+{% endfor %}
+{% endif %}
+{% include "templates/includes/posthog_boot.html" %}
+{% endblock %}
+
+{% block page_content %}
+<article class="zivvy-legal">
+	<header class="zivvy-legal__hero">
+		<p class="zivvy-legal__brand">
+			<a href="https://zivvy.xyz/home">Zivvy</a>
+			<span>· {{ _("Trust Center") }}</span>
+		</p>
+		<h1>{{ page_title }}</h1>
+		<p class="zivvy-legal__meta">{{ page_subtitle }}</p>
+	</header>
+	<div class="zivvy-legal__body">
+		{% block legal_body %}{% endblock %}
+	</div>
+	<footer class="zivvy-legal__footer">
+		<nav class="zivvy-legal__nav">
+			<a href="/terms">{{ _("Terms") }}</a>
+			<a href="/privacy">{{ _("Privacy") }}</a>
+			<a href="/cookies">{{ _("Cookies") }}</a>
+			<a href="/acceptable-use">{{ _("Acceptable Use") }}</a>
+			<a href="/pricing">{{ _("Pricing") }}</a>
+			<a href="/blog">{{ _("Blog") }}</a>
+			<a href="/home">{{ _("Home") }}</a>
+			<a href="mailto:contact@vestcodes.com">contact@vestcodes.com</a>
+		</nav>
+		<p>© {{ frappe.utils.nowdate()[:4] }} Vestcodes Co. {{ _("All rights reserved.") }} · <a href="https://zivvy.xyz">zivvy.xyz</a></p>
+	</footer>
+</article>
+{% endblock %}

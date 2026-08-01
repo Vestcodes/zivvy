@@ -1,0 +1,22 @@
+{
+  "name": "@zivvy/erp-kernel",
+  "version": "1.0.0",
+  "description": "Frappe/ERPNext kernel wrapper for Zivvy SaaS. This package owns ERP depth, not product UX.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "bench start",
+    "build": "python -m py_compile $(find zivvy_brand -name '*.py' -type f | tr '\\n' ' ')",
+    "typecheck": "python -m py_compile $(find zivvy_brand -name '*.py' -type f | tr '\\n' ' ')",
+    "lint": "python -m py_compile $(find zivvy_brand -name '*.py' -type f | tr '\\n' ' ')",
+    "test": "python -m py_compile $(find zivvy_brand -name '*.py' -type f | tr '\\n' ' ')",
+    "migrate": "bench --site ${FRAPPE_SITE:-zivvy.xyz} migrate",
+    "deploy": "railway up --detach --yes --service web"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "playwright": "^1.61.1"
+  }
+}

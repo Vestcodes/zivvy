@@ -1,0 +1,23 @@
+{% extends "templates/marketing/base.html" %}
+
+{% block marketing_content %}
+<header class="zivvy-page-hero">
+	<div class="zivvy-page-hero__inner">
+		<h1>{{ _("Blog") }}</h1>
+		<p>{{ _("Notes on CRM, plans, billing, and how growing teams use Zivvy.") }}</p>
+	</div>
+</header>
+
+<section class="zivvy-section zivvy-blog">
+	<p class="zivvy-note-card">{{ _("Short, practical notes for founders and operators — pricing, billing, CRM workflows, and plan-aware scaling.") }}</p>
+	<div class="zivvy-blog-grid">
+		{% for post in posts %}
+		<a class="zivvy-blog-card" href="/blog/{{ post.slug }}">
+			<div class="zivvy-blog-card__date">{{ post.date }}</div>
+			<h2>{{ post.title }}</h2>
+			<p>{{ post.excerpt }}</p>
+		</a>
+		{% endfor %}
+	</div>
+</section>
+{% endblock %}

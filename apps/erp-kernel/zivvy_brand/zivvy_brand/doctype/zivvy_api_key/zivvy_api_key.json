@@ -1,0 +1,128 @@
+{
+  "name": "Zivvy API Key",
+  "module": "Zivvy Brand",
+  "doctype": "DocType",
+  "document_type": "Other",
+  "engine": "InnoDB",
+  "field_order": [
+    "label",
+    "key_hash",
+    "key_preview",
+    "user",
+    "tenant",
+    "column_break_1",
+    "tier",
+    "scopes",
+    "rate_limit",
+    "enabled",
+    "section_break_2",
+    "last_used"
+  ],
+  "fields": [
+    {
+      "fieldname": "label",
+      "fieldtype": "Data",
+      "label": "Label",
+      "reqd": 1,
+      "in_list_view": 1,
+      "description": "A friendly name for this key, e.g. 'Production Integration'"
+    },
+    {
+      "fieldname": "key_hash",
+      "fieldtype": "Data",
+      "label": "Key Hash",
+      "reqd": 1,
+      "unique": 1,
+      "read_only": 1,
+      "hidden": 1,
+      "description": "SHA-256 hash of the full API key"
+    },
+    {
+      "fieldname": "key_preview",
+      "fieldtype": "Data",
+      "label": "Key Preview",
+      "read_only": 1,
+      "in_list_view": 1,
+      "description": "First and last few characters for identification"
+    },
+    {
+      "fieldname": "user",
+      "fieldtype": "Link",
+      "label": "User",
+      "options": "User",
+      "reqd": 1,
+      "in_list_view": 1
+    },
+    {
+      "fieldname": "tenant",
+      "fieldtype": "Data",
+      "label": "Tenant",
+      "description": "Zivvy tenant name for isolation"
+    },
+    {
+      "fieldname": "column_break_1",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "tier",
+      "fieldtype": "Select",
+      "label": "Tier",
+      "options": "free\npro\nbusiness",
+      "default": "free",
+      "in_list_view": 1
+    },
+    {
+      "fieldname": "scopes",
+      "fieldtype": "Data",
+      "label": "Scopes",
+      "default": "read,write",
+      "description": "Comma-separated: read, write, admin"
+    },
+    {
+      "fieldname": "rate_limit",
+      "fieldtype": "Int",
+      "label": "Rate Limit (req/min)",
+      "default": "100"
+    },
+    {
+      "fieldname": "enabled",
+      "fieldtype": "Check",
+      "label": "Enabled",
+      "default": "1",
+      "in_list_view": 1
+    },
+    {
+      "fieldname": "section_break_2",
+      "fieldtype": "Section Break",
+      "label": "Usage"
+    },
+    {
+      "fieldname": "last_used",
+      "fieldtype": "Datetime",
+      "label": "Last Used",
+      "read_only": 1
+    }
+  ],
+  "permissions": [
+    {
+      "role": "System Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 1
+    },
+    {
+      "role": "Zivvy Tenant Admin",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 1
+    }
+  ],
+  "sort_field": "creation",
+  "sort_order": "DESC",
+  "track_changes": 1,
+  "autoname": "format:ZKEY-{####}",
+  "naming_rule": "Expression (old style)",
+  "title_field": "label"
+}

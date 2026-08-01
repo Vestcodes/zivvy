@@ -1,0 +1,19 @@
+{# Vendored for Frappe v15 — upstream only ships this on develop/newer builds. #}
+{%- macro alert_banner(type, text="") -%}
+{%- set is_error = type == "error" -%}
+<div class="login-{{ type }}-banner es-alert hidden" role="alert" data-theme="{{ 'red' if is_error else 'green' }}">
+	<svg fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24">
+		{% if is_error %}
+		<circle cx="12" cy="12" r="9"></circle>
+		<path d="M12 8v4"></path>
+		<path d="M12 16h.01"></path>
+		{% else %}
+		<circle cx="12" cy="12" r="9"></circle>
+		<path d="M8.5 12.5l2.5 2.5 4.5-5"></path>
+		{% endif %}
+	</svg>
+	<div class="es-alert__content">
+		<span class="es-alert__title">{{ text }}</span>
+	</div>
+</div>
+{%- endmacro %}

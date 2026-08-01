@@ -1,0 +1,21 @@
+{
+  "name": "zivvy",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@11.6.0",
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev --parallel",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "check": "turbo run typecheck lint test",
+    "web": "pnpm --filter @zivvy/web dev",
+    "api": "pnpm --filter @zivvy/api start:dev",
+    "docs:verify": "pnpm --filter @zivvy/docs verify"
+  },
+  "devDependencies": {
+    "turbo": "^2.5.6",
+    "typescript": "^5.7.2"
+  }
+}

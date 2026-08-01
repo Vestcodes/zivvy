@@ -1,0 +1,396 @@
+---
+title: Webhooks
+description: Receive real-time notifications when events happen in your Zivvy account.
+order: 5
+---
+
+# Webhooks
+
+> Webhooks are **live** — subscribe today from [Settings → Developer](https://zivvy.xyz/settings/developer) or via [`POST /v1/webhooks`](/docs#tag/Webhooks). 100+ event types across every resource, at-least-once delivery, HMAC-SHA256 signed.
+
+Webhooks let your application receive real-time HTTP notifications when events happen in your Zivvy account — an order is submitted, an invoice is paid, stock levels change. Instead of polling the API, your server gets a POST request the moment something happens.
+
+## How webhooks work
+
+1. You register a webhook endpoint URL in the Zivvy dashboard.
+2. You subscribe to one or more of the 100+ event types below (or use `*` to receive everything, or `sales-orders.*` to receive every event for a resource).
+3. When a matching event occurs, Zivvy sends an HTTP POST request to your endpoint with a JSON payload describing the event.
+4. Your endpoint responds with a `200` status to acknowledge receipt.
+
+## Registering a webhook
+
+In the dashboard, go to **Settings → Webhooks** and click **Create Webhook**:
+
+- **URL** — The HTTPS endpoint on your server that will receive events. Must be publicly accessible and use HTTPS.
+- **Events** — Select one or more event types to subscribe to, or choose "All events".
+- **Secret** — A signing secret is generated automatically. Use it to verify that incoming requests are genuinely from Zivvy.
+
+## Event types
+
+Event names use the form `resource.action`, where the resource matches the plural slug in the REST API (e.g. `sales-orders`, `payment-entries`) and the action is one of the lifecycle stages below. Subscribe to individual events (`sales-orders.submitted`), a full resource (`sales-orders.*`), or every event (`*`).
+
+### CRM
+
+| Event | Description |
+|-------|-------------|
+| `leads.created` | A new lead was created |
+| `leads.updated` | A lead was modified |
+| `leads.deleted` | A lead was deleted |
+| `leads.converted` | A lead was converted to an opportunity or customer |
+| `opportunities.created` | A new opportunity was created |
+| `opportunities.updated` | An opportunity was modified |
+| `opportunities.deleted` | An opportunity was deleted |
+| `opportunities.won` | An opportunity was marked as won |
+| `opportunities.lost` | An opportunity was marked as lost |
+| `customers.created` | A new customer was created |
+| `customers.updated` | A customer was modified |
+| `customers.deleted` | A customer was deleted |
+| `contacts.created` | A new contact was created |
+| `contacts.updated` | A contact was modified |
+| `contacts.deleted` | A contact was deleted |
+| `suppliers.created` | A new supplier was created |
+| `suppliers.updated` | A supplier was modified |
+| `suppliers.deleted` | A supplier was deleted |
+| `addresses.created` | A new address was created |
+| `addresses.updated` | An address was modified |
+| `addresses.deleted` | An address was deleted |
+
+### Sales
+
+| Event | Description |
+|-------|-------------|
+| `quotations.created` | A new quotation was created |
+| `quotations.updated` | A quotation was modified |
+| `quotations.submitted` | A quotation was submitted |
+| `quotations.cancelled` | A quotation was cancelled |
+| `sales-orders.created` | A new sales order was created |
+| `sales-orders.updated` | A sales order was modified |
+| `sales-orders.submitted` | A sales order was submitted |
+| `sales-orders.cancelled` | A sales order was cancelled |
+| `sales-invoices.created` | A new sales invoice was created |
+| `sales-invoices.updated` | A sales invoice was modified |
+| `sales-invoices.submitted` | A sales invoice was submitted |
+| `sales-invoices.cancelled` | A sales invoice was cancelled |
+| `sales-invoices.paid` | A sales invoice was fully paid |
+
+### Purchasing
+
+| Event | Description |
+|-------|-------------|
+| `purchase-orders.created` | A new purchase order was created |
+| `purchase-orders.updated` | A purchase order was modified |
+| `purchase-orders.submitted` | A purchase order was submitted |
+| `purchase-orders.cancelled` | A purchase order was cancelled |
+| `purchase-invoices.created` | A new purchase invoice was created |
+| `purchase-invoices.updated` | A purchase invoice was modified |
+| `purchase-invoices.submitted` | A purchase invoice was submitted |
+| `purchase-invoices.cancelled` | A purchase invoice was cancelled |
+| `purchase-invoices.paid` | A purchase invoice was fully paid |
+
+### Billing
+
+| Event | Description |
+|-------|-------------|
+| `payment-entries.created` | A new payment entry was created |
+| `payment-entries.updated` | A payment entry was modified |
+| `payment-entries.submitted` | A payment entry was submitted |
+| `payment-entries.cancelled` | A payment entry was cancelled |
+| `payment-requests.created` | A new payment request was created |
+| `payment-requests.updated` | A payment request was modified |
+| `payment-requests.submitted` | A payment request was submitted |
+| `payment-requests.sent` | A payment request was sent to the payer |
+| `payment-requests.paid` | A payment request was fulfilled |
+| `payment-requests.cancelled` | A payment request was cancelled |
+| `payment-requests.expired` | A payment request expired without payment |
+| `payment-reconciliations.created` | A new payment reconciliation was started |
+| `payment-reconciliations.updated` | A payment reconciliation was modified |
+| `payment-reconciliations.reconciled` | Payments were reconciled against invoices |
+
+### Banking
+
+| Event | Description |
+|-------|-------------|
+| `bank-transactions.created` | A new bank transaction was imported |
+| `bank-transactions.updated` | A bank transaction was modified |
+| `bank-transactions.submitted` | A bank transaction was submitted |
+| `bank-transactions.cancelled` | A bank transaction was cancelled |
+| `bank-transactions.matched` | A bank transaction was matched to a suggested entry |
+| `bank-transactions.reconciled` | A bank transaction was fully reconciled |
+| `bank-transactions.unreconciled` | A bank transaction was unlinked from its match |
+| `bank-statement-imports.created` | A new bank statement import job was created |
+| `bank-statement-imports.started` | A bank statement import began processing |
+| `bank-statement-imports.completed` | A bank statement import finished successfully |
+| `bank-statement-imports.failed` | A bank statement import failed |
+| `bank-clearances.created` | A new bank clearance was created |
+| `bank-clearances.updated` | A bank clearance was modified |
+| `bank-guarantees.created` | A new bank guarantee was recorded |
+| `bank-guarantees.submitted` | A bank guarantee was submitted |
+| `bank-guarantees.cancelled` | A bank guarantee was cancelled |
+
+### Stock
+
+| Event | Description |
+|-------|-------------|
+| `items.created` | A new item was created |
+| `items.updated` | An item was modified |
+| `items.deleted` | An item was deleted |
+| `stock-entries.created` | A new stock entry was created |
+| `stock-entries.updated` | A stock entry was modified |
+| `stock-entries.submitted` | A stock entry was submitted |
+| `stock-entries.cancelled` | A stock entry was cancelled |
+| `delivery-notes.created` | A new delivery note was created |
+| `delivery-notes.updated` | A delivery note was modified |
+| `delivery-notes.submitted` | A delivery note was submitted |
+| `delivery-notes.cancelled` | A delivery note was cancelled |
+| `purchase-receipts.created` | A new purchase receipt was created |
+| `purchase-receipts.updated` | A purchase receipt was modified |
+| `purchase-receipts.submitted` | A purchase receipt was submitted |
+| `purchase-receipts.cancelled` | A purchase receipt was cancelled |
+| `batches.created` | A new batch was created |
+| `batches.updated` | A batch was modified |
+| `serial-nos.created` | A new serial number was created |
+| `serial-nos.updated` | A serial number was modified |
+
+### HR
+
+| Event | Description |
+|-------|-------------|
+| `employees.created` | A new employee was created |
+| `employees.updated` | An employee record was modified |
+| `employees.deleted` | An employee was deleted |
+| `leave-applications.created` | A new leave application was submitted |
+| `leave-applications.updated` | A leave application was modified |
+| `leave-applications.approved` | A leave application was approved |
+| `leave-applications.rejected` | A leave application was rejected |
+| `leave-applications.cancelled` | A leave application was cancelled |
+| `attendance.created` | A new attendance record was created |
+| `attendance.updated` | An attendance record was modified |
+| `attendance.submitted` | An attendance record was submitted |
+| `attendance.cancelled` | An attendance record was cancelled |
+| `expense-claims.created` | A new expense claim was created |
+| `expense-claims.updated` | An expense claim was modified |
+| `expense-claims.submitted` | An expense claim was submitted |
+| `expense-claims.approved` | An expense claim was approved |
+| `expense-claims.rejected` | An expense claim was rejected |
+
+### Projects
+
+| Event | Description |
+|-------|-------------|
+| `projects.created` | A new project was created |
+| `projects.updated` | A project was modified |
+| `projects.deleted` | A project was deleted |
+| `projects.completed` | A project was marked as completed |
+| `tasks.created` | A new task was created |
+| `tasks.updated` | A task was modified |
+| `tasks.deleted` | A task was deleted |
+| `tasks.completed` | A task was marked as completed |
+| `timesheets.created` | A new timesheet was created |
+| `timesheets.updated` | A timesheet was modified |
+| `timesheets.submitted` | A timesheet was submitted |
+| `timesheets.cancelled` | A timesheet was cancelled |
+
+### Manufacturing
+
+| Event | Description |
+|-------|-------------|
+| `boms.created` | A new BOM was created |
+| `boms.updated` | A BOM was modified |
+| `boms.submitted` | A BOM was submitted |
+| `boms.cancelled` | A BOM was cancelled |
+| `work-orders.created` | A new work order was created |
+| `work-orders.updated` | A work order was modified |
+| `work-orders.submitted` | A work order was submitted |
+| `work-orders.completed` | A work order was completed |
+| `work-orders.cancelled` | A work order was cancelled |
+| `production-plans.created` | A new production plan was created |
+| `production-plans.updated` | A production plan was modified |
+| `production-plans.submitted` | A production plan was submitted |
+| `production-plans.cancelled` | A production plan was cancelled |
+| `production-plans.completed` | A production plan was completed |
+| `job-cards.created` | A new job card was created |
+| `job-cards.updated` | A job card was modified |
+| `job-cards.submitted` | A job card was submitted |
+| `job-cards.completed` | A job card was completed |
+| `job-cards.cancelled` | A job card was cancelled |
+
+### Quality
+
+| Event | Description |
+|-------|-------------|
+| `quality-inspections.created` | A new quality inspection was created |
+| `quality-inspections.submitted` | A quality inspection was submitted |
+| `quality-inspections.rejected` | A quality inspection was rejected |
+
+### Assets
+
+| Event | Description |
+|-------|-------------|
+| `assets.created` | A new asset was created |
+| `assets.updated` | An asset was modified |
+| `assets.submitted` | An asset was submitted |
+| `assets.scrapped` | An asset was scrapped |
+| `asset-movements.created` | A new asset movement was created |
+| `asset-movements.submitted` | An asset movement was submitted |
+| `asset-movements.cancelled` | An asset movement was cancelled |
+| `asset-repairs.created` | A new asset repair was logged |
+| `asset-repairs.updated` | An asset repair was modified |
+| `asset-repairs.submitted` | An asset repair was submitted |
+| `asset-repairs.completed` | An asset repair was completed |
+| `asset-repairs.cancelled` | An asset repair was cancelled |
+| `asset-capitalizations.created` | A new asset capitalization was created |
+| `asset-capitalizations.submitted` | An asset capitalization was submitted |
+| `asset-capitalizations.cancelled` | An asset capitalization was cancelled |
+
+### Support
+
+| Event | Description |
+|-------|-------------|
+| `issues.created` | A new issue was reported |
+| `issues.updated` | An issue was modified |
+| `issues.resolved` | An issue was marked as resolved |
+| `issues.closed` | An issue was closed |
+| `support-tickets.created` | A new support ticket was opened |
+| `support-tickets.updated` | A support ticket was modified |
+| `support-tickets.closed` | A support ticket was closed |
+| `support-tickets.resolved` | A support ticket was marked as resolved |
+| `support-tickets.reopened` | A closed support ticket was reopened |
+
+## Payload format
+
+Every webhook delivery is an HTTP POST with a JSON body. The following headers are always set:
+
+| Header | Description |
+|--------|-------------|
+| `X-Zivvy-Event` | The event type, e.g. `sales-orders.submitted` |
+| `X-Zivvy-Delivery` | A unique 32-character ID for this delivery attempt (use for deduplication) |
+| `X-Zivvy-Signature` | `sha256=<hex>` — HMAC-SHA256 of the raw body, keyed by your webhook secret |
+| `Content-Type` | Always `application/json` |
+
+```json
+{
+  "event": "sales-orders.submitted",
+  "resource": "sales-orders",
+  "data": {
+    "name": "SO-00042",
+    "doctype": "Sales Order",
+    "modified": "2026-07-25 14:30:00.123456",
+    "customer": "Acme Corp",
+    "status": "To Deliver and Bill",
+    "grand_total": "12500.0"
+  },
+  "timestamp": "2026-07-25T14:30:00.123456"
+}
+```
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `event` | string | Event type in the form `resource.action` (e.g. `sales-orders.submitted`) |
+| `resource` | string | Resource slug — matches the plural resource used in the REST API |
+| `data` | object | Snapshot of the affected document at emit time |
+| `data.name` | string | Unique document identifier (use with the REST API to fetch the full record) |
+| `data.doctype` | string | Underlying doctype name (e.g. `Sales Order`) |
+| `data.modified` | string | Last-modified timestamp of the document |
+| `timestamp` | string | ISO 8601 timestamp of when the event was emitted |
+
+The `data` object always contains `name`, `doctype`, and `modified`. Common fields (`customer`, `supplier`, `status`, `grand_total`, `employee`) are also included when present on the document. For the full record, use `data.name` with the corresponding REST endpoint — e.g. `GET /v1/sales-orders/{name}`.
+
+## Signature verification
+
+Every webhook request includes a signature in the `X-Zivvy-Signature` header. Verify this signature to ensure the request came from Zivvy and was not tampered with.
+
+The signature is an HMAC-SHA256 hash of the raw request body, using your webhook secret as the key:
+
+### Python
+
+```python
+import hmac
+import hashlib
+
+def verify_webhook(payload_body, signature_header, secret):
+    expected = hmac.new(
+        secret.encode("utf-8"),
+        payload_body,
+        hashlib.sha256
+    ).hexdigest()
+
+    return hmac.compare_digest(
+        f"sha256={expected}",
+        signature_header
+    )
+```
+
+### JavaScript (Node.js)
+
+```javascript
+const crypto = require("crypto");
+
+function verifyWebhook(payloadBody, signatureHeader, secret) {
+  const expected = crypto
+    .createHmac("sha256", secret)
+    .update(payloadBody)
+    .digest("hex");
+
+  return signatureHeader === `sha256=${expected}`;
+}
+```
+
+### Express middleware example
+
+```javascript
+app.post("/webhooks/zivvy", express.raw({ type: "application/json" }), (req, res) => {
+  const signature = req.headers["x-zivvy-signature"];
+  const secret = process.env.ZIVVY_WEBHOOK_SECRET;
+
+  if (!verifyWebhook(req.body, signature, secret)) {
+    return res.status(401).send("Invalid signature");
+  }
+
+  const event = JSON.parse(req.body);
+
+  switch (event.event) {
+    case "sales-orders.submitted":
+      handleNewOrder(event.data);
+      break;
+    case "sales-invoices.paid":
+      handleInvoicePaid(event.data);
+      break;
+    default:
+      console.log(`Unhandled event type: ${event.event}`);
+  }
+
+  res.status(200).send("OK");
+});
+```
+
+> Always verify the signature before processing a webhook. Never trust the payload without verification.
+
+## Retry policy
+
+If your endpoint does not respond with a `2xx` status within 10 seconds, Zivvy retries the delivery with exponential backoff:
+
+| Attempt | Delay after previous attempt |
+|---------|------------------------------|
+| 1st retry | 1 minute |
+| 2nd retry | 5 minutes |
+| 3rd retry | 30 minutes |
+| 4th retry | 2 hours |
+| 5th retry | 12 hours |
+
+After 5 failed retries, the delivery is marked as failed. You can view and manually retry failed deliveries in the dashboard under **Settings → Webhooks → Delivery Log**.
+
+If your endpoint fails consistently for 3 consecutive days, the webhook is automatically disabled and you will receive an email notification.
+
+## Handling webhooks correctly
+
+- **Respond quickly.** Return a `200` status as soon as you receive the request. Process the event asynchronously (e.g., add it to a queue) rather than doing heavy work inline.
+- **Handle duplicates.** Use the `X-Zivvy-Delivery` header to deduplicate. In rare cases (network issues, retries), you may receive the same delivery more than once.
+- **Verify signatures.** Always check `X-Zivvy-Signature` before processing.
+- **Use HTTPS.** Webhook endpoints must use HTTPS. Plain HTTP endpoints will be rejected.
+- **Handle unknown events gracefully.** New event types may be added in the future. Your handler should not break if it receives an event type it does not recognize.
+
+## Testing webhooks
+
+During development, you can use tools like [ngrok](https://ngrok.com) or [localtunnel](https://localtunnel.github.io/localtunnel/) to expose your local server to the internet and test webhook deliveries.
+
+The dashboard also includes a **Send Test Event** button for each webhook, which delivers a sample payload to your endpoint so you can verify your setup without waiting for a real event.

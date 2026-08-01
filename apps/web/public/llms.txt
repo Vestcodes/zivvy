@@ -1,0 +1,32 @@
+# Zivvy
+
+> Zivvy is business software that works. Sales, stock, accounting, HR, projects, and manufacturing in one product.
+
+## About
+
+- Product: Zivvy — https://zivvy.xyz
+- Company: Zivvy
+- Contact: support@zivvy.xyz
+- Pricing: Free / Pro ($18/seat/mo) / Business ($30/seat/mo); annual −20% — see /pricing
+
+## Public pages
+
+- Home: https://zivvy.xyz/
+- Features: https://zivvy.xyz/features
+- Pricing: https://zivvy.xyz/pricing
+- Contact: https://zivvy.xyz/contact
+- Blog: https://zivvy.xyz/blog
+
+## Legal
+
+- Terms: https://zivvy.xyz/terms
+- Privacy: https://zivvy.xyz/privacy
+- Cookies: https://zivvy.xyz/cookies
+- Acceptable use: https://zivvy.xyz/acceptable-use
+
+## Stack
+
+- Frontend: Next.js on Vercel
+- Backend: Zivvy services on Railway
+- Billing: Zivvy subscriptions
+- Email: Resend

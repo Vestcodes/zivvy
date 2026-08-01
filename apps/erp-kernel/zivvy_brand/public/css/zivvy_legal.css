@@ -1,0 +1,304 @@
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&family=Sora:wght@500;600;700&display=swap");
+
+.zivvy-legal {
+	--zivvy-midnight: #071225;
+	--zivvy-graphite: #27334d;
+	--zivvy-indigo: #5d53ff;
+	--zivvy-cyan: #20d4bb;
+	--zivvy-paper: #f4f6fc;
+	--zivvy-white: #ffffff;
+	--zivvy-text: var(--zivvy-midnight);
+	--zivvy-muted: #5d6780;
+	--zivvy-border: #d8deec;
+	--zivvy-focus: 0 0 0 3px rgba(93, 83, 255, 0.24);
+	max-width: 840px;
+	margin: 0 auto;
+	padding: clamp(2rem, 5vw, 3.4rem) 1.25rem 4rem;
+	font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+	color: var(--zivvy-text);
+}
+
+.zivvy-legal a {
+	color: var(--zivvy-indigo);
+}
+
+.zivvy-legal a:focus-visible {
+	outline: none;
+	box-shadow: var(--zivvy-focus);
+}
+
+.zivvy-legal__hero {
+	margin-bottom: 2.1rem;
+	border: 1px solid var(--zivvy-border);
+	border-radius: 18px;
+	background:
+		radial-gradient(620px 220px at 0% 0%, rgba(93, 83, 255, 0.16), transparent 60%),
+		radial-gradient(470px 180px at 100% 0%, rgba(32, 212, 187, 0.12), transparent 56%),
+		var(--zivvy-white);
+	padding: 1.5rem 1.35rem;
+}
+
+.zivvy-legal__brand {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	font-family: "IBM Plex Mono", ui-monospace, monospace;
+	font-size: 0.72rem;
+	letter-spacing: 0.09em;
+	text-transform: uppercase;
+	margin: 0 0 0.72rem;
+}
+
+.zivvy-legal__brand a {
+	text-decoration: none;
+	font-weight: 500;
+}
+
+.zivvy-legal__hero h1 {
+	font-family: "Sora", "IBM Plex Sans", sans-serif;
+	font-size: clamp(1.65rem, 4vw, 2.2rem);
+	letter-spacing: -0.03em;
+	margin: 0 0 0.45rem;
+}
+
+.zivvy-legal__meta {
+	color: var(--zivvy-muted);
+	margin: 0;
+	font-size: 0.93rem;
+}
+
+.zivvy-legal__body h2 {
+	font-family: "Sora", "IBM Plex Sans", sans-serif;
+	font-size: 1.18rem;
+	margin: 1.9rem 0 0.68rem;
+	letter-spacing: -0.02em;
+}
+
+.zivvy-legal__body p,
+.zivvy-legal__body li {
+	line-height: 1.69;
+	color: #1f2b43;
+	font-size: 0.98rem;
+}
+
+.zivvy-legal__body ul {
+	padding-left: 1.2rem;
+}
+
+.zivvy-legal__footer {
+	margin-top: 2.8rem;
+	padding-top: 1.3rem;
+	border-top: 1px solid var(--zivvy-border);
+	font-size: 0.85rem;
+	color: var(--zivvy-muted);
+}
+
+.zivvy-legal__nav {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.72rem 1.15rem;
+	margin-bottom: 0.7rem;
+}
+
+.zivvy-legal__nav a {
+	text-decoration: none;
+	font-weight: 500;
+}
+
+/* Cookie banner */
+.zivvy-cookie-banner {
+	position: fixed;
+	left: 1rem;
+	right: 1rem;
+	bottom: 1rem;
+	z-index: 9999;
+	max-width: 540px;
+	margin: 0 auto;
+	background: #071225;
+	color: #f8fbff;
+	border-radius: 15px;
+	padding: 1rem 1.1rem;
+	box-shadow: 0 20px 42px rgba(7, 18, 37, 0.36);
+	font-family: "IBM Plex Sans", sans-serif;
+	font-size: 0.9rem;
+	display: none;
+}
+
+.zivvy-cookie-banner.is-visible {
+	display: block;
+}
+
+.zivvy-cookie-banner a {
+	color: #c9d6ff;
+}
+
+.zivvy-cookie-banner__actions {
+	display: flex;
+	gap: 0.55rem;
+	margin-top: 0.75rem;
+	flex-wrap: wrap;
+}
+
+.zivvy-cookie-banner button {
+	border: 0;
+	border-radius: 9px;
+	padding: 0.47rem 0.88rem;
+	font-weight: 600;
+	cursor: pointer;
+	transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.zivvy-cookie-banner button:active {
+	transform: scale(0.97);
+}
+
+.zivvy-cookie-banner .accept {
+	background: linear-gradient(132deg, #5d53ff, #736bff 55%, #20d4bb);
+	color: #fff;
+}
+
+.zivvy-cookie-banner .essential {
+	background: transparent;
+	color: #e2ebff;
+	border: 1px solid #3f4f75;
+}
+
+/* Desk billing visuals */
+.zivvy-billing {
+	padding: 0.55rem 0 2rem;
+}
+
+.zivvy-billing-loading {
+	border: 1px solid #d8deec;
+	border-radius: 14px;
+	background: #fff;
+}
+
+.zivvy-billing-summary {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 1rem;
+	padding: 1.25rem;
+	background: #fff;
+	border: 1px solid #d8deec;
+	border-radius: 16px;
+	margin-bottom: 1.2rem;
+	box-shadow: 0 16px 35px rgba(7, 18, 37, 0.07);
+}
+
+@media (max-width: 960px) {
+	.zivvy-billing-summary {
+		grid-template-columns: 1fr;
+	}
+}
+
+.zivvy-billing-tier,
+.zivvy-billing-seats {
+	font-family: "Sora", "IBM Plex Sans", sans-serif;
+	font-size: 1.45rem;
+	font-weight: 700;
+	color: #3f35e7;
+	letter-spacing: -0.02em;
+}
+
+.zivvy-billing-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.52rem;
+	align-items: flex-start;
+	grid-column: 1 / -1;
+}
+
+.zivvy-plan-grid {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 0.95rem;
+	margin-bottom: 1.2rem;
+}
+
+@media (max-width: 960px) {
+	.zivvy-plan-grid {
+		grid-template-columns: 1fr;
+	}
+}
+
+.zivvy-plan-card {
+	background: #fff;
+	border: 1px solid #d8deec;
+	border-radius: 15px;
+	padding: 1rem;
+	box-shadow: 0 12px 26px rgba(7, 18, 37, 0.06);
+}
+
+.zivvy-plan-card.is-current {
+	border-color: rgba(93, 83, 255, 0.35);
+	box-shadow: 0 16px 34px rgba(93, 83, 255, 0.16);
+}
+
+.zivvy-plan-card__head {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.zivvy-plan-card h3 {
+	font-family: "Sora", "IBM Plex Sans", sans-serif;
+	margin: 0;
+	font-size: 1.08rem;
+}
+
+.zivvy-plan-price {
+	font-weight: 700;
+	color: #4137ea;
+	margin: 0.35rem 0;
+	font-family: "Sora", "IBM Plex Sans", sans-serif;
+}
+
+.zivvy-plan-features {
+	padding-left: 1.1rem;
+	margin: 0 0 1rem;
+	color: #41506d;
+	font-size: 0.9rem;
+	line-height: 1.55;
+}
+
+.zivvy-plan-actions .btn {
+	width: 100%;
+}
+
+.zivvy-webhook-url {
+	display: block;
+	padding: 0.75rem;
+	background: #f6f8fc;
+	border-radius: 8px;
+	word-break: break-all;
+	font-size: 0.8rem;
+	border: 1px solid #e1e7f3;
+}
+
+.zivvy-billing-alert {
+	border-radius: 13px;
+}
+
+.zivvy-priority-badge {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.35rem;
+	padding: 0.22rem 0.56rem;
+	border-radius: 999px;
+	background: linear-gradient(132deg, #5d53ff, #736bff 55%, #20d4bb);
+	color: #fff;
+	font-size: 11px;
+	font-weight: 600;
+	margin-left: 0.5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.zivvy-cookie-banner button,
+	.zivvy-legal * {
+		transition-duration: 0.01ms !important;
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+	}
+}

@@ -1,0 +1,123 @@
+{
+  "name": "Zivvy Webhook",
+  "module": "Zivvy Brand",
+  "doctype": "DocType",
+  "document_type": "Other",
+  "engine": "InnoDB",
+  "field_order": [
+    "url",
+    "label",
+    "events",
+    "column_break_1",
+    "enabled",
+    "secret",
+    "zivvy_tenant",
+    "created_by",
+    "section_break_stats",
+    "total_deliveries",
+    "last_delivery",
+    "last_status"
+  ],
+  "fields": [
+    {
+      "fieldname": "url",
+      "fieldtype": "Data",
+      "label": "URL",
+      "reqd": 1,
+      "in_list_view": 1,
+      "description": "HTTPS endpoint to receive webhook payloads"
+    },
+    {
+      "fieldname": "label",
+      "fieldtype": "Data",
+      "label": "Label",
+      "in_list_view": 1,
+      "description": "Optional friendly name"
+    },
+    {
+      "fieldname": "events",
+      "fieldtype": "Long Text",
+      "label": "Events",
+      "reqd": 1,
+      "description": "JSON array of subscribed event types"
+    },
+    {
+      "fieldname": "column_break_1",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "enabled",
+      "fieldtype": "Check",
+      "label": "Enabled",
+      "default": "1",
+      "in_list_view": 1
+    },
+    {
+      "fieldname": "secret",
+      "fieldtype": "Password",
+      "label": "Secret",
+      "description": "Shared secret for HMAC-SHA256 signature verification"
+    },
+    {
+      "fieldname": "zivvy_tenant",
+      "fieldtype": "Data",
+      "label": "Tenant",
+      "reqd": 1,
+      "in_list_view": 1
+    },
+    {
+      "fieldname": "created_by",
+      "fieldtype": "Link",
+      "label": "Created By",
+      "options": "User",
+      "read_only": 1
+    },
+    {
+      "fieldname": "section_break_stats",
+      "fieldtype": "Section Break",
+      "label": "Delivery Stats"
+    },
+    {
+      "fieldname": "total_deliveries",
+      "fieldtype": "Int",
+      "label": "Total Deliveries",
+      "read_only": 1,
+      "default": "0"
+    },
+    {
+      "fieldname": "last_delivery",
+      "fieldtype": "Datetime",
+      "label": "Last Delivery",
+      "read_only": 1
+    },
+    {
+      "fieldname": "last_status",
+      "fieldtype": "Select",
+      "label": "Last Status",
+      "options": "\nSuccess\nFailed",
+      "read_only": 1
+    }
+  ],
+  "permissions": [
+    {
+      "role": "System Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 1
+    },
+    {
+      "role": "Zivvy Tenant Admin",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 1
+    }
+  ],
+  "sort_field": "creation",
+  "sort_order": "DESC",
+  "track_changes": 1,
+  "autoname": "format:ZWEB-{####}",
+  "naming_rule": "Expression (old style)",
+  "title_field": "label"
+}

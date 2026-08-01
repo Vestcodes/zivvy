@@ -1,0 +1,136 @@
+{
+ "actions": [],
+ "creation": "2026-07-23 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "plan_section",
+  "tier",
+  "status",
+  "column_break_plan",
+  "seats_allowed",
+  "cancel_at_period_end",
+  "polar_section",
+  "polar_subscription_id",
+  "polar_customer_id",
+  "column_break_polar",
+  "product_id",
+  "current_period_end",
+  "sync_section",
+  "last_synced_at",
+  "last_webhook_type"
+ ],
+ "fields": [
+  {
+   "fieldname": "plan_section",
+   "fieldtype": "Section Break",
+   "label": "Plan"
+  },
+  {
+   "default": "free",
+   "fieldname": "tier",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Tier",
+   "options": "free\npro\nbusiness",
+   "reqd": 1
+  },
+  {
+   "default": "none",
+   "fieldname": "status",
+   "fieldtype": "Data",
+   "label": "Subscription Status"
+  },
+  {
+   "fieldname": "column_break_plan",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "2",
+   "description": "Synced from Polar seat quantity when subscribed; Free defaults to 2.",
+   "fieldname": "seats_allowed",
+   "fieldtype": "Int",
+   "label": "Seats Allowed",
+   "non_negative": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "cancel_at_period_end",
+   "fieldtype": "Check",
+   "label": "Cancel at Period End"
+  },
+  {
+   "fieldname": "polar_section",
+   "fieldtype": "Section Break",
+   "label": "Polar References"
+  },
+  {
+   "fieldname": "polar_subscription_id",
+   "fieldtype": "Data",
+   "label": "Polar Subscription ID",
+   "read_only": 1
+  },
+  {
+   "fieldname": "polar_customer_id",
+   "fieldtype": "Data",
+   "label": "Polar Customer ID",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_polar",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "product_id",
+   "fieldtype": "Data",
+   "label": "Product ID",
+   "read_only": 1
+  },
+  {
+   "fieldname": "current_period_end",
+   "fieldtype": "Data",
+   "label": "Current Period End",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sync_section",
+   "fieldtype": "Section Break",
+   "label": "Sync"
+  },
+  {
+   "fieldname": "last_synced_at",
+   "fieldtype": "Datetime",
+   "label": "Last Synced At",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_webhook_type",
+   "fieldtype": "Data",
+   "label": "Last Webhook Type",
+   "read_only": 1
+  }
+ ],
+ "issingle": 1,
+ "links": [],
+ "modified": "2026-07-23 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Zivvy Brand",
+ "name": "Zivvy Subscription",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

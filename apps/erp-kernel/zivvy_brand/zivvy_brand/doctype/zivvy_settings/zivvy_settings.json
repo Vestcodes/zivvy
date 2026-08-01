@@ -1,0 +1,126 @@
+{
+ "actions": [],
+ "creation": "2026-07-23 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+  "field_order": [
+  "analytics_section",
+  "enable_posthog",
+  "posthog_project_api_key",
+  "column_break_ph",
+  "posthog_host",
+  "posthog_host_custom",
+  "enable_posthog_on_desk",
+  "email_section",
+  "resend_api_key",
+  "column_break_resend",
+  "resend_from_email",
+  "site_section",
+  "marketing_home_note"
+ ],
+ "fields": [
+  {
+   "fieldname": "analytics_section",
+   "fieldtype": "Section Break",
+   "label": "PostHog Analytics"
+  },
+  {
+   "default": "0",
+   "description": "Load PostHog only after the visitor accepts analytics cookies (choice=all).",
+   "fieldname": "enable_posthog",
+   "fieldtype": "Check",
+   "label": "Enable PostHog"
+  },
+  {
+   "depends_on": "eval:doc.enable_posthog",
+   "description": "Project API key from PostHog. Prefer env POSTHOG_PROJECT_API_KEY in production.",
+   "fieldname": "posthog_project_api_key",
+   "fieldtype": "Password",
+   "label": "Project API Key"
+  },
+  {
+   "fieldname": "column_break_ph",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "US",
+   "depends_on": "eval:doc.enable_posthog",
+   "fieldname": "posthog_host",
+   "fieldtype": "Select",
+   "label": "PostHog Host",
+   "options": "US\nEU\nCustom"
+  },
+  {
+   "depends_on": "eval:doc.enable_posthog && doc.posthog_host==\"Custom\"",
+   "description": "e.g. https://posthog.example.com",
+   "fieldname": "posthog_host_custom",
+   "fieldtype": "Data",
+   "label": "Custom Host URL",
+   "options": "URL"
+  },
+  {
+   "default": "0",
+   "depends_on": "eval:doc.enable_posthog",
+   "description": "Also inject PostHog on Desk (still requires analytics consent in this browser).",
+   "fieldname": "enable_posthog_on_desk",
+   "fieldtype": "Check",
+   "label": "Enable on Desk"
+  },
+  {
+   "fieldname": "email_section",
+   "fieldtype": "Section Break",
+   "label": "Transactional Email (Resend)"
+  },
+  {
+   "description": "Resend API key (also used as SMTP password). Prefer env RESEND_API_KEY in production — never commit secrets.",
+   "fieldname": "resend_api_key",
+   "fieldtype": "Password",
+   "label": "Resend API Key"
+  },
+  {
+   "fieldname": "column_break_resend",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Zivvy <noreply@zivvy.xyz>",
+   "description": "From address. Domain must be verified in Resend (DNS). Prefer env RESEND_FROM_EMAIL. Fallback: Zivvy &lt;contact@vestcodes.com&gt;.",
+   "fieldname": "resend_from_email",
+   "fieldtype": "Data",
+   "label": "From Email"
+  },
+  {
+   "fieldname": "site_section",
+   "fieldtype": "Section Break",
+   "label": "Marketing"
+  },
+  {
+   "fieldname": "marketing_home_note",
+   "fieldtype": "HTML",
+   "label": "Note",
+   "options": "<p><strong>Production:</strong> <a href=\"https://zivvy.xyz\" target=\"_blank\" rel=\"noopener\">https://zivvy.xyz</a>. Marketing homepage is <code>/home</code> (Website home on install). Prefer apex; redirect <code>www.zivvy.xyz</code> → apex. Cookie/session domain: <code>.zivvy.xyz</code>. Polar Settings + legal pages are separate DocTypes.</p>"
+  }
+ ],
+ "issingle": 1,
+ "links": [],
+ "modified": "2026-07-23 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Zivvy Brand",
+ "name": "Zivvy Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

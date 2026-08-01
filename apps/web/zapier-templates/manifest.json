@@ -1,0 +1,154 @@
+{
+  "generated_at": "2026-07-25T21:29:52.748Z",
+  "api_base": "https://api.zivvy.xyz",
+  "integrate_base": "https://integrate.zivvy.xyz",
+  "zapier_docs": [
+    "https://docs.zapier.com/integrations/build-cli/overview",
+    "https://docs.zapier.com/integrations/build/cli-hook-trigger",
+    "https://docs.zapier.com/integrations/build/apikeyauth"
+  ],
+  "recipes": [
+    {
+      "file": "recipes/01-crm-lead-created.json",
+      "guide": "recipes/01-crm-lead-created.md",
+      "name": "Zivvy CRM — New Lead → Slack",
+      "area": "CRM",
+      "events": [
+        "leads.created"
+      ],
+      "integration_trigger": "crm_lead_created"
+    },
+    {
+      "file": "recipes/02-sales-order-submitted.json",
+      "guide": "recipes/02-sales-order-submitted.md",
+      "name": "Zivvy Sales — Order Submitted → Fulfillment",
+      "area": "Sales",
+      "events": [
+        "sales-orders.submitted"
+      ],
+      "integration_trigger": "sales_order_submitted"
+    },
+    {
+      "file": "recipes/03-billing-invoice.json",
+      "guide": "recipes/03-billing-invoice.md",
+      "name": "Zivvy Billing — Invoice / Payment Events",
+      "area": "Billing & Accounting",
+      "events": [
+        "sales-invoices.submitted",
+        "sales-invoices.updated",
+        "payment-entries.submitted"
+      ],
+      "integration_trigger": "billing_invoice"
+    },
+    {
+      "file": "recipes/04-purchasing-po.json",
+      "guide": "recipes/04-purchasing-po.md",
+      "name": "Zivvy Purchasing — PO / Receipt Submitted",
+      "area": "Purchasing",
+      "events": [
+        "purchase-orders.submitted",
+        "purchase-receipts.submitted"
+      ],
+      "integration_trigger": "purchasing_po"
+    },
+    {
+      "file": "recipes/05-stock-movement.json",
+      "guide": "recipes/05-stock-movement.md",
+      "name": "Zivvy Stock — Movements & New Items",
+      "area": "Stock",
+      "events": [
+        "stock-entries.submitted",
+        "items.created",
+        "delivery-notes.submitted"
+      ],
+      "integration_trigger": "stock_movement"
+    },
+    {
+      "file": "recipes/06-banking-transaction.json",
+      "guide": "recipes/06-banking-transaction.md",
+      "name": "Zivvy Banking — Bank Transaction",
+      "area": "Banking",
+      "events": [
+        "bank-transactions.created",
+        "bank-transactions.updated"
+      ],
+      "integration_trigger": "banking_transaction"
+    },
+    {
+      "file": "recipes/07-hr-people.json",
+      "guide": "recipes/07-hr-people.md",
+      "name": "Zivvy HR — Leave / Expense / Employee",
+      "area": "HR & People",
+      "events": [
+        "leave-applications.created",
+        "leave-applications.updated",
+        "leave-applications.submitted",
+        "expense-claims.created",
+        "expense-claims.updated",
+        "expense-claims.submitted",
+        "employees.created"
+      ],
+      "integration_trigger": "hr_people"
+    },
+    {
+      "file": "recipes/08-projects-tasks.json",
+      "guide": "recipes/08-projects-tasks.md",
+      "name": "Zivvy Projects — Task / Timesheet",
+      "area": "Projects",
+      "events": [
+        "tasks.created",
+        "tasks.updated",
+        "timesheets.submitted",
+        "projects.updated"
+      ],
+      "integration_trigger": "projects_tasks"
+    },
+    {
+      "file": "recipes/09-manufacturing.json",
+      "guide": "recipes/09-manufacturing.md",
+      "name": "Zivvy Manufacturing — Work Order / BOM",
+      "area": "Manufacturing",
+      "events": [
+        "work-orders.submitted",
+        "work-orders.updated",
+        "boms.created",
+        "job-cards.updated"
+      ],
+      "integration_trigger": "manufacturing"
+    },
+    {
+      "file": "recipes/10-support-ticket.json",
+      "guide": "recipes/10-support-ticket.md",
+      "name": "Zivvy Support — Ticket / Issue",
+      "area": "Support",
+      "events": [
+        "support-tickets.created",
+        "support-tickets.updated",
+        "issues.created",
+        "issues.updated"
+      ],
+      "integration_trigger": "support_ticket"
+    }
+  ],
+  "integration": {
+    "path": "integration/",
+    "triggers": [
+      "crm_lead_created",
+      "sales_order_submitted",
+      "billing_invoice",
+      "purchasing_po",
+      "stock_movement",
+      "banking_transaction",
+      "hr_people",
+      "projects_tasks",
+      "manufacturing",
+      "support_ticket"
+    ],
+    "creates": [
+      "create_lead",
+      "create_item",
+      "create_employee",
+      "create_task"
+    ]
+  }
+}

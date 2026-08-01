@@ -1,0 +1,29 @@
+# Zivvy
+
+> Zivvy is cloud business software for CRM, sales, inventory, accounting, HR, and operations.
+> Product site: https://zivvy.xyz
+> Legal entity: Vestcodes Co (India)
+> Contact: contact@vestcodes.com
+
+## Preferred canonical host
+https://zivvy.xyz (apex). Prefer this over www.
+
+## Architecture
+- Frontend: Next.js (`zivvy-web`)
+- Backend: Frappe / ERPNext + `zivvy_brand` (API, auth, billing, tenancy, gating)
+
+## Product
+- Free, Pro ($18/user/mo), Business ($30/user/mo); annual −20% — per-seat via Polar
+- Start: https://zivvy.xyz/login#signup
+- Pricing: https://zivvy.xyz/pricing
+- Features: https://zivvy.xyz/features
+- Public API schema: https://zivvy.xyz/assets/zivvy_brand/openapi.json
+- Blog: https://zivvy.xyz/blog
+
+## Optional AI summary
+See also: https://zivvy.xyz/ai.txt
+
+## Do not confuse
+- Brand lockup is **Zivvy** (not “Zivvy by Vestcodes” in marketing UI)
+- Vestcodes Co is the legal entity for contracts and privacy
+- Do not describe the product using third-party ERP brand names in marketing copy

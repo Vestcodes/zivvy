@@ -1,0 +1,96 @@
+{
+  "version": "1.0.0",
+  "kind": "zivvy-zapier-catch-hook-recipe",
+  "name": "Zivvy Billing — Invoice / Payment Events",
+  "area": "Billing & Accounting",
+  "docs": {
+    "zapier": [
+      "https://help.zapier.com/hc/en-us/articles/8496288691469-Trigger-Zaps-from-webhooks",
+      "https://help.zapier.com/hc/en-us/articles/8496257774221-Use-Code-by-Zapier"
+    ],
+    "zivvy": [
+      "https://integrate.zivvy.xyz/docs",
+      "https://zivvy.xyz/integrations/zapier"
+    ]
+  },
+  "events": [
+    "sales-invoices.submitted",
+    "sales-invoices.updated",
+    "payment-entries.submitted"
+  ],
+  "steps": [
+    {
+      "step": 1,
+      "app": "Webhooks by Zapier",
+      "action": "Catch Hook",
+      "notes": [
+        "Copy the Catch Hook URL",
+        "In Zivvy Settings → Developer (or POST /v1/webhooks) register that URL",
+        "Subscribe events: sales-invoices.submitted, sales-invoices.updated, payment-entries.submitted",
+        "Zapier owns hooks.zapier.com — HMAC is optional; URL secrecy is primary auth"
+      ]
+    },
+    {
+      "step": 2,
+      "app": "Code by Zapier",
+      "action": "Run Javascript",
+      "input": {
+        "allowed_events": "sales-invoices.submitted,sales-invoices.updated,payment-entries.submitted",
+        "event": "{{1. event}}",
+        "resource": "{{1. resource}}",
+        "name": "{{1. data__name}}",
+        "customer": "{{1. data__customer}}",
+        "supplier": "{{1. data__supplier}}",
+        "employee": "{{1. data__employee}}",
+        "status": "{{1. data__status}}",
+        "grand_total": "{{1. data__grand_total}}",
+        "timestamp": "{{1. timestamp}}"
+      },
+      "code_file": "_shared-filter-code.js"
+    },
+    {
+      "step": 3,
+      "app": "Filter by Zapier",
+      "action": "Only continue if…",
+      "conditions": [
+        {
+          "field": "2. event",
+          "op": "(Text) Exactly matches",
+          "value": "sales-invoices.submitted",
+          "or_any_of": [
+            "sales-invoices.submitted",
+            "sales-invoices.updated",
+            "payment-entries.submitted"
+          ]
+        }
+      ],
+      "notes": [
+        "Or skip Filter if Code step already enforces allowed_events"
+      ]
+    },
+    {
+      "step": 4,
+      "app": "Webhooks by Zapier",
+      "action": "GET",
+      "url": "https://api.zivvy.xyz/v1/sales-invoices/{{2. name}}",
+      "headers": {
+        "Authorization": "Bearer {{ZIVVY_API_KEY}}",
+        "Accept": "application/json"
+      },
+      "notes": [
+        "Optional enrich. Store zk_live_ key in Zapier Storage or a Zapier secret field.",
+        "OpenAPI also documents X-API-Key — gateway accepts the integrate.zivvy.xyz key header."
+      ]
+    },
+    {
+      "step": 5,
+      "app": "Slack",
+      "action": "Send Channel Message",
+      "message": "{{2. event}}: {{2. name}} party={{2. customer}} total={{2. grand_total}}",
+      "notes": [
+        "Swap Slack for Email, Sheets, HubSpot, etc."
+      ]
+    }
+  ],
+  "curl_register": "curl -X POST https://integrate.zivvy.xyz/v1/webhooks \\\n  -H \"Authorization: Bearer $ZIVVY_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"url\": \"https://hooks.zapier.com/hooks/catch/XXXX/YYYY/\",\n    \"events\": [\"sales-invoices.submitted\",\"sales-invoices.updated\",\"payment-entries.submitted\"],\n    \"label\": \"Billing & Accounting Zap\",\n    \"secret\": \"$ZIVVY_WEBHOOK_SECRET\"\n  }'"
+}

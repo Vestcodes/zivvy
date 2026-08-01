@@ -1,0 +1,58 @@
+# Local / reference stack mirroring Railway (Vestcodes org project `zivvy`).
+# Prototype defaults to PostgreSQL + Redis services + `web` image from Dockerfile.
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:7
+    volumes:
+      - redis-data:/data
+    ports:
+      - "6379:6379"
+
+  web:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        ERPNEXT_VERSION: v15
+    depends_on:
+      - db
+      - redis
+    environment:
+      DB_TYPE: postgres
+      DB_HOST: db
+      DB_PORT: "5432"
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      REDIS_CACHE: redis://redis:6379
+      REDIS_QUEUE: redis://redis:6379
+      REDIS_SOCKETIO: redis://redis:6379
+      FRAPPE_SITE_NAME: zivvy.xyz
+      SITE_URL: https://zivvy.xyz
+      PORT: "8000"
+      GUNICORN_WORKERS: "2"
+      GUNICORN_THREADS: "4"
+      GUNICORN_TIMEOUT: "120"
+      AUTO_CREATE_SITE: "1"
+      ADMIN_PASSWORD: admin
+      POLAR_USE_SANDBOX: "0"
+      POLAR_SUCCESS_URL: https://zivvy.xyz/app/billing
+      POLAR_CANCEL_URL: https://zivvy.xyz/pricing
+    ports:
+      - "8000:8000"
+    volumes:
+      - sites:/home/frappe/frappe-bench/sites
+
+volumes:
+  db-data:
+  redis-data:
+  sites:

@@ -1,0 +1,214 @@
+---
+title: Pagination & Filtering
+description: Navigate large datasets with pagination, filtering, sorting, and search.
+order: 3
+---
+
+# Pagination & Filtering
+
+Most list endpoints return paginated results. The API uses offset-based pagination with a consistent interface across all resources.
+
+## Pagination
+
+Control pagination with two query parameters:
+
+| Parameter | Type | Default | Max | Description |
+|-----------|------|---------|-----|-------------|
+| `limit` | integer | 20 | 100 | Number of records to return |
+| `offset` | integer | 0 | — | Number of records to skip |
+
+### Example
+
+Fetch the first 10 items:
+
+```bash
+curl "https://integrate.zivvy.xyz/v1/items?limit=10&offset=0" \
+  -H "X-API-Key: zk_live_your_key_here"
+```
+
+Fetch the next 10:
+
+```bash
+curl "https://integrate.zivvy.xyz/v1/items?limit=10&offset=10" \
+  -H "X-API-Key: zk_live_your_key_here"
+```
+
+### Response format
+
+Every paginated response includes a `meta` object with the total count and current pagination state:
+
+```json
+{
+  "data": [ ... ],
+  "meta": {
+    "total": 142,
+    "limit": 10,
+    "offset": 10
+  }
+}
+```
+
+Use `meta.total` to calculate the total number of pages:
+
+```javascript
+const totalPages = Math.ceil(meta.total / meta.limit);
+```
+
+### Iterating through all records
+
+```python
+import requests
+
+headers = {"X-API-Key": "zk_live_your_key_here"}
+all_items = []
+offset = 0
+limit = 100
+
+while True:
+    response = requests.get(
+        f"https://integrate.zivvy.xyz/v1/items?limit={limit}&offset={offset}",
+        headers=headers
+    )
+    result = response.json()
+    all_items.extend(result["data"])
+
+    if offset + limit >= result["meta"]["total"]:
+        break
+    offset += limit
+
+print(f"Fetched {len(all_items)} items")
+```
+
+## Filtering
+
+Filter results by passing field names as query parameters. The API matches records where all specified filters are satisfied (AND logic).
+
+### Basic filters
+
+```bash
+# Items in the Electronics group
+curl "https://integrate.zivvy.xyz/v1/items?item_group=Electronics" \
+  -H "X-API-Key: zk_live_your_key_here"
+
+# Active customers in the US
+curl "https://integrate.zivvy.xyz/v1/customers?country=United%20States&status=active" \
+  -H "X-API-Key: zk_live_your_key_here"
+
+# Invoices that are overdue
+curl "https://integrate.zivvy.xyz/v1/invoices?status=overdue" \
+  -H "X-API-Key: zk_live_your_key_here"
+```
+
+### Filter operators
+
+For advanced filtering, append an operator suffix to the field name:
+
+| Operator | Suffix | Example | Description |
+|----------|--------|---------|-------------|
+| Equals | (none) | `status=active` | Exact match (default) |
+| Not equal | `__ne` | `status__ne=cancelled` | Excludes matching records |
+| Greater than | `__gt` | `standard_rate__gt=100` | Values above threshold |
+| Greater or equal | `__gte` | `created__gte=2024-01-01` | Values at or above threshold |
+| Less than | `__lt` | `standard_rate__lt=50` | Values below threshold |
+| Less or equal | `__lte` | `modified__lte=2024-06-30` | Values at or below threshold |
+| Contains | `__like` | `item_name__like=desk` | Case-insensitive substring match |
+| In list | `__in` | `status__in=active,pending` | Matches any value in the comma-separated list |
+
+### Combined example
+
+Fetch electronics priced over $100, modified this year, sorted by price:
+
+```bash
+curl "https://integrate.zivvy.xyz/v1/items?item_group=Electronics&standard_rate__gt=100&modified__gte=2024-01-01&sort=standard_rate&order=desc&limit=10" \
+  -H "X-API-Key: zk_live_your_key_here"
+```
+
+## Sorting
+
+Control the order of results with the `sort` and `order` parameters:
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `sort` | string | `modified` | Field name to sort by |
+| `order` | string | `desc` | Sort direction: `asc` or `desc` |
+
+### Examples
+
+```bash
+# Newest items first (default)
+curl "https://integrate.zivvy.xyz/v1/items?sort=modified&order=desc" \
+  -H "X-API-Key: zk_live_your_key_here"
+
+# Alphabetical by name
+curl "https://integrate.zivvy.xyz/v1/items?sort=item_name&order=asc" \
+  -H "X-API-Key: zk_live_your_key_here"
+
+# Most expensive first
+curl "https://integrate.zivvy.xyz/v1/items?sort=standard_rate&order=desc&limit=10" \
+  -H "X-API-Key: zk_live_your_key_here"
+```
+
+You can sort by any field that exists on the resource. The API returns a `VALIDATION_ERROR` if you specify a field that does not exist.
+
+## Searching
+
+Use the `q` parameter for full-text search across a resource's key fields:
+
+```bash
+curl "https://integrate.zivvy.xyz/v1/items?q=standing+desk" \
+  -H "X-API-Key: zk_live_your_key_here"
+```
+
+Search checks the resource's primary text fields (e.g., `item_name`, `item_code`, and `description` for items). It is case-insensitive and matches partial words.
+
+You can combine search with filters:
+
+```bash
+# Search for "desk" within the Furniture group
+curl "https://integrate.zivvy.xyz/v1/items?q=desk&item_group=Furniture&sort=item_name&order=asc" \
+  -H "X-API-Key: zk_live_your_key_here"
+```
+
+## Selecting fields
+
+By default, list endpoints return a standard set of fields. Use the `fields` parameter to request only the fields you need:
+
+```bash
+curl "https://integrate.zivvy.xyz/v1/items?fields=item_code,item_name,standard_rate&limit=5" \
+  -H "X-API-Key: zk_live_your_key_here"
+```
+
+This reduces response size and can improve performance for large datasets.
+
+## Putting it all together
+
+A realistic query combining pagination, filtering, sorting, and field selection:
+
+```bash
+curl "https://integrate.zivvy.xyz/v1/items?item_group=Electronics&standard_rate__gte=50&standard_rate__lte=500&sort=modified&order=desc&fields=item_code,item_name,standard_rate,modified&limit=20&offset=0" \
+  -H "X-API-Key: zk_live_your_key_here"
+```
+
+```json
+{
+  "data": [
+    {
+      "item_code": "IT-00042",
+      "item_name": "Wireless Keyboard",
+      "standard_rate": 79.99,
+      "modified": "2024-03-15T10:30:00Z"
+    },
+    {
+      "item_code": "IT-00038",
+      "item_name": "USB-C Hub",
+      "standard_rate": 54.99,
+      "modified": "2024-03-14T16:45:00Z"
+    }
+  ],
+  "meta": {
+    "total": 28,
+    "limit": 20,
+    "offset": 0
+  }
+}
+```

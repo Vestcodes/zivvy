@@ -1,0 +1,216 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "field:slug",
+ "creation": "2026-07-23 14:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "identity_section",
+  "tenant_name",
+  "slug",
+  "status",
+  "column_break_identity",
+  "plan",
+  "seat_limit",
+  "seats_used",
+  "links_section",
+  "company",
+  "owner_user",
+  "column_break_links",
+  "datacenter",
+  "created",
+  "billing_section",
+  "polar_customer_id",
+  "polar_subscription_id",
+  "column_break_billing",
+  "product_id",
+  "subscription_status",
+  "current_period_end",
+  "cancel_at_period_end",
+  "last_synced_at"
+ ],
+ "fields": [
+  {
+   "fieldname": "identity_section",
+   "fieldtype": "Section Break",
+   "label": "Identity"
+  },
+  {
+   "fieldname": "tenant_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Tenant Name",
+   "reqd": 1
+  },
+  {
+   "description": "Unique subdomain slug (e.g. acme → acme.zivvy.xyz). Autoname key.",
+   "fieldname": "slug",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Slug",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "default": "trial",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "trial\nactive\nsuspended",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_identity",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "free",
+   "fieldname": "plan",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Plan",
+   "options": "free\npro\nbusiness",
+   "reqd": 1
+  },
+  {
+   "default": "2",
+   "description": "Max enabled System Users in this tenant. Free defaults to 2; Polar sync may raise.",
+   "fieldname": "seat_limit",
+   "fieldtype": "Int",
+   "label": "Seat Limit",
+   "non_negative": 1
+  },
+  {
+   "default": "0",
+   "description": "Cached count of billable users in this tenant (refreshed on seat checks).",
+   "fieldname": "seats_used",
+   "fieldtype": "Int",
+   "label": "Seats Used",
+   "non_negative": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "links_section",
+   "fieldtype": "Section Break",
+   "label": "Company & Owner"
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Company",
+   "options": "Company"
+  },
+  {
+   "fieldname": "owner_user",
+   "fieldtype": "Link",
+   "label": "Owner User",
+   "options": "User"
+  },
+  {
+   "fieldname": "column_break_links",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "us",
+   "fieldname": "datacenter",
+   "fieldtype": "Select",
+   "label": "Datacenter",
+   "options": "india\neu\nus"
+  },
+  {
+   "fieldname": "created",
+   "fieldtype": "Datetime",
+   "label": "Created",
+   "read_only": 1
+  },
+  {
+   "fieldname": "billing_section",
+   "fieldtype": "Section Break",
+   "label": "Polar Billing"
+  },
+  {
+   "fieldname": "polar_customer_id",
+   "fieldtype": "Data",
+   "label": "Polar Customer ID",
+   "read_only": 1
+  },
+  {
+   "fieldname": "polar_subscription_id",
+   "fieldtype": "Data",
+   "label": "Polar Subscription ID",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_billing",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "product_id",
+   "fieldtype": "Data",
+   "label": "Product ID",
+   "read_only": 1
+  },
+  {
+   "default": "none",
+   "fieldname": "subscription_status",
+   "fieldtype": "Data",
+   "label": "Subscription Status"
+  },
+  {
+   "fieldname": "current_period_end",
+   "fieldtype": "Data",
+   "label": "Current Period End",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "cancel_at_period_end",
+   "fieldtype": "Check",
+   "label": "Cancel at Period End"
+  },
+  {
+   "fieldname": "last_synced_at",
+   "fieldtype": "Datetime",
+   "label": "Last Synced At",
+   "read_only": 1
+  }
+ ],
+ "links": [],
+ "modified": "2026-07-23 14:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Zivvy Brand",
+ "name": "Zivvy Tenant",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 0,
+   "print": 1,
+   "read": 1,
+   "role": "Sales User",
+   "write": 0
+  }
+ ],
+ "search_fields": "tenant_name,slug,company,owner_user",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "tenant_name",
+ "track_changes": 1
+}

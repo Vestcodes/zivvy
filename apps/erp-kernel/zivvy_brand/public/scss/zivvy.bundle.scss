@@ -1,0 +1,347 @@
+/*
+ * Zivvy by Vestcodes — Desk + portal theme
+ * Progressive enhancement over Frappe Desk / website chrome.
+ */
+
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Sora:wght@500;600;700&display=swap");
+
+:root,
+[data-theme="light"],
+html {
+	--zivvy-primary: #4f46e5;
+	--zivvy-accent: #7c3aed;
+	--zivvy-surface: #ffffff;
+	--zivvy-surface-muted: #f8fafc;
+	--zivvy-text: #0f172a;
+	--zivvy-border: #e2e8f0;
+
+	--primary: #4f46e5;
+	--primary-color: #4f46e5;
+	--btn-primary: #4f46e5;
+	--btn-primary-hover: #4338ca;
+	--btn-primary-active: #3730a3;
+
+	--blue-500: #4f46e5;
+	--blue-600: #4338ca;
+	--indigo-500: #4f46e5;
+	--violet-500: #7c3aed;
+
+	--text-color: #0f172a;
+	--heading-color: #0f172a;
+	--text-muted: #64748b;
+	--bg-color: #f8fafc;
+	--subtle-fg: #f1f5f9;
+	--control-bg: #f8fafc;
+	--border-color: #e2e8f0;
+	--card-bg: #ffffff;
+
+	--navbar-bg: #ffffff;
+	--sidebar-bg: #f8fafc;
+	--fg-color: #ffffff;
+
+	--awesomplete-hover-bg: rgba(79, 70, 229, 0.08);
+	--dt-primary-color: #4f46e5;
+
+	--font-stack: "IBM Plex Sans", "Segoe UI", sans-serif;
+	--font-family-sans: "IBM Plex Sans", "Segoe UI", sans-serif;
+}
+
+body {
+	font-family: var(--font-stack);
+	color: var(--zivvy-text);
+	background: var(--zivvy-surface-muted);
+}
+
+h1,
+h2,
+h3,
+h4,
+.page-title,
+.workspace-title,
+.navbar-brand {
+	font-family: Sora, var(--font-stack);
+	letter-spacing: -0.02em;
+}
+
+/* ---------- Primary actions ---------- */
+.btn-primary,
+.btn-primary:not(:disabled):not(.disabled),
+button.btn-primary,
+.page-actions .btn-primary {
+	background-color: var(--zivvy-primary) !important;
+	background-image: linear-gradient(135deg, var(--zivvy-primary), var(--zivvy-accent)) !important;
+	border-color: transparent !important;
+	color: #fff !important;
+	border-radius: 10px;
+	box-shadow: 0 6px 16px rgba(79, 70, 229, 0.22);
+	font-weight: 600;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+	filter: brightness(1.04);
+	border-color: transparent !important;
+}
+
+.btn {
+	border-radius: 10px;
+}
+
+a,
+.btn-link,
+.text-primary {
+	--text-color: var(--zivvy-primary);
+}
+
+a:hover {
+	color: var(--zivvy-accent);
+}
+
+/* ---------- Navbar ---------- */
+.navbar,
+header.navbar,
+.std-desk-navbar,
+body[data-route] .navbar {
+	background: var(--zivvy-surface) !important;
+	border-bottom: 1px solid var(--zivvy-border) !important;
+	box-shadow: 0 1px 0 rgba(15, 23, 42, 0.04);
+	backdrop-filter: saturate(1.2);
+}
+
+.navbar .navbar-brand,
+.navbar .app-logo,
+.navbar img.app-logo {
+	max-height: 28px;
+}
+
+.navbar .nav-link,
+.navbar .dropdown-toggle {
+	color: var(--zivvy-text) !important;
+	font-weight: 500;
+}
+
+.navbar .nav-link:hover,
+.navbar .dropdown-toggle:hover {
+	color: var(--zivvy-primary) !important;
+}
+
+/* Accent bar under navbar */
+.navbar::after {
+	content: "";
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	height: 2px;
+	background: linear-gradient(90deg, var(--zivvy-primary), var(--zivvy-accent), transparent 80%);
+	pointer-events: none;
+	opacity: 0.85;
+}
+
+.navbar {
+	position: relative;
+}
+
+/* ---------- Sidebar ---------- */
+.layout-side-section,
+.desk-sidebar,
+.list-sidebar,
+.form-sidebar,
+.standard-sidebar,
+body .sidebar-menu {
+	background: var(--zivvy-surface-muted) !important;
+	border-color: var(--zivvy-border) !important;
+}
+
+.desk-sidebar .sidebar-item-label,
+.standard-sidebar-label {
+	color: #475569;
+	font-weight: 500;
+}
+
+.desk-sidebar .selected,
+.desk-sidebar .sidebar-item-container.selected,
+.desk-sidebar .item-anchor.active,
+.standard-sidebar-item.selected,
+.list-sidebar .list-link.active {
+	background: rgba(79, 70, 229, 0.1) !important;
+	color: var(--zivvy-primary) !important;
+	border-radius: 10px;
+}
+
+.desk-sidebar .sidebar-item-container:hover,
+.standard-sidebar-item:hover {
+	background: rgba(79, 70, 229, 0.06);
+	border-radius: 10px;
+}
+
+/* ---------- Page head ---------- */
+.page-head,
+.page-head.flex,
+.layout-main-section-wrapper .page-head {
+	background: rgba(255, 255, 255, 0.92) !important;
+	border-bottom: 1px solid var(--zivvy-border) !important;
+	backdrop-filter: blur(8px);
+	padding-top: 0.85rem;
+	padding-bottom: 0.85rem;
+}
+
+.page-title .title-text,
+.page-head h3,
+.page-head .title-area .title-text {
+	font-family: Sora, var(--font-stack);
+	font-weight: 600;
+	color: var(--zivvy-text);
+	letter-spacing: -0.02em;
+}
+
+/* ---------- Layout density ---------- */
+.layout-main-section,
+.form-layout,
+.list-row-container {
+	background: transparent;
+}
+
+.frappe-card,
+.widget,
+.dashboard-widget-box,
+.workspace-card,
+.codex-editor,
+.form-section,
+.form-dashboard-section,
+.page-card {
+	background: var(--zivvy-surface) !important;
+	border: 1px solid var(--zivvy-border) !important;
+	border-radius: 14px !important;
+	box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04) !important;
+}
+
+.widget:hover,
+.workspace-card:hover,
+.dashboard-widget-box:hover {
+	border-color: rgba(79, 70, 229, 0.28) !important;
+	box-shadow: 0 8px 24px rgba(79, 70, 229, 0.08) !important;
+}
+
+.list-row,
+.list-row-head {
+	border-color: var(--zivvy-border) !important;
+}
+
+.list-row:hover {
+	background: rgba(79, 70, 229, 0.04) !important;
+}
+
+.form-control,
+.input-with-feedback,
+.select-input,
+.awesomplete > input {
+	border-radius: 10px !important;
+	border-color: var(--zivvy-border) !important;
+	background: var(--zivvy-surface) !important;
+}
+
+.form-control:focus,
+.input-with-feedback:focus {
+	border-color: var(--zivvy-primary) !important;
+	box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15) !important;
+}
+
+/* ---------- Workspace ---------- */
+.workspace-header,
+.workspace-sidebar,
+.codex-editor__redactor {
+	--primary: var(--zivvy-primary);
+}
+
+.workspace-title,
+.editor-title {
+	font-family: Sora, var(--font-stack) !important;
+}
+
+.workspace .widget .widget-head .widget-title,
+.dashboard-widget-box .widget-head .widget-title {
+	font-weight: 600;
+	color: var(--zivvy-text);
+}
+
+.workspace-page,
+.workspace-body {
+	background: linear-gradient(180deg, #eef2ff 0%, var(--zivvy-surface-muted) 220px, var(--zivvy-surface-muted) 100%);
+}
+
+/* ---------- Portal / website ---------- */
+.web-footer,
+.footer-powered,
+.website-footer {
+	color: var(--zivvy-text);
+}
+
+.web-footer a,
+.footer-powered a {
+	color: var(--zivvy-primary) !important;
+}
+
+.navbar-light,
+.web-navbar {
+	border-bottom: 1px solid var(--zivvy-border);
+}
+
+.btn-primary-dark,
+.btn.btn-login {
+	background: linear-gradient(135deg, var(--zivvy-primary), var(--zivvy-accent)) !important;
+	border: none !important;
+}
+
+/* Indicator / progress accents */
+.indicator-pill.blue,
+.indicator.blue,
+.progress-bar.bg-primary {
+	background-color: var(--zivvy-primary) !important;
+}
+
+/* Checkbox / switch accents where CSS variables apply */
+input[type="checkbox"]:checked,
+.checkbox input:checked + label::before {
+	accent-color: var(--zivvy-primary);
+}
+
+/* Soften noisy borders on Desk shells */
+.body-sidebar,
+.content.page-container {
+	border-color: var(--zivvy-border) !important;
+}
+
+/* Apps switcher polish */
+.app-switcher,
+.apps-list .app-item {
+	border-radius: 12px;
+}
+
+.app-switcher .app-item:hover {
+	background: rgba(79, 70, 229, 0.08);
+}
+
+/* Hide leftover Frappe / ERPNext chrome (about, help, list ads) */
+.frappe-about,
+.modal-body a[href*="frappe.io"],
+.modal-body a[href*="frappeframework.com"],
+.modal-body a[href*="discuss.frappe.io"],
+.modal-body a[href*="erpnext.com"],
+.modal-body a[href*="docs.erpnext.com"],
+.dropdown-menu a[href*="frappe.io"],
+.dropdown-menu a[href*="frappeframework.com"],
+.dropdown-menu a[href*="discuss.frappe.io"],
+.dropdown-menu a[href*="docs.erpnext.com"],
+.dropdown-menu a[href*="erpnext.com"],
+.dropdown-menu a[href*="frappe.cloud"],
+.dropdown-menu a[href*="github.com/frappe"],
+.list-sidebar a[href*="frappe.io"],
+.list-sidebar .sidebar-action:has(a[href*="frappe.io"]) {
+	display: none !important;
+}
+
+/* Prefer Zivvy About dialog body */
+.zivvy-about a {
+	color: var(--zivvy-primary);
+}

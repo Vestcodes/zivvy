@@ -1,0 +1,183 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "field:slug",
+ "creation": "2026-07-25 12:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "identity_section",
+  "slug",
+  "title",
+  "category",
+  "enabled",
+  "column_break_identity",
+  "monthly_price_usd",
+  "annual_price_usd",
+  "upstream_section",
+  "upstream_frappe_app",
+  "upstream_url",
+  "column_break_upstream",
+  "doctypes_unlocked",
+  "modules_unlocked",
+  "polar_section",
+  "polar_product_id",
+  "polar_monthly_price_id",
+  "polar_annual_price_id",
+  "content_section",
+  "description",
+  "marketing_summary"
+ ],
+ "fields": [
+  {
+   "fieldname": "identity_section",
+   "fieldtype": "Section Break",
+   "label": "Identity"
+  },
+  {
+   "description": "Unique slug used in APIs and gating (e.g. ecommerce-integrations).",
+   "fieldname": "slug",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Slug",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "title",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Title",
+   "reqd": 1
+  },
+  {
+   "default": "Other",
+   "fieldname": "category",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Category",
+   "options": "Integrations\nCompliance\nPayments\nDocuments\nOther"
+  },
+  {
+   "default": "1",
+   "fieldname": "enabled",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Enabled"
+  },
+  {
+   "fieldname": "column_break_identity",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "monthly_price_usd",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Monthly Price (USD)",
+   "reqd": 1
+  },
+  {
+   "fieldname": "annual_price_usd",
+   "fieldtype": "Currency",
+   "label": "Annual Price (USD)"
+  },
+  {
+   "fieldname": "upstream_section",
+   "fieldtype": "Section Break",
+   "label": "Upstream Frappe App"
+  },
+  {
+   "description": "Upstream Frappe app name (e.g. ecommerce_integrations).",
+   "fieldname": "upstream_frappe_app",
+   "fieldtype": "Data",
+   "label": "Upstream Frappe App"
+  },
+  {
+   "fieldname": "upstream_url",
+   "fieldtype": "Data",
+   "label": "Upstream URL"
+  },
+  {
+   "fieldname": "column_break_upstream",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "JSON array of DocType names this addon unlocks.",
+   "fieldname": "doctypes_unlocked",
+   "fieldtype": "Long Text",
+   "label": "DocTypes Unlocked (JSON list)"
+  },
+  {
+   "description": "JSON array of Module names this addon unlocks.",
+   "fieldname": "modules_unlocked",
+   "fieldtype": "Long Text",
+   "label": "Modules Unlocked (JSON list)"
+  },
+  {
+   "fieldname": "polar_section",
+   "fieldtype": "Section Break",
+   "label": "Polar Billing"
+  },
+  {
+   "fieldname": "polar_product_id",
+   "fieldtype": "Data",
+   "label": "Polar Product ID"
+  },
+  {
+   "fieldname": "polar_monthly_price_id",
+   "fieldtype": "Data",
+   "label": "Polar Monthly Price ID"
+  },
+  {
+   "fieldname": "polar_annual_price_id",
+   "fieldtype": "Data",
+   "label": "Polar Annual Price ID"
+  },
+  {
+   "fieldname": "content_section",
+   "fieldtype": "Section Break",
+   "label": "Content"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "Description"
+  },
+  {
+   "fieldname": "marketing_summary",
+   "fieldtype": "Text Editor",
+   "label": "Marketing Summary"
+  }
+ ],
+ "links": [],
+ "modified": "2026-07-25 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Zivvy Brand",
+ "name": "Zivvy Addon",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "read": 1,
+   "role": "Zivvy Tenant Admin"
+  }
+ ],
+ "search_fields": "slug,title,category",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "title",
+ "track_changes": 1
+}

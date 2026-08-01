@@ -1,0 +1,135 @@
+{% extends "templates/marketing/base.html" %}
+
+{% block head_include %}
+{{ super() }}
+<link rel="stylesheet" href="/assets/zivvy_brand/css/zivvy_legal.css?v=20260723-revamp">
+{% endblock %}
+
+{% block marketing_content %}
+<header class="zivvy-page-hero">
+	<div class="zivvy-page-hero__inner">
+		<h1>{{ _("Pricing built to reduce buying hesitation") }}</h1>
+		<p>{{ _("Per-active-seat plans, visible feature boundaries, and in-product upgrades. No hidden SKU maze, no surprise gating.") }}</p>
+		<div class="zivvy-page-hero__chips">
+			<span>{{ _("Monthly per-seat pricing") }}</span>
+			<span>{{ _("Upgrade in /app/billing") }}</span>
+			<span>{{ _("Polar merchant-of-record") }}</span>
+		</div>
+	</div>
+</header>
+
+<section class="zivvy-section zivvy-pricing" data-zivvy-page="pricing">
+	<p class="zivvy-note-card">
+		<span class="zivvy-plan-badge">{{ _("Conversion clarity") }}</span>
+		{{ _("Barcode is a paid inventory capability: blocked on Free, included on Pro and Business.") }}
+	</p>
+	<div class="zivvy-pricing__grid">
+		{% set codes = ["free", "pro", "business"] %}
+		{% for code in codes %}
+		{% set plan = plans[code] %}
+		<section class="zivvy-price-card {% if code == 'pro' %}is-featured{% endif %}">
+			{% if code == "pro" %}
+			<p class="zivvy-price-card__tag">{{ _("Most teams choose Pro") }}</p>
+			{% endif %}
+			<h2>{{ plan.label }}</h2>
+			<p class="price">
+				{% if plan.price_usd == 0 %}
+					$0
+				{% else %}
+					${{ plan.price_usd }} <span class="zivvy-price-card__suffix">/ {{ _("user / mo") }}</span>
+				{% endif %}
+			</p>
+			<p class="zivvy-price-card__persona">
+				{% if code == "free" %}
+				{{ _("Best for: early teams validating process discipline") }}
+				{% elif code == "pro" %}
+				{{ _("Best for: finance, inventory, HRMS, and banking") }}
+				{% else %}
+				{{ _("Best for: ecommerce sync and multi-company ops") }}
+				{% endif %}
+			</p>
+			<ul>
+				{% for feature in plan.features %}
+				<li>{{ feature }}</li>
+				{% endfor %}
+			</ul>
+			{% if code == "free" %}
+			<a class="cta secondary" href="/login#signup" data-zivvy-event="cta_start_free">{{ _("Start Free") }}</a>
+			{% elif is_logged_in %}
+			<a class="cta" href="/app/billing" data-zivvy-event="cta_upgrade">{{ _("Upgrade in Billing") }}</a>
+			{% else %}
+			<a class="cta" href="/login?redirect-to=/app/billing" data-zivvy-event="cta_upgrade">{{ _("Sign in to upgrade") }}</a>
+			{% endif %}
+		</section>
+		{% endfor %}
+	</div>
+	<section class="zivvy-pricing-matrix" aria-label="{{ _('Feature gating by plan') }}">
+		<h2>{{ _("Feature gating at a glance") }}</h2>
+		<p>{{ _("The table below makes upgrade decisions explicit for buyers and operators.") }}</p>
+		<div class="zivvy-pricing-matrix__table" role="table" aria-label="{{ _('Plan comparison') }}">
+			<div class="zivvy-pricing-matrix__row is-head" role="row">
+				<div role="columnheader">{{ _("Capability") }}</div>
+				<div role="columnheader">{{ _("Free") }}</div>
+				<div role="columnheader">{{ _("Pro") }}</div>
+				<div role="columnheader">{{ _("Business") }}</div>
+			</div>
+			<div class="zivvy-pricing-matrix__row" role="row">
+				<div role="cell">{{ _("CRM and quote-to-order workflow") }}</div>
+				<div role="cell">{{ _("Included") }}</div>
+				<div role="cell">{{ _("Included") }}</div>
+				<div role="cell">{{ _("Included") }}</div>
+			</div>
+			<div class="zivvy-pricing-matrix__row" role="row">
+				<div role="cell">{{ _("Inventory barcode workflows") }}</div>
+				<div role="cell">{{ _("Blocked") }}</div>
+				<div role="cell">{{ _("Included") }}</div>
+				<div role="cell">{{ _("Included") }}</div>
+			</div>
+			<div class="zivvy-pricing-matrix__row" role="row">
+				<div role="cell">{{ _("Finance, HRMS, projects, banking") }}</div>
+				<div role="cell">{{ _("Limited") }}</div>
+				<div role="cell">{{ _("Included") }}</div>
+				<div role="cell">{{ _("Included") }}</div>
+			</div>
+			<div class="zivvy-pricing-matrix__row" role="row">
+				<div role="cell">{{ _("Ecommerce channel sync") }}</div>
+				<div role="cell">{{ _("Not included") }}</div>
+				<div role="cell">{{ _("Not included") }}</div>
+				<div role="cell">{{ _("Included") }}</div>
+			</div>
+			<div class="zivvy-pricing-matrix__row" role="row">
+				<div role="cell">{{ _("Advanced manufacturing and quality") }}</div>
+				<div role="cell">{{ _("Not included") }}</div>
+				<div role="cell">{{ _("Not included") }}</div>
+				<div role="cell">{{ _("Included") }}</div>
+			</div>
+			<div class="zivvy-pricing-matrix__row" role="row">
+				<div role="cell">{{ _("Multi-company operations") }}</div>
+				<div role="cell">{{ _("Not included") }}</div>
+				<div role="cell">{{ _("Not included") }}</div>
+				<div role="cell">{{ _("Included") }}</div>
+			</div>
+		</div>
+	</section>
+	<section class="zivvy-pricing-help">
+		<article class="zivvy-pricing-help__card">
+			<h3>{{ _("Need a zero-risk onboarding run?") }}</h3>
+			<p>{{ _("For evaluation, migration dry-runs, or QA, we can provide a time-bound 100% onboarding coupon for paid plan checkout where appropriate.") }}</p>
+			<p>{{ _("Request this through") }} <a href="/contact">{{ _("contact") }}</a> {{ _("with your use case and expected seat count.") }}</p>
+		</article>
+		<article class="zivvy-pricing-help__card">
+			<h3>{{ _("How upgrades work") }}</h3>
+			<ol>
+				<li>{{ _("Sign in and open") }} <a href="/app/billing">/app/billing</a>.</li>
+				<li>{{ _("Choose Pro or Business and confirm seats.") }}</li>
+				<li>{{ _("Complete Polar checkout and return to Billing for active status.") }}</li>
+			</ol>
+		</article>
+	</section>
+	<p class="zivvy-pricing-note">
+		{{ _("Payments are processed by Polar (merchant of record). Vestcodes Co operates Zivvy from India. Barcode features are not on Free; they are available on Pro and Business with inventory.") }}
+		<a href="/features">{{ _("Feature details") }}</a> ·
+		<a href="/terms">{{ _("Terms") }}</a>
+	</p>
+</section>
+{% endblock %}

@@ -1,0 +1,26 @@
+.git
+.cursor
+**/__pycache__
+**/*.pyc
+.env
+.env.*
+!.env.example
+# Keep README.md — required by pyproject.toml / flit
+DEPLOY.md
+scripts/*.md
+.DS_Store
+deploy/docker-compose.yml
+node_modules
+e2e-screenshots
+playwright-report
+test-results
+*.md
+!README.md
+.demo-credentials.local
+.railway-config-pull-*
+FULL_USER_QA_REPORT.md
+BROWSER_E2E_REPORT.md
+E2E_REPORT.md
+CONVERSION_UX_REPORT.md
+POLISH_REPORT.md
+SMOKE_REPORT.md

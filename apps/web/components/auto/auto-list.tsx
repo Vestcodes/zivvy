@@ -1,0 +1,247 @@
+import Link from "next/link";
+import { ChevronRight } from "lucide-react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow
+} from "@/components/ui/table";
+import { Card } from "@/components/ui/card";
+import { FieldCell } from "@/components/auto/field-cell";
+import { AutoListEmpty } from "@/components/auto/auto-list-empty";
+import { AutoListNewButton } from "@/components/auto/auto-list-new-button";
+import { AutoListSkeleton } from "@/components/auto/auto-list-skeleton";
+import { AutoListSearch } from "@/components/auto/auto-list-search";
+import { AutoListPagination } from "@/components/auto/auto-list-pagination";
+import { AutoListKeyboard } from "@/components/auto/auto-list-keyboard";
+import { UpgradeRequired } from "@/components/upgrade-required";
+import { SavedViewsBar } from "@/components/auto/saved-views-bar";
+import { NextActionStrip } from "@/components/auto/next-action-strip";
+import { computeListAction } from "@/lib/next-action";
+import {
+  frappeGetCount,
+  getDoctypeMeta,
+  groupFieldsForForm,
+  listViewFields,
+  reportviewGet
+} from "@/lib/frappe-meta";
+import { fetchBootinfo } from "@/lib/boot-server";
+import { tierAtLeast } from "@/lib/boot-types";
+
+interface Props {
+  doctype: string;
+  basePath: string;             // e.g. "/sales/invoices"
+  title: string;
+  filters?: Array<[string, string, string, string | number | boolean]>;
+  pageLength?: number;
+  searchParams?: {
+    q?: string;
+    page?: string;
+    size?: string;
+    filters?: string;
+    sort?: string;
+    order?: string;
+    new?: string;
+  };
+}
+
+export async function AutoList({
+  doctype,
+  basePath,
+  title,
+  filters: baseFilters,
+  pageLength = 25,
+  searchParams = {}
+}: Props) {
+  // Tier gate FIRST — before any fetches.
+  const boot = await fetchBootinfo();
+  const zivvy = boot.zivvy;
+  const requiredTier = zivvy?.doctype_min_tier?.[doctype];
+  if (requiredTier && zivvy && !tierAtLeast(zivvy.tier, requiredTier)) {
+    return (
+      <div className="space-y-4">
+        <header>
+          <h1 className="font-display text-2xl tracking-tight sm:text-3xl">{title}</h1>
+          <p className="text-sm text-muted-foreground">{doctype}</p>
+        </header>
+        <UpgradeRequired featureName={title} requiredTier={requiredTier} />
+      </div>
+    );
+  }
+
+  const meta = await getDoctypeMeta(doctype);
+
+  if (!meta) {
+    return <AutoListSkeleton title={title} basePath={basePath} reason="unavailable" />;
+  }
+
+  const allListFields = listViewFields(meta);
+  const newGroups = groupFieldsForForm(meta, { isNew: true });
+  const titleField = meta.title_field && meta.title_field !== "name" ? meta.title_field : null;
+  const titleMeta = titleField ? meta.fields.find((f) => f.fieldname === titleField) : null;
+  const titleDefault = typeof titleMeta?.default === "string" ? titleMeta.default : "";
+  const titleSourceField = titleDefault.match(/^\{(\w+)\}$/)?.[1] ?? null;
+  const titleExclude = new Set([titleField, titleSourceField].filter(Boolean) as string[]);
+  const listFields = titleField
+    ? allListFields.filter((f) => !titleExclude.has(f.fieldname))
+    : allListFields;
+  const fieldNames = [
+    "name",
+    ...(titleField ? [titleField] : []),
+    ...allListFields.map((f) => f.fieldname).filter((f) => f !== "name")
+  ];
+  const orderBy = meta.sort_field
+    ? `\`tab${doctype}\`.\`${meta.sort_field}\` ${meta.sort_order ?? "DESC"}`
+    : `\`tab${doctype}\`.\`modified\` DESC`;
+
+  const q = (searchParams.q ?? "").trim();
+  const page = Math.max(1, Number(searchParams.page ?? 1) || 1);
+  const size = Math.max(5, Math.min(200, Number(searchParams.size ?? pageLength) || pageLength));
+
+  // Saved-view filters from URL
+  let viewFilters: Array<[string, string, string, string | number | boolean]> = [];
+  if (searchParams.filters) {
+    try { viewFilters = JSON.parse(searchParams.filters); } catch { /* ignore */ }
+  }
+
+  // Saved-view sort override
+  const sortOverride = searchParams.sort
+    ? `\`tab${doctype}\`.\`${searchParams.sort}\` ${searchParams.order ?? "DESC"}`
+    : null;
+
+  const filters: Array<[string, string, string, string | number | boolean]> = [
+    ...(baseFilters ?? []),
+    ...viewFilters
+  ];
+  let orFilters: Array<[string, string, string, string | number | boolean]> | undefined;
+  if (q) {
+    const searchFields: Array<[string, string, string, string | number | boolean]> = [
+      [doctype, "name", "like", `%${q}%`]
+    ];
+    if (titleField) {
+      searchFields.push([doctype, titleField, "like", `%${q}%`]);
+    }
+    orFilters = searchFields;
+  }
+
+  const [list, count] = await Promise.all([
+    reportviewGet({
+      doctype,
+      fields: fieldNames,
+      filters: filters.length > 0 ? filters : undefined,
+      or_filters: orFilters,
+      order_by: sortOverride ?? orderBy,
+      start: (page - 1) * size,
+      page_length: size
+    }),
+    frappeGetCount(doctype, filters.length > 0 ? Object.fromEntries(
+      filters.map(([, field, op, val]) => [field, op === "=" ? val : [op, val]])
+    ) : undefined)
+  ]);
+
+  const shownOnPage = list?.values.length ?? 0;
+  const rowHrefs = (list?.values ?? []).map(
+    (row) => `${basePath}/${encodeURIComponent(String(row.name))}`
+  );
+
+  return (
+    <div className="space-y-4">
+      <header className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h1 className="font-display text-2xl tracking-tight sm:text-3xl">{title}</h1>
+          <p className="text-sm text-muted-foreground">
+            {doctype}
+            {q && (
+              <>
+                {" "}
+                · <span className="font-mono">matching "{q}"</span>
+              </>
+            )}
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <AutoListSearch placeholder={`Search ${title.toLowerCase()}…`} />
+          <AutoListNewButton
+            meta={meta}
+            groups={newGroups}
+            basePath={basePath}
+            title={title}
+            defaultOpen={searchParams.new === "1"}
+          />
+        </div>
+      </header>
+
+      {list && (
+        <>
+          <NextActionStrip
+            action={computeListAction({ meta, total: count, basePath, title })}
+          />
+          <SavedViewsBar
+            doctype={doctype}
+            userEmail={boot.user?.name ?? null}
+            tenantName={boot.zivvy?.tenant?.name ?? null}
+          />
+        </>
+      )}
+
+      {!list || shownOnPage === 0 ? (
+        <AutoListEmpty
+          title={title}
+          basePath={basePath}
+          reason={list ? "empty" : "unavailable"}
+        />
+      ) : (
+        <AutoListKeyboard rowHrefs={rowHrefs}>
+          <Card className="border-border/70 bg-card p-0 shadow-sm">
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-secondary/40 hover:bg-secondary/40">
+                  <TableHead className="w-[240px] font-medium">{titleField ? (titleSourceField ? meta.fields.find((f) => f.fieldname === titleSourceField)?.label : null) ?? allListFields.find((f) => f.fieldname === titleField)?.label ?? titleMeta?.label ?? "Name" : "Name"}</TableHead>
+                  {listFields
+                    .filter((f) => f.fieldname !== "name")
+                    .map((f) => (
+                      <TableHead key={f.fieldname} className="font-medium">
+                        {f.label ?? f.fieldname}
+                      </TableHead>
+                    ))}
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {list.values.map((row) => {
+                  const rowHref = `${basePath}/${encodeURIComponent(String(row.name))}`;
+                  return (
+                    <TableRow
+                      key={String(row.name)}
+                      className="group relative cursor-pointer transition-colors hover:bg-muted/40"
+                    >
+                      <TableCell>
+                        <Link
+                          href={rowHref}
+                          className="inline-flex items-center gap-1.5 font-medium text-foreground hover:text-primary"
+                        >
+                          {titleField && row[titleField] ? String(row[titleField]) : String(row.name)}
+                          <ChevronRight className="size-3.5 text-muted-foreground opacity-0 transition-all group-hover:translate-x-0.5 group-hover:opacity-100" />
+                        </Link>
+                      </TableCell>
+                      {listFields
+                        .filter((f) => f.fieldname !== "name")
+                        .map((f) => (
+                          <TableCell key={f.fieldname} className="text-sm">
+                            <FieldCell field={f} value={row[f.fieldname]} currency={String(boot.sysdefaults?.currency ?? "USD")} />
+                          </TableCell>
+                        ))}
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </Card>
+        </AutoListKeyboard>
+      )}
+
+      <AutoListPagination page={page} pageSize={size} total={count} shownOnPage={shownOnPage} />
+    </div>
+  );
+}

@@ -1,0 +1,12 @@
+{# Injected via update_website_context + web template include from base #}
+{% if zivvy_posthog and zivvy_posthog.enabled and zivvy_posthog.api_key %}
+<script>
+window.zivvy_posthog = {
+	enabled: true,
+	api_key: {{ zivvy_posthog.api_key | tojson }},
+	host: {{ zivvy_posthog.host | tojson }}
+};
+</script>
+{% else %}
+<script>window.zivvy_posthog = { enabled: false };</script>
+{% endif %}

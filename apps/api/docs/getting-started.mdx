@@ -1,0 +1,75 @@
+---
+title: Getting Started
+description: Get up and running with the Zivvy API in under 5 minutes.
+order: 1
+---
+
+# Getting Started
+
+The Zivvy API gives you programmatic access to your business data — items, customers, orders, invoices, stock, and more. It's a REST API that returns JSON, secured with API keys.
+
+## Base URL
+
+All API requests go to:
+
+```
+https://integrate.zivvy.xyz/v1
+```
+
+## Authentication
+
+Every request must include your API key in the `X-API-Key` header:
+
+```bash
+curl https://integrate.zivvy.xyz/v1/items \
+  -H "X-API-Key: zk_live_your_key_here"
+```
+
+You can generate API keys from **Settings → API Keys** in your [Zivvy dashboard](https://zivvy.xyz/settings).
+
+### Key types
+
+| Type | Prefix | Use case |
+|------|--------|----------|
+| Live | `zk_live_` | Production integrations |
+| Test | `zk_test_` | Development and testing |
+
+Test keys work against a sandboxed copy of your data. They can't modify production records.
+
+## Your first request
+
+Let's fetch your items:
+
+```bash
+curl https://integrate.zivvy.xyz/v1/items?limit=5 \
+  -H "X-API-Key: zk_live_your_key_here"
+```
+
+Response:
+
+```json
+{
+  "data": [
+    {
+      "name": "IT-00001",
+      "item_code": "IT-00001",
+      "item_name": "Standing Desk",
+      "item_group": "Furniture",
+      "standard_rate": 499.00,
+      "stock_uom": "Nos"
+    }
+  ],
+  "meta": {
+    "total": 42,
+    "limit": 5,
+    "offset": 0
+  }
+}
+```
+
+## Next steps
+
+- [Authentication](/docs/guides/authentication) — API key management and scopes
+- [Pagination & Filtering](/docs/guides/pagination) — Navigate large datasets
+- [Errors](/docs/guides/errors) — Error codes and handling
+- [Webhooks](/docs/guides/webhooks) — Real-time event notifications

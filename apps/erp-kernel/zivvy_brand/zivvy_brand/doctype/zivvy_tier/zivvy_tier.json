@@ -1,0 +1,271 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "field:slug",
+ "creation": "2026-07-25 12:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "identity_section",
+  "slug",
+  "title",
+  "enabled",
+  "column_break_identity",
+  "monthly_price_usd",
+  "annual_price_usd",
+  "polar_section",
+  "polar_product_id_monthly",
+  "polar_price_id_monthly",
+  "polar_product_id_annual",
+  "polar_price_id_annual",
+  "localised_prices_section",
+  "polar_price_id_monthly_eur",
+  "polar_price_id_monthly_gbp",
+  "polar_price_id_monthly_inr",
+  "polar_price_id_monthly_brl",
+  "polar_price_id_monthly_mxn",
+  "polar_price_id_monthly_idr",
+  "polar_price_id_monthly_pln",
+  "polar_price_id_monthly_aud",
+  "polar_price_id_monthly_cad",
+  "polar_price_id_monthly_jpy",
+  "polar_price_id_monthly_sgd",
+  "column_break_localised",
+  "polar_price_id_annual_eur",
+  "polar_price_id_annual_gbp",
+  "polar_price_id_annual_inr",
+  "polar_price_id_annual_brl",
+  "polar_price_id_annual_mxn",
+  "polar_price_id_annual_idr",
+  "polar_price_id_annual_pln",
+  "polar_price_id_annual_aud",
+  "polar_price_id_annual_cad",
+  "polar_price_id_annual_jpy",
+  "polar_price_id_annual_sgd"
+ ],
+ "fields": [
+  {
+   "fieldname": "identity_section",
+   "fieldtype": "Section Break",
+   "label": "Identity"
+  },
+  {
+   "description": "Unique slug used in checkout URLs and gating (pro / business).",
+   "fieldname": "slug",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Slug",
+   "options": "pro\nbusiness",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "title",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Title",
+   "reqd": 1
+  },
+  {
+   "default": "1",
+   "fieldname": "enabled",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Enabled"
+  },
+  {
+   "fieldname": "column_break_identity",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "monthly_price_usd",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Monthly Price (USD)",
+   "reqd": 1
+  },
+  {
+   "fieldname": "annual_price_usd",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Annual Price (USD)"
+  },
+  {
+   "fieldname": "polar_section",
+   "fieldtype": "Section Break",
+   "label": "Polar Billing",
+   "description": "Monthly and annual are SEPARATE products in Polar; each has its own product id + price id."
+  },
+  {
+   "fieldname": "polar_product_id_monthly",
+   "fieldtype": "Data",
+   "label": "Polar Product ID (Monthly)"
+  },
+  {
+   "fieldname": "polar_price_id_monthly",
+   "fieldtype": "Data",
+   "label": "Polar Price ID (Monthly)"
+  },
+  {
+   "fieldname": "polar_product_id_annual",
+   "fieldtype": "Data",
+   "label": "Polar Product ID (Annual)"
+  },
+  {
+   "fieldname": "polar_price_id_annual",
+   "fieldtype": "Data",
+   "label": "Polar Price ID (Annual)"
+  },
+  {
+   "fieldname": "localised_prices_section",
+   "fieldtype": "Section Break",
+   "label": "Localised Polar Price IDs (Optional)",
+   "description": "Per-currency Polar price IDs. Optional — empty means USD fallback (Polar presents via its own FX). Non-breaking: v1 checkout still works without any of these set. Add rows only as you wire up a native price in Polar for that currency."
+  },
+  {
+   "fieldname": "polar_price_id_monthly_eur",
+   "fieldtype": "Data",
+   "label": "Polar Price ID (Monthly, EUR)"
+  },
+  {
+   "fieldname": "polar_price_id_monthly_gbp",
+   "fieldtype": "Data",
+   "label": "Polar Price ID (Monthly, GBP)"
+  },
+  {
+   "fieldname": "polar_price_id_monthly_inr",
+   "fieldtype": "Data",
+   "label": "Polar Price ID (Monthly, INR)"
+  },
+  {
+   "fieldname": "polar_price_id_monthly_brl",
+   "fieldtype": "Data",
+   "label": "Polar Price ID (Monthly, BRL)"
+  },
+  {
+   "fieldname": "polar_price_id_monthly_mxn",
+   "fieldtype": "Data",
+   "label": "Polar Price ID (Monthly, MXN)"
+  },
+  {
+   "fieldname": "polar_price_id_monthly_idr",
+   "fieldtype": "Data",
+   "label": "Polar Price ID (Monthly, IDR)"
+  },
+  {
+   "fieldname": "polar_price_id_monthly_pln",
+   "fieldtype": "Data",
+   "label": "Polar Price ID (Monthly, PLN)"
+  },
+  {
+   "fieldname": "polar_price_id_monthly_aud",
+   "fieldtype": "Data",
+   "label": "Polar Price ID (Monthly, AUD)"
+  },
+  {
+   "fieldname": "polar_price_id_monthly_cad",
+   "fieldtype": "Data",
+   "label": "Polar Price ID (Monthly, CAD)"
+  },
+  {
+   "fieldname": "polar_price_id_monthly_jpy",
+   "fieldtype": "Data",
+   "label": "Polar Price ID (Monthly, JPY)"
+  },
+  {
+   "fieldname": "polar_price_id_monthly_sgd",
+   "fieldtype": "Data",
+   "label": "Polar Price ID (Monthly, SGD)"
+  },
+  {
+   "fieldname": "column_break_localised",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "polar_price_id_annual_eur",
+   "fieldtype": "Data",
+   "label": "Polar Price ID (Annual, EUR)"
+  },
+  {
+   "fieldname": "polar_price_id_annual_gbp",
+   "fieldtype": "Data",
+   "label": "Polar Price ID (Annual, GBP)"
+  },
+  {
+   "fieldname": "polar_price_id_annual_inr",
+   "fieldtype": "Data",
+   "label": "Polar Price ID (Annual, INR)"
+  },
+  {
+   "fieldname": "polar_price_id_annual_brl",
+   "fieldtype": "Data",
+   "label": "Polar Price ID (Annual, BRL)"
+  },
+  {
+   "fieldname": "polar_price_id_annual_mxn",
+   "fieldtype": "Data",
+   "label": "Polar Price ID (Annual, MXN)"
+  },
+  {
+   "fieldname": "polar_price_id_annual_idr",
+   "fieldtype": "Data",
+   "label": "Polar Price ID (Annual, IDR)"
+  },
+  {
+   "fieldname": "polar_price_id_annual_pln",
+   "fieldtype": "Data",
+   "label": "Polar Price ID (Annual, PLN)"
+  },
+  {
+   "fieldname": "polar_price_id_annual_aud",
+   "fieldtype": "Data",
+   "label": "Polar Price ID (Annual, AUD)"
+  },
+  {
+   "fieldname": "polar_price_id_annual_cad",
+   "fieldtype": "Data",
+   "label": "Polar Price ID (Annual, CAD)"
+  },
+  {
+   "fieldname": "polar_price_id_annual_jpy",
+   "fieldtype": "Data",
+   "label": "Polar Price ID (Annual, JPY)"
+  },
+  {
+   "fieldname": "polar_price_id_annual_sgd",
+   "fieldtype": "Data",
+   "label": "Polar Price ID (Annual, SGD)"
+  }
+ ],
+ "links": [],
+ "modified": "2026-07-26 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Zivvy Brand",
+ "name": "Zivvy Tier",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "read": 1,
+   "role": "Zivvy Tenant Admin"
+  }
+ ],
+ "search_fields": "slug,title",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "title",
+ "track_changes": 1
+}

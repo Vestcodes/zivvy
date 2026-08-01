@@ -1,0 +1,459 @@
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&family=Sora:wght@500;600;700;800&display=swap");
+
+:root {
+	--zivvy-login-ink: #071225;
+	--zivvy-login-muted: #5d6780;
+	--zivvy-login-border: #d8deec;
+	--zivvy-login-surface: #ffffff;
+	--zivvy-login-paper: #f4f6fc;
+	--zivvy-login-brand: #5d53ff;
+	--zivvy-login-focus: 0 0 0 3px rgba(93, 83, 255, 0.24);
+}
+
+html,
+body {
+	min-height: 100%;
+}
+
+body.zivvy-login {
+	font-family: "IBM Plex Sans", system-ui, sans-serif !important;
+	color: var(--zivvy-login-ink);
+	background:
+		radial-gradient(880px 430px at 14% 9%, rgba(93, 83, 255, 0.18), transparent 60%),
+		radial-gradient(760px 440px at 86% 0%, rgba(32, 212, 187, 0.12), transparent 56%),
+		var(--zivvy-login-paper) !important;
+}
+
+body.zivvy-login .navbar,
+body.zivvy-login .web-footer,
+body.zivvy-login .footer-parent,
+body.zivvy-login .page-footer,
+body.zivvy-login footer {
+	display: none !important;
+}
+
+body.zivvy-login .main-section,
+body.zivvy-login .page_content,
+body.zivvy-login .container.page-body,
+body.zivvy-login .page-content-wrapper {
+	max-width: none !important;
+	padding: 0 !important;
+	margin: 0 !important;
+	width: 100% !important;
+}
+
+body.zivvy-login .page-content,
+body.zivvy-login .container {
+	background: transparent !important;
+	max-width: none !important;
+	width: 100% !important;
+}
+
+.zivvy-login-shell {
+	min-height: 100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 1.5rem 1rem;
+}
+
+.zivvy-login-layout {
+	width: min(1080px, 100%);
+	display: grid;
+	grid-template-columns: 0.96fr 1.04fr;
+	gap: 1rem;
+	align-items: stretch;
+}
+
+@media (max-width: 980px) {
+	.zivvy-login-layout {
+		grid-template-columns: 1fr;
+	}
+}
+
+.zivvy-login-story {
+	position: relative;
+	padding: 1.45rem 1.35rem;
+	border: 1px solid #cad4ef;
+	border-radius: 18px;
+	background:
+		radial-gradient(520px 260px at 10% 10%, rgba(93, 83, 255, 0.22), transparent 64%),
+		radial-gradient(460px 230px at 100% 2%, rgba(32, 212, 187, 0.16), transparent 56%),
+		#fff;
+	box-shadow: 0 20px 42px rgba(7, 18, 37, 0.1);
+}
+
+.zivvy-login-story__brand {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.52rem;
+	font-family: "IBM Plex Mono", ui-monospace, monospace;
+	font-size: 0.7rem;
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+	color: #3f35e7;
+	margin-bottom: 0.8rem;
+}
+
+.zivvy-login-story h1 {
+	font-family: "Sora", "IBM Plex Sans", sans-serif;
+	font-size: clamp(1.5rem, 3.4vw, 2.2rem);
+	letter-spacing: -0.04em;
+	line-height: 1.12;
+	margin: 0 0 0.6rem;
+}
+
+.zivvy-login-story p {
+	margin: 0 0 1.1rem;
+	color: var(--zivvy-login-muted);
+	line-height: 1.6;
+	font-size: 0.96rem;
+}
+
+.zivvy-login-story__list {
+	margin: 0;
+	padding-left: 1.1rem;
+	color: #2b3957;
+	font-size: 0.92rem;
+	line-height: 1.62;
+}
+
+.zivvy-login-story__list li {
+	margin-bottom: 0.35rem;
+}
+
+.zivvy-login-story__meta {
+	margin-top: 1rem;
+	padding-top: 0.9rem;
+	border-top: 1px solid #dae0ef;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.45rem;
+}
+
+.zivvy-login-story__chip {
+	font-family: "IBM Plex Mono", ui-monospace, monospace;
+	font-size: 0.68rem;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	padding: 0.32rem 0.52rem;
+	background: rgba(93, 83, 255, 0.1);
+	color: #3f35e7;
+	border: 1px solid rgba(93, 83, 255, 0.22);
+	border-radius: 999px;
+}
+
+.zivvy-login-panel {
+	width: min(470px, 100%);
+	justify-self: center;
+}
+
+.zivvy-lockup {
+	margin-bottom: 0.9rem;
+	text-align: center;
+}
+
+.zivvy-lockup img {
+	display: block;
+	width: 44px;
+	height: 44px;
+	border-radius: 10px;
+	margin: 0 auto 0.48rem;
+}
+
+.zivvy-lockup .brand-name {
+	font-family: "Sora", "IBM Plex Sans", sans-serif;
+	font-weight: 700;
+	font-size: 1.25rem;
+	letter-spacing: -0.03em;
+	color: var(--zivvy-login-ink);
+	line-height: 1.2;
+	margin: 0;
+}
+
+.zivvy-login-shell .login-content.page-card,
+.zivvy-login-shell .page-card {
+	background: var(--zivvy-login-surface) !important;
+	border: 1px solid var(--zivvy-login-border) !important;
+	border-radius: 14px !important;
+	box-shadow: 0 18px 36px rgba(7, 18, 37, 0.09) !important;
+	padding: 1.35rem !important;
+	width: 100% !important;
+}
+
+.zivvy-login-shell .page-card-head {
+	margin-bottom: 0.9rem !important;
+	text-align: left !important;
+}
+
+.zivvy-login-shell .page-card-head h4 {
+	font-family: "Sora", "IBM Plex Sans", sans-serif !important;
+	color: var(--zivvy-login-ink) !important;
+	font-weight: 600 !important;
+	font-size: 1.16rem !important;
+	letter-spacing: -0.02em;
+	margin: 0 0 0.28rem !important;
+}
+
+.zivvy-login-shell .page-card-subtitle {
+	color: var(--zivvy-login-muted) !important;
+	font-size: 0.9rem !important;
+	line-height: 1.45 !important;
+	margin: 0 !important;
+}
+
+.zivvy-login-shell .form-group {
+	margin-bottom: 0.9rem !important;
+}
+
+.zivvy-login-shell .form-label,
+.zivvy-login-shell label {
+	display: block !important;
+	margin-bottom: 0.32rem !important;
+	color: #445372 !important;
+	font-size: 0.86rem !important;
+	font-weight: 500 !important;
+}
+
+.zivvy-login-shell .email-field,
+.zivvy-login-shell .password-field {
+	position: relative !important;
+	width: 100% !important;
+}
+
+.zivvy-login-shell .form-control,
+.zivvy-login-shell input[type="text"],
+.zivvy-login-shell input[type="email"],
+.zivvy-login-shell input[type="password"] {
+	width: 100% !important;
+	box-sizing: border-box !important;
+	border-radius: 11px !important;
+	border: 1px solid var(--zivvy-login-border) !important;
+	background: #ffffff !important;
+	color: var(--zivvy-login-ink) !important;
+	min-height: 42px !important;
+	padding: 0.6rem 0.84rem !important;
+	box-shadow: none !important;
+	font-size: 0.97rem !important;
+}
+
+.zivvy-login-shell .password-field .form-control {
+	padding-right: 4rem !important;
+}
+
+.zivvy-login-shell .form-control:focus {
+	border-color: #8f9dd9 !important;
+	box-shadow: var(--zivvy-login-focus) !important;
+	outline: none !important;
+}
+
+.zivvy-login-shell .toggle-password {
+	position: absolute !important;
+	right: 0.8rem !important;
+	top: 50% !important;
+	transform: translateY(-50%) !important;
+	cursor: pointer;
+	font-size: 0.8rem;
+	font-weight: 500;
+	user-select: none;
+	color: var(--zivvy-login-muted) !important;
+}
+
+.zivvy-login-shell .forgot-password-message {
+	text-align: right !important;
+	margin: 0.45rem 0 0 !important;
+}
+
+.zivvy-login-shell .btn,
+.zivvy-login-shell .btn-primary,
+.zivvy-login-shell .btn-block,
+.zivvy-login-shell button[type="submit"] {
+	display: block !important;
+	width: 100% !important;
+	box-sizing: border-box !important;
+	background: linear-gradient(132deg, #5d53ff, #736bff 55%, #20d4bb) !important;
+	border: 0 !important;
+	border-radius: 11px !important;
+	color: #ffffff !important;
+	font-weight: 600 !important;
+	min-height: 42px !important;
+	padding: 0.65rem 1rem !important;
+	margin: 0 0 0.58rem !important;
+	box-shadow: 0 14px 28px rgba(93, 83, 255, 0.26) !important;
+	line-height: 1.3 !important;
+	transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1) !important;
+}
+
+.zivvy-login-shell .btn:active,
+.zivvy-login-shell button[type="submit"]:active {
+	transform: scale(0.97);
+}
+
+.zivvy-login-shell .btn-default,
+.zivvy-login-shell a.btn-login-option {
+	background: #f6f8fc !important;
+	color: var(--zivvy-login-ink) !important;
+	border: 1px solid var(--zivvy-login-border) !important;
+	box-shadow: none !important;
+}
+
+.zivvy-login-shell .login-error-banner,
+.zivvy-login-shell .login-success-banner {
+	display: flex;
+	align-items: flex-start;
+	gap: 0.5rem;
+	width: 100%;
+	box-sizing: border-box;
+	padding: 0.72rem 0.88rem;
+	border-radius: 10px;
+	font-size: 0.86rem;
+	line-height: 1.35;
+	margin-bottom: 0.8rem;
+}
+
+.zivvy-login-shell .login-error-banner {
+	background: #fef2f2;
+	color: #991b1b;
+}
+
+.zivvy-login-shell .login-success-banner {
+	background: #ecfdf5;
+	color: #065f46;
+}
+
+.zivvy-login-shell .login-error-banner.hidden,
+.zivvy-login-shell .login-success-banner.hidden {
+	display: none !important;
+}
+
+.zivvy-login-shell .page-card-body.invalid .form-control {
+	border-color: #f87171 !important;
+}
+
+.zivvy-login-shell a {
+	color: var(--zivvy-login-brand) !important;
+}
+
+.zivvy-login-shell .sign-up-message {
+	text-align: center !important;
+	margin: 0.9rem 0 0 !important;
+	color: var(--zivvy-login-muted) !important;
+	font-size: 0.9rem !important;
+}
+
+.zivvy-login-shell .zivvy-signup-hint {
+	margin: 0 0 0.8rem;
+	padding: 0.62rem 0.72rem;
+	border-radius: 10px;
+	border: 1px solid rgba(93, 83, 255, 0.2);
+	background: rgba(93, 83, 255, 0.08);
+	color: #4036db;
+	font-size: 0.82rem;
+	line-height: 1.45;
+}
+
+.zivvy-login-shell .sign-up-message a {
+	font-weight: 600;
+}
+
+.zivvy-login-footnote {
+	text-align: center;
+	font-size: 0.8rem;
+	color: var(--zivvy-login-muted);
+	margin-top: 0.9rem;
+	line-height: 1.5;
+}
+
+.zivvy-login-footnote a {
+	color: var(--zivvy-login-brand) !important;
+	font-weight: 600;
+	text-decoration: none;
+}
+
+.zivvy-login-legal a {
+	font-weight: 500 !important;
+}
+
+.zivvy-login-legal a:hover {
+	text-decoration: underline;
+}
+
+.zivvy-login-shell .zivvy-datacenter-field {
+	margin-bottom: 1rem !important;
+}
+
+.zivvy-login-shell .zivvy-datacenter-options {
+	display: grid !important;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 0.45rem;
+	width: 100%;
+}
+
+.zivvy-login-shell .zivvy-datacenter-option {
+	display: flex !important;
+	align-items: center;
+	justify-content: center;
+	gap: 0.34rem;
+	margin: 0 !important;
+	padding: 0.58rem 0.42rem !important;
+	border: 1px solid var(--zivvy-login-border);
+	border-radius: 10px;
+	background: #fff;
+	cursor: pointer;
+	font-size: 0.88rem !important;
+	font-weight: 600 !important;
+	color: var(--zivvy-login-ink) !important;
+}
+
+.zivvy-login-shell .zivvy-datacenter-option:has(input:checked) {
+	border-color: #7f8fdb;
+	box-shadow: var(--zivvy-login-focus);
+}
+
+.zivvy-login-shell .zivvy-datacenter-option input {
+	margin: 0 !important;
+	accent-color: var(--zivvy-login-brand);
+}
+
+.zivvy-login-shell .zivvy-datacenter-help {
+	margin: 0.48rem 0 0 !important;
+	font-size: 0.78rem !important;
+	line-height: 1.38 !important;
+}
+
+.zivvy-login-shell .social-logins,
+.zivvy-login-shell .social-login-buttons,
+.zivvy-login-shell .login-button-wrapper {
+	display: block !important;
+	width: 100% !important;
+}
+
+@media (max-width: 980px) {
+	.zivvy-login-story {
+		order: 2;
+	}
+
+	.zivvy-login-panel {
+		order: 1;
+	}
+}
+
+@media (max-width: 560px) {
+	.zivvy-login-shell {
+		padding: 1rem;
+	}
+
+	.zivvy-login-shell .zivvy-datacenter-options {
+		grid-template-columns: 1fr;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.zivvy-login-shell *,
+	.zivvy-login-shell *::before,
+	.zivvy-login-shell *::after {
+		transition-duration: 0.01ms !important;
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+	}
+}

@@ -1,0 +1,39 @@
+{% extends "templates/marketing/base.html" %}
+
+{% block marketing_content %}
+<header class="zivvy-page-hero">
+	<div class="zivvy-page-hero__inner">
+		<h1>{{ _("Feature depth that follows business maturity") }}</h1>
+		<p>{{ _("From founder-led sales velocity to full operations control, Zivvy unlocks capabilities at the moment your team is ready.") }}</p>
+	</div>
+</header>
+
+<section class="zivvy-section zivvy-features">
+	<p class="zivvy-section__eyebrow">{{ _("Plan narrative") }}</p>
+	<h2>{{ _("Choose the operating depth your team needs right now") }}</h2>
+	<p class="zivvy-section__lead">{{ _("Each plan is intentionally opinionated to avoid bloated bundles and unused complexity. Barcode capability is paid: Free excludes it; Pro and Business include it with inventory.") }}</p>
+	<p class="zivvy-note-card">
+		<strong>{{ _("Inventory barcode access is paid.") }}</strong>
+		{{ _("Free workspaces are blocked from barcode flows. Upgrade to Pro or Business to enable barcode scanning.") }}
+	</p>
+	{% for item in narrative %}
+	{% set plan = plans[item.code] %}
+	<article class="zivvy-feature-tier">
+		<h2>{{ plan.label }}</h2>
+		<div class="price">
+			{% if plan.price_usd == 0 %}$0 · {{ _("starter velocity") }}{% else %}${{ plan.price_usd }} / {{ _("user / month") }}{% endif %}
+		</div>
+		<p class="zivvy-feature-tier__lead">{{ _(item.body) }}</p>
+		<ul>
+			{% for feature in plan.features %}
+			<li>{{ feature }}</li>
+			{% endfor %}
+		</ul>
+	</article>
+	{% endfor %}
+	<div class="zivvy-inline-actions">
+		<a class="zivvy-btn zivvy-btn--primary" href="/pricing" data-zivvy-event="cta_see_pricing">{{ _("Compare plan economics") }}</a>
+		<a class="zivvy-btn zivvy-btn--ghost" href="/login#signup" data-zivvy-event="cta_start_free">{{ _("Start workspace") }}</a>
+	</div>
+</section>
+{% endblock %}

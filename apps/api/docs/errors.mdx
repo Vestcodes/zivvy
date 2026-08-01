@@ -1,0 +1,299 @@
+---
+title: Errors
+description: Error response format, error codes, and handling guidance.
+order: 4
+---
+
+# Errors
+
+The Zivvy API uses standard HTTP status codes and returns a consistent error response body. When a request fails, the response includes an `error` object with a machine-readable code, a human-readable message, and the HTTP status.
+
+## Error response format
+
+Every error response follows this structure:
+
+```json
+{
+  "error": {
+    "code": "NOT_FOUND",
+    "message": "Item IT-99999 does not exist.",
+    "status": 404
+  }
+}
+```
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `code` | string | A machine-readable error code (e.g., `NOT_FOUND`, `VALIDATION_ERROR`) |
+| `message` | string | A human-readable description of what went wrong |
+| `status` | integer | The HTTP status code |
+
+Some errors include additional fields:
+
+```json
+{
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "Request validation failed.",
+    "status": 422,
+    "details": [
+      {
+        "field": "item_name",
+        "message": "item_name is required."
+      },
+      {
+        "field": "standard_rate",
+        "message": "standard_rate must be a positive number."
+      }
+    ]
+  }
+}
+```
+
+## Error codes
+
+### 401 Unauthorized — `UNAUTHORIZED`
+
+The request is missing an API key, or the key is invalid or revoked.
+
+```json
+{
+  "error": {
+    "code": "UNAUTHORIZED",
+    "message": "Invalid or missing API key.",
+    "status": 401
+  }
+}
+```
+
+**Common causes:**
+- No `X-API-Key` header on the request
+- The API key has been revoked
+- The key has a typo or is from a different environment
+- Using a test key (`zk_test_`) against production, or vice versa
+
+**Fix:** Verify your API key in the [dashboard](https://zivvy.xyz/settings) and ensure the `X-API-Key` header is set correctly.
+
+### 403 Forbidden — `FORBIDDEN`
+
+The API key is valid but does not have permission for this action.
+
+```json
+{
+  "error": {
+    "code": "FORBIDDEN",
+    "message": "API key does not have write permission.",
+    "status": 403
+  }
+}
+```
+
+**Common causes:**
+- Using a `read`-scoped key for a write operation (POST, PUT, DELETE)
+- Using a `write`-scoped key for admin-only actions (deleting resources, managing keys)
+- The key's IP allowlist does not include the requesting IP (Business plan)
+
+**Fix:** Check the key's scope in the dashboard. Create a new key with the appropriate scope if needed.
+
+### 404 Not Found — `NOT_FOUND`
+
+The requested resource does not exist.
+
+```json
+{
+  "error": {
+    "code": "NOT_FOUND",
+    "message": "Item IT-99999 does not exist.",
+    "status": 404
+  }
+}
+```
+
+**Common causes:**
+- The resource ID is incorrect
+- The resource was deleted
+- A typo in the endpoint URL
+
+**Fix:** Verify the resource ID. Use the list endpoint to find valid IDs.
+
+### 422 Unprocessable Entity — `VALIDATION_ERROR`
+
+The request body or query parameters failed validation.
+
+```json
+{
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "Request validation failed.",
+    "status": 422,
+    "details": [
+      {
+        "field": "email",
+        "message": "email must be a valid email address."
+      }
+    ]
+  }
+}
+```
+
+**Common causes:**
+- Required fields are missing
+- Field values have the wrong type (e.g., string where a number is expected)
+- Values are out of range (e.g., negative quantity)
+- Invalid enum values (e.g., unknown status)
+
+**Fix:** Read the `details` array to identify which fields need correction. Each entry specifies the field name and what is wrong.
+
+### 429 Too Many Requests — `RATE_LIMITED`
+
+You have exceeded the rate limit for your plan.
+
+```json
+{
+  "error": {
+    "code": "RATE_LIMITED",
+    "message": "Rate limit exceeded. Try again in 8 seconds.",
+    "status": 429
+  }
+}
+```
+
+**Response headers:**
+
+| Header | Example | Description |
+|--------|---------|-------------|
+| `X-RateLimit-Limit` | `100` | Your per-minute limit |
+| `X-RateLimit-Remaining` | `0` | Requests left in this window |
+| `X-RateLimit-Reset` | `1700000068` | When the window resets (Unix timestamp) |
+| `Retry-After` | `8` | Seconds to wait before retrying |
+
+**Fix:** Wait for the duration specified in the `Retry-After` header, then retry. If you consistently hit limits, consider upgrading your plan or optimizing your request patterns with pagination and caching.
+
+### 500 Internal Server Error — `INTERNAL_ERROR`
+
+An unexpected error occurred on the server.
+
+```json
+{
+  "error": {
+    "code": "INTERNAL_ERROR",
+    "message": "An unexpected error occurred. Please try again.",
+    "status": 500
+  }
+}
+```
+
+**Fix:** Retry the request after a short delay. If the error persists, contact support at [support@zivvy.xyz](mailto:support@zivvy.xyz) with your request ID from the `X-Request-Id` response header.
+
+## Handling errors in code
+
+### Python
+
+```python
+import requests
+import time
+
+def api_request(url, headers, max_retries=3):
+    for attempt in range(max_retries):
+        response = requests.get(url, headers=headers)
+
+        if response.status_code == 200:
+            return response.json()
+
+        error = response.json().get("error", {})
+
+        if response.status_code == 429:
+            retry_after = int(response.headers.get("Retry-After", 10))
+            print(f"Rate limited. Retrying in {retry_after}s...")
+            time.sleep(retry_after)
+            continue
+
+        if response.status_code >= 500:
+            wait = 2 ** attempt
+            print(f"Server error. Retrying in {wait}s...")
+            time.sleep(wait)
+            continue
+
+        # Client errors (4xx) — do not retry
+        raise Exception(
+            f"API error {error.get('code')}: {error.get('message')}"
+        )
+
+    raise Exception("Max retries exceeded")
+```
+
+### JavaScript
+
+```javascript
+async function apiRequest(url, apiKey, maxRetries = 3) {
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    const response = await fetch(url, {
+      headers: { "X-API-Key": apiKey },
+    });
+
+    if (response.ok) {
+      return response.json();
+    }
+
+    const { error } = await response.json();
+
+    if (response.status === 429) {
+      const retryAfter = parseInt(response.headers.get("Retry-After") || "10");
+      console.log(`Rate limited. Retrying in ${retryAfter}s...`);
+      await new Promise((r) => setTimeout(r, retryAfter * 1000));
+      continue;
+    }
+
+    if (response.status >= 500) {
+      const wait = Math.pow(2, attempt) * 1000;
+      console.log(`Server error. Retrying in ${wait}ms...`);
+      await new Promise((r) => setTimeout(r, wait));
+      continue;
+    }
+
+    // Client errors — do not retry
+    throw new Error(`API error ${error.code}: ${error.message}`);
+  }
+
+  throw new Error("Max retries exceeded");
+}
+```
+
+## Retry guidance
+
+Not all errors should be retried. Follow these rules:
+
+| Status | Retry? | Strategy |
+|--------|--------|----------|
+| 401 | No | Fix your API key |
+| 403 | No | Fix key scope or permissions |
+| 404 | No | Fix the resource ID or URL |
+| 422 | No | Fix the request body |
+| 429 | Yes | Wait for `Retry-After` seconds, then retry |
+| 500 | Yes | Exponential backoff: 1s, 2s, 4s, up to 3 retries |
+
+## Idempotency
+
+For write operations (POST, PUT, PATCH), you can include an `Idempotency-Key` header to safely retry requests without creating duplicate resources:
+
+```bash
+curl -X POST https://integrate.zivvy.xyz/v1/orders \
+  -H "X-API-Key: zk_live_your_key_here" \
+  -H "Idempotency-Key: order-abc-123-unique" \
+  -H "Content-Type: application/json" \
+  -d '{"customer": "CUST-001", "items": [{"item_code": "IT-00001", "qty": 2}]}'
+```
+
+If a request with the same `Idempotency-Key` has already been processed, the API returns the original response instead of processing the request again. Idempotency keys expire after 24 hours.
+
+This is especially useful when retrying after network timeouts, where you cannot be sure whether the server received and processed the original request.
+
+## Request ID
+
+Every API response includes an `X-Request-Id` header containing a unique identifier for that request:
+
+```
+X-Request-Id: req_a1b2c3d4e5f6
+```
+
+Include this ID when contacting support about a specific error. It helps the team locate the exact request in the logs.

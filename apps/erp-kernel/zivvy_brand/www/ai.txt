@@ -1,0 +1,21 @@
+Zivvy (https://zivvy.xyz) — business software for growing teams.
+
+Canonical: https://zivvy.xyz
+Organization: Vestcodes Co
+Contact: contact@vestcodes.com
+
+Frontend: Next.js (zivvy-web)
+Backend: Frappe / ERPNext + zivvy_brand APIs
+
+Key pages:
+- Home https://zivvy.xyz/home
+- Features https://zivvy.xyz/features
+- Pricing https://zivvy.xyz/pricing
+- Blog https://zivvy.xyz/blog
+- API schema https://zivvy.xyz/assets/zivvy_brand/openapi.json
+- Contact https://zivvy.xyz/contact
+- Terms https://zivvy.xyz/terms
+- Privacy https://zivvy.xyz/privacy
+
+Plans: Free · Pro $18/seat/mo · Business $30/seat/mo · annual −20% (Polar).
+More for LLMs: https://zivvy.xyz/llms.txt
