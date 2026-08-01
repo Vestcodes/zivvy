@@ -69,7 +69,7 @@ export async function AutoList({
     return (
       <div className="space-y-4">
         <header>
-          <h1 className="font-display text-2xl tracking-tight sm:text-3xl">{title}</h1>
+          <h1 className="type-page-title">{title}</h1>
           <p className="text-sm text-muted-foreground">{doctype}</p>
         </header>
         <UpgradeRequired featureName={title} requiredTier={requiredTier} />
@@ -159,7 +159,7 @@ export async function AutoList({
           <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">
             {moduleSpec?.title ?? doctype}
           </p>
-          <h1 className="mt-1 font-display text-2xl font-semibold tracking-tight sm:text-3xl">{title}</h1>
+          <h1 className="mt-1 type-page-title">{title}</h1>
           <p className="mt-1 text-sm leading-6 text-muted-foreground">
             {moduleSpec?.description ?? doctype}
             {q && (

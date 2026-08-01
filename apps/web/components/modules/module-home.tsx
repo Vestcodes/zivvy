@@ -99,10 +99,8 @@ export async function ModuleHome({ moduleKey }: { moduleKey: string }) {
               </span>
               Module workspace
             </div>
-            <h1 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl">
-              {spec.title}
-            </h1>
-            <p className="mt-2 max-w-2xl text-base leading-7 text-muted-foreground">
+            <h1 className="type-page-title">{spec.title}</h1>
+            <p className="mt-2 max-w-2xl type-body text-muted-foreground">
               {spec.primaryJob}
             </p>
           </div>
@@ -123,8 +121,8 @@ export async function ModuleHome({ moduleKey }: { moduleKey: string }) {
       <section aria-labelledby={`${moduleKey}-health`}>
         <div className="mb-3 flex items-end justify-between gap-3">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">Today</p>
-            <h2 id={`${moduleKey}-health`} className="mt-1 font-display text-xl font-semibold tracking-tight">
+            <p className="type-caption font-semibold uppercase tracking-[0.14em]">Today</p>
+            <h2 id={`${moduleKey}-health`} className="mt-1 type-section-title">
               Workspace health
             </h2>
           </div>
@@ -170,8 +168,8 @@ export async function ModuleHome({ moduleKey }: { moduleKey: string }) {
       <div className="grid gap-6 xl:grid-cols-[minmax(0,1.45fr)_minmax(19rem,0.75fr)]">
         <section aria-labelledby={`${moduleKey}-workflows`}>
           <div className="mb-3">
-            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">Workflows</p>
-            <h2 id={`${moduleKey}-workflows`} className="mt-1 font-display text-xl font-semibold tracking-tight">
+            <p className="type-caption font-semibold uppercase tracking-[0.14em]">Workflows</p>
+            <h2 id={`${moduleKey}-workflows`} className="mt-1 type-section-title">
               Start where the work is
             </h2>
           </div>

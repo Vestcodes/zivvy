@@ -424,6 +424,56 @@
     background: color-mix(in oklab, var(--primary) 22%, transparent);
     color: var(--foreground);
   }
+
+  /*
+   * Product type scale — matches typeScaleTokens in packages/ui/src/tokens.ts.
+   * Use these semantic classes instead of ad-hoc text-{size} on new surfaces so
+   * every module tiers text hierarchy the same way.
+   */
+  .type-marketing-hero {
+    font-family: var(--font-serif);
+    font-size: clamp(2.75rem, 7vw, 5.75rem);
+    line-height: 0.94;
+    letter-spacing: -0.03em;
+    font-weight: 600;
+  }
+  .type-page-title {
+    font-family: var(--font-sans);
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    font-weight: 600;
+  }
+  .type-section-title {
+    font-family: var(--font-sans);
+    font-size: 1.125rem;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+    font-weight: 600;
+  }
+  .type-body {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+  .type-table-body {
+    font-size: 0.875rem;
+    line-height: 1.45;
+  }
+  .type-caption {
+    font-size: 0.75rem;
+    line-height: 1.4;
+    letter-spacing: 0.02em;
+    color: var(--muted-foreground);
+  }
+
+  /* Page section separator — Phase 2 says cards are for repeated items, not
+     page sections. Section stack uses a rule not a bordered card. */
+  .section-stack > * + * {
+    margin-top: 1.5rem;
+  }
+  .section-hairline {
+    border-top: 1px solid color-mix(in oklab, var(--border) 80%, transparent);
+  }
 }
 
 /* Primary gradient utility for icon tiles / logo mark */

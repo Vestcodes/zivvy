@@ -31,7 +31,7 @@ export function DashboardHero() {
             today
           )}
         </p>
-        <h1 className="font-display text-2xl tracking-tight sm:text-3xl">
+        <h1 className="type-page-title">
           {firstName ? `${greeting}, ${firstName}` : greeting}
         </h1>
       </div>

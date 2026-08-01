@@ -314,7 +314,7 @@ export function AutoFormClient({
           </div>
           <div className="mt-2 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
             <div className="flex flex-wrap items-center gap-3">
-              <h1 className="break-words font-display text-2xl font-semibold tracking-tight sm:text-3xl">
+              <h1 className="break-words type-page-title">
                 {isNew ? `New ${singularTitle}` : String(doc.name)}
               </h1>
               {meta.is_submittable && !isNew && (
