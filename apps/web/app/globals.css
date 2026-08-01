@@ -36,12 +36,20 @@
   --sidebar-accent-foreground: #178262;
   --sidebar-border: #e8edec;
   --sidebar-ring: #1b9872;
-  --font-sans: var(--font-inter-sans), "Inter", system-ui, sans-serif;
-  --font-serif: var(--font-inter-serif), "Inter", system-ui, sans-serif;
-  --font-mono: var(--font-jetbrains-mono), "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-sans: var(--font-ibm-plex-sans), system-ui, sans-serif;
+  --font-serif: var(--font-sora), var(--font-ibm-plex-sans), system-ui, sans-serif;
+  --font-mono: var(--font-ibm-plex-mono), ui-monospace, SFMono-Regular, monospace;
   --radius: 0.5rem;
   --tracking-normal: -0.015em;
   --spacing: 0.25rem;
+
+  /* App layout contracts — mirrored in @zivvy/ui for non-CSS consumers. */
+  --app-sidebar-width: 16rem;
+  --app-topbar-height: 3rem;
+  --app-content-max: 80rem;
+  --app-reading-max: 44rem;
+  --app-table-row: 3.25rem;
+  --app-touch-target: 2.75rem;
 
   --shadow-2xs: 0 1px 8px 0 rgba(0, 0, 0, 0.01);
   --shadow-xs: 0 1px 8px 0 rgba(0, 0, 0, 0.01);
@@ -84,6 +92,25 @@
   --status-progress-bg: #ede9fe;
   --status-progress-fg: #4c1d95;
   --status-progress-ring: #c4b5fd;
+}
+
+@media (pointer: coarse) {
+  [data-slot="button"] {
+    min-height: var(--app-touch-target);
+  }
+
+  [data-slot="button"][data-size^="icon"] {
+    min-width: var(--app-touch-target);
+  }
+}
+
+@media (max-width: 767px) {
+  [data-slot="input"],
+  [data-slot="textarea"],
+  [data-slot="select-trigger"] {
+    min-height: var(--app-touch-target);
+    font-size: 1rem;
+  }
 }
 
 /* Respect user preference — override transitions/animations */

@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
+import { IBM_Plex_Mono, IBM_Plex_Sans, Sora } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
 import { BootProvider } from "@/components/boot-provider";
 import { QueryProvider } from "@/components/query-provider";
@@ -17,23 +17,23 @@ import { PostHogProvider } from "@/components/posthog-provider";
 import { SITE_ORIGIN } from "@/lib/seo";
 import "./globals.css";
 
-// Inter drives both --font-sans and --font-serif (Inter's Display cut covers
-// both use-cases). Invoked twice so each CSS variable resolves independently.
-const fontSans = Inter({
+const fontSans = IBM_Plex_Sans({
   subsets: ["latin"],
-  variable: "--font-inter-sans",
+  variable: "--font-ibm-plex-sans",
+  weight: ["400", "500", "600"],
   display: "swap"
 });
 
-const fontSerif = Inter({
+const fontDisplay = Sora({
   subsets: ["latin"],
-  variable: "--font-inter-serif",
+  variable: "--font-sora",
   display: "swap"
 });
 
-const fontMono = JetBrains_Mono({
+const fontMono = IBM_Plex_Mono({
   subsets: ["latin"],
-  variable: "--font-jetbrains-mono",
+  variable: "--font-ibm-plex-mono",
+  weight: ["400", "500"],
   display: "swap"
 });
 
@@ -136,7 +136,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="en"
-      className={`${fontSans.variable} ${fontSerif.variable} ${fontMono.variable}`}
+      className={`${fontSans.variable} ${fontDisplay.variable} ${fontMono.variable}`}
       suppressHydrationWarning
     >
       <body className="min-h-dvh">

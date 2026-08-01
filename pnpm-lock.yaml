@@ -98,6 +98,12 @@ importers:
       '@vercel/speed-insights':
         specifier: ^2.0.0
         version: 2.0.0(next@16.2.11(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)
+      '@zivvy/module-registry':
+        specifier: workspace:*
+        version: link:../../packages/module-registry
+      '@zivvy/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
       babylovegrowth-next-js-blog:
         specifier: ^0.2.2
         version: 0.2.2

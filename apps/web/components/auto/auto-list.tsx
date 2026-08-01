@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
+import { getModuleByNavigationKey } from "@zivvy/module-registry";
 import {
   Table,
   TableBody,
@@ -16,6 +17,8 @@ import { AutoListSkeleton } from "@/components/auto/auto-list-skeleton";
 import { AutoListSearch } from "@/components/auto/auto-list-search";
 import { AutoListPagination } from "@/components/auto/auto-list-pagination";
 import { AutoListKeyboard } from "@/components/auto/auto-list-keyboard";
+import { AutoListRowActions } from "@/components/auto/auto-list-row-actions";
+import { AutoListControls } from "@/components/auto/auto-list-controls";
 import { UpgradeRequired } from "@/components/upgrade-required";
 import { SavedViewsBar } from "@/components/auto/saved-views-bar";
 import { NextActionStrip } from "@/components/auto/next-action-strip";
@@ -57,6 +60,9 @@ export async function AutoList({
 }: Props) {
   // Tier gate FIRST — before any fetches.
   const boot = await fetchBootinfo();
+  const navigationKey = basePath.split("/").filter(Boolean)[0] ?? "";
+  const moduleSpec = getModuleByNavigationKey(navigationKey);
+  const moduleHref = navigationKey ? `/${navigationKey}` : "/apps";
   const zivvy = boot.zivvy;
   const requiredTier = zivvy?.doctype_min_tier?.[doctype];
   if (requiredTier && zivvy && !tierAtLeast(zivvy.tier, requiredTier)) {
@@ -147,12 +153,15 @@ export async function AutoList({
   );
 
   return (
-    <div className="space-y-4">
-      <header className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="font-display text-2xl tracking-tight sm:text-3xl">{title}</h1>
-          <p className="text-sm text-muted-foreground">
-            {doctype}
+    <div className="mx-auto w-full max-w-7xl space-y-4">
+      <header className="flex flex-col gap-4 border-b border-border/70 pb-5 lg:flex-row lg:items-end lg:justify-between">
+        <div className="max-w-2xl">
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+            {moduleSpec?.title ?? doctype}
+          </p>
+          <h1 className="mt-1 font-display text-2xl font-semibold tracking-tight sm:text-3xl">{title}</h1>
+          <p className="mt-1 text-sm leading-6 text-muted-foreground">
+            {moduleSpec?.description ?? doctype}
             {q && (
               <>
                 {" "}
@@ -161,8 +170,15 @@ export async function AutoList({
             )}
           </p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex w-full flex-col gap-2 sm:flex-row sm:flex-wrap lg:w-auto lg:flex-nowrap">
           <AutoListSearch placeholder={`Search ${title.toLowerCase()}…`} />
+          <AutoListControls
+            doctype={doctype}
+            fields={meta.fields
+              .filter((field) => field.in_standard_filter || field.in_list_view || field.fieldname === meta.title_field)
+              .filter((field) => !["Section Break", "Column Break", "Tab Break", "Table", "HTML"].includes(field.fieldtype))
+              .slice(0, 16)}
+          />
           <AutoListNewButton
             meta={meta}
             groups={newGroups}
@@ -191,10 +207,42 @@ export async function AutoList({
           title={title}
           basePath={basePath}
           reason={list ? "empty" : "unavailable"}
+          emptyState={moduleSpec?.emptyState}
+          moduleHref={moduleHref}
         />
       ) : (
         <AutoListKeyboard rowHrefs={rowHrefs}>
-          <Card className="border-border/70 bg-card p-0 shadow-sm">
+          <div className="grid gap-2 md:hidden">
+            {list.values.map((row) => {
+              const rowHref = `${basePath}/${encodeURIComponent(String(row.name))}`;
+              const label = titleField && row[titleField] ? String(row[titleField]) : String(row.name);
+              return (
+                <Card key={String(row.name)} className="group border-border/70 bg-card p-4 shadow-none">
+                  <div className="flex items-start justify-between gap-3">
+                    <Link href={rowHref} className="min-w-0 flex-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50">
+                      <span className="block truncate font-medium text-foreground">{label}</span>
+                      <span className="mt-0.5 block truncate font-mono text-xs text-muted-foreground">{String(row.name)}</span>
+                    </Link>
+                    <AutoListRowActions href={rowHref} name={String(row.name)} />
+                  </div>
+                  <dl className="mt-3 grid gap-2 border-t border-border/60 pt-3">
+                    {listFields
+                      .filter((field) => field.fieldname !== "name")
+                      .slice(0, 3)
+                      .map((field) => (
+                        <div key={field.fieldname} className="grid grid-cols-[minmax(6.5rem,0.8fr)_minmax(0,1.2fr)] gap-3 text-sm">
+                          <dt className="truncate text-muted-foreground">{field.label ?? field.fieldname}</dt>
+                          <dd className="min-w-0 truncate text-right">
+                            <FieldCell field={field} value={row[field.fieldname]} currency={String(boot.sysdefaults?.currency ?? "USD")} />
+                          </dd>
+                        </div>
+                      ))}
+                  </dl>
+                </Card>
+              );
+            })}
+          </div>
+          <Card className="hidden overflow-x-auto border-border/70 bg-card p-0 shadow-none md:block">
             <Table>
               <TableHeader>
                 <TableRow className="bg-secondary/40 hover:bg-secondary/40">
@@ -206,6 +254,9 @@ export async function AutoList({
                         {f.label ?? f.fieldname}
                       </TableHead>
                     ))}
+                  <TableHead className="w-12">
+                    <span className="sr-only">Actions</span>
+                  </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -214,7 +265,7 @@ export async function AutoList({
                   return (
                     <TableRow
                       key={String(row.name)}
-                      className="group relative cursor-pointer transition-colors hover:bg-muted/40"
+                      className="group relative h-[var(--app-table-row)] transition-colors hover:bg-muted/40"
                     >
                       <TableCell>
                         <Link
@@ -232,6 +283,9 @@ export async function AutoList({
                             <FieldCell field={f} value={row[f.fieldname]} currency={String(boot.sysdefaults?.currency ?? "USD")} />
                           </TableCell>
                         ))}
+                      <TableCell className="w-12 px-2 text-right">
+                        <AutoListRowActions href={rowHref} name={String(row.name)} />
+                      </TableCell>
                     </TableRow>
                   );
                 })}

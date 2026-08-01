@@ -49,7 +49,7 @@ export const SLUG_TO_DOCTYPE: Record<string, string> = {
   "manufacturing/subcontracting":   "Subcontracting Order",
 
   // Assets
-  "assets":                "Asset",
+  "assets/register":       "Asset",
   "assets/maintenance":    "Asset Maintenance Log",
   "assets/movements":      "Asset Movement",
   "assets/depreciation":   "Asset Depreciation Schedule",
@@ -85,15 +85,19 @@ export const SLUG_TO_DOCTYPE: Record<string, string> = {
   "crm/contracts":         "Contract",
 
   // Projects
-  "projects":              "Project",
+  "projects/all":          "Project",
   "projects/tasks":        "Task",
   "projects/timesheets":   "Timesheet",
 
-  // Support (ERPNext core)
-  "support/tickets":       "Issue",
-  "support/issues":        "Issue",
-  "support/warranty":      "Warranty Claim",
-  "support/slas":          "Service Level Agreement",
+  // Customer service (ERPNext core). `/support/*` is reserved for the public
+  // support website, so operational records live under `/service/*`.
+  "service/tickets":       "Issue",
+  "service/issues":        "Issue",
+  "service/warranty":      "Warranty Claim",
+  "service/slas":          "Service Level Agreement",
+
+  // Quality
+  "quality/inspections":   "Quality Inspection",
 
   // Helpdesk (Frappe Helpdesk app, Pro tier)
   "helpdesk/tickets":      "HD Ticket",

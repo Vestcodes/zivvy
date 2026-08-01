@@ -101,24 +101,24 @@ const APP_ROUTES = [
   { label: "Work orders", href: "/manufacturing/work-orders", area: "manufacturing", minTier: "business" },
   { label: "Job cards", href: "/manufacturing/job-cards", area: "manufacturing", minTier: "business" },
   { label: "Subcontracting", href: "/manufacturing/subcontracting", area: "manufacturing", minTier: "business" },
-  { label: "Quality", href: "/quality", area: "manufacturing", minTier: "business" },
+  { label: "Quality", href: "/quality/inspections", area: "manufacturing", minTier: "business" },
 
   // Assets
-  { label: "Assets", href: "/assets", area: "assets" },
+  { label: "Assets", href: "/assets/register", area: "assets" },
   { label: "Maintenance", href: "/assets/maintenance", area: "assets" },
   { label: "Movements", href: "/assets/movements", area: "assets" },
   { label: "Depreciation", href: "/assets/depreciation", area: "assets" },
 
   // Projects
-  { label: "Projects", href: "/projects", area: "projects", minTier: "pro" },
+  { label: "Projects", href: "/projects/all", area: "projects", minTier: "pro" },
   { label: "Tasks", href: "/projects/tasks", area: "projects", minTier: "pro" },
   { label: "Timesheets", href: "/projects/timesheets", area: "projects", minTier: "pro" },
 
   // Support
-  { label: "Tickets", href: "/support/tickets", area: "support" },
-  { label: "Issues", href: "/support/issues", area: "support" },
-  { label: "Warranty", href: "/support/warranty", area: "support" },
-  { label: "SLAs", href: "/support/slas", area: "support" },
+  { label: "Tickets", href: "/service/tickets", area: "support" },
+  { label: "Issues", href: "/service/issues", area: "support" },
+  { label: "Warranty", href: "/service/warranty", area: "support" },
+  { label: "SLAs", href: "/service/slas", area: "support" },
 
   // Setup
   { label: "Team", href: "/settings/team", area: "setup" },

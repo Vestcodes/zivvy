@@ -123,6 +123,40 @@ export const moduleRegistry: ModuleSpec[] = [
     smokeTests: ["create item", "filter items", "scan barcode", "move stock"]
   },
   {
+    key: "shipping",
+    title: "Shipping",
+    description: "Shipments, carrier rules, delivery tracking, and fulfilment exceptions.",
+    status: "kernel-backed",
+    minTier: "free",
+    targetUsers: ["ops operator", "warehouse operator", "customer success"],
+    primaryJob: "Move fulfilled orders to customers with clear tracking and exception handling.",
+    primaryCta: "Create shipment",
+    emptyState: "Create a shipment from a sales order or configure a shipping rule.",
+    routes: ["/shipping", "/shipping/shipments", "/shipping/rules"],
+    erpDoctypes: ["Shipment", "Shipping Rule"],
+    eventNames: [],
+    integrations: ["DHL", "UPS", "FedEx", "Webhooks"],
+    aiCapabilities: ["explain delivery exception", "draft customer update", "suggest carrier rule"],
+    smokeTests: ["create shipment", "filter shipments", "create shipping rule", "open tracking details"]
+  },
+  {
+    key: "pos",
+    title: "Point of Sale",
+    description: "Fast retail checkout, register sessions, profiles, returns, and receipts.",
+    status: "kernel-backed",
+    minTier: "pro",
+    targetUsers: ["retail operator", "store manager", "finance operator"],
+    primaryJob: "Complete an accurate sale quickly while keeping stock and accounting in sync.",
+    primaryCta: "Start checkout",
+    emptyState: "Create a POS profile and open the first register session.",
+    routes: ["/pos", "/pos/invoices", "/pos/profiles", "/pos/opening", "/pos/closing"],
+    erpDoctypes: ["POS Invoice", "POS Profile", "POS Opening Entry", "POS Closing Entry"],
+    eventNames: ["sales-invoices.created", "sales-invoices.paid"],
+    integrations: ["Stripe", "Adyen", "Receipt printers"],
+    aiCapabilities: ["summarize shift", "flag unusual return", "explain register variance"],
+    smokeTests: ["open register", "create POS invoice", "process return", "close register"]
+  },
+  {
     key: "procurement",
     title: "Procurement",
     description: "Suppliers, requests, purchase orders, bills, and buying controls.",
@@ -149,7 +183,7 @@ export const moduleRegistry: ModuleSpec[] = [
     primaryJob: "Turn committed work into tracked tasks, time, budget, and invoiceable progress.",
     primaryCta: "Create project",
     emptyState: "Create a project, import tasks, or start from a delivery template.",
-    routes: ["/projects", "/projects/tasks", "/projects/timesheets"],
+    routes: ["/projects", "/projects/all", "/projects/tasks", "/projects/timesheets"],
     erpDoctypes: ["Project", "Task", "Timesheet"],
     eventNames: ["projects.created", "tasks.created", "tasks.updated"],
     integrations: ["Slack", "GitHub", "Notion", "Google Calendar"],
@@ -174,6 +208,23 @@ export const moduleRegistry: ModuleSpec[] = [
     smokeTests: ["create employee", "request time off", "record attendance", "submit expense"]
   },
   {
+    key: "talent",
+    title: "Talent",
+    description: "Recruitment, interviews, goals, performance, and learning in one people workflow.",
+    status: "kernel-backed",
+    minTier: "pro",
+    targetUsers: ["people ops", "hiring manager", "team lead"],
+    primaryJob: "Move candidates and employees through fair, visible growth workflows.",
+    primaryCta: "Create job opening",
+    emptyState: "Create a job opening, invite interviewers, or import active candidates.",
+    routes: ["/talent", "/talent/openings", "/talent/applicants", "/talent/interviews", "/talent/goals"],
+    erpDoctypes: ["Job Opening", "Job Applicant", "Interview", "Appraisal", "Goal", "Training Event"],
+    eventNames: [],
+    integrations: ["Google Calendar", "Microsoft 365", "Slack"],
+    aiCapabilities: ["summarize candidate", "draft interview plan", "suggest development goal"],
+    smokeTests: ["create job opening", "add applicant", "schedule interview", "create goal"]
+  },
+  {
     key: "manufacturing",
     title: "Manufacturing",
     description: "BOMs, work orders, job cards, subcontracting, and shop-floor execution.",
@@ -191,6 +242,23 @@ export const moduleRegistry: ModuleSpec[] = [
     smokeTests: ["create BOM", "create work order", "complete job card", "view material requirements"]
   },
   {
+    key: "quality",
+    title: "Quality",
+    description: "Inspections, criteria, non-conformance, and production quality evidence.",
+    status: "kernel-backed",
+    minTier: "business",
+    targetUsers: ["quality lead", "production manager", "ops operator"],
+    primaryJob: "Catch quality problems before they become customer or production failures.",
+    primaryCta: "Create inspection",
+    emptyState: "Create the first inspection or define quality criteria for a produced item.",
+    routes: ["/quality", "/quality/inspections"],
+    erpDoctypes: ["Quality Inspection"],
+    eventNames: [],
+    integrations: ["Webhooks", "Slack"],
+    aiCapabilities: ["summarize failed criteria", "detect recurring defect", "draft corrective action"],
+    smokeTests: ["create inspection", "record result", "filter failed inspections", "open linked work order"]
+  },
+  {
     key: "assets",
     title: "Assets",
     description: "Fixed assets, maintenance, movements, depreciation, and lifecycle controls.",
@@ -200,7 +268,7 @@ export const moduleRegistry: ModuleSpec[] = [
     primaryJob: "Track owned assets from purchase to depreciation, movement, and maintenance.",
     primaryCta: "Add asset",
     emptyState: "Create your first asset or import fixed assets from CSV.",
-    routes: ["/assets", "/assets/maintenance", "/assets/movements", "/assets/depreciation"],
+    routes: ["/assets", "/assets/register", "/assets/maintenance", "/assets/movements", "/assets/depreciation"],
     erpDoctypes: ["Asset", "Asset Movement", "Asset Maintenance"],
     eventNames: ["assets.created", "assets.updated"],
     integrations: ["Webhooks"],
@@ -217,12 +285,29 @@ export const moduleRegistry: ModuleSpec[] = [
     primaryJob: "Resolve customer issues with full account, order, and product context.",
     primaryCta: "Create ticket",
     emptyState: "Create a ticket, import support history, or connect email/Slack.",
-    routes: ["/support/tickets", "/support/issues", "/helpdesk/tickets", "/helpdesk/kb"],
+    routes: ["/service", "/service/tickets", "/service/issues", "/service/warranty", "/service/slas"],
     erpDoctypes: ["Issue", "HD Ticket", "Warranty Claim"],
     eventNames: ["tickets.created", "tickets.updated"],
     integrations: ["Gmail", "Slack", "Postmark", "Twilio"],
     aiCapabilities: ["summarize thread", "draft reply", "suggest knowledge article"],
     smokeTests: ["create ticket", "assign ticket", "change status", "search knowledge base"]
+  },
+  {
+    key: "helpdesk",
+    title: "Helpdesk",
+    description: "Shared support inboxes, teams, service contracts, and a customer knowledge base.",
+    status: "kernel-backed",
+    minTier: "pro",
+    targetUsers: ["support agent", "support lead", "customer success"],
+    primaryJob: "Resolve incoming requests with clear ownership, service targets, and reusable answers.",
+    primaryCta: "Create ticket",
+    emptyState: "Connect a support inbox, create a ticket, or publish the first knowledge article.",
+    routes: ["/helpdesk", "/helpdesk/tickets", "/helpdesk/kb", "/helpdesk/teams", "/helpdesk/contracts"],
+    erpDoctypes: ["HD Ticket", "HD Article", "HD Team", "HD Service Level Agreement"],
+    eventNames: ["tickets.created", "tickets.updated"],
+    integrations: ["Gmail", "Microsoft 365", "Slack", "Twilio"],
+    aiCapabilities: ["summarize thread", "draft reply", "suggest knowledge article"],
+    smokeTests: ["create ticket", "assign team", "change status", "search knowledge base"]
   },
   {
     key: "wiki",
@@ -296,4 +381,16 @@ export const moduleRegistry: ModuleSpec[] = [
 
 export function getModule(key: string) {
   return moduleRegistry.find((module) => module.key === key) ?? null;
+}
+
+/** URL/sidebar keys intentionally differ from product names in a few places. */
+export const moduleNavigationAliases: Record<string, string> = {
+  purchases: "procurement",
+  hr: "people",
+  service: "support",
+  insights: "analytics"
+};
+
+export function getModuleByNavigationKey(key: string) {
+  return getModule(moduleNavigationAliases[key] ?? key);
 }

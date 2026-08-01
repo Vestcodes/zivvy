@@ -1,14 +1,8 @@
 import type { Metadata } from "next";
-import { AutoList } from "@/components/auto/auto-list";
+import { ModuleHome } from "@/components/modules/module-home";
 
 export const metadata: Metadata = { title: "Quality — Zivvy" };
 
 export default function QualityPage() {
-  return (
-    <AutoList
-      doctype="Quality Inspection"
-      basePath="/quality"
-      title="Quality inspections"
-    />
-  );
+  return <ModuleHome moduleKey="quality" />;
 }

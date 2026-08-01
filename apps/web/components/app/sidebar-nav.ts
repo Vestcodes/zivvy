@@ -223,7 +223,7 @@ export const MODULE_NAVS: Record<string, ModuleNav> = {
     title: "Projects",
     subtitle: "Tasks, timesheets, budgets",
     items: [
-      { label: "All projects", href: "/projects", icon: KanbanSquare, module: "Projects", minTier: "pro" },
+      { label: "All projects", href: "/projects/all", icon: KanbanSquare, module: "Projects", minTier: "pro" },
       { label: "Tasks", href: "/projects/tasks", icon: ListChecks, module: "Projects", minTier: "pro" },
       { label: "Timesheets", href: "/projects/timesheets", icon: Clock3, module: "Projects", minTier: "pro" }
     ]
@@ -246,7 +246,7 @@ export const MODULE_NAVS: Record<string, ModuleNav> = {
     title: "Quality",
     subtitle: "Inspections & compliance",
     items: [
-      { label: "Inspections", href: "/quality", icon: ShieldCheck, module: "Quality Management", minTier: "business" }
+      { label: "Inspections", href: "/quality/inspections", icon: ShieldCheck, module: "Quality Management", minTier: "business" }
     ]
   },
 
@@ -255,22 +255,22 @@ export const MODULE_NAVS: Record<string, ModuleNav> = {
     title: "Assets",
     subtitle: "Fixed assets, maintenance, depreciation",
     items: [
-      { label: "Assets", href: "/assets", icon: Building2, module: "Assets" },
+      { label: "Asset register", href: "/assets/register", icon: Building2, module: "Assets" },
       { label: "Maintenance", href: "/assets/maintenance", icon: Wrench, module: "Assets" },
       { label: "Movements", href: "/assets/movements", icon: Truck, module: "Assets" },
       { label: "Depreciation", href: "/assets/depreciation", icon: ClipboardCheck, module: "Assets" }
     ]
   },
 
-  support: {
-    key: "support",
+  service: {
+    key: "service",
     title: "Support",
     subtitle: "Tickets, SLA, warranty",
     items: [
-      { label: "Tickets", href: "/support/tickets", icon: Ticket, module: "Support" },
-      { label: "Issues", href: "/support/issues", icon: AlertOctagon, module: "Support" },
-      { label: "Warranty", href: "/support/warranty", icon: ShieldAlert, module: "Support" },
-      { label: "SLAs", href: "/support/slas", icon: HardHat, module: "Support" }
+      { label: "Tickets", href: "/service/tickets", icon: Ticket, module: "Support" },
+      { label: "Issues", href: "/service/issues", icon: AlertOctagon, module: "Support" },
+      { label: "Warranty", href: "/service/warranty", icon: ShieldAlert, module: "Support" },
+      { label: "SLAs", href: "/service/slas", icon: HardHat, module: "Support" }
     ]
   },
 

@@ -192,23 +192,23 @@ export const APPS: AppTile[] = [
   { label: "Work orders",       href: "/manufacturing/work-orders",      icon: Factory,      gradient: "from-[#dc2626] to-[#991b1b]", category: "manufacturing", module: "Manufacturing", minTier: "business" },
   { label: "Job cards",         href: "/manufacturing/job-cards",        icon: Hammer,       gradient: "from-[#f87171] to-[#991b1b]", category: "manufacturing", module: "Manufacturing", minTier: "business" },
   { label: "Subcontracting",    href: "/manufacturing/subcontracting",   icon: Cog,          gradient: "from-[#c026d3] to-[#701a75]", category: "manufacturing", module: "Subcontracting", minTier: "business" },
-  { label: "Quality",           href: "/quality",                        icon: ShieldCheck,  gradient: "from-[#fb7185] to-[#9f1239]", category: "manufacturing", module: "Quality Management", minTier: "business" },
+  { label: "Quality",           href: "/quality/inspections",            icon: ShieldCheck,  gradient: "from-[#fb7185] to-[#9f1239]", category: "manufacturing", module: "Quality Management", minTier: "business" },
 
   // ASSETS
-  { label: "Assets",            href: "/assets",                 icon: Building2,        gradient: "from-[#a16207] to-[#78350f]", category: "assets", module: "Assets" },
+  { label: "Assets",            href: "/assets/register",        icon: Building2,        gradient: "from-[#a16207] to-[#78350f]", category: "assets", module: "Assets" },
   { label: "Maintenance",       href: "/assets/maintenance",     icon: Wrench,           gradient: "from-[#d97706] to-[#92400e]", category: "assets", module: "Assets" },
   { label: "Movements",         href: "/assets/movements",       icon: Truck,            gradient: "from-[#ca8a04] to-[#78350f]", category: "assets", module: "Assets" },
 
   // PROJECTS
-  { label: "Projects",          href: "/projects",               icon: KanbanSquare,     gradient: "from-[#06b6d4] to-[#0e7490]", category: "projects", module: "Projects", minTier: "pro" },
+  { label: "Projects",          href: "/projects/all",           icon: KanbanSquare,     gradient: "from-[#06b6d4] to-[#0e7490]", category: "projects", module: "Projects", minTier: "pro" },
   { label: "Tasks",             href: "/projects/tasks",         icon: ListChecks,       gradient: "from-[#0ea5e9] to-[#0369a1]", category: "projects", module: "Projects", minTier: "pro" },
   { label: "Timesheets",        href: "/projects/timesheets",    icon: Clock3,           gradient: "from-[#3b82f6] to-[#1e40af]", category: "projects", module: "Projects", minTier: "pro" },
 
   // SUPPORT
-  { label: "Tickets",           href: "/support/tickets",        icon: Ticket,           gradient: "from-[#f43f5e] to-[#9f1239]", category: "support", module: "Support" },
-  { label: "Issues",            href: "/support/issues",         icon: AlertOctagon,     gradient: "from-[#e11d48] to-[#881337]", category: "support", module: "Support" },
-  { label: "Warranty",          href: "/support/warranty",       icon: ShieldAlert,      gradient: "from-[#f59e0b] to-[#b45309]", category: "support", module: "Support" },
-  { label: "SLAs",              href: "/support/slas",           icon: HardHat,          gradient: "from-[#fb7185] to-[#be123c]", category: "support", module: "Support" },
+  { label: "Tickets",           href: "/service/tickets",        icon: Ticket,           gradient: "from-[#f43f5e] to-[#9f1239]", category: "support", module: "Support" },
+  { label: "Issues",            href: "/service/issues",         icon: AlertOctagon,     gradient: "from-[#e11d48] to-[#881337]", category: "support", module: "Support" },
+  { label: "Warranty",          href: "/service/warranty",       icon: ShieldAlert,      gradient: "from-[#f59e0b] to-[#b45309]", category: "support", module: "Support" },
+  { label: "SLAs",              href: "/service/slas",           icon: HardHat,          gradient: "from-[#fb7185] to-[#be123c]", category: "support", module: "Support" },
 
   // SETUP
   { label: "Team",              href: "/settings/team",          icon: UserCog,          gradient: "from-[#64748b] to-[#334155]", category: "setup" },

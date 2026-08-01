@@ -110,9 +110,9 @@ function TopbarUserAvatar() {
         <button
           type="button"
           aria-label="Open user menu"
-          className="ml-0.5 rounded-full outline-none ring-offset-background transition focus-visible:ring-2 focus-visible:ring-primary/50"
+          className="ml-0.5 grid size-10 place-items-center rounded-full outline-none ring-offset-background transition focus-visible:ring-2 focus-visible:ring-primary/50"
         >
-          <Avatar className="size-7">
+          <Avatar className="size-8">
             <AvatarFallback className="bg-primary/10 text-[11px] font-semibold text-primary">
               {initials}
             </AvatarFallback>
@@ -165,7 +165,7 @@ export function AppTopbar({ notifications = [], unreadCount = 0 }: TopbarProps) 
   const segments = pathname.split("/").filter(Boolean);
 
   return (
-    <header className="sticky top-0 z-30 grid h-12 shrink-0 grid-cols-[1fr_auto_1fr] items-center gap-2 border-b bg-background/90 px-3 backdrop-blur">
+    <header className="sticky top-0 z-30 grid h-12 shrink-0 grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 border-b bg-background/90 px-2 backdrop-blur sm:px-3">
       {/* Left — sidebar trigger + breadcrumb */}
       <div className="flex min-w-0 items-center gap-1.5">
         <SidebarTrigger className="-ml-1" />
@@ -206,7 +206,8 @@ export function AppTopbar({ notifications = [], unreadCount = 0 }: TopbarProps) 
 
       {/* Center — global search */}
       <div className="mx-auto w-full max-w-md justify-self-center">
-        <AwesomebarTrigger />
+        <div className="sm:hidden"><AwesomebarTrigger compact /></div>
+        <div className="hidden sm:block"><AwesomebarTrigger /></div>
       </div>
 
       {/* Right — tier, tenant, bell, avatar */}
@@ -214,7 +215,7 @@ export function AppTopbar({ notifications = [], unreadCount = 0 }: TopbarProps) 
         {boot && (
           <Badge
             className={cn(
-              "h-6 shrink-0 px-2 text-[10px] font-medium uppercase tracking-wide",
+              "hidden h-6 shrink-0 px-2 text-[10px] font-medium uppercase tracking-wide sm:inline-flex",
               TIER_STYLE[boot.tier] ?? TIER_STYLE.free
             )}
           >

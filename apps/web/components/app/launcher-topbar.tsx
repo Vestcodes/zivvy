@@ -65,11 +65,12 @@ export function LauncherTopbar() {
         </span>
       )}
       <div className="ml-auto flex items-center gap-1.5">
-        <AwesomebarTrigger />
+        <div className="sm:hidden"><AwesomebarTrigger compact /></div>
+        <div className="hidden sm:block"><AwesomebarTrigger /></div>
         {zivvy && (
           <Badge
             className={cn(
-              "h-6 px-2 text-[10px] font-medium uppercase tracking-wide",
+              "hidden h-6 px-2 text-[10px] font-medium uppercase tracking-wide sm:inline-flex",
               TIER_STYLE[zivvy.tier] ?? TIER_STYLE.free
             )}
           >
@@ -78,7 +79,7 @@ export function LauncherTopbar() {
         )}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <button className="grid size-8 place-items-center rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring">
+            <button aria-label="Open user menu" className="grid size-10 place-items-center rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring">
               <Avatar className="size-8">
                 <AvatarFallback className="bg-primary-gradient text-primary-foreground text-xs">
                   {initials}

@@ -13,6 +13,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { frappeCall } from "@/lib/frappe-client";
 import { cn } from "@/lib/utils";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface TimelineEvent {
   id: string;
@@ -187,24 +188,44 @@ export function ActivityTimeline({ doctype, docname, owner, creation, modified, 
 
   if (loading && events.length === 0) {
     return (
-      <Card className="border-border/70 bg-card shadow-sm">
+      <Card className="border-border/70 bg-card shadow-none" aria-busy="true">
         <CardHeader>
           <CardTitle className="font-display text-lg">Activity</CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <Clock className="size-4 animate-pulse" />
-            Loading activity…
-          </div>
+        <CardContent className="grid gap-3">
+          <span className="sr-only">Loading activity</span>
+          {Array.from({ length: 3 }, (_, index) => (
+            <div key={index} className="flex items-center gap-3">
+              <Skeleton className="size-8 rounded-full" />
+              <div className="grid flex-1 gap-1.5">
+                <Skeleton className="h-4 w-2/3" />
+                <Skeleton className="h-3 w-20" />
+              </div>
+            </div>
+          ))}
         </CardContent>
       </Card>
     );
   }
 
-  if (events.length === 0) return null;
+  if (events.length === 0) {
+    return (
+      <Card className="border-border/70 bg-card shadow-none">
+        <CardHeader>
+          <CardTitle className="font-display text-lg">Activity</CardTitle>
+        </CardHeader>
+        <CardContent className="flex items-center gap-3 text-sm text-muted-foreground">
+          <span className="grid size-9 place-items-center rounded-full bg-muted">
+            <Clock className="size-4" />
+          </span>
+          No activity has been recorded for this item yet.
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
-    <Card className="border-border/70 bg-card shadow-sm">
+    <Card className="border-border/70 bg-card shadow-none">
       <CardHeader>
         <CardTitle className="font-display text-lg">Activity</CardTitle>
       </CardHeader>

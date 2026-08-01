@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { AlertTriangle, LogIn } from "lucide-react";
+import { AlertTriangle, LogIn, Wrench } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { AutoFormClient } from "@/components/auto/auto-form-client";
@@ -24,7 +24,7 @@ function EmptyState({
 }: {
   title: string;
   basePath: string;
-  reason: "auth" | "not-found";
+  reason: "auth" | "not-found" | "unavailable";
 }) {
   if (reason === "auth") {
     return (
@@ -46,6 +46,29 @@ function EmptyState({
                 <LogIn />
                 Sign in
               </Link>
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+  if (reason === "unavailable") {
+    return (
+      <Card className="border-border/70 bg-card">
+        <CardContent className="flex flex-col items-center px-4 py-16 text-center">
+          <div className="grid size-12 place-items-center rounded-full bg-status-warning-bg text-status-warning-fg">
+            <Wrench className="size-5" />
+          </div>
+          <p className="mt-3 font-display text-lg font-semibold">This record type is not available</p>
+          <p className="mt-1 max-w-md text-sm leading-6 text-muted-foreground">
+            Check that the backend app is installed and your role has permission to open {title.toLowerCase()}.
+          </p>
+          <div className="mt-4 flex flex-wrap justify-center gap-2">
+            <Button asChild variant="outline">
+              <Link href={basePath}>Back to list</Link>
+            </Button>
+            <Button asChild variant="polished">
+              <Link href="/help">Get help</Link>
             </Button>
           </div>
         </CardContent>
@@ -86,7 +109,7 @@ export async function AutoForm({ doctype, name, basePath, title }: Props) {
 
   const meta = await getDoctypeMeta(doctype);
   if (!meta) {
-    return <EmptyState title={title} basePath={basePath} reason="auth" />;
+    return <EmptyState title={title} basePath={basePath} reason="unavailable" />;
   }
 
   const isNew = name === "new";

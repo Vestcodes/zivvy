@@ -1,14 +1,8 @@
 import type { Metadata } from "next";
-import { AutoList } from "@/components/auto/auto-list";
+import { ModuleHome } from "@/components/modules/module-home";
 
 export const metadata: Metadata = { title: "Assets — Zivvy" };
 
 export default function AssetsPage() {
-  return (
-    <AutoList
-      doctype="Asset"
-      basePath="/assets"
-      title="Assets"
-    />
-  );
+  return <ModuleHome moduleKey="assets" />;
 }

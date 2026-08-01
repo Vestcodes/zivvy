@@ -44,7 +44,7 @@ export function FieldInput({ field, value, onChange, disabled, error }: Props) {
           onClick={() => !readOnly && onChange(Number(value ?? 0) === 1 ? 0 : 1)}
           disabled={readOnly}
           className={cn(
-            "relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+            "relative inline-flex h-7 w-12 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors before:absolute before:-inset-y-2 before:inset-x-0 before:content-[''] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
             Number(value ?? 0) === 1 ? "bg-primary" : "bg-input"
           )}
         >
@@ -86,7 +86,7 @@ export function FieldInput({ field, value, onChange, disabled, error }: Props) {
               aria-invalid={invalid || undefined}
               aria-describedby={invalid ? errorId : undefined}
               className={cn(
-                "h-10 font-mono tabular-nums",
+                "h-11 text-base font-mono tabular-nums md:h-10 md:text-sm",
                 field.fieldtype === "Currency" && "pl-7",
                 field.fieldtype === "Percent" && "pr-7"
               )}
@@ -104,7 +104,7 @@ export function FieldInput({ field, value, onChange, disabled, error }: Props) {
             disabled={readOnly}
             aria-invalid={invalid || undefined}
             aria-describedby={invalid ? errorId : undefined}
-            className="h-10 font-mono tabular-nums"
+            className="h-11 text-base font-mono tabular-nums md:h-10 md:text-sm"
           />
         );
       case "Date":
@@ -115,7 +115,7 @@ export function FieldInput({ field, value, onChange, disabled, error }: Props) {
             value={(value as string | undefined) ?? ""}
             onChange={(e) => onChange(e.target.value)}
             disabled={readOnly}
-            className="h-10"
+            className="h-11 text-base md:h-10 md:text-sm"
           />
         );
       case "Datetime":
@@ -126,7 +126,7 @@ export function FieldInput({ field, value, onChange, disabled, error }: Props) {
             value={((value as string | undefined) ?? "").slice(0, 16)}
             onChange={(e) => onChange(e.target.value)}
             disabled={readOnly}
-            className="h-10"
+            className="h-11 text-base md:h-10 md:text-sm"
           />
         );
       case "Select": {
@@ -137,7 +137,7 @@ export function FieldInput({ field, value, onChange, disabled, error }: Props) {
             onValueChange={(v) => onChange(v)}
             disabled={readOnly}
           >
-            <SelectTrigger id={commonId} className="h-10">
+            <SelectTrigger id={commonId} className="h-11 text-base md:h-10 md:text-sm">
               <SelectValue placeholder="Select..." />
             </SelectTrigger>
             <SelectContent>
@@ -186,7 +186,7 @@ export function FieldInput({ field, value, onChange, disabled, error }: Props) {
             onChange={(e) => onChange(e.target.value)}
             disabled={readOnly}
             placeholder={`Enter ${label.toLowerCase()}...`}
-            className="h-10"
+            className="h-11 text-base md:h-10 md:text-sm"
           />
         );
     }

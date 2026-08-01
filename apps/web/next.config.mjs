@@ -71,7 +71,11 @@ const nextConfig = {
     return [
       { source: "/www", destination: "/", permanent: false },
       { source: "/www/:path*", destination: "/:path*", permanent: false },
-      { source: "/settings/billing", destination: "/billing", permanent: false }
+      { source: "/settings/billing", destination: "/billing", permanent: false },
+      { source: "/support/tickets", destination: "/service/tickets", permanent: false },
+      { source: "/support/issues", destination: "/service/issues", permanent: false },
+      { source: "/support/warranty", destination: "/service/warranty", permanent: false },
+      { source: "/support/slas", destination: "/service/slas", permanent: false }
     ];
   },
   async rewrites() {

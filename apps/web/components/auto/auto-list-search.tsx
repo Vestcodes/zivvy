@@ -36,20 +36,20 @@ export function AutoListSearch({ placeholder = "Search…" }: Props) {
   }, [value, router, searchParams]);
 
   return (
-    <div className="relative">
+    <div className="relative w-full sm:w-auto">
       <Search className="pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground" />
       <Input
         type="search"
         placeholder={placeholder}
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        className="h-9 w-56 pl-8 pr-8"
+        className="h-10 w-full pl-8 pr-10 sm:w-64"
       />
       {value && (
         <button
           type="button"
           onClick={() => setValue("")}
-          className="absolute top-1/2 right-2 -translate-y-1/2 rounded p-0.5 text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+          className="absolute top-1/2 right-1 min-h-9 min-w-9 -translate-y-1/2 rounded-md p-2 text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
           aria-label="Clear search"
         >
           <X className="size-3.5" />

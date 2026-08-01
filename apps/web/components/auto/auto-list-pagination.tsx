@@ -30,7 +30,7 @@ export function AutoListPagination({ page, pageSize, total, shownOnPage }: Props
   const hasNext = total !== null ? to < total : shownOnPage === pageSize;
 
   return (
-    <footer className="flex items-center justify-between gap-2 text-xs text-muted-foreground">
+    <footer className="flex flex-col items-center justify-between gap-3 text-xs text-muted-foreground sm:flex-row">
       <span className="font-mono tabular-nums">
         {shownOnPage === 0 ? "0 results" : `${from.toLocaleString()}–${to.toLocaleString()} of ${totalStr}`}
       </span>
@@ -41,7 +41,7 @@ export function AutoListPagination({ page, pageSize, total, shownOnPage }: Props
           size="sm"
           disabled={!hasPrev}
           onClick={() => goto(page - 1)}
-          className="h-7 px-2"
+          className="min-h-9 px-2"
         >
           <ChevronLeft className="size-4" />
           Prev
@@ -53,7 +53,7 @@ export function AutoListPagination({ page, pageSize, total, shownOnPage }: Props
           size="sm"
           disabled={!hasNext}
           onClick={() => goto(page + 1)}
-          className="h-7 px-2"
+          className="min-h-9 px-2"
         >
           Next
           <ChevronRight className="size-4" />

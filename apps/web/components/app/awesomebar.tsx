@@ -54,7 +54,7 @@ const QUICK_ACTIONS = [
   { label: "New stock entry", href: "/stock/entries?new=1", icon: Boxes },
   { label: "New delivery note", href: "/sales/deliveries?new=1", icon: Truck },
   { label: "New employee", href: "/hr/employees?new=1", icon: UserRound },
-  { label: "New support ticket", href: "/support/tickets?new=1", icon: Ticket }
+  { label: "New support ticket", href: "/service/tickets?new=1", icon: Ticket }
 ];
 
 const JUMP = [
@@ -69,7 +69,7 @@ const JUMP = [
   { label: "Developer settings", href: "/settings/developer", icon: Code }
 ];
 
-export function AwesomebarTrigger() {
+export function AwesomebarTrigger({ compact = false }: { compact?: boolean }) {
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
@@ -93,17 +93,20 @@ export function AwesomebarTrigger() {
     <>
       <Button
         variant="outline"
-        size="sm"
+        size={compact ? "icon" : "sm"}
         onClick={() => setOpen(true)}
-        className="w-full max-w-56 justify-between text-muted-foreground"
+        aria-label="Open global search"
+        className={compact ? "size-10 text-muted-foreground" : "w-full max-w-56 justify-between text-muted-foreground"}
       >
         <span className="inline-flex min-w-0 items-center gap-2">
           <Search className="size-4 shrink-0" />
-          <span className="truncate text-sm">Search…</span>
+          {!compact ? <span className="truncate text-sm">Search…</span> : null}
         </span>
-        <kbd className="pointer-events-none inline-flex items-center gap-0.5 rounded border border-border bg-muted px-1.5 font-mono text-[10px] text-muted-foreground">
-          <span>⌘</span>K
-        </kbd>
+        {!compact ? (
+          <kbd className="pointer-events-none inline-flex items-center gap-0.5 rounded border border-border bg-muted px-1.5 font-mono text-[10px] text-muted-foreground">
+            <span>⌘</span>K
+          </kbd>
+        ) : null}
       </Button>
 
       <CommandDialog open={open} onOpenChange={setOpen}>

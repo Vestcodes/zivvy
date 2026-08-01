@@ -25,15 +25,15 @@ export function AutoListSkeleton({
           </div>
           <p className="mt-3 font-display text-lg">{title} couldn&apos;t be loaded</p>
           <p className="mt-1 max-w-sm text-sm text-muted-foreground">
-            This module may not be configured for your workspace yet, or your
-            session may have expired. Try refreshing the page.
+            Live data is unavailable. Check that the backend app is installed
+            and your role has access, then retry.
           </p>
           <div className="mt-4 flex gap-2">
             <Button asChild variant="outline">
               <Link href={basePath}>Refresh</Link>
             </Button>
             <Button asChild variant="polished">
-              <Link href="/settings">Settings</Link>
+              <Link href="/help">Get help</Link>
             </Button>
           </div>
         </CardContent>

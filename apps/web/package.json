@@ -12,6 +12,8 @@
     "test": "tsc --noEmit"
   },
   "dependencies": {
+    "@zivvy/module-registry": "workspace:*",
+    "@zivvy/ui": "workspace:*",
     "@radix-ui/react-icons": "^1.3.2",
     "@tanstack/react-query": "^5.101.4",
     "@vercel/analytics": "^2.0.1",

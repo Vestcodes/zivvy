@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { AppSidebar } from "@/components/app/app-sidebar";
 import { AppTopbar } from "@/components/app/app-topbar";
 import { KeyboardShortcuts } from "@/components/app/keyboard-shortcuts";
+import { RecentWorkspaceTracker } from "@/components/app/recent-workspaces";
 
 async function TopbarWithData() {
   const [notifications, unreadCount] = await Promise.all([
@@ -35,6 +36,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </div>
         </SidebarInset>
         <KeyboardShortcuts />
+        <RecentWorkspaceTracker />
       </SidebarProvider>
     </TooltipProvider>
   );

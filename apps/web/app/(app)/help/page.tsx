@@ -54,7 +54,7 @@ const LINKS: HelpLink[] = [
     external: true
   },
   {
-    href: "/support/tickets",
+    href: "/service/tickets",
     title: "Support tickets",
     description: "Open or track issues for your workspace.",
     icon: MessageSquare

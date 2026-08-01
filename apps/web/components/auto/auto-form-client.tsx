@@ -301,20 +301,20 @@ export function AutoFormClient({
 
   return (
     <>
-      <div className={cn("mx-auto w-full max-w-3xl", editing && "pb-24")}>
+      <div className={cn("mx-auto w-full max-w-4xl", editing && "pb-28")}>
         {/* Header */}
         <div className="mb-6">
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <Button asChild variant="ghost" size="icon-sm" className="size-7">
-              <Link href={basePath}>
+            <Button asChild variant="ghost" size="icon" className="-ml-2 size-10">
+              <Link href={basePath} aria-label={`Back to ${title.toLowerCase()}`}>
                 <ArrowLeft className="size-4" />
               </Link>
             </Button>
             <span className="truncate">{title}</span>
           </div>
-          <div className="mt-2 flex flex-wrap items-center justify-between gap-3">
+          <div className="mt-2 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
             <div className="flex flex-wrap items-center gap-3">
-              <h1 className="font-display text-2xl tracking-tight sm:text-3xl">
+              <h1 className="break-words font-display text-2xl font-semibold tracking-tight sm:text-3xl">
                 {isNew ? `New ${singularTitle}` : String(doc.name)}
               </h1>
               {meta.is_submittable && !isNew && (
@@ -336,7 +336,7 @@ export function AutoFormClient({
               )}
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               {!editing && !isNew && (
                 <PrintButton doctype={meta.name} docname={String(doc.name)} />
               )}
@@ -389,7 +389,7 @@ export function AutoFormClient({
                 sectionIdx > 0 && "border-t border-border/50"
               )}
             >
-              <div className="px-6 py-5">
+              <div className="px-4 py-5 sm:px-6">
                 {section.label && (
                   <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-muted-foreground/70">
                     {section.label}
@@ -432,7 +432,7 @@ export function AutoFormClient({
               <button
                 type="button"
                 onClick={() => setShowAllDetail((v) => !v)}
-                className="flex w-full items-center justify-center gap-1.5 rounded-lg py-1.5 text-sm text-muted-foreground transition-colors hover:bg-muted/50 hover:text-foreground"
+                className="flex min-h-11 w-full items-center justify-center gap-1.5 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted/50 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
               >
                 {showAllDetail ? (
                   <>
@@ -467,8 +467,8 @@ export function AutoFormClient({
 
       {/* Bottom action bar */}
       {editing && (
-        <div className="pointer-events-none fixed inset-x-0 bottom-0 z-40 flex justify-center px-4 pb-4">
-          <div className="pointer-events-auto flex w-full max-w-3xl items-center justify-between gap-3 rounded-2xl border border-border/70 bg-background/95 px-4 py-3 shadow-elevation-lg backdrop-blur supports-[backdrop-filter]:bg-background/80">
+        <div className="pointer-events-none fixed inset-x-0 bottom-0 z-40 flex justify-center px-3 pb-[calc(env(safe-area-inset-bottom)+0.75rem)] sm:px-4">
+          <div className="pointer-events-auto flex w-full max-w-4xl items-center justify-between gap-3 rounded-2xl border border-border/70 bg-background/95 px-3 py-3 shadow-elevation-lg backdrop-blur supports-[backdrop-filter]:bg-background/80 sm:px-4">
             <div className="ml-1 flex min-w-0 items-center gap-2 text-sm text-muted-foreground">
               {saving ? (
                 <>

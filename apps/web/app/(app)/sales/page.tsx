@@ -1,5 +1,8 @@
-import { redirectToModuleHome } from "@/lib/module-redirect";
+import type { Metadata } from "next";
+import { ModuleHome } from "@/components/modules/module-home";
+
+export const metadata: Metadata = { title: "Sales — Zivvy" };
 
 export default function SalesHome() {
-  redirectToModuleHome("sales");
+  return <ModuleHome moduleKey="sales" />;
 }

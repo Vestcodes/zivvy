@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Inbox, LogIn, Plus, Lock } from "lucide-react";
+import { ArrowRight, Inbox, LogIn, Plus, Wrench } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { requestOpenNew } from "@/components/auto/auto-list-new-button";
@@ -10,11 +10,15 @@ import { singular } from "@/lib/next-action";
 export function AutoListEmpty({
   title,
   basePath,
-  reason
+  reason,
+  emptyState,
+  moduleHref
 }: {
   title: string;
   basePath: string;
   reason: "empty" | "auth" | "unavailable";
+  emptyState?: string;
+  moduleHref?: string;
 }) {
   if (reason === "auth") {
     return (
@@ -44,21 +48,21 @@ export function AutoListEmpty({
       <Card className="border-border/70 bg-card">
         <CardContent className="flex flex-col items-center px-4 py-16 text-center">
           <div className="grid size-12 place-items-center rounded-full bg-secondary text-muted-foreground">
-            <Lock className="size-5" />
+            <Wrench className="size-5" />
           </div>
           <p className="mt-3 max-w-xs font-display text-lg break-words sm:max-w-sm">
             {title} couldn&apos;t be loaded
           </p>
           <p className="mt-1 max-w-xs text-sm text-muted-foreground break-words sm:max-w-sm">
-            This module may not be configured for your workspace yet, or your
-            session may have expired. Try refreshing the page.
+            Live data is unavailable. Check that the backend app is installed
+            and your role has access, then retry.
           </p>
           <div className="mt-4 flex gap-2">
             <Button asChild variant="outline">
               <Link href={basePath}>Refresh</Link>
             </Button>
             <Button asChild variant="polished">
-              <Link href="/settings">Settings</Link>
+              <Link href="/help">Get help</Link>
             </Button>
           </div>
         </CardContent>
@@ -74,7 +78,7 @@ export function AutoListEmpty({
         </div>
         <p className="mt-3 max-w-xs font-display text-lg break-words sm:max-w-sm">No {title.toLowerCase()} yet</p>
         <p className="mt-1 max-w-xs text-sm text-muted-foreground break-words sm:max-w-sm">
-          Get started by creating your first record. It'll appear here.
+          {emptyState ?? "Create the first record to begin this workflow. It will appear here."}
         </p>
         <Button
           type="button"
@@ -85,6 +89,14 @@ export function AutoListEmpty({
           <Plus />
           New {singular(title).toLowerCase()}
         </Button>
+        {moduleHref ? (
+          <Button asChild variant="ghost" className="mt-2">
+            <Link href={moduleHref}>
+              View module overview
+              <ArrowRight className="size-4" />
+            </Link>
+          </Button>
+        ) : null}
       </CardContent>
     </Card>
   );
