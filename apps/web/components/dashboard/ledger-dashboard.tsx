@@ -9,11 +9,10 @@ import { cn } from "@/lib/utils";
  * The operator ledger.
  *
  * Design contract:
- *   - The page IS the ledger — not a widget in a template. It bleeds through
- *     the app-shell's content padding via negative margins matched to each
- *     breakpoint, and it fills the viewport vertically so the identity reads
- *     as "this is the page" rather than "this is a beige card sitting in
- *     the app".
+ *   - The ledger is a single considered document card that fills the content
+ *     area of the app shell. It sits ON the neutral canvas — the desk chrome
+ *     (sidebar, topbar) stays on its own tokens, so no color seam collides
+ *     with the ledger's identity.
  *   - No KPI cards. Every number appears next to the thing to do about it.
  *   - Time is the axis (Today / This week). Never module.
  *   - Row: [status dot] [subject + note] [amount, mono, right] [verb + arrow]
@@ -195,14 +194,15 @@ export async function LedgerDashboard() {
   const hasAnyRows = criticalRows.length + waitingRows.length + activityRows.length > 0;
 
   return (
-    // Full-bleed wrapper: cancels the app-shell's inner padding so the ledger
-    // paints the whole content area corner-to-corner. Height fills the
-    // viewport minus the topbar so short states still read as "the page".
+    // Card wrapper: a considered document laid on the desk. Full width of
+    // the content area, rounded corners, subtle hairline, and tall enough
+    // that the ledger fills the viewport minus the topbar and content
+    // padding — so it never reads as a small widget floating in space.
     <div
       className={cn(
-        "surface-ledger relative flex flex-col",
-        "mx-[-1rem] my-[-1rem] md:mx-[-1.25rem] md:my-[-1.25rem] lg:mx-[-1.5rem] lg:my-[-1.25rem]",
-        "min-h-[calc(100dvh-var(--app-topbar-height,3rem))]"
+        "surface-ledger relative flex flex-col overflow-hidden",
+        "rounded-2xl border border-[color:var(--ledger-rule-soft)]",
+        "min-h-[calc(100dvh-var(--app-topbar-height,3rem)-2rem)] md:min-h-[calc(100dvh-var(--app-topbar-height,3rem)-2.5rem)]"
       )}
     >
       {/* Masthead — the ledger's own topline, sitting on the bone */}
