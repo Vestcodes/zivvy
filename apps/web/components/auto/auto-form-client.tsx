@@ -34,6 +34,7 @@ import { FieldInput } from "@/components/auto/field-input";
 import { ActivityTimeline } from "@/components/auto/activity-timeline";
 import { PrintButton } from "@/components/auto/print-preview";
 import { NextActionStrip } from "@/components/auto/next-action-strip";
+import { MetadataRail } from "@/components/auto/metadata-rail";
 import { frappeCall, FrappeError } from "@/lib/frappe-client";
 import type { DoctypeMeta, FormGroup } from "@/lib/frappe-meta";
 import { cn } from "@/lib/utils";
@@ -301,7 +302,7 @@ export function AutoFormClient({
 
   return (
     <>
-      <div className={cn("mx-auto w-full max-w-4xl", editing && "pb-28")}>
+      <div className={cn("mx-auto w-full max-w-7xl", editing && "pb-28")}>
         {/* Header */}
         <div className="mb-6">
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -380,6 +381,15 @@ export function AutoFormClient({
         {/* Next action strip */}
         <NextActionStrip action={displayedNextAction} onExecute={executeNextAction} className="mb-5" />
 
+        {/* Two-column workspace: form on the left, metadata + activity rail on
+            the right. Rail is sticky on lg+; on smaller screens it stacks below
+            the form. Rail is hidden entirely for the create-new state where
+            there's no metadata to show. */}
+        <div className={cn(
+          "grid gap-6",
+          !isNew && "lg:grid-cols-[minmax(0,1.7fr)_minmax(20rem,0.8fr)]"
+        )}>
+          <div className="min-w-0">
         {/* Form body — single unified container */}
         <div className="rounded-xl border border-border/70 bg-card shadow-sm">
           {visibleSections.map((section, sectionIdx) => (
@@ -450,19 +460,30 @@ export function AutoFormClient({
           )}
         </div>
 
-        {/* Activity timeline */}
-        {!isNew && !editing && (
-          <div className="mt-6">
-            <ActivityTimeline
-              doctype={meta.name}
-              docname={String(doc.name)}
-              owner={doc.owner as string | undefined}
-              creation={doc.creation as string | undefined}
-              modified={doc.modified as string | undefined}
-              modifiedBy={doc.modified_by as string | undefined}
-            />
           </div>
-        )}
+
+          {/* Metadata + activity rail — sticky on lg+, stacks below on mobile */}
+          {!isNew && (
+            <aside className="min-w-0 space-y-4 lg:sticky lg:top-4 lg:self-start">
+              <MetadataRail
+                owner={doc.owner as string | undefined}
+                creation={doc.creation as string | undefined}
+                modified={doc.modified as string | undefined}
+                modifiedBy={doc.modified_by as string | undefined}
+              />
+              {!editing && (
+                <ActivityTimeline
+                  doctype={meta.name}
+                  docname={String(doc.name)}
+                  owner={doc.owner as string | undefined}
+                  creation={doc.creation as string | undefined}
+                  modified={doc.modified as string | undefined}
+                  modifiedBy={doc.modified_by as string | undefined}
+                />
+              )}
+            </aside>
+          )}
+        </div>
       </div>
 
       {/* Bottom action bar */}
