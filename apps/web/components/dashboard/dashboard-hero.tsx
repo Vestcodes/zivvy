@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ArrowRight, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useBoot, useZivvyBoot } from "@/components/boot-provider";
+import { personaCopy, resolvePersona } from "@/lib/dashboard-persona";
 
 export function DashboardHero() {
   const boot = useBoot();
@@ -11,6 +12,8 @@ export function DashboardHero() {
   const firstName = boot.user?.full_name?.split(" ")[0];
   const greeting = getGreeting();
   const company = zivvy?.tenant?.company;
+  const persona = resolvePersona(boot);
+  const copy = personaCopy(persona);
   const today = new Date().toLocaleDateString(undefined, {
     weekday: "long",
     month: "long",
@@ -20,7 +23,16 @@ export function DashboardHero() {
   return (
     <section className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
       <div className="min-w-0">
-        <p className="text-xs text-muted-foreground">
+        <p className="type-caption font-semibold uppercase tracking-[0.14em]">
+          {copy.eyebrow}
+        </p>
+        <h1 className="mt-1 type-page-title">
+          {firstName ? `${greeting}, ${firstName}` : greeting}
+        </h1>
+        <p className="mt-1 type-body text-muted-foreground">
+          {copy.focusHint}
+        </p>
+        <p className="mt-2 type-caption">
           {company ? (
             <>
               <span className="font-medium text-foreground/80">{company}</span>
@@ -31,9 +43,6 @@ export function DashboardHero() {
             today
           )}
         </p>
-        <h1 className="type-page-title">
-          {firstName ? `${greeting}, ${firstName}` : greeting}
-        </h1>
       </div>
       <div className="flex gap-2">
         <Button asChild variant="outline" size="sm">

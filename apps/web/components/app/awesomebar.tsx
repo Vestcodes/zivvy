@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   Search,
@@ -25,8 +25,12 @@ import {
   Truck,
   Boxes,
   UserRound,
-  Ticket
+  Ticket,
+  FileText,
+  Loader2
 } from "lucide-react";
+import { frappeCall } from "@/lib/frappe-client";
+import { SLUG_TO_DOCTYPE } from "@/lib/doctype-slugs";
 import {
   CommandDialog,
   CommandEmpty,
@@ -69,8 +73,33 @@ const JUMP = [
   { label: "Developer settings", href: "/settings/developer", icon: Code }
 ];
 
+// Reverse doctype → slug lookup for building deep-link URLs to found records.
+const DOCTYPE_TO_SLUG: Record<string, string> = {};
+for (const [slug, dt] of Object.entries(SLUG_TO_DOCTYPE)) {
+  if (!DOCTYPE_TO_SLUG[dt]) DOCTYPE_TO_SLUG[dt] = `/${slug}`;
+}
+
+interface GlobalHit {
+  doctype: string;
+  name: string;
+  content?: string;
+}
+
+/** Frappe returns each row as {doctype, name, content, ...}. Deep-link only
+ *  when we have a slug mapping — otherwise the record isn't reachable via
+ *  our routing and shouldn't be surfaced. */
+function hitToHref(hit: GlobalHit): string | null {
+  const base = DOCTYPE_TO_SLUG[hit.doctype];
+  if (!base) return null;
+  return `${base}/${encodeURIComponent(hit.name)}`;
+}
+
 export function AwesomebarTrigger({ compact = false }: { compact?: boolean }) {
   const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const [hits, setHits] = useState<GlobalHit[]>([]);
+  const [searching, setSearching] = useState(false);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -83,6 +112,51 @@ export function AwesomebarTrigger({ compact = false }: { compact?: boolean }) {
     document.addEventListener("keydown", down);
     return () => document.removeEventListener("keydown", down);
   }, []);
+
+  // Debounced live record search. Only fires when the query is >=2 chars
+  // and the dialog is open — cancels any in-flight timer on new keystroke
+  // + on close so we don't leak searches.
+  useEffect(() => {
+    if (!open) {
+      setHits([]);
+      setSearching(false);
+      return;
+    }
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    const q = query.trim();
+    if (q.length < 2) {
+      setHits([]);
+      setSearching(false);
+      return;
+    }
+    setSearching(true);
+    debounceRef.current = setTimeout(async () => {
+      try {
+        const rows = await frappeCall<GlobalHit[]>(
+          "frappe.utils.global_search.search",
+          { text: q, start: 0, limit: 10 }
+        );
+        setHits(Array.isArray(rows) ? rows : []);
+      } catch {
+        setHits([]);
+      } finally {
+        setSearching(false);
+      }
+    }, 220);
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
+  }, [query, open]);
+
+  // When the dialog closes reset the query so next open starts clean.
+  useEffect(() => {
+    if (!open) setQuery("");
+  }, [open]);
+
+  const routableHits = useMemo(
+    () => hits.map((h) => ({ ...h, href: hitToHref(h) })).filter((h) => h.href),
+    [hits]
+  );
 
   function go(href: string) {
     setOpen(false);
@@ -109,10 +183,51 @@ export function AwesomebarTrigger({ compact = false }: { compact?: boolean }) {
         ) : null}
       </Button>
 
-      <CommandDialog open={open} onOpenChange={setOpen}>
-        <CommandInput placeholder="Search customers, invoices, actions…" />
+      <CommandDialog open={open} onOpenChange={setOpen} shouldFilter={query.trim().length < 2}>
+        <CommandInput
+          placeholder="Search customers, invoices, actions…"
+          value={query}
+          onValueChange={setQuery}
+        />
         <CommandList>
-          <CommandEmpty>Nothing matched.</CommandEmpty>
+          <CommandEmpty>
+            {searching ? "Searching…" : query.trim().length >= 2 ? "Nothing matched." : "Nothing matched."}
+          </CommandEmpty>
+
+          {routableHits.length > 0 && (
+            <>
+              <CommandGroup heading={searching ? "Records (searching…)" : "Records"}>
+                {routableHits.map((hit) => (
+                  <CommandItem
+                    key={`${hit.doctype}:${hit.name}`}
+                    value={`record ${hit.doctype} ${hit.name} ${hit.content ?? ""}`}
+                    onSelect={() => hit.href && go(hit.href)}
+                  >
+                    <FileText className="text-muted-foreground" />
+                    <div className="flex min-w-0 flex-1 flex-col">
+                      <span className="truncate">{hit.name}</span>
+                      <span className="truncate text-xs text-muted-foreground">
+                        {hit.doctype}
+                        {hit.content ? ` · ${hit.content.replace(/<[^>]*>/g, "").slice(0, 80)}` : ""}
+                      </span>
+                    </div>
+                    <CommandShortcut>
+                      <ArrowRight className="size-3" />
+                    </CommandShortcut>
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+              <CommandSeparator />
+            </>
+          )}
+
+          {searching && routableHits.length === 0 && (
+            <div className="flex items-center gap-2 px-3 py-4 text-sm text-muted-foreground">
+              <Loader2 className="size-3.5 animate-spin" />
+              Searching records…
+            </div>
+          )}
+
           <CommandGroup heading="Quick actions">
             {QUICK_ACTIONS.map((a) => (
               <CommandItem

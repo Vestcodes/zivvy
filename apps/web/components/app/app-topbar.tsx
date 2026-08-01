@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { AwesomebarTrigger } from "@/components/app/awesomebar";
 import { NotificationBell } from "@/components/app/notifications";
+import { ThemeToggle } from "@/components/app/theme-toggle";
 import { useZivvyBoot, useBoot } from "@/components/boot-provider";
 import { frappeLogout } from "@/lib/frappe-client";
 import { purgeAllSavedViews } from "@/lib/saved-views";
@@ -227,6 +228,7 @@ export function AppTopbar({ notifications = [], unreadCount = 0 }: TopbarProps) 
             {boot.tenant.company}
           </span>
         )}
+        <ThemeToggle />
         <NotificationBell
           notifications={notifications}
           unreadCount={unreadCount}

@@ -23,6 +23,8 @@ import { UpgradeRequired } from "@/components/upgrade-required";
 import { SavedViewsBar } from "@/components/auto/saved-views-bar";
 import { NextActionStrip } from "@/components/auto/next-action-strip";
 import { computeListAction } from "@/lib/next-action";
+import { AutoListViewToggle } from "@/components/auto/auto-list-view-toggle";
+import { AutoListBoard } from "@/components/auto/auto-list-board";
 import {
   frappeGetCount,
   getDoctypeMeta,
@@ -47,7 +49,17 @@ interface Props {
     sort?: string;
     order?: string;
     new?: string;
+    view?: string;
   };
+}
+
+const STATUS_FIELD_CANDIDATES = ["status", "workflow_state"];
+
+function findStatusField(fieldNames: string[]): string | null {
+  for (const candidate of STATUS_FIELD_CANDIDATES) {
+    if (fieldNames.includes(candidate)) return candidate;
+  }
+  return null;
 }
 
 export async function AutoList({
@@ -171,6 +183,10 @@ export async function AutoList({
           </p>
         </div>
         <div className="flex w-full flex-col gap-2 sm:flex-row sm:flex-wrap lg:w-auto lg:flex-nowrap">
+          <AutoListViewToggle
+            currentView={searchParams.view === "board" ? "board" : "table"}
+            boardAvailable={Boolean(findStatusField(meta.fields.map((f) => f.fieldname)))}
+          />
           <AutoListSearch placeholder={`Search ${title.toLowerCase()}…`} />
           <AutoListControls
             doctype={doctype}
@@ -209,6 +225,15 @@ export async function AutoList({
           reason={list ? "empty" : "unavailable"}
           emptyState={moduleSpec?.emptyState}
           moduleHref={moduleHref}
+        />
+      ) : searchParams.view === "board" && findStatusField(meta.fields.map((f) => f.fieldname)) ? (
+        <AutoListBoard
+          rows={list.values as Array<{ name: string; [k: string]: unknown }>}
+          statusField={findStatusField(meta.fields.map((f) => f.fieldname)) as string}
+          titleField={titleField}
+          listFields={listFields}
+          basePath={basePath}
+          currency={String(boot.sysdefaults?.currency ?? "USD")}
         />
       ) : (
         <AutoListKeyboard rowHrefs={rowHrefs}>
