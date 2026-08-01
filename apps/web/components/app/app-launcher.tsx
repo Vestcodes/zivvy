@@ -62,14 +62,14 @@ const GROUPS: Array<{ key: WorkspaceGroup; label: string; description: string }>
   { key: "insight", label: "Learn and extend", description: "Analytics, storefronts, and connected systems." }
 ];
 
-const TONE_STYLES = {
-  emerald: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300",
-  sky: "bg-sky-500/10 text-sky-700 dark:text-sky-300",
-  amber: "bg-amber-500/12 text-amber-800 dark:text-amber-300",
-  violet: "bg-violet-500/10 text-violet-700 dark:text-violet-300",
-  rose: "bg-rose-500/10 text-rose-700 dark:text-rose-300",
-  slate: "bg-slate-500/10 text-slate-700 dark:text-slate-300"
-} as const;
+// Category eyebrows — mono uppercase labels shown above the module title.
+// Deliberately short. Not "Sales & CRM Suite" — just SALES.
+const CATEGORY_EYEBROW: Record<WorkspaceGroup, string> = {
+  core: "Sell · buy · account",
+  operations: "Deliver the work",
+  team: "People & support",
+  insight: "Learn & extend"
+};
 
 function WorkspaceCard({ workspace }: { workspace: WorkspaceDefinition }) {
   const boot = useZivvyBoot();
@@ -77,36 +77,63 @@ function WorkspaceCard({ workspace }: { workspace: WorkspaceDefinition }) {
   const spec = getModuleByNavigationKey(workspace.key);
   if (!nav || !spec) return null;
 
-  const Icon = nav.items[0]?.icon ?? LayoutDashboard;
   const gates = nav.items.map((item) =>
     isItemGated({ module: item.module, minTier: item.minTier }, boot)
   );
   const locked = gates.length > 0 && gates.every((gate) => gate.gated);
+  const availableCount = gates.filter((g) => !g.gated).length;
   const requiredTier = gates.find((gate) => gate.requiredTier)?.requiredTier;
+
+  // Meta line — the single earned signal for this card. Prefer an available
+  // workflow count over a static description because it says something true
+  // about what the operator gets when they open the workspace.
+  const meta = locked
+    ? `Unlocks ${nav.items.length} workflow${nav.items.length === 1 ? "" : "s"}`
+    : availableCount === nav.items.length
+      ? `${nav.items.length} workflow${nav.items.length === 1 ? "" : "s"}`
+      : `${availableCount} of ${nav.items.length} workflow${nav.items.length === 1 ? "" : "s"}`;
 
   return (
     <Link
       href={workspace.href}
       onClick={() => rememberWorkspace(workspace.key)}
-      className="group flex min-h-36 flex-col justify-between rounded-xl border border-border/70 bg-card p-4 transition-[border-color,transform,box-shadow] duration-[var(--duration-base)] ease-[var(--ease-out-quart)] hover:-translate-y-0.5 hover:border-primary/35 hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+      className={cn(
+        "group relative flex min-h-32 flex-col justify-between rounded-xl border border-border/70 bg-card p-5 transition-[border-color,background-color] duration-[var(--duration-base)] ease-[var(--ease-out-quart)] hover:border-foreground/25 hover:bg-accent/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50",
+        locked && "opacity-90"
+      )}
     >
-      <div className="flex items-start justify-between gap-3">
-        <span className={cn("grid size-10 place-items-center rounded-lg", TONE_STYLES[workspace.tone])}>
-          <Icon className="size-5" />
-        </span>
+      {/* Top row: category eyebrow (or lock badge) */}
+      <div className="flex items-baseline justify-between gap-2">
+        <p className="font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
+          {CATEGORY_EYEBROW[workspace.group]}
+        </p>
         {locked ? (
-          <Badge variant="outline" className="gap-1 text-[10px] font-medium text-muted-foreground">
+          <span className="inline-flex items-center gap-1 font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
             <LockKeyhole className="size-3" />
             {TIER_LABEL[requiredTier ?? "pro"]}
-          </Badge>
+          </span>
         ) : null}
       </div>
-      <div className="mt-5">
-        <div className="flex items-center gap-2">
-          <h3 className="font-display text-base font-semibold tracking-tight">{spec.title}</h3>
-          <ArrowRight className="size-3.5 text-muted-foreground opacity-0 transition-all group-hover:translate-x-0.5 group-hover:opacity-100" />
-        </div>
-        <p className="mt-1 line-clamp-2 text-sm leading-5 text-muted-foreground">{spec.description}</p>
+
+      {/* Middle: title + one-line thesis */}
+      <div className="mt-4">
+        <h3 className="font-display text-lg font-semibold tracking-tight text-foreground">
+          {spec.title}
+        </h3>
+        <p className="mt-1.5 line-clamp-2 text-sm leading-5 text-muted-foreground">
+          {spec.primaryJob ?? spec.description}
+        </p>
+      </div>
+
+      {/* Foot: hairline + workflow count + verb-with-arrow */}
+      <div className="mt-4 flex items-center justify-between border-t border-border/60 pt-3">
+        <span className="font-mono text-[11px] tabular-nums text-muted-foreground">
+          {meta}
+        </span>
+        <span className="inline-flex items-center gap-1 text-sm font-medium text-foreground/85 transition-colors group-hover:text-primary">
+          {locked ? "See plans" : "Open"}
+          <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" />
+        </span>
       </div>
     </Link>
   );

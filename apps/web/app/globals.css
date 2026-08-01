@@ -92,6 +92,25 @@
   --status-progress-bg: #ede9fe;
   --status-progress-fg: #4c1d95;
   --status-progress-ring: #c4b5fd;
+
+  /* Operator-ledger palette — scoped to surfaces that opt into the ledger
+     look via .surface-ledger. Bone ground, deep ink, and three earned
+     accents used ONLY as state signals (spruce=done, clay=overdue,
+     copper=waiting). Not decoration — never spend these outside the state
+     they name. Also drives dashboard chrome + the workspace launcher. */
+  --ledger-bone:        #EEEAE0;
+  --ledger-bone-tint:   #F4F0E6;
+  --ledger-bone-shade:  #E3DECF;
+  --ledger-ink:         #12161B;
+  --ledger-pencil:      #5E5A50;
+  --ledger-rule:        #C9C2B0;
+  --ledger-rule-soft:   #DCD5C2;
+  --ledger-spruce:      #146C4F;
+  --ledger-spruce-tint: #DFE8DF;
+  --ledger-clay:        #94382C;
+  --ledger-clay-tint:   #ECD9D3;
+  --ledger-copper:      #A96A2A;
+  --ledger-copper-tint: #F0DEC3;
 }
 
 @media (pointer: coarse) {
@@ -191,6 +210,22 @@
   --status-progress-bg: #4c1d9533;
   --status-progress-fg: #c4b5fd;
   --status-progress-ring: #4c1d95;
+
+  /* Ledger palette — dark: shift accents up in luminance so they read on
+     graphite ground. Same hue family, opposite duty cycle. */
+  --ledger-bone:        #101317;
+  --ledger-bone-tint:   #171B20;
+  --ledger-bone-shade:  #0B0E12;
+  --ledger-ink:         #EBE6DC;
+  --ledger-pencil:      #948E7F;
+  --ledger-rule:        #2D2F33;
+  --ledger-rule-soft:   #212327;
+  --ledger-spruce:      #6AA37E;
+  --ledger-spruce-tint: #1A2721;
+  --ledger-clay:        #C97966;
+  --ledger-clay-tint:   #2E1F1B;
+  --ledger-copper:      #D19A5D;
+  --ledger-copper-tint: #2A2118;
 }
 
 @theme inline {
@@ -473,6 +508,108 @@
   }
   .section-hairline {
     border-top: 1px solid color-mix(in oklab, var(--border) 80%, transparent);
+  }
+
+  /* Ledger typographic settings — used inside .surface-ledger. Deliberate
+     type-setting is the identity: mono eyebrows at wide tracking, tight-
+     heavy headline, ink numbers on a shared rail. */
+  .type-ledger-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ledger-pencil);
+  }
+  .type-ledger-hero {
+    font-family: var(--font-sans);
+    font-size: clamp(1.75rem, 4vw, 2.75rem);
+    line-height: 1.06;
+    letter-spacing: -0.025em;
+    font-weight: 550;
+    color: var(--ledger-ink);
+    text-wrap: balance;
+    max-width: 26ch;
+  }
+  .type-ledger-title {
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+    line-height: 1.35;
+    font-weight: 500;
+    letter-spacing: -0.005em;
+    color: var(--ledger-ink);
+  }
+  .type-ledger-note {
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    color: var(--ledger-pencil);
+  }
+  .type-ledger-amount {
+    font-family: var(--font-mono);
+    font-size: 0.9375rem;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+    color: var(--ledger-ink);
+    text-align: right;
+  }
+  .type-ledger-ref {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.02em;
+    color: var(--ledger-pencil);
+  }
+  .surface-ledger {
+    background: var(--ledger-bone);
+    color: var(--ledger-ink);
+  }
+  .ledger-band {
+    border-top: 1px solid var(--ledger-rule);
+  }
+  .ledger-row + .ledger-row {
+    border-top: 1px solid var(--ledger-rule-soft);
+  }
+  .ledger-cta {
+    color: var(--ledger-ink);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    text-decoration: none;
+    padding: 0.25rem 0;
+    border-bottom: 1px solid transparent;
+    transition: color 0.16s, border-color 0.16s;
+    white-space: nowrap;
+  }
+  .ledger-cta:hover {
+    color: var(--ledger-spruce);
+    border-color: var(--ledger-spruce);
+  }
+  .ledger-cta > span {
+    transition: transform 0.18s cubic-bezier(0.2, 0.7, 0.2, 1);
+    display: inline-block;
+  }
+  .ledger-cta:hover > span {
+    transform: translate(2px, -2px);
+  }
+  .ledger-cta[data-tone="clay"]:hover { color: var(--ledger-clay); border-color: var(--ledger-clay); }
+  .ledger-cta[data-tone="copper"]:hover { color: var(--ledger-copper); border-color: var(--ledger-copper); }
+
+  .ledger-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 9999px;
+    background: var(--ledger-pencil);
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--ledger-pencil) 25%, transparent);
+    display: inline-block;
+  }
+  .ledger-dot[data-tone="clay"]   { background: var(--ledger-clay);   box-shadow: 0 0 0 3px var(--ledger-clay-tint); }
+  .ledger-dot[data-tone="copper"] { background: var(--ledger-copper); box-shadow: 0 0 0 3px var(--ledger-copper-tint); }
+  .ledger-dot[data-tone="spruce"] { background: var(--ledger-spruce); box-shadow: 0 0 0 3px var(--ledger-spruce-tint); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ledger-cta > span { transition: none; }
+    .ledger-cta:hover > span { transform: none; }
   }
 }
 
