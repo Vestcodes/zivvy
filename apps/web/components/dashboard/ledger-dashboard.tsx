@@ -9,10 +9,10 @@ import { cn } from "@/lib/utils";
  * The operator ledger.
  *
  * Design contract:
- *   - The ledger is a single considered document card that fills the content
- *     area of the app shell. It sits ON the neutral canvas — the desk chrome
- *     (sidebar, topbar) stays on its own tokens, so no color seam collides
- *     with the ledger's identity.
+ *   - Neutral card on the app-shell canvas — no color seam against the
+ *     sidebar/topbar. The identity comes from typography + structure
+ *     (mono eyebrows, tight-heavy headline, tabular amounts, hairline
+ *     rows) rather than a distinct surface color.
  *   - No KPI cards. Every number appears next to the thing to do about it.
  *   - Time is the axis (Today / This week). Never module.
  *   - Row: [status dot] [subject + note] [amount, mono, right] [verb + arrow]
@@ -107,7 +107,7 @@ function Row({ row }: { row: LedgerRow }) {
       <p
         className={cn(
           "type-ledger-amount min-w-[8ch]",
-          row.amountKind === "none" && "text-[color:var(--ledger-pencil)]"
+          row.amountKind === "none" && "text-muted-foreground"
         )}
       >
         {row.amount ?? (row.amountKind === "none" ? "—" : "")}
@@ -129,7 +129,7 @@ function BandHead({ label, count }: { label: string; count: number }) {
     <header className="mb-6 flex items-baseline justify-between">
       <p className="type-ledger-eyebrow">{label}</p>
       <p className="type-ledger-eyebrow tabular-nums">
-        <span className="text-[color:var(--ledger-rule)]">·</span> {count}
+        <span className="text-border">·</span> {count}
       </p>
     </header>
   );
@@ -194,14 +194,14 @@ export async function LedgerDashboard() {
   const hasAnyRows = criticalRows.length + waitingRows.length + activityRows.length > 0;
 
   return (
-    // Card wrapper: a considered document laid on the desk. Full width of
-    // the content area, rounded corners, subtle hairline, and tall enough
-    // that the ledger fills the viewport minus the topbar and content
-    // padding — so it never reads as a small widget floating in space.
+    // Card wrapper: neutral surface on the app-shell canvas. Rounded, subtle
+    // border in the shared --border token so the card matches every other
+    // surface in the app. Fills the content area top-to-bottom so it never
+    // reads as a small floating widget.
     <div
       className={cn(
-        "surface-ledger relative flex flex-col overflow-hidden",
-        "rounded-2xl border border-[color:var(--ledger-rule-soft)]",
+        "bg-card text-card-foreground relative flex flex-col overflow-hidden",
+        "rounded-2xl border border-border",
         "min-h-[calc(100dvh-var(--app-topbar-height,3rem)-2rem)] md:min-h-[calc(100dvh-var(--app-topbar-height,3rem)-2.5rem)]"
       )}
     >
@@ -209,7 +209,7 @@ export async function LedgerDashboard() {
       <header className="mx-auto w-full max-w-5xl px-6 pt-10 pb-6 md:px-10 md:pt-14 lg:px-14 lg:pt-16">
         <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
           <span className="type-ledger-eyebrow">{copy.eyebrow}</span>
-          <span className="type-ledger-eyebrow text-[color:var(--ledger-rule)]" aria-hidden>·</span>
+          <span className="type-ledger-eyebrow text-border" aria-hidden>·</span>
           <span className="type-ledger-eyebrow">{today}</span>
         </div>
       </header>
@@ -221,7 +221,7 @@ export async function LedgerDashboard() {
         </p>
         <h1 className="type-ledger-hero">{hero.title}</h1>
         {hero.meta && (
-          <p className="mt-5 max-w-[52ch] text-[15px] text-[color:var(--ledger-pencil)]">
+          <p className="mt-5 max-w-[52ch] text-[15px] text-muted-foreground">
             {hero.meta}
           </p>
         )}
@@ -273,7 +273,7 @@ export async function LedgerDashboard() {
       {/* Colophon anchors the bottom so short states still fill the page */}
       <div className="mt-auto">
         <div className="mx-auto w-full max-w-5xl px-6 py-8 md:px-10 md:py-10 lg:px-14">
-          <div className="flex items-baseline justify-between border-t border-[color:var(--ledger-rule-soft)] pt-5">
+          <div className="flex items-baseline justify-between border-t border-border pt-5">
             <span className="type-ledger-eyebrow">
               {boot.zivvy?.tenant?.company ?? "Zivvy"} · {copy.eyebrow.toLowerCase()}
             </span>

@@ -5,10 +5,29 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   ArrowRight,
+  BookOpen,
+  Boxes,
+  Building2,
+  ChartLine,
+  Factory,
+  GraduationCap,
+  Headphones,
   LayoutDashboard,
+  Layers,
   LockKeyhole,
+  PackageOpen,
+  ReceiptText,
+  ScanBarcode,
   Search,
-  X
+  ShieldCheck,
+  Store,
+  Ticket,
+  Truck,
+  Users,
+  UsersRound,
+  Wallet,
+  X,
+  type LucideIcon
 } from "lucide-react";
 import { getModuleByNavigationKey } from "@zivvy/module-registry";
 import { APPS, CATEGORIES, type AppTile } from "@/components/app/app-launcher-data";
@@ -71,6 +90,41 @@ const CATEGORY_EYEBROW: Record<WorkspaceGroup, string> = {
   insight: "Learn & extend"
 };
 
+// One recognizable glyph per workspace. Chosen so silhouettes stay distinct
+// at 20px — no two cards read as the same thing at a glance.
+const WORKSPACE_ICON: Record<string, LucideIcon> = {
+  sales: ReceiptText,
+  crm: UsersRound,
+  purchases: PackageOpen,
+  stock: Boxes,
+  finance: Wallet,
+  shipping: Truck,
+  pos: ScanBarcode,
+  manufacturing: Factory,
+  quality: ShieldCheck,
+  assets: Building2,
+  projects: Layers,
+  hr: Users,
+  talent: GraduationCap,
+  service: Headphones,
+  helpdesk: Ticket,
+  wiki: BookOpen,
+  insights: ChartLine,
+  webshop: Store
+};
+
+// Tone tints — the glyph sits inside a rounded square filled with a subtle
+// hue from the workspace's tone. Same in light and dark, chosen so each
+// tone reads as itself without overpowering the mono type below.
+const TONE_GLYPH: Record<WorkspaceDefinition["tone"], string> = {
+  emerald: "bg-emerald-50 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-300",
+  sky:     "bg-sky-50 text-sky-700 dark:bg-sky-950/50 dark:text-sky-300",
+  amber:   "bg-amber-50 text-amber-700 dark:bg-amber-950/50 dark:text-amber-300",
+  violet:  "bg-violet-50 text-violet-700 dark:bg-violet-950/50 dark:text-violet-300",
+  rose:    "bg-rose-50 text-rose-700 dark:bg-rose-950/50 dark:text-rose-300",
+  slate:   "bg-slate-100 text-slate-700 dark:bg-slate-800/60 dark:text-slate-300"
+};
+
 function WorkspaceCard({ workspace }: { workspace: WorkspaceDefinition }) {
   const boot = useZivvyBoot();
   const nav = MODULE_NAVS[workspace.key];
@@ -83,6 +137,7 @@ function WorkspaceCard({ workspace }: { workspace: WorkspaceDefinition }) {
   const locked = gates.length > 0 && gates.every((gate) => gate.gated);
   const availableCount = gates.filter((g) => !g.gated).length;
   const requiredTier = gates.find((gate) => gate.requiredTier)?.requiredTier;
+  const Glyph = WORKSPACE_ICON[workspace.key] ?? LayoutDashboard;
 
   // Meta line — the single earned signal for this card. Prefer an available
   // workflow count over a static description because it says something true
@@ -98,21 +153,32 @@ function WorkspaceCard({ workspace }: { workspace: WorkspaceDefinition }) {
       href={workspace.href}
       onClick={() => rememberWorkspace(workspace.key)}
       className={cn(
-        "group relative flex min-h-32 flex-col justify-between rounded-xl border border-border/70 bg-card p-5 transition-[border-color,background-color] duration-[var(--duration-base)] ease-[var(--ease-out-quart)] hover:border-foreground/25 hover:bg-accent/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50",
+        "group relative flex min-h-36 flex-col rounded-xl border border-border/70 bg-card p-5 transition-[border-color,background-color] duration-[var(--duration-base)] ease-[var(--ease-out-quart)] hover:border-foreground/25 hover:bg-accent/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50",
         locked && "opacity-90"
       )}
     >
-      {/* Top row: category eyebrow (or lock badge) */}
-      <div className="flex items-baseline justify-between gap-2">
-        <p className="font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
-          {CATEGORY_EYEBROW[workspace.group]}
-        </p>
-        {locked ? (
-          <span className="inline-flex items-center gap-1 font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
-            <LockKeyhole className="size-3" />
-            {TIER_LABEL[requiredTier ?? "pro"]}
-          </span>
-        ) : null}
+      {/* Header: workspace glyph + category eyebrow (or lock badge) */}
+      <div className="flex items-start justify-between gap-3">
+        <span
+          className={cn(
+            "grid size-10 place-items-center rounded-lg transition-colors",
+            TONE_GLYPH[workspace.tone]
+          )}
+          aria-hidden
+        >
+          <Glyph className="size-5" strokeWidth={1.75} />
+        </span>
+        <div className="flex flex-col items-end gap-1 pt-1.5 text-right">
+          <p className="font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
+            {CATEGORY_EYEBROW[workspace.group]}
+          </p>
+          {locked ? (
+            <span className="inline-flex items-center gap-1 font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
+              <LockKeyhole className="size-3" />
+              {TIER_LABEL[requiredTier ?? "pro"]}
+            </span>
+          ) : null}
+        </div>
       </div>
 
       {/* Middle: title + one-line thesis */}
@@ -126,7 +192,7 @@ function WorkspaceCard({ workspace }: { workspace: WorkspaceDefinition }) {
       </div>
 
       {/* Foot: hairline + workflow count + verb-with-arrow */}
-      <div className="mt-4 flex items-center justify-between border-t border-border/60 pt-3">
+      <div className="mt-auto flex items-center justify-between border-t border-border/60 pt-3">
         <span className="font-mono text-[11px] tabular-nums text-muted-foreground">
           {meta}
         </span>

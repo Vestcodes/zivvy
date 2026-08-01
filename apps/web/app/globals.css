@@ -562,10 +562,10 @@
     color: var(--ledger-ink);
   }
   .ledger-band {
-    border-top: 1px solid var(--ledger-rule);
+    border-top: 1px solid var(--border);
   }
   .ledger-row + .ledger-row {
-    border-top: 1px solid var(--ledger-rule-soft);
+    border-top: 1px solid var(--border);
   }
   .ledger-cta {
     color: var(--ledger-ink);
