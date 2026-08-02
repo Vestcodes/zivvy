@@ -4,9 +4,22 @@
       "root": "apps/web",
       "framework": "nextjs",
       "installCommand": "pnpm install --config.strict-dep-builds=false --config.verify-deps-before-run=false"
+    },
+    "portal": {
+      "root": "apps/portal",
+      "framework": "nextjs",
+      "installCommand": "pnpm install --config.strict-dep-builds=false --config.verify-deps-before-run=false"
     }
   },
   "rewrites": [
+    {
+      "source": "/(.*)",
+      "has": [{ "type": "host", "value": "portal.zivvy.xyz" }],
+      "destination": {
+        "type": "service",
+        "service": "portal"
+      }
+    },
     {
       "source": "/(.*)",
       "destination": {
