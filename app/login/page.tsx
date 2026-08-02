@@ -67,7 +67,7 @@ export default async function LoginPage({
               Sales, stock, accounting, HR, and manufacturing in one product.
             </p>
             <ul className="mt-8 space-y-2 text-sm text-primary-foreground/70">
-              <li>· 2 seats on Free, forever</li>
+              <li>· 1 seat on Free, forever</li>
               <li>· No credit card required</li>
               <li>· Data in India, EU, or US — your choice</li>
             </ul>

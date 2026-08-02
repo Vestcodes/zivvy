@@ -70,7 +70,7 @@ export function SoftwareApplicationJsonLd() {
             name: "Free",
             price: "0",
             priceCurrency: "USD",
-            description: "2 seats, sales, CRM, basic stock. No card required."
+            description: "1 seat, sales, CRM, basic stock. No card required."
           },
           {
             "@type": "Offer",

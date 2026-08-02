@@ -32,7 +32,7 @@ const PLANS: Plan[] = [
     monthly: 0,
     annual: 0,
     desc: "Get started with sales, stock basics, and CRM.",
-    features: ["2 seats", "Sales & CRM", "Basic stock", "Community support"],
+    features: ["1 seat", "Sales & CRM", "Basic stock", "Community support"],
     cta: "Get started"
   },
   {

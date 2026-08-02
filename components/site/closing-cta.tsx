@@ -32,7 +32,7 @@ export function ClosingCta() {
       >
         <div className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-medium text-white backdrop-blur">
           <Sparkles className="size-3.5 text-emerald-300" />
-          <span>2 seats free forever — no credit card</span>
+          <span>1 seat free forever — no credit card</span>
         </div>
 
         <h2 className="mt-6 font-display text-4xl leading-[1.05] tracking-tight text-white sm:text-6xl">

@@ -13,6 +13,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { appendCheckoutLocale } from "@/lib/tier-checkout";
 import { CreditCard, ExternalLink, Minus, Plus, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -106,7 +107,7 @@ export function SeatUpgradeDialog({
         return;
       }
       if (res.mode === "checkout" && res.checkout_url) {
-        window.location.href = res.checkout_url;
+        window.location.href = appendCheckoutLocale(res.checkout_url);
         return;
       }
       if (res.mode === "portal" && res.portal_url) {
@@ -115,7 +116,7 @@ export function SeatUpgradeDialog({
         return;
       }
       if (res.mode === "placeholder" && res.checkout_url) {
-        window.location.href = res.checkout_url;
+        window.location.href = appendCheckoutLocale(res.checkout_url);
         return;
       }
       toast.error("Seat change request didn't complete. Try again shortly.");

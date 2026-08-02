@@ -49,7 +49,7 @@ export default function PricingPage() {
     <>
       <ProductJsonLd
         name="Zivvy Free"
-        description="Free forever plan — 2 seats, sales, CRM and basic stock."
+        description="Free forever plan — 1 seat, sales, CRM and basic stock."
         priceUsd={0}
       />
       <ProductJsonLd

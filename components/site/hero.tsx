@@ -122,7 +122,7 @@ export function Hero() {
           </div>
 
           <p className="mt-6 text-xs text-muted-foreground">
-            Free forever plan · No credit card · 2 seats included
+            Free forever plan · No credit card · 1 seat included
           </p>
         </div>
       </AuroraBackground>

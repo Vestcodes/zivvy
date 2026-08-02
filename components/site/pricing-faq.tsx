@@ -20,7 +20,7 @@ const FAQ: { q: string; a: React.ReactNode }[] = [
   },
   {
     q: "What happens on Free?",
-    a: "You get 2 seats, sales, CRM, and basic stock. Enough to run a small operation. Upgrade when you outgrow it."
+    a: "You get 1 seat, sales, CRM, and basic stock. Enough to run a solo operation. Upgrade when you outgrow it."
   },
   {
     q: "Where is data hosted?",

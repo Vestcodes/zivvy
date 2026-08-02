@@ -96,7 +96,7 @@ export async function startTierCheckout(
     const url = (result?.checkout_url ?? "").trim();
     if (!url) return false;
     if (/^https?:\/\//i.test(url)) {
-      window.location.href = url;
+      window.location.href = appendCheckoutLocale(url);
       return true;
     }
     navigate(url);
@@ -108,4 +108,30 @@ export async function startTierCheckout(
     }
     return false;
   }
+}
+
+const POLAR_CHECKOUT_LOCALES = new Set([
+  "en", "nl", "es", "fr", "sv", "de", "hu", "it", "pt", "pt-PT",
+  "ko", "ja", "tr", "pl",
+]);
+
+export function appendCheckoutLocale(url: string): string {
+  if (typeof navigator === "undefined") return url;
+  try {
+    const parsed = new URL(url);
+    if (parsed.searchParams.has("locale")) return url;
+    const browserLang = navigator.language;
+    if (POLAR_CHECKOUT_LOCALES.has(browserLang)) {
+      parsed.searchParams.set("locale", browserLang);
+      return parsed.toString();
+    }
+    const short = browserLang.split("-")[0];
+    if (POLAR_CHECKOUT_LOCALES.has(short)) {
+      parsed.searchParams.set("locale", short);
+      return parsed.toString();
+    }
+  } catch {
+    // Malformed URL — return as-is.
+  }
+  return url;
 }

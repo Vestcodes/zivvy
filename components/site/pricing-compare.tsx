@@ -3,19 +3,101 @@ import { cn } from "@/lib/utils";
 
 type Row = { label: string; free: boolean; pro: boolean; business: boolean };
 
-const ROWS: Row[] = [
-  { label: "Sales & CRM", free: true, pro: true, business: true },
-  { label: "Basic stock", free: true, pro: true, business: true },
-  { label: "Full accounting & tax", free: false, pro: true, business: true },
-  { label: "Full stock & warehouses", free: false, pro: true, business: true },
-  { label: "HR & payroll", free: false, pro: true, business: true },
-  { label: "Barcode workflows", free: false, pro: true, business: true },
-  { label: "Projects", free: false, pro: true, business: true },
-  { label: "Manufacturing & BOMs", free: false, pro: false, business: true },
-  { label: "Assets & quality", free: false, pro: false, business: true },
-  { label: "Subcontracting", free: false, pro: false, business: true },
-  { label: "Multiple companies", free: false, pro: false, business: true },
-  { label: "Priority support", free: false, pro: true, business: true }
+interface Section {
+  category: string;
+  rows: Row[];
+}
+
+const SECTIONS: Section[] = [
+  {
+    category: "Sales & CRM",
+    rows: [
+      { label: "Leads, contacts & opportunities", free: true, pro: true, business: true },
+      { label: "Quotations & sales orders", free: true, pro: true, business: true },
+      { label: "Pipeline (Kanban)", free: true, pro: true, business: true },
+      { label: "Sales invoicing", free: false, pro: true, business: true },
+      { label: "POS / point of sale", free: false, pro: true, business: true },
+    ],
+  },
+  {
+    category: "Inventory & stock",
+    rows: [
+      { label: "Items & item groups", free: true, pro: true, business: true },
+      { label: "Stock entries & movements", free: true, pro: true, business: true },
+      { label: "Multi-warehouse & transfers", free: false, pro: true, business: true },
+      { label: "Barcode workflows", free: false, pro: true, business: true },
+      { label: "Serial & batch tracking", free: false, pro: true, business: true },
+    ],
+  },
+  {
+    category: "Accounting & tax",
+    rows: [
+      { label: "Chart of accounts", free: false, pro: true, business: true },
+      { label: "Journal & payment entries", free: false, pro: true, business: true },
+      { label: "Tax templates & GST/VAT", free: false, pro: true, business: true },
+      { label: "Financial reports", free: false, pro: true, business: true },
+    ],
+  },
+  {
+    category: "Purchasing",
+    rows: [
+      { label: "Suppliers & supplier quotations", free: false, pro: true, business: true },
+      { label: "Purchase orders & receipts", free: false, pro: true, business: true },
+      { label: "Request for quotation (RFQ)", free: false, pro: true, business: true },
+    ],
+  },
+  {
+    category: "HR & people",
+    rows: [
+      { label: "Employees & departments", free: false, pro: true, business: true },
+      { label: "Leave & attendance", free: false, pro: true, business: true },
+      { label: "Payroll & salary slips", free: false, pro: true, business: true },
+      { label: "Recruitment pipeline", free: false, pro: true, business: true },
+      { label: "Expense claims", free: false, pro: true, business: true },
+    ],
+  },
+  {
+    category: "Projects",
+    rows: [
+      { label: "Projects & tasks", free: false, pro: true, business: true },
+      { label: "Timesheets", free: false, pro: true, business: true },
+    ],
+  },
+  {
+    category: "Manufacturing & operations",
+    rows: [
+      { label: "Bills of materials (BOMs)", free: false, pro: true, business: true },
+      { label: "Work orders & job cards", free: false, pro: false, business: true },
+      { label: "Subcontracting", free: false, pro: false, business: true },
+      { label: "Quality inspections", free: false, pro: false, business: true },
+    ],
+  },
+  {
+    category: "Assets & enterprise",
+    rows: [
+      { label: "Fixed assets & depreciation", free: false, pro: false, business: true },
+      { label: "Asset maintenance", free: false, pro: false, business: true },
+      { label: "Multiple companies", free: false, pro: false, business: true },
+      { label: "Analytics & insights (BI)", free: false, pro: false, business: true },
+      { label: "Webshop / e-commerce", free: false, pro: false, business: true },
+    ],
+  },
+  {
+    category: "Platform",
+    rows: [
+      { label: "Wiki / knowledge base", free: true, pro: true, business: true },
+      { label: "REST API & webhooks", free: true, pro: true, business: true },
+      { label: "Region-pinned data (IN/EU/US)", free: true, pro: true, business: true },
+      { label: "Helpdesk & tickets", free: false, pro: true, business: true },
+      { label: "Priority support", free: false, pro: true, business: true },
+    ],
+  },
+  {
+    category: "Seats",
+    rows: [
+      { label: "Included seats", free: true, pro: true, business: true },
+    ],
+  },
 ];
 
 function Cell({ on, label }: { on: boolean; label: string }) {
@@ -36,11 +118,15 @@ function Cell({ on, label }: { on: boolean; label: string }) {
   );
 }
 
-/**
- * Feature matrix. Sticky `<thead>` — as the user scrolls the page, the
- * column labels ride along so it's always obvious which tier a column
- * belongs to. Body rows highlight on hover to make eye-tracking easier.
- */
+function SeatCell({ tier }: { tier: "free" | "pro" | "business" }) {
+  const label = tier === "free" ? "1" : "Unlimited";
+  return (
+    <span className="text-sm font-medium tabular-nums">
+      {label}
+    </span>
+  );
+}
+
 export function PricingCompare() {
   return (
     <section className="mx-auto max-w-4xl px-6 py-16 sm:py-20">
@@ -88,30 +174,45 @@ export function PricingCompare() {
               </tr>
             </thead>
             <tbody>
-              {ROWS.map((row) => (
-                <tr
-                  key={row.label}
-                  className={cn(
-                    "group border-b border-border/50 last:border-b-0",
-                    "transition-colors hover:bg-primary/[0.04]"
-                  )}
-                >
-                  <th
-                    scope="row"
-                    className="px-4 py-3 text-left font-medium text-foreground/90 group-hover:text-foreground"
-                  >
-                    {row.label}
-                  </th>
-                  <td className="px-4 py-3 text-center">
-                    <Cell on={row.free} label={row.label} />
-                  </td>
-                  <td className="bg-primary/[0.03] px-4 py-3 text-center group-hover:bg-primary/[0.07]">
-                    <Cell on={row.pro} label={row.label} />
-                  </td>
-                  <td className="px-4 py-3 text-center">
-                    <Cell on={row.business} label={row.label} />
-                  </td>
-                </tr>
+              {SECTIONS.map((section) => (
+                <>
+                  <tr key={`cat-${section.category}`}>
+                    <td
+                      colSpan={4}
+                      className="border-b border-border/50 bg-muted/30 px-4 py-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground"
+                    >
+                      {section.category}
+                    </td>
+                  </tr>
+                  {section.rows.map((row) => {
+                    const isSeats = section.category === "Seats";
+                    return (
+                      <tr
+                        key={row.label}
+                        className={cn(
+                          "group border-b border-border/50 last:border-b-0",
+                          "transition-colors hover:bg-primary/[0.04]"
+                        )}
+                      >
+                        <th
+                          scope="row"
+                          className="px-4 py-3 text-left font-medium text-foreground/90 group-hover:text-foreground"
+                        >
+                          {row.label}
+                        </th>
+                        <td className="px-4 py-3 text-center">
+                          {isSeats ? <SeatCell tier="free" /> : <Cell on={row.free} label={row.label} />}
+                        </td>
+                        <td className="bg-primary/[0.03] px-4 py-3 text-center group-hover:bg-primary/[0.07]">
+                          {isSeats ? <SeatCell tier="pro" /> : <Cell on={row.pro} label={row.label} />}
+                        </td>
+                        <td className="px-4 py-3 text-center">
+                          {isSeats ? <SeatCell tier="business" /> : <Cell on={row.business} label={row.label} />}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </>
               ))}
             </tbody>
           </table>

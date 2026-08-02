@@ -1,15 +1,5 @@
 "use client";
 
-/**
- * `<RegionPicker>` — dropdown that lets a user preview localised pricing
- * for a different country. Writes the same country/currency cookies the
- * middleware would set via the `RegionProvider.setRegion()` shim, then
- * `router.refresh()` so any server-rendered price re-runs.
- *
- * Kept intentionally lean: a curated list of the countries we actually
- * profile on marketing pages. Full 240-country picker isn't a v1 need.
- */
-
 import { useMemo } from "react";
 import { Globe } from "lucide-react";
 import {
@@ -31,64 +21,123 @@ interface CountryOption {
   flag: string;
 }
 
-/**
- * The visible menu — a single list of countries we actively profile on
- * marketing pages. Country selection drives which Polar-native currency
- * the tier cards render.
- */
-const MARKETING_CODES: CountryOption[] = [
-  { code: "US", label: "United States", flag: "🇺🇸" },
-  { code: "GB", label: "United Kingdom", flag: "🇬🇧" },
-  { code: "DE", label: "Germany", flag: "🇩🇪" },
-  { code: "FR", label: "France", flag: "🇫🇷" },
-  { code: "NL", label: "Netherlands", flag: "🇳🇱" },
-  { code: "IT", label: "Italy", flag: "🇮🇹" },
-  { code: "ES", label: "Spain", flag: "🇪🇸" },
-  { code: "CA", label: "Canada", flag: "🇨🇦" },
-  { code: "AU", label: "Australia", flag: "🇦🇺" },
-  { code: "SG", label: "Singapore", flag: "🇸🇬" },
-  { code: "JP", label: "Japan", flag: "🇯🇵" },
-  { code: "AE", label: "United Arab Emirates", flag: "🇦🇪" },
-  { code: "ZA", label: "South Africa", flag: "🇿🇦" },
-  { code: "IN", label: "India", flag: "🇮🇳" },
-  { code: "BR", label: "Brazil", flag: "🇧🇷" },
-  { code: "MX", label: "Mexico", flag: "🇲🇽" },
-  { code: "ID", label: "Indonesia", flag: "🇮🇩" },
-  { code: "PL", label: "Poland", flag: "🇵🇱" },
-  { code: "PH", label: "Philippines", flag: "🇵🇭" },
-  { code: "PK", label: "Pakistan", flag: "🇵🇰" },
-  { code: "TR", label: "Türkiye", flag: "🇹🇷" }
+interface CountryGroup {
+  label: string;
+  countries: CountryOption[];
+}
+
+const COUNTRY_GROUPS: CountryGroup[] = [
+  {
+    label: "Americas",
+    countries: [
+      { code: "US", label: "United States", flag: "🇺🇸" },
+      { code: "CA", label: "Canada", flag: "🇨🇦" },
+      { code: "BR", label: "Brazil", flag: "🇧🇷" },
+      { code: "MX", label: "Mexico", flag: "🇲🇽" },
+      { code: "AR", label: "Argentina", flag: "🇦🇷" },
+      { code: "CL", label: "Chile", flag: "🇨🇱" },
+      { code: "CO", label: "Colombia", flag: "🇨🇴" },
+      { code: "PE", label: "Peru", flag: "🇵🇪" },
+    ],
+  },
+  {
+    label: "Europe",
+    countries: [
+      { code: "GB", label: "United Kingdom", flag: "🇬🇧" },
+      { code: "DE", label: "Germany", flag: "🇩🇪" },
+      { code: "FR", label: "France", flag: "🇫🇷" },
+      { code: "NL", label: "Netherlands", flag: "🇳🇱" },
+      { code: "IT", label: "Italy", flag: "🇮🇹" },
+      { code: "ES", label: "Spain", flag: "🇪🇸" },
+      { code: "BE", label: "Belgium", flag: "🇧🇪" },
+      { code: "IE", label: "Ireland", flag: "🇮🇪" },
+      { code: "PT", label: "Portugal", flag: "🇵🇹" },
+      { code: "AT", label: "Austria", flag: "🇦🇹" },
+      { code: "CH", label: "Switzerland", flag: "🇨🇭" },
+      { code: "SE", label: "Sweden", flag: "🇸🇪" },
+      { code: "NO", label: "Norway", flag: "🇳🇴" },
+      { code: "DK", label: "Denmark", flag: "🇩🇰" },
+      { code: "FI", label: "Finland", flag: "🇫🇮" },
+      { code: "PL", label: "Poland", flag: "🇵🇱" },
+      { code: "CZ", label: "Czech Republic", flag: "🇨🇿" },
+      { code: "HU", label: "Hungary", flag: "🇭🇺" },
+      { code: "RO", label: "Romania", flag: "🇷🇴" },
+      { code: "BG", label: "Bulgaria", flag: "🇧🇬" },
+      { code: "HR", label: "Croatia", flag: "🇭🇷" },
+      { code: "GR", label: "Greece", flag: "🇬🇷" },
+      { code: "UA", label: "Ukraine", flag: "🇺🇦" },
+      { code: "TR", label: "Türkiye", flag: "🇹🇷" },
+    ],
+  },
+  {
+    label: "Asia Pacific",
+    countries: [
+      { code: "IN", label: "India", flag: "🇮🇳" },
+      { code: "JP", label: "Japan", flag: "🇯🇵" },
+      { code: "AU", label: "Australia", flag: "🇦🇺" },
+      { code: "NZ", label: "New Zealand", flag: "🇳🇿" },
+      { code: "SG", label: "Singapore", flag: "🇸🇬" },
+      { code: "HK", label: "Hong Kong", flag: "🇭🇰" },
+      { code: "KR", label: "South Korea", flag: "🇰🇷" },
+      { code: "TW", label: "Taiwan", flag: "🇹🇼" },
+      { code: "MY", label: "Malaysia", flag: "🇲🇾" },
+      { code: "TH", label: "Thailand", flag: "🇹🇭" },
+      { code: "ID", label: "Indonesia", flag: "🇮🇩" },
+      { code: "PH", label: "Philippines", flag: "🇵🇭" },
+      { code: "VN", label: "Vietnam", flag: "🇻🇳" },
+      { code: "CN", label: "China", flag: "🇨🇳" },
+      { code: "PK", label: "Pakistan", flag: "🇵🇰" },
+      { code: "BD", label: "Bangladesh", flag: "🇧🇩" },
+      { code: "LK", label: "Sri Lanka", flag: "🇱🇰" },
+    ],
+  },
+  {
+    label: "Middle East & Africa",
+    countries: [
+      { code: "AE", label: "United Arab Emirates", flag: "🇦🇪" },
+      { code: "SA", label: "Saudi Arabia", flag: "🇸🇦" },
+      { code: "IL", label: "Israel", flag: "🇮🇱" },
+      { code: "EG", label: "Egypt", flag: "🇪🇬" },
+      { code: "ZA", label: "South Africa", flag: "🇿🇦" },
+      { code: "NG", label: "Nigeria", flag: "🇳🇬" },
+      { code: "KE", label: "Kenya", flag: "🇰🇪" },
+    ],
+  },
 ];
+
+const ALL_CODES = new Set(
+  COUNTRY_GROUPS.flatMap((g) => g.countries.map((c) => c.code))
+);
 
 interface Props {
   className?: string;
   triggerClassName?: string;
-  /** Optional label rendered above the trigger, e.g. "Prices in". */
   label?: string;
 }
 
 export function RegionPicker({ className, triggerClassName, label }: Props) {
   const region = useRegion();
 
-  // Guarantee the active country is present — a user landing from an
-  // obscure country should still see their own flag as the current value.
-  const options = useMemo<CountryOption[]>(() => {
-    const seen = new Set(MARKETING_CODES.map((o) => o.code));
-    const merged = [...MARKETING_CODES];
-    if (!seen.has(region.country) && REGION_CURRENCY[region.country]) {
-      merged.push({
-        code: region.country,
-        label: region.country,
-        flag: "🌐"
-      });
+  const groups = useMemo<CountryGroup[]>(() => {
+    if (ALL_CODES.has(region.country) || !REGION_CURRENCY[region.country]) {
+      return COUNTRY_GROUPS;
     }
-    return merged;
+    return [
+      ...COUNTRY_GROUPS,
+      {
+        label: "Other",
+        countries: [
+          { code: region.country, label: region.country, flag: "🌐" },
+        ],
+      },
+    ];
   }, [region.country]);
 
-  const activeOption = options.find((o) => o.code === region.country) ?? {
+  const allCountries = groups.flatMap((g) => g.countries);
+  const activeOption = allCountries.find((o) => o.code === region.country) ?? {
     code: region.country,
     label: region.country,
-    flag: "🌐"
+    flag: "🌐",
   };
 
   return (
@@ -117,18 +166,20 @@ export function RegionPicker({ className, triggerClassName, label }: Props) {
             </span>
           </SelectValue>
         </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            <SelectLabel>Currency</SelectLabel>
-            {options.map((opt) => (
-              <SelectItem key={opt.code} value={opt.code}>
-                <span className="inline-flex items-center gap-2">
-                  <span aria-hidden>{opt.flag}</span>
-                  <span>{opt.label}</span>
-                </span>
-              </SelectItem>
-            ))}
-          </SelectGroup>
+        <SelectContent className="max-h-[320px]">
+          {groups.map((group) => (
+            <SelectGroup key={group.label}>
+              <SelectLabel>{group.label}</SelectLabel>
+              {group.countries.map((opt) => (
+                <SelectItem key={opt.code} value={opt.code}>
+                  <span className="inline-flex items-center gap-2">
+                    <span aria-hidden>{opt.flag}</span>
+                    <span>{opt.label}</span>
+                  </span>
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          ))}
         </SelectContent>
       </Select>
     </div>

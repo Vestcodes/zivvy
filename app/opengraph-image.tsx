@@ -105,7 +105,7 @@ export default async function Image() {
               fontWeight: 600
             }}
           >
-            Free · 2 seats included
+            Free · 1 seat included
           </div>
           <div style={{ display: "flex" }}>zivvy.xyz</div>
         </div>

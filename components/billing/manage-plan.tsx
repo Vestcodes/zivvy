@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Check, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
 import { createCheckout, createPortalSession } from "@/lib/billing-client";
+import { appendCheckoutLocale } from "@/lib/tier-checkout";
 import { FrappeError } from "@/lib/frappe-client";
 import type { ZivvyTier } from "@/lib/boot-types";
 import { cn } from "@/lib/utils";
@@ -72,7 +73,7 @@ export function ManagePlan({ hasSubscription, currentTier }: { hasSubscription: 
     try {
       const res = await createCheckout(tier);
       if (res.url) {
-        window.location.href = res.url;
+        window.location.href = appendCheckoutLocale(res.url);
       } else {
         toast.error("Checkout URL missing from response.");
       }

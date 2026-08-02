@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
+import { appendCheckoutLocale } from "@/lib/tier-checkout";
 import {
   Check,
   ExternalLink,
@@ -109,7 +110,7 @@ export function AddonsManager({ tenant, currentUser }: Props) {
         { addon_slug: addon.slug }
       );
       if (result?.checkout_url) {
-        window.open(result.checkout_url, "_blank", "noopener,noreferrer");
+        window.open(appendCheckoutLocale(result.checkout_url), "_blank", "noopener,noreferrer");
         toast.success("Opening checkout in a new tab");
       } else {
         toast.success(`Subscribed to ${addon.title}`);
