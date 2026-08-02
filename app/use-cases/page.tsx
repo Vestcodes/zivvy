@@ -4,7 +4,7 @@ import { useCaseCards } from "@/lib/marketing-content";
 import { makeMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = makeMetadata({
-  title: "Use Cases",
+  title: "Use Cases for ERP Workflows and Automation",
   description:
     "Concrete workflows mapped to Zivvy REST resources and webhook events — project delivery, onboarding, support, planning, CRM automation.",
   canonicalPath: "/use-cases"

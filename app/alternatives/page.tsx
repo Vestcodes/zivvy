@@ -5,7 +5,7 @@ import { alternativeCards } from "@/lib/marketing-content";
 import { makeMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = makeMetadata({
-  title: "Alternatives",
+  title: "Alternatives to Odoo, Zoho and Legacy ERP",
   description:
     "Migration guides from Odoo, Zoho, and legacy ERP — mapped to Zivvy tenants, REST resources, and webhook events. No feature bingo.",
   canonicalPath: "/alternatives"

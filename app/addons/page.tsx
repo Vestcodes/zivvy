@@ -4,9 +4,9 @@ import { addonDetails } from "@/lib/addons-content";
 import { makeMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = makeMetadata({
-  title: "Add-ons",
+  title: "Add-ons for DATEV, Payments, Signing and More",
   description:
-    "Optional Zivvy modules for commerce sync, German DATEV filing, in-ERP contract signing, and batch payments.",
+    "Extend Zivvy with add-ons for DATEV export, payment processing, digital signing, e-invoicing and more. Install from the marketplace in one click.",
   canonicalPath: "/addons"
 });
 

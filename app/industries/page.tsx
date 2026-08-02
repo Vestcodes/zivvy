@@ -4,7 +4,7 @@ import { industryCards } from "@/lib/marketing-content";
 import { makeMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = makeMetadata({
-  title: "Industries",
+  title: "Industry Solutions for Healthcare, SaaS and More",
   description:
     "Same tenant model, same REST and webhook surface — different defaults for healthcare, education, manufacturing, SaaS, and finance.",
   canonicalPath: "/industries"

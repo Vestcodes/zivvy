@@ -3,7 +3,7 @@ import { BreadcrumbJsonLd } from "@/components/site/marketing/seo-scripts";
 import { makeMetadata } from "@/lib/seo";
 
 export const metadata = makeMetadata({
-  title: "About",
+  title: "About Zivvy, Cloud ERP for Growing Teams",
   description:
     "Zivvy builds owner-first ERP software — tenant-isolated, integrable and honest about pricing. Learn our mission, story and operating principles.",
   canonicalPath: "/about"

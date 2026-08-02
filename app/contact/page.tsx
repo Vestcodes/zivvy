@@ -5,8 +5,8 @@ import { Mail, MapPin, MessagesSquare } from "lucide-react";
 import { makeMetadata } from "@/lib/seo";
 
 export const metadata = makeMetadata({
-  title: "Contact",
-  description: "Talk to the Zivvy team. Sales, support, partnerships.",
+  title: "Contact Sales, Support and Partnerships",
+  description: "Reach Zivvy sales, support or partnerships. Book a demo, get help with your workspace or discuss integration and reseller opportunities.",
   canonicalPath: "/contact",
 });
 

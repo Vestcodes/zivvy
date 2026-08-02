@@ -4,9 +4,9 @@ import { LegalShell } from "@/components/site/marketing/legal-shell";
 import { makeMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = makeMetadata({
-  title: "Data Processing",
+  title: "Data Processing Agreement (DPA) Summary",
   description:
-    "Summary of how Zivvy processes Customer Data as a service provider, including regions and subprocessors.",
+    "Summary of how Zivvy processes customer data as a cloud ERP provider, including data regions, subprocessors, security measures and how to request a signed DPA.",
   canonicalPath: "/dpa"
 });
 

@@ -203,7 +203,7 @@ export function BrandLogo({
     return (
       <img
         src={logoDevUrl(brand.domain)}
-        alt={label ?? brand.name}
+        alt={label ?? `${brand.name} logo`}
         loading="lazy"
         decoding="async"
         className={cn("inline-block object-contain", className)}
@@ -223,7 +223,7 @@ export function BrandLogo({
     <svg
       viewBox="0 0 24 24"
       role="img"
-      aria-label={label ?? brand.name}
+      aria-label={label ?? `${brand.name} logo`}
       className={cn("inline-block", className)}
       fill={fill}
     >

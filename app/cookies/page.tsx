@@ -4,9 +4,9 @@ import { LegalShell } from "@/components/site/marketing/legal-shell";
 import { makeMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = makeMetadata({
-  title: "Cookie Policy",
+  title: "Cookie Policy for Zivvy ERP and Website",
   description:
-    "How Zivvy uses cookies and similar technologies on the website and product.",
+    "Learn how Zivvy uses cookies and similar technologies on the website and ERP product. Understand cookie types, consent options and how to manage preferences.",
   canonicalPath: "/cookies"
 });
 

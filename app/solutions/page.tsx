@@ -5,7 +5,7 @@ import { solutionProfiles } from "@/lib/solutions-content";
 import { makeMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = makeMetadata({
-  title: "Solutions",
+  title: "Solutions by Industry, Country and Team Size",
   description:
     "One tenant shaped to your world — country-ready tax, industry-tuned modules, and team-shaped starters across 22+ profiles.",
   canonicalPath: "/solutions"

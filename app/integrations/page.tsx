@@ -3,8 +3,8 @@ import { integrationCards } from "@/lib/marketing-content";
 import { makeMetadata } from "@/lib/seo";
 
 export const metadata = makeMetadata({
-  title: "Integrations",
-  description: "Explore integration patterns for Slack, Salesforce, HubSpot, Zapier, and Google Drive.",
+  title: "Integrations with Slack, Xero, Stripe and More",
+  description: "Connect Zivvy to Slack, Xero, Stripe, Shopify, Google Drive, Zapier and more. Every integration is a REST endpoint. No middleware required.",
   canonicalPath: "/integrations",
 });
 

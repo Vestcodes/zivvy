@@ -10,9 +10,9 @@ import { BreadcrumbJsonLd, FaqJsonLd, ProductJsonLd } from "@/components/site/ma
 import { makeMetadata } from "@/lib/seo";
 
 export const metadata = makeMetadata({
-  title: "Pricing",
+  title: "Pricing Plans for Free, Pro and Business Tiers",
   description:
-    "Simple, seat-based pricing. Free forever, Pro at $18/seat/mo, Business at $30/seat/mo. Annual saves 20%. Add-ons for ecommerce, DATEV, digital signing and payments.",
+    "Compare Free, Pro and Business plans. Seat-based pricing from $0/mo. No credit card required to start. Region-picked data in India, EU or US.",
   canonicalPath: "/pricing"
 });
 

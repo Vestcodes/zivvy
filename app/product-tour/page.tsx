@@ -14,7 +14,7 @@ import {
 } from "@/lib/seo";
 
 export const metadata: Metadata = makeMetadata({
-  title: "Product Tour",
+  title: "Interactive Product Tour for Cloud ERP Software",
   description:
     "Watch Zivvy’s Business-tier product tour — full CRM-to-manufacturing walkthrough plus module tours for sales, stock, accounting, HR, banking, and integrations.",
   canonicalPath: "/product-tour"

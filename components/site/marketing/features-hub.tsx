@@ -265,9 +265,11 @@ export function FeaturesHubPage({ deepDives }: Props) {
                   </AnimatedShinyText>
                 </div>
               </BlurFade>
+              <h1 className="sr-only">Every capability, one tenant, one API</h1>
               <TextGenerateEffect
                 words="Every capability, one tenant, one API."
                 className="mx-auto max-w-3xl font-display text-4xl font-bold tracking-tight sm:text-5xl"
+                aria-hidden
               />
               <BlurFade delay={0.15}>
                 <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">

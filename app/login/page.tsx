@@ -6,8 +6,8 @@ import { AuthPanel } from "@/components/auth/auth-panel";
 import { fetchBootinfo } from "@/lib/boot-server";
 
 export const metadata: Metadata = {
-  title: "Sign in — Zivvy",
-  description: "Sign in to your Zivvy workspace, or create a free account."
+  title: "Sign In to Your Cloud ERP Workspace — Zivvy",
+  description: "Sign in to your Zivvy cloud ERP workspace or create a free account. Access sales, stock, accounting, HR and manufacturing from any browser."
 };
 
 function pickParam(value: string | string[] | undefined): string | undefined {
@@ -38,6 +38,7 @@ export default async function LoginPage({
   }
   return (
     <div className="grid min-h-dvh lg:grid-cols-2">
+      <h1 className="sr-only">Sign in to Zivvy</h1>
       {/* Brand panel */}
       <div
         className="relative hidden overflow-hidden text-primary-foreground lg:block"
