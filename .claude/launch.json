@@ -6,6 +6,12 @@
       "runtimeExecutable": "pnpm",
       "runtimeArgs": ["--filter", "@zivvy/web", "dev"],
       "port": 3000
+    },
+    {
+      "name": "zivvy-portal",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--filter", "@zivvy/portal", "dev"],
+      "port": 3100
     }
   ]
 }

@@ -265,7 +265,10 @@ doc_events = {
 	},
 	# --- Non-submittable Pro/Business resources ---
 	"Employee": {
-		"after_insert": _webhook_emit,
+		"after_insert": [
+			"zivvy_brand.hr.portal.provision_portal_user",
+			_webhook_emit,
+		],
 		"on_update": _webhook_emit,
 		"on_trash": _webhook_emit,
 	},
