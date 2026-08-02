@@ -52,7 +52,8 @@ const MOCK_ZIVVY: ZivvyBoot = {
     team: "/settings/team",
     settings: "/settings",
     help: "/help"
-  }
+  },
+  active_addons: []
 };
 
 export const MOCK_BOOT: Bootinfo = {

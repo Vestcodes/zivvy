@@ -65,6 +65,12 @@ export function useEntitlement(
   };
 }
 
+export function useAddonEntitlement(addonSlug: string): { active: boolean } {
+  const boot = useZivvyBoot();
+  const active = boot?.active_addons?.includes(addonSlug) ?? false;
+  return { active };
+}
+
 export function useIsSignedIn(): boolean {
   return useBoot().logged_in;
 }

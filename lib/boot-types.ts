@@ -38,6 +38,7 @@ export interface ZivvyBoot {
   subscription_status: string;
   blocked_modules: string[];
   blocked_doctypes: string[];
+  active_addons: string[];
   module_min_tier: Record<string, ZivvyTier>;
   doctype_min_tier: Record<string, ZivvyTier>;
   pricing: Record<string, unknown>;

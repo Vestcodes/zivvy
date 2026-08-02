@@ -82,6 +82,7 @@ interface BootData {
   };
   blocked_modules: string[];
   blocked_doctypes: string[];
+  active_addons?: string[];
 }
 
 /**
@@ -103,7 +104,7 @@ async function _fetchBootinfo(): Promise<Bootinfo> {
   );
   if (!data?.user) return GUEST_BOOT;
 
-  const { user, plan, tenant: tenantInfo, tier_map: tierMap, blocked_modules, blocked_doctypes } = data;
+  const { user, plan, tenant: tenantInfo, tier_map: tierMap, blocked_modules, blocked_doctypes, active_addons } = data;
 
   const tier: ZivvyTier = plan.tier ?? "free";
   const moduleTierMap = tierMap?.module_min_tier ?? FALLBACK_MODULE_MIN_TIER;
@@ -147,7 +148,8 @@ async function _fetchBootinfo(): Promise<Bootinfo> {
       team: "/settings/team",
       settings: "/settings",
       help: "/help"
-    }
+    },
+    active_addons: active_addons ?? []
   };
 
   return {

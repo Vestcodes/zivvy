@@ -1,12 +1,10 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { toast } from "sonner";
 import {
-  Calendar,
   Download,
-  FileArchive,
   FileSpreadsheet,
   Loader2,
   Settings2,
@@ -30,10 +28,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Skeleton } from "@/components/ui/skeleton";
 import { frappeCall } from "@/lib/frappe-client";
 import { AddonLock } from "@/components/site/addon-lock";
-import type { ActiveAddon } from "@/components/settings/addons-manager";
+import { useAddonEntitlement } from "@/components/boot-provider";
 
 const DATEV_ADDON_SLUG = "erpnext-datev";
 
@@ -86,9 +83,7 @@ function defaultToDate(): string {
 }
 
 export default function DatevExportPage() {
-  const [addonStatus, setAddonStatus] = useState<
-    "loading" | "active" | "inactive"
-  >("loading");
+  const { active: addonActive } = useAddonEntitlement(DATEV_ADDON_SLUG);
   const [companies, setCompanies] = useState<string[]>([]);
   const [company, setCompany] = useState("");
   const [fromDate, setFromDate] = useState(defaultFromDate);
@@ -98,55 +93,43 @@ export default function DatevExportPage() {
   const [hasSettings, setHasSettings] = useState<boolean | null>(null);
 
   useEffect(() => {
+    if (!addonActive) return;
     async function init() {
       try {
-        const addons = await frappeCall<ActiveAddon[]>(
-          "zivvy_brand.api.addons.list_my_addons"
+        const res = await frappeCall<{ keys?: string[] }>(
+          "frappe.client.get_list",
+          {
+            doctype: "Company" as unknown as string,
+            fields: JSON.stringify(["name"]) as unknown as string,
+            limit_page_length: 100 as unknown as string,
+          } as Record<string, string>
         );
-        const isActive = (addons ?? []).some(
-          (a) =>
-            a.addon_slug === DATEV_ADDON_SLUG &&
-            a.status !== "cancelled" &&
-            a.status !== "past_due"
+        const names = ((res as unknown as Array<{ name: string }>) ?? []).map(
+          (c) => c.name
         );
-        setAddonStatus(isActive ? "active" : "inactive");
+        setCompanies(names);
+        if (names.length === 1) setCompany(names[0]);
 
-        if (isActive) {
-          const res = await frappeCall<{ keys?: string[] }>(
+        try {
+          const settings = await frappeCall<unknown[]>(
             "frappe.client.get_list",
             {
-              doctype: "Company" as unknown as string,
-              fields: JSON.stringify(["name"]) as unknown as string,
-              limit_page_length: 100 as unknown as string,
+              doctype: "DATEV Settings" as unknown as string,
+              limit_page_length: 1 as unknown as string,
             } as Record<string, string>
           );
-          const names = ((res as unknown as Array<{ name: string }>) ?? []).map(
-            (c) => c.name
+          setHasSettings(
+            Array.isArray(settings) && settings.length > 0
           );
-          setCompanies(names);
-          if (names.length === 1) setCompany(names[0]);
-
-          try {
-            const settings = await frappeCall<unknown[]>(
-              "frappe.client.get_list",
-              {
-                doctype: "DATEV Settings" as unknown as string,
-                limit_page_length: 1 as unknown as string,
-              } as Record<string, string>
-            );
-            setHasSettings(
-              Array.isArray(settings) && settings.length > 0
-            );
-          } catch {
-            setHasSettings(false);
-          }
+        } catch {
+          setHasSettings(false);
         }
       } catch {
-        setAddonStatus("inactive");
+        // silently fail — page will still render
       }
     }
     init();
-  }, []);
+  }, [addonActive]);
 
   const handleDownload = useCallback(async () => {
     if (!company || !fromDate || !toDate) {
@@ -175,21 +158,7 @@ export default function DatevExportPage() {
 
   const canDownload = company && fromDate && toDate;
 
-  if (addonStatus === "loading") {
-    return (
-      <div className="mx-auto w-full max-w-4xl space-y-6 py-4">
-        <Skeleton className="h-10 w-48" />
-        <Skeleton className="h-5 w-96" />
-        <div className="grid gap-4 sm:grid-cols-2">
-          {[1, 2, 3, 4].map((i) => (
-            <Skeleton key={i} className="h-32 w-full rounded-xl" />
-          ))}
-        </div>
-      </div>
-    );
-  }
-
-  if (addonStatus === "inactive") {
+  if (!addonActive) {
     return (
       <AddonLock
         addonSlug={DATEV_ADDON_SLUG}

@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowRight, Check, Loader2 } from "lucide-react";
+import { ArrowRight, Check, ExternalLink, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { frappeCall, FrappeError } from "@/lib/frappe-client";
+import { appendCheckoutLocale } from "@/lib/tier-checkout";
 
 /**
  * In-product subscribe button for a paid add-on. Only rendered when
@@ -34,17 +35,23 @@ export function AddonSubscribeForm({
     setState("loading");
     setMessage(null);
     try {
-      const response = await frappeCall<{ status?: string; message?: string }>(
+      const response = await frappeCall<{ checkout_url?: string; status?: string; message?: string }>(
         method,
-        { addon: addonSlug }
+        { addon_slug: addonSlug }
       );
-      const status = response?.status ?? "requested";
-      setState("done");
-      setMessage(
-        response?.message ??
-          `We received your request for ${addonName}. Finish checkout from your dashboard to activate it.`
-      );
-      toast.success(`Subscription ${status} for ${addonName}`);
+      if (response?.checkout_url) {
+        window.open(appendCheckoutLocale(response.checkout_url), "_blank", "noopener,noreferrer");
+        setState("done");
+        setMessage("Opening checkout — complete payment to activate the add-on.");
+        toast.success(`Opening checkout for ${addonName}`);
+      } else {
+        setState("done");
+        setMessage(
+          response?.message ??
+            `We received your request for ${addonName}. Finish checkout from your dashboard to activate it.`
+        );
+        toast.success(`Subscription ${response?.status ?? "requested"} for ${addonName}`);
+      }
     } catch (err) {
       const msg =
         err instanceof FrappeError

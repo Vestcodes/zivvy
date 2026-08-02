@@ -31,7 +31,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
 import { frappeCall } from "@/lib/frappe-client";
 import { AddonLock } from "@/components/site/addon-lock";
-import type { ActiveAddon } from "@/components/settings/addons-manager";
+import { useAddonEntitlement } from "@/components/boot-provider";
 
 const DATEV_ADDON_SLUG = "erpnext-datev";
 
@@ -47,9 +47,7 @@ interface DatevSettings {
 }
 
 export default function DatevSettingsPage() {
-  const [addonStatus, setAddonStatus] = useState<
-    "loading" | "active" | "inactive"
-  >("loading");
+  const { active: addonActive } = useAddonEntitlement(DATEV_ADDON_SLUG);
   const [companies, setCompanies] = useState<string[]>([]);
   const [suppliers, setSuppliers] = useState<string[]>([]);
   const [selectedCompany, setSelectedCompany] = useState("");
@@ -59,55 +57,43 @@ export default function DatevSettingsPage() {
   const [isNew, setIsNew] = useState(true);
 
   useEffect(() => {
+    if (!addonActive) return;
     async function init() {
       try {
-        const addons = await frappeCall<ActiveAddon[]>(
-          "zivvy_brand.api.addons.list_my_addons"
-        );
-        const isActive = (addons ?? []).some(
-          (a) =>
-            a.addon_slug === DATEV_ADDON_SLUG &&
-            a.status !== "cancelled" &&
-            a.status !== "past_due"
-        );
-        setAddonStatus(isActive ? "active" : "inactive");
-
-        if (isActive) {
-          const [compRes, suppRes] = await Promise.all([
-            frappeCall<Array<{ name: string }>>(
-              "frappe.client.get_list",
-              {
-                doctype: "Company" as unknown as string,
-                fields: JSON.stringify(["name"]) as unknown as string,
-                limit_page_length: 100 as unknown as string,
-              } as Record<string, string>
-            ),
-            frappeCall<Array<{ name: string }>>(
-              "frappe.client.get_list",
-              {
-                doctype: "Supplier" as unknown as string,
-                fields: JSON.stringify(["name"]) as unknown as string,
-                limit_page_length: 200 as unknown as string,
-              } as Record<string, string>
-            ),
-          ]);
-          const compNames = (compRes ?? []).map((c) => c.name);
-          const suppNames = (suppRes ?? []).map((s) => s.name);
-          setCompanies(compNames);
-          setSuppliers(suppNames);
-          if (compNames.length === 1) {
-            setSelectedCompany(compNames[0]);
-          }
+        const [compRes, suppRes] = await Promise.all([
+          frappeCall<Array<{ name: string }>>(
+            "frappe.client.get_list",
+            {
+              doctype: "Company" as unknown as string,
+              fields: JSON.stringify(["name"]) as unknown as string,
+              limit_page_length: 100 as unknown as string,
+            } as Record<string, string>
+          ),
+          frappeCall<Array<{ name: string }>>(
+            "frappe.client.get_list",
+            {
+              doctype: "Supplier" as unknown as string,
+              fields: JSON.stringify(["name"]) as unknown as string,
+              limit_page_length: 200 as unknown as string,
+            } as Record<string, string>
+          ),
+        ]);
+        const compNames = (compRes ?? []).map((c) => c.name);
+        const suppNames = (suppRes ?? []).map((s) => s.name);
+        setCompanies(compNames);
+        setSuppliers(suppNames);
+        if (compNames.length === 1) {
+          setSelectedCompany(compNames[0]);
         }
       } catch {
-        setAddonStatus("inactive");
+        // silently fail
       }
     }
     init();
-  }, []);
+  }, [addonActive]);
 
   useEffect(() => {
-    if (!selectedCompany || addonStatus !== "active") return;
+    if (!selectedCompany || !addonActive) return;
 
     async function loadSettings() {
       setLoadingSettings(true);
@@ -157,7 +143,7 @@ export default function DatevSettingsPage() {
       }
     }
     loadSettings();
-  }, [selectedCompany, addonStatus]);
+  }, [selectedCompany, addonActive]);
 
   const handleSave = useCallback(async () => {
     if (!selectedCompany || !settings.client_number || !settings.consultant_number) {
@@ -212,16 +198,7 @@ export default function DatevSettingsPage() {
   const update = (field: keyof DatevSettings, value: string | number) =>
     setSettings((prev) => ({ ...prev, [field]: value }));
 
-  if (addonStatus === "loading") {
-    return (
-      <div className="mx-auto w-full max-w-2xl space-y-6 py-4">
-        <Skeleton className="h-10 w-48" />
-        <Skeleton className="h-64 w-full rounded-xl" />
-      </div>
-    );
-  }
-
-  if (addonStatus === "inactive") {
+  if (!addonActive) {
     return (
       <AddonLock
         addonSlug={DATEV_ADDON_SLUG}

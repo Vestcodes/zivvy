@@ -108,7 +108,7 @@ export const addonDetails: AddonDetail[] = [
           "Yes. Each connection has an active toggle — pause a store during a migration or a big promo without disabling the whole add-on."
       }
     ],
-    frappeMethod: "zivvy.addons.subscribe"
+    frappeMethod: "zivvy_brand.api.addons.subscribe"
   },
   {
     slug: "erpnext-datev",
@@ -181,7 +181,7 @@ export const addonDetails: AddonDetail[] = [
           "The formats are German — DATEV is a Germany-specific standard. Austrian and Swiss customers usually adapt SKR03/SKR04 mappings with their advisor."
       }
     ],
-    frappeMethod: "zivvy.addons.subscribe"
+    frappeMethod: "zivvy_brand.api.addons.subscribe"
   },
   {
     slug: "digital-signer",
@@ -255,7 +255,7 @@ export const addonDetails: AddonDetail[] = [
           "In your Zivvy workspace, pinned to your chosen region. Signed copies are cryptographically hashed so tampering is detectable."
       }
     ],
-    frappeMethod: "zivvy.addons.subscribe"
+    frappeMethod: "zivvy_brand.api.addons.subscribe"
   },
   {
     slug: "payments-processor",
@@ -329,7 +329,7 @@ export const addonDetails: AddonDetail[] = [
           "Yes. Payroll batches inherit vendor limits and the same audit trail, so employees and suppliers can move through one clean process."
       }
     ],
-    frappeMethod: "zivvy.addons.subscribe"
+    frappeMethod: "zivvy_brand.api.addons.subscribe"
   }
 ];
 
